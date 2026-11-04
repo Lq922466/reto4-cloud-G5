@@ -79,3 +79,24 @@ Evidencias del 4 de noviembre de 2026: [registro de EC2, Swarm y HTTP](evidencia
 En E8, la comprobación esperaba Down y Swarm devolvió Unknown/Unreachable, por lo que se activó el arranque de recuperación. Se observaron 38 respuestas HTTP correctas y 0 fallos durante la parada y 130 correctas y 0 fallos durante la recuperación, con un intervalo sin sondeo entre ambas. La nueva IP pública del manager es 98.93.8.44. [Registro de terminal](evidencias/E8-eleccion-registro.txt) · [Captura durante la maniobra](evidencias/E8-web-parada.png) · [Captura tras reincorporar el manager](evidencias/E8-web-recuperado.png).
 
 [Revisión completa de la guía y la rúbrica](REVISION.md). En E8, la última muestra antes de la interrupción fue a las 21:15:14 y la primera posterior a las 21:15:48, hora de Madrid. Las dos respuestas fueron correctas. Entre ambas muestras transcurrieron 34 segundos sin observaciones intermedias.
+
+## Comprobación posterior de solo lectura
+
+El 4 de noviembre de 2026, a las 21:26 de Madrid, EC2 informó cuatro instancias
+running con ambos controles en ok. SSH respondió en los cuatro nodos. Swarm
+mostró cuatro nodos Ready/Active, worker2-g5 como Leader, dos managers Reachable,
+dos redes overlay con MTU 1450 y reto4_web con 4/4. Se obtuvo HTTP 1.0 por las
+cuatro IP públicas actuales. El [registro original](evidencias/verificacion-posterior.txt)
+conserva comandos, hostname, horas y resultados. Estas observaciones son
+posteriores y no amplían el intervalo cubierto por el sondeo de E8.
+
+| Nodo | IP pública consultada en EC2 | Captura posterior |
+| --- | --- | --- |
+| manager-g5 | 98.93.8.44 | [Portal](evidencias/posterior-web-manager-g5.png) |
+| worker1-g5 | 54.227.41.215 | [Portal](evidencias/posterior-web-worker1-g5.png) |
+| worker2-g5 | 34.228.8.66 | [Portal](evidencias/posterior-web-worker2-g5.png) |
+| worker3-g5 | 3.91.68.78 | [Portal](evidencias/posterior-web-worker3-g5.png) |
+
+Capturas de Codex entre las 21:26:28 y las 21:26:39. El navegador capturó el
+contenido web. AWS Console y la terminal web siguen pendientes de captura
+visual. Las IP del estado de Terraform corresponden a su última aplicación.

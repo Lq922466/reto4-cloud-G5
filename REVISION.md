@@ -73,3 +73,21 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 
 
 En E8, la última muestra antes de la interrupción fue a las 21:15:14 y la primera posterior a las 21:15:48, hora de Madrid. Las dos respuestas fueron correctas. Entre ambas muestras transcurrieron 34 segundos sin observaciones intermedias.
+
+## Preparación operativa de lo pendiente
+
+| Bloque | Preparación y criterio de cierre |
+| --- | --- |
+| E5 | Antes del reinicio autorizado, conservar IDs, IP privadas, tres managers, líder, 4/4 y HTTP. Tras el reinicio de Learner Lab, revalidar sesión, consultar IP públicas actuales, ajustar alias con la huella conocida y comprobar SSH, los cuatro nodos, la distribución de tareas y el portal. Fechar y comparar las capturas. |
+| A6 | Conservar la salida de validación, plan y apply. Preparar en una rama un cambio acotado y revisar su plan para excluir sustituciones. Aplicarlo solo con autorización. Dejar la prueba de destrucción para el final, con alcance e impacto revisados y autorización separada. |
+| Web F1 | Sustituir el contenido provisional de las dos versiones por el artefacto del grupo. Mantener la identidad y versión por réplica, construir ambas imágenes y verificar el contenido y la comprobación HTTP. |
+| Docker Hub | Definir cuenta y repositorio, verificar acceso sin guardar credenciales, obtener autorización para publicar y guardar evidencia de ambas etiquetas y sus digests. Desplegar las imágenes aprobadas, verificar 4/4 y el acceso por las cuatro IP y repetir las pruebas que requiera el docente. |
+| Entrega | Confirmar acceso del profesor y claves públicas individuales, añadir las prácticas y reparto reales, revisar la PR y evidencias con el grupo. Integrar en main después de la revisión. |
+
+### Guion de exposición de diez minutos
+
+1. **0–2 min.** Presentar el evento, el mapa del clúster y el reparto real del grupo.
+2. **2–4 min.** Mostrar el módulo Terraform y el acceso seguro por salto SSH.
+3. **4–6 min.** Mostrar red overlay, cuatro réplicas e identidad del contenedor servido.
+4. **6–9 min.** Demostrar una prueba previamente autorizada. Para repasar E4 y E8 sin intervenir, usar el registro y las capturas históricas, incluido el hueco de E8.
+5. **9–10 min.** Mostrar la evidencia y resumir lo pendiente. Preparar demostración individual y preguntas sobre cualquier fase.

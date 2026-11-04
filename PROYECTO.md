@@ -68,10 +68,12 @@ Los cuatro accesos devolvieron la misma página mediante la malla de enrutamient
 | E5 | worker3-g5 volvió Ready/Active y el servicio a 4/4. El despliegue escalonado volvió a asignar tareas al worker. Sigue pendiente reiniciar Learner Lab. |
 | E6 | worker1-g5 pasó por Drain y volvió a Active. |
 | E7 | La web respondió en 2.0 y volvió a 1.0 tras rollback. |
-| E8 | Cuórum preparado. manager-g5 es Leader y worker1-g5 y worker2-g5 están Reachable. Falta autorizar la parada del líder. |
+| E8 | Con tres managers operativos, se detuvo únicamente manager-g5. worker2-g5 asumió el liderazgo. manager-g5 volvió Reachable y el servicio terminó 4/4. |
 
 Durante la primera secuencia de orquestación se registraron 156 peticiones HTTP correctas y 0 fallidas.
 Para completar las evidencias de terminal, mostrar el hostname y la hora junto
 a cada comando, estado y resultado, e identificar al autor.
 
 Evidencias del 4 de noviembre de 2026: [registro de EC2, Swarm y HTTP](evidencias/E4-E5-E8-registro.txt), [portal durante la parada](evidencias/E4-web-worker-down.png) y [portal después de reincorporar el worker](evidencias/E5-web-recuperado.png). Capturas de Codex. Durante la parada el contador mostró 5/4 por la tarea antigua sin confirmación de apagado. Después de arrancar el worker se normalizó a 4/4. La nueva IP pública de worker3-g5 es 3.91.68.78.
+
+En E8, la comprobación esperaba Down y Swarm devolvió Unknown/Unreachable, por lo que se activó el arranque de recuperación. Se observaron 38 respuestas HTTP correctas y 0 fallos durante la parada y 130 correctas y 0 fallos durante la recuperación, con un intervalo sin sondeo entre ambas. La nueva IP pública del manager es 98.93.8.44. [Registro de terminal](evidencias/E8-eleccion-registro.txt) · [Captura durante la maniobra](evidencias/E8-web-parada.png) · [Captura tras reincorporar el manager](evidencias/E8-web-recuperado.png).

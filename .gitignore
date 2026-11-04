@@ -1,0 +1,18 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+crash.log
+crash.*.log
+.terraformrc
+terraform.rc
+
+# SSH y credenciales
+*.pem
+*.ppk
+*.key
+.ssh/
+.aws/
+credentials

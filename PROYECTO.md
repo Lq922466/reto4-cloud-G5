@@ -64,12 +64,14 @@ Los cuatro accesos devolvieron la misma página mediante la malla de enrutamient
 | E1 | 12 respuestas, repartidas por igual entre cuatro contenedores. |
 | E2 | 8/8, 12/12 y 2/2. Se restauró 4/4. |
 | E3 | Se eliminó un contenedor y Swarm recuperó 4/4. |
-| E4 | Pendiente la caída controlada de un worker. |
-| E5 | Pendientes reincorporación, reparto y reinicio del laboratorio. |
+| E4 | Se detuvo worker3-g5. Swarm reubicó su tarea en manager-g5. El sondeo registró 164 respuestas HTTP correctas y 0 fallos. |
+| E5 | worker3-g5 volvió Ready/Active y el servicio a 4/4. El despliegue escalonado volvió a asignar tareas al worker. Sigue pendiente reiniciar Learner Lab. |
 | E6 | worker1-g5 pasó por Drain y volvió a Active. |
 | E7 | La web respondió en 2.0 y volvió a 1.0 tras rollback. |
-| E8 | Pendiente la elección con caída controlada del líder. |
+| E8 | Cuórum preparado. manager-g5 es Leader y worker1-g5 y worker2-g5 están Reachable. Falta autorizar la parada del líder. |
 
-Durante la secuencia se registraron 156 peticiones HTTP correctas y 0 fallidas.
+Durante la primera secuencia de orquestación se registraron 156 peticiones HTTP correctas y 0 fallidas.
 Para completar las evidencias de terminal, mostrar el hostname y la hora junto
 a cada comando, estado y resultado, e identificar al autor.
+
+Evidencias del 4 de noviembre de 2026: [registro de EC2, Swarm y HTTP](evidencias/E4-E5-E8-registro.txt), [portal durante la parada](evidencias/E4-web-worker-down.png) y [portal después de reincorporar el worker](evidencias/E5-web-recuperado.png). Capturas de Codex. Durante la parada el contador mostró 5/4 por la tarea antigua sin confirmación de apagado. Después de arrancar el worker se normalizó a 4/4. La nueva IP pública de worker3-g5 es 3.91.68.78.

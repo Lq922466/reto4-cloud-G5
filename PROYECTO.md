@@ -119,3 +119,11 @@ y 2.0 tienen contextos de construcción preparados y comprobaciones HTTP
 locales. La variante 2.0 incorpora una vista de estado de réplica. Consultar
 [la revisión del ZIP y el alcance de D1–D3](REVISION.md#revisión-del-zip-de-la-web-f1-definitiva).
 El clúster sigue sirviendo el portal provisional.
+
+### E5 Verificación posterior interrumpida
+
+Learner Lab se reinició mediante End Lab y Start Lab. La primera verificación
+posterior se detuvo porque la política de la sesión AWS anterior rechazó la
+consulta de EC2. El [registro](evidencias/E5-verificacion-posterior.txt) se
+conserva sin identificadores de sesión. Se requiere renovar las credenciales
+temporales en Codespaces y completar las comprobaciones antes de cerrar E5.

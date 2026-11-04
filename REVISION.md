@@ -179,3 +179,13 @@ privada de IDs y volúmenes raíz. verificar-e5.sh ahora compara cada disco
 adjunto con esa referencia antes de comprobar SSH y Swarm. El reinicio
 autorizado requiere End Lab y Start Lab desde la sesión de AWS Academy.
 E5 seguirá pendiente hasta que consten el reinicio y las comprobaciones posteriores.
+
+### E5 tras End Lab y Start Lab
+
+El usuario confirmó el reinicio y el indicador verde de AWS Academy.
+A las 21:51 de Madrid, el comprobador se detuvo en DescribeInstanceStatus
+por una denegación explícita de la política voc-cancel-cred. La sesión
+anterior de Codespaces requiere credenciales temporales nuevas. El error
+no permite confirmar ni descartar cambios en los recursos. E5 sigue
+pendiente de la comparación de EC2, discos, SSH, cuórum y HTTP.
+[Registro posterior saneado](evidencias/E5-verificacion-posterior.txt).

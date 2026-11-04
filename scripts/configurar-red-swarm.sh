@@ -17,7 +17,7 @@ else
         exit 1
     fi
     if docker network inspect ingress >/dev/null 2>&1; then
-        docker network rm ingress
+        printf 'y\n' | docker network rm ingress
     fi
     docker network create --driver overlay --ingress \
         --opt com.docker.network.driver.mtu=1450 red-g5

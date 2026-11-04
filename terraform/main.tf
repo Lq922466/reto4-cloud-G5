@@ -6,7 +6,7 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+    values = [var.ubuntu_ami_name]
   }
 
   filter {
@@ -22,7 +22,7 @@ data "aws_vpc" "default" {
 
 # Security Group del cluster G5
 resource "aws_security_group" "cluster" {
-  name        = "reto4-cloud-g5"
+  name        = "reto4-cloud-${var.grupo}"
   description = "Seguridad del cluster Docker Swarm G5"
   vpc_id      = data.aws_vpc.default.id
 
@@ -33,6 +33,15 @@ resource "aws_security_group" "cluster" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [var.ssh_cidr]
+  }
+
+  # El salto SSH usa la IP privada del manager dentro del mismo grupo.
+  ingress {
+    description = "SSH entre nodos para ProxyJump"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    self        = true
   }
 
   # HTTP
@@ -108,7 +117,7 @@ resource "aws_security_group" "cluster" {
   }
 
   tags = {
-    Name = "reto4-cloud-g5"
+    Name = "reto4-cloud-${var.grupo}"
   }
 }
 
@@ -118,6 +127,12 @@ resource "aws_instance" "manager" {
   instance_type          = var.manager_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.cluster.id]
+
+  associate_public_ip_address = true
+  user_data = templatefile("${path.module}/scripts/bootstrap.sh.tftpl", {
+    hostname    = "manager-${var.grupo}"
+    public_keys = var.ssh_public_keys
+  })
 
   root_block_device {
     volume_size = 20
@@ -137,6 +152,12 @@ resource "aws_instance" "workers" {
   instance_type          = var.worker_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.cluster.id]
+
+  associate_public_ip_address = true
+  user_data = templatefile("${path.module}/scripts/bootstrap.sh.tftpl", {
+    hostname    = "worker${count.index + 1}-${var.grupo}"
+    public_keys = var.ssh_public_keys
+  })
 
   root_block_device {
     volume_size = 10

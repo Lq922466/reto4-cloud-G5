@@ -1,0 +1,22 @@
+services:
+  web:
+    image: "${WEB_IMAGE}"
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: ingress
+    networks:
+      - red-app-g5
+    deploy:
+      replicas: 4
+      restart_policy:
+        condition: any
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+
+networks:
+  red-app-g5:
+    external: true

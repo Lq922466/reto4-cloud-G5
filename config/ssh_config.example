@@ -1,0 +1,20 @@
+Host manager-g5
+    HostName IP_PUBLICA_MANAGER
+
+Host worker1-g5
+    HostName IP_PRIVADA_WORKER1
+
+Host worker2-g5
+    HostName IP_PRIVADA_WORKER2
+
+Host worker3-g5
+    HostName IP_PRIVADA_WORKER3
+
+Host worker?-g5
+    ProxyJump manager-g5
+
+Host manager-g5 worker?-g5
+    User ubuntu
+    IdentityFile ~/.ssh/reto4_g5
+    IdentitiesOnly yes
+    BatchMode yes

@@ -43,3 +43,22 @@ variable "key_name" {
 
 
 
+
+variable "ubuntu_ami_name" {
+  description = "Patrón de AMI oficial Ubuntu 22.04"
+  type        = string
+  default     = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
+}
+
+variable "ssh_public_keys" {
+  description = "Claves públicas SSH de los miembros del grupo"
+  type        = set(string)
+
+  validation {
+    condition = length(var.ssh_public_keys) > 0 && alltrue([
+      for key in var.ssh_public_keys :
+      can(regex("^(ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp(256|384|521)) [A-Za-z0-9+/=]+( [^\\r\\n]*)?$", key))
+    ])
+    error_message = "Indica al menos una clave pública OpenSSH válida en una sola línea."
+  }
+}

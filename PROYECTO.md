@@ -100,3 +100,14 @@ posteriores y no amplían el intervalo cubierto por el sondeo de E8.
 Capturas de Codex entre las 21:26:28 y las 21:26:39. El navegador capturó el
 contenido web. AWS Console y la terminal web siguen pendientes de captura
 visual. Las IP del estado de Terraform corresponden a su última aplicación.
+
+## Preparación de E5 y A6
+
+El respaldo privado del estado, la configuración de Swarm y las imágenes
+provisionales quedó validado en Codespaces. La comprobación previa a E5
+confirmó cuatro nodos operativos, 4/4 y acceso HTTP desde las cuatro IP.
+El reinicio del laboratorio permanece pendiente de autorización.
+
+En A6 se preparó un plan aislado de una sola actualización de etiqueta del
+manager. No se aplicó. Los registros y el procedimiento de comprobación
+están en [REVISION.md](REVISION.md#preparación-de-e5-y-a6).

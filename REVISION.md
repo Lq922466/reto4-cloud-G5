@@ -91,3 +91,49 @@ En E8, la última muestra antes de la interrupción fue a las 21:15:14 y la prim
 3. **4–6 min.** Mostrar red overlay, cuatro réplicas e identidad del contenedor servido.
 4. **6–9 min.** Demostrar una prueba previamente autorizada. Para repasar E4 y E8 sin intervenir, usar el registro y las capturas históricas, incluido el hueco de E8.
 5. **9–10 min.** Mostrar la evidencia y resumir lo pendiente. Preparar demostración individual y preguntas sobre cualquier fase.
+
+## Preparación de E5 y A6
+
+La comprobación previa a E5 se ejecutó el 4 de noviembre de 2026 a las
+21:32 de Madrid. Los cuatro nodos pasaron los controles, SSH y las consultas de
+Swarm. El servicio quedó en 4/4 y respondió por las cuatro IP públicas.
+
+- [Respaldo e inventario](evidencias/E5-preparacion.txt). El estado original y
+  la copia coinciden en linaje y serial. Ambos tienen permisos 600. La copia
+  privada en Codespaces también contiene la configuración SSH, la huella de
+  la clave, la identificación de la cuenta AWS, las configuraciones exportadas
+  de Swarm y un archivo verificado de las dos imágenes provisionales.
+- [Verificación previa](evidencias/E5-verificacion-previa.txt). Ejecutar desde
+  el worktree operativo `bash scripts/verificar-e5.sh DIRECTORIO_PRIVADO`
+  tras el reinicio autorizado. El script compara cuenta, estado, IDs, IP
+  privadas, salud EC2, SSH, cuórum, redes, 4/4 y HTTP. Usa las IP públicas
+  actuales con una configuración SSH temporal y conserva el estado original.
+- El estado de Swarm se comprobó en el disco raíz de los cuatro nodos. La
+  exportación es un inventario de configuración. No es una copia fría de
+  Raft. Si el laboratorio devuelve otra cuenta, cambian los IDs o se pierden
+  los discos, detener la prueba y revisar la recuperación antes de cualquier
+  acción de escritura. Consultar la
+  [guía de respaldo de Swarm](https://docs.docker.com/engine/swarm/admin_guide/#back-up-the-swarm).
+- [Plan A6](evidencias/A6-plan-previo.txt). En una copia privada se generó un
+  plan real con 0 altas, 1 cambio y 0 destrucciones. Solo propone añadir
+  `PruebaA6=reto4-g5` a manager-g5. Si se autoriza, incorporar el cambio al
+  worktree operativo, volver a planificar contra su estado y comprobar que el
+  plan sigue limitado a la etiqueta antes de aplicar. La destrucción es una
+  prueba posterior con autorización independiente.
+
+## Integración de la web final
+
+Recibir dos exportaciones estáticas que contengan index.html y los recursos
+públicos de cada versión. Revisar el contenido antes de compilar. El constructor
+rechaza enlaces simbólicos y nombres comunes de archivos sensibles.
+
+```bash
+bash app/construir.sh RUTA_EXPORTACION_1 CUENTA/REPOSITORIO 1.0
+bash app/construir.sh RUTA_EXPORTACION_2 CUENTA/REPOSITORIO 2.0
+```
+
+Comprobar ambas imágenes, su contenido y /identidad.txt localmente. Tras
+autorización de publicación, autenticarse sin guardar credenciales en el
+repositorio, publicar exactamente las dos etiquetas aprobadas y registrar
+sus digests. Desplegar 1.0, verificar cuatro réplicas y las cuatro IP y
+repetir las pruebas pertinentes con el portal final.

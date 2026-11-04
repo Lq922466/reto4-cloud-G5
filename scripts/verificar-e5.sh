@@ -38,6 +38,15 @@ jq -e --argjson nodes "$nodes" '
 ' <<< "$live" >/dev/null
 jq -r '.Reservations[].Instances[] | [.InstanceId,.PrivateIpAddress,.PublicIpAddress] | @tsv' <<< "$live"
 
+printf '\n$ Comparar discos de EC2 con la referencia previa\n'
+jq -e --slurpfile baseline "$backup/e5-discos-antes.json" '
+    [.Reservations[].Instances[] | {
+        id: .InstanceId,
+        devices: ([.BlockDeviceMappings[] | {device: .DeviceName, volume: .Ebs.VolumeId}] | sort_by(.device))
+    }] | sort_by(.id) |
+    if . == $baseline[0] then . else error("Han cambiado los discos o los IDs de EC2") end
+' <<< "$live"
+
 manager_id=$(jq -er '."manager-g5".id' <<< "$nodes")
 manager_ip=$(jq -er --arg id "$manager_id" '.Reservations[].Instances[] | select(.InstanceId==$id) | .PublicIpAddress' <<< "$live")
 config=$(mktemp)

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprar Entradas - Gran Premio de Euskadi F1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==========================================================================
+         1. BARRA SUPERIOR (INFORMACIÓN OFICIAL)
+         ========================================================================== -->
+    <div class="contador-bar">
+        <span>Adquisicion Oficial de Entradas - GP de Euskadi 2026</span>
+    </div>
+
+    <!-- ==========================================================================
+         2. CABECERA Y NAVEGACIÓN PRINCIPAL
+         ========================================================================== -->
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="img/logo_f1_bilbao.PNG" alt="Logo Gran Premio de Euskadi F1" class="logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li class="dropdown"><a href="#">La carrera</a>
+                    <ul class="submenu">
+                        <li><a href="index.html#circuito">Circuito</a></li>
+                        <li><a href="index.html#horarios">Horarios</a></li>
+                        <li><a href="index.html#escuderias">Escuderias</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#">Bilbao</a>
+                    <ul class="submenu">
+                        <li><a href="#">Visitanos</a></li>
+                        <li><a href="#">Gastronomia</a></li>
+                        <li><a href="#">Alojamiento</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="entradas.html">Entradas</a>
+                    <ul class="submenu">
+                        <li><a href="entradas.html">Solo Carrera</a></li>
+                        <li><a href="acceso.html">Acceso Prensa</a></li>
+                    </ul>
+                </li>
+                <li><a href="sorteo.html">Sorteo Podio</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ==========================================================================
+         3. CONTENEDOR PRINCIPAL DEL FORMULARIO DE ENTRADAS
+         ========================================================================== -->
+    <div class="main-wrapper single-column">
+        <main class="bloque-principal">
+            <h1>Formulario de Adquisicion de Entradas</h1>
+            <p class="subtitle-form">Completa tus datos personales y selecciona la zona deseada para obtener tus pases de carrera.</p>
+
+            <p role="note">Calculadora de demostración. No se realizan compras ni se envían datos.</p>
+            <form id="formEntrada" method="post" class="form-container">
+
+                <!-- Campo DNI -->
+                <div class="form-group">
+                    <label for="dni">DNI (8 numeros y letra mayuscula):</label>
+                    <input type="text" id="dni" name="dni" placeholder="Ejemplo: 12345678A" required>
+                    <span id="errorDni" class="error-msg"></span>
+                </div>
+
+                <!-- Campo Nombre -->
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+                </div>
+
+                <!-- Campo Apellidos -->
+                <div class="form-group">
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" id="apellidos" name="apellidos" placeholder="Tus apellidos" required>
+                </div>
+
+                <!-- Campo Email -->
+                <div class="form-group">
+                    <label for="email">Correo Electronico:</label>
+                    <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+                    <span id="errorEmail" class="error-msg"></span>
+                </div>
+
+                <!-- Desplegable Tipo de Entrada -->
+                <div class="form-group">
+                    <label for="tipoEntrada">Tipo de Entrada:</label>
+                    <select id="tipoEntrada" name="tipoEntrada" required>
+                        <option value="adulto">Adulto</option>
+                        <option value="infantil">Infantil (Menores de 18 anos)</option>
+                    </select>
+                </div>
+
+                <!-- Desplegable Zona del Circuito -->
+                <div class="form-group">
+                    <label for="zonaEntrada">Zona del Circuito:</label>
+                    <select id="zonaEntrada" name="zonaEntrada" required>
+                        <option value="zona1">Zona 1 (Tribuna Principal)</option>
+                        <option value="zona2">Zona 2 (Pelouse / Ria)</option>
+                    </select>
+                </div>
+
+                <!-- Campo Edad -->
+                <div class="form-group">
+                    <label for="edad">Edad:</label>
+                    <input type="number" id="edad" name="edad" placeholder="Edad actual" required>
+                    <span id="errorEdad" class="error-msg"></span>
+                </div>
+
+                <!-- Cálculo Dinámico del Precio -->
+                <div class="form-group">
+                    <label for="precio">Precio Final (€):</label>
+                    <div class="precio-inline-box">
+                        <input type="text" id="precio" name="precio" placeholder="Haz clic en 'Calcular'" readonly disabled>
+                        <button type="button" id="calcularPrecio" class="btn-submit btn-small">Calcular</button>
+                    </div>
+                </div>
+
+                <!-- Contrato y Condiciones Generales -->
+                <div class="form-group">
+                    <label>Condiciones Generales de Compra-Venta:</label>
+                    <div class="contrato-box">
+                        <p><strong>Articulo 1:</strong> Las entradas son personales e intransferibles.</p>
+                        <p><strong>Articulo 2:</strong> No se admiten cambios ni devoluciones de importe.</p>
+                        <p><strong>Articulo 3:</strong> Obligatorio acreditar ser menor de 18 años en entradas infantiles.</p>
+                        <p><strong>Articulo 4:</strong> Prohibida la introduccion de objetos peligrosos al recinto.</p>
+                    </div>
+                </div>
+
+                <!-- Aceptación de Condiciones -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="aceptaCondiciones" required>
+                    <label for="aceptaCondiciones" class="label-normal">He leido y acepto las condiciones de la compra-venta</label>
+                </div>
+
+                <!-- Botón de Envío -->
+                <button type="submit" id="btnComprar" class="btn-submit">Comprar Entrada</button>
+            </form>
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+         5. PIE DE PÁGINA (FOOTER Y ENLACES SOCIALES)
+         ========================================================================== -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2026 Gran Premio de Euskadi F1. Todos los derechos reservados.</p>
+            <p>
+                <a href="#">Politica de Cookies</a> |
+                <a href="#">Privacidad</a> |
+                <a href="#">Aviso Legal</a>
+            </p>
+        </div>
+        <div class="redes-sociales">
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_twitter.png" alt="Twitter/X"></a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_instagram.png" alt="Instagram"></a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_facebook.png" alt="Facebook"></a>
+            <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_f1.png" alt="F1 Official"></a>
+        </div>
+    </footer>
+
+<script src="app.js" defer></script>
+
+</body>
+</html>

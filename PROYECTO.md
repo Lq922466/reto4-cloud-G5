@@ -111,3 +111,11 @@ El reinicio del laboratorio permanece pendiente de autorización.
 En A6 se preparó un plan aislado de una sola actualización de etiqueta del
 manager. No se aplicó. Los registros y el procedimiento de comprobación
 están en [REVISION.md](REVISION.md#preparación-de-e5-y-a6).
+
+## Web F1 candidata
+
+La web definitiva del grupo ya está en app/f1. Las versiones de entrega 1.0
+y 2.0 tienen contextos de construcción preparados y comprobaciones HTTP
+locales. La variante 2.0 incorpora una vista de estado de réplica. Consultar
+[la revisión del ZIP y el alcance de D1–D3](REVISION.md#revisión-del-zip-de-la-web-f1-definitiva).
+El clúster sigue sirviendo el portal provisional.

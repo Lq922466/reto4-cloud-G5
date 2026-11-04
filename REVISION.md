@@ -41,7 +41,7 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | C2 | Verificado con registro | Swarm por IP privada. Red ingress red-g5 con MTU 1450. | Capturar inspección de red y direcciones privadas. |
 | C3 | Verificado con registro | Configuración inicial de un manager líder y tres workers Ready/Active. E8 dejó tres managers operativos y worker2-g5 como líder. | Capturar el estado actual y señalar qué registro acredita la topología inicial. |
 | C4 | Verificado con registro | Overlay red-app-g5 para la aplicación con MTU 1450. | Capturar listado e inspección. |
-| D1 | Parcial | Dockerfile y dos imágenes del portal provisional, con versión e identidad del contenedor. | Integrar la web F1 definitiva, construir ambas versiones y publicar con autorización. Guardar evidencia de etiquetas en Docker Hub. |
+| D1 | Parcial | Dockerfile y dos imágenes del portal provisional, con versión e identidad del contenedor. | El código definitivo y sus dos contextos se probaron localmente. Compilar y verificar las imágenes en Docker, publicar con autorización y guardar evidencia de etiquetas en Docker Hub. |
 | D2 | Verificado en prototipo | stack.yml define red, cuatro réplicas y políticas. El servicio real terminó 4/4. | Repetir con imágenes definitivas y capturar configuración y servicio. |
 | D3 | Verificado en prototipo | Cuatro respuestas HTTP y cuatro capturas reales del navegador. Las IP públicas de manager y worker3 cambiaron tras las pruebas. | Repetir con la web definitiva y las IP actuales. Capturar navegador con dirección visible. |
 | E1 | Verificado en prototipo | Doce peticiones dieron cuatro identidades distintas. | Capturar respuestas del sondeo y repetir con la web final. |
@@ -137,3 +137,45 @@ autorización de publicación, autenticarse sin guardar credenciales en el
 repositorio, publicar exactamente las dos etiquetas aprobadas y registrar
 sus digests. Desplegar 1.0, verificar cuatro réplicas y las cuatro IP y
 repetir las pruebas pertinentes con el portal final.
+
+## Revisión del ZIP de la web F1 definitiva
+
+El archivo del grupo contiene cinco páginas HTML, CSS, JavaScript e imágenes,
+sin servidor de aplicación, base de datos ni dependencias de compilación. El
+sitio puede servirse en Nginx. La copia preparada está en `app/f1`. Se corrigió
+la ruta del logo respetando mayúsculas de Linux, se retiró una credencial de
+demostración del JavaScript y se deshabilitó el acceso que requería un servidor.
+Los demás formularios funcionan como demostración local, sin enviar datos.
+Se retiró también el hash vacío que figuraba junto al enlace FIA. La validez
+del documento externo no se verificó como parte de la prueba local.
+
+```bash
+bash app/construir-f1.sh CUENTA/REPOSITORIO 1.0
+bash app/construir-f1.sh CUENTA/REPOSITORIO 2.0
+```
+
+- **1.0** contiene el sitio del grupo e incluye un enlace a la identidad de la
+  réplica. **2.0** muestra una versión distinta y añade una página que consulta
+  el estado de la réplica. Nginx generará /identidad.txt al arrancar cada
+  contenedor. El constructor compartido comprueba los archivos que se servirán.
+- **D1:** se prepararon los dos contextos y se verificaron con Chromium las
+  cinco páginas de ambas versiones. Cargaron el logo, mostraron su versión y
+  no enviaron los formularios. La página de estado se probó con una respuesta
+  simulada identificada como tal. No se construyeron ni publicaron imágenes.
+- **D2 y D3:** stack.yml admite la imagen final, con cuatro réplicas, la red
+  del grupo y política de reinicio. Se deben comprobar las cuatro réplicas y
+  las cuatro IP con la web final tras autorizar su sustitución. Los resultados
+  anteriores corresponden al portal provisional.
+- [Captura local del sitio candidato](evidencias/F1-candidata-local.png).
+  Autor Codex, 4 de noviembre de 2026. Es una prueba de navegador local
+  posterior a las pruebas del portal provisional y no acredita un despliegue.
+
+### E5 y comparación de discos
+
+Se confirmó que el plan operativo no propone acciones sobre recursos AWS.
+Terraform señala una actualización de la salida nodes a partir de las IP
+reales. El estado se conservó sin aplicar ese cambio. Se guardó la referencia
+privada de IDs y volúmenes raíz. verificar-e5.sh ahora compara cada disco
+adjunto con esa referencia antes de comprobar SSH y Swarm. El reinicio
+autorizado requiere End Lab y Start Lab desde la sesión de AWS Academy.
+E5 seguirá pendiente hasta que consten el reinicio y las comprobaciones posteriores.

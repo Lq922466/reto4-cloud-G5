@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto y Ubicación - Gran Premio de Euskadi F1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==========================================================================
+         1. BARRA SUPERIOR (INFORMACIÓN OFICIAL)
+         ========================================================================== -->
+    <div class="contador-bar">
+        <span>Informacion Oficial y Atención al Espectador - GP de Euskadi</span>
+    </div>
+
+    <!-- ==========================================================================
+         2. CABECERA Y NAVEGACIÓN PRINCIPAL
+         ========================================================================== -->
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="img/logo_f1_bilbao.PNG" alt="Logo Gran Premio de Euskadi F1" class="logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li class="dropdown"><a href="#">La carrera</a>
+                    <ul class="submenu">
+                        <li><a href="index.html#circuito">Circuito</a></li>
+                        <li><a href="index.html#horarios">Horarios</a></li>
+                        <li><a href="index.html#escuderias">Escuderias</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#">Bilbao</a>
+                    <ul class="submenu">
+                        <li><a href="#">Visitanos</a></li>
+                        <li><a href="#">Gastronomia</a></li>
+                        <li><a href="#">Alojamiento</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="entradas.html">Entradas</a>
+                    <ul class="submenu">
+                        <li><a href="entradas.html">Solo Carrera</a></li>
+                        <li><a href="acceso.html">Acceso Prensa</a></li>
+                    </ul>
+                </li>
+                <li><a href="sorteo.html">Sorteo Podio</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ==========================================================================
+         3. CONTENEDOR PRINCIPAL DE CONTACTO Y MAPA
+         ========================================================================== -->
+    <div class="main-wrapper medium-wrapper">
+        <main class="bloque-principal">
+            <h1>Contacto y Ubicación del Circuito</h1>
+            <p class="subtitle-form">Ponte en contacto con la organización del evento o localiza el trazado en el plano oficial:</p>
+
+            <!-- Datos Directos de Contacto -->
+            <div class="form-container">
+                <p><strong>Ubicación del Trazado:</strong> Circuito Urbano de Bilbao (Ría de Bilbao - Entorno Museo Guggenheim)</p>
+                <p><strong>Teléfono de Atención:</strong> +34 944 000 000</p>
+                <p><strong>Correo Electrónico Oficial:</strong> prensa@gpeuskadif1.eus</p>
+            </div>
+
+            <!-- Mapa / Plano Resumen del Circuito -->
+            <div class="contacto-mapa-box">
+                <h2>Plano del Trazado Urbano</h2>
+                <img src="img/mapa_circuito.jpg" alt="Mapa del Circuito Urbano de Bilbao" class="img-responsive">
+            </div>
+
+            <!-- Formulario de Consulta para Espectadores -->
+            <section class="seccion-destacada">
+                <h2>Envíanos un Mensaje</h2>
+                <p role="note">Formulario de demostración. El sitio no envía mensajes.</p>
+            <form method="post" id="formContacto" class="form-container">
+                    <div class="form-group">
+                        <label for="nombreContacto">Nombre Completo:</label>
+                        <input type="text" id="nombreContacto" name="nombreContacto" placeholder="Tu nombre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailContacto">Correo Electrónico:</label>
+                        <input type="email" id="emailContacto" name="emailContacto" placeholder="ejemplo@correo.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="asuntoContacto">Asunto:</label>
+                        <select id="asuntoContacto" name="asuntoContacto" required>
+                            <option value="informacion">Información General</option>
+                            <option value="entradas">Dudas sobre Entradas</option>
+                            <option value="prensa">Acreditaciones de Prensa</option>
+                            <option value="accesibilidad">Accesibilidad y Movilidad</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mensajeContacto">Mensaje:</label>
+                        <textarea id="mensajeContacto" name="mensajeContacto" rows="4" class="form-group" style="padding:12px; background-color:#1e222d; border:1px solid #323846; color:#fff; border-radius:4px; font-size:0.95rem; resize:vertical;" placeholder="Escribe tu consulta aquí..." required></textarea>
+                    </div>
+
+                    <button type="submit" id="btnEnviarContacto" class="btn-submit">Enviar Mensaje</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+         5. PIE DE PÁGINA (FOOTER Y ENLACES SOCIALES)
+         ========================================================================== -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2026 Gran Premio de Euskadi F1. Todos los derechos reservados.</p>
+            <p>
+                <a href="#">Politica de Cookies</a> |
+                <a href="#">Privacidad</a> |
+                <a href="#">Aviso Legal</a>
+            </p>
+        </div>
+        <div class="redes-sociales">
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_twitter.png" alt="Twitter/X"></a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_instagram.png" alt="Instagram"></a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_facebook.png" alt="Facebook"></a>
+            <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_f1.png" alt="F1 Official"></a>
+        </div>
+    </footer>
+
+<script src="app.js" defer></script>
+
+</body>
+</html>

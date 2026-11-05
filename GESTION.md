@@ -1,12 +1,13 @@
 # Gestión del grupo 5
 
-> **BORRADOR. No entregar todavía.** Lo que aparece como dato procede de GitHub y del historial de Git a 5 de
-> noviembre de 2026. Cada campo `[POR COMPLETAR]` debe rellenarlo la persona indicada con información real.
-> Ningún reparto, reunión ni aportación se ha deducido o inventado.
+> **BORRADOR. No entregar todavía.** Contiene solo datos reales disponibles a 5 de noviembre de 2026: GitHub, el historial de Git
+> y las decisiones del responsable de la cuenta Lq922466. Cada `[POR COMPLETAR]` debe rellenarlo la persona indicada. Ningún
+> reparto, reunión ni aportación se ha deducido o inventado.
 
 ## 1. Equipo
 
-Las cuentas son las que tienen acceso al repositorio. Tener acceso no confirma que sean integrantes del grupo.
+El responsable de la cuenta Lq922466 indica que el grupo tiene cuatro integrantes. Las cuentas de la tabla son las que tienen acceso
+al repositorio, pero falta confirmar que correspondan a esos integrantes.
 
 | Cuenta de GitHub | Permiso | Nombre del integrante | Rol en el grupo | ¿Integrante confirmado? |
 | --- | --- | --- | --- | --- |
@@ -28,11 +29,11 @@ El estado técnico procede de [REVISION.md](REVISION.md). Cada responsable debe 
 | Acceso SSH y seguridad | B1–B5, F12 | Faltan las claves individuales de B1 | `[POR COMPLETAR]` | `[POR COMPLETAR]` |
 | Docker Swarm y redes | C1–C4, F7, F8 | Verificado | `[POR COMPLETAR]` | `[POR COMPLETAR]` |
 | Web F1 | D1–D3 | Verificado | `[POR COMPLETAR]` | `[POR COMPLETAR]` |
-| Pruebas de orquestación | E1–E8 | E4 y E8 solo con el portal provisional | `[POR COMPLETAR]` | `[POR COMPLETAR]` |
-| Informe y evidencias | F9, F10 | Estructura preparada, sin Word | `[POR COMPLETAR]` | `[POR COMPLETAR]` |
+| Pruebas de orquestación | E1–E8 | E4 y E8 parciales: solo con el portal provisional | `[POR COMPLETAR]` | `[POR COMPLETAR]` |
+| Informe y evidencias | F9, F10 | Informe en `PROYECTO.md`. Sin Word | `[POR COMPLETAR]` | `[POR COMPLETAR]` |
 | Gestión | F11 | Este borrador | `[POR COMPLETAR]` | `[POR COMPLETAR]` |
 | Prácticas individuales | F13 | Sin contenido | Cada integrante | `[POR COMPLETAR]` |
-| Exposición y defensa | G1–G3 | Sin realizar | Todo el grupo | — |
+| Exposición y defensa | G1–G3 | [Material preparado](entrega/DEFENSA.md), sin realizar | Todo el grupo | — |
 
 **Autoría de la web.** Según [REVISION.md](REVISION.md), el contenido de `app/f1` llegó como un ZIP del grupo. Sus autores no constan en Git:
 `[POR COMPLETAR]`.
@@ -51,9 +52,17 @@ reuniones. Las semanas anteriores deben añadirse solo si hubo trabajo real.
 | 4 de noviembre | Arranque, SSH, Swarm, portal provisional, pruebas E1–E8, revisión de criterios y preparación de la web del ZIP | Codex |
 | 4 de noviembre | Apertura de la PR #1 | Cuenta Lq922466 |
 | 5 de noviembre | E5, web definitiva, imágenes en Docker Hub, cambio A6, repetición de E1, E2, E3, E6 y E7, y capturas | Innnx, con Claude Code |
+| 5 de noviembre | Auditoría de solo lectura, informe técnico y material de defensa | Innnx, con Claude Code |
 
 - Reuniones de la semana y asistentes: `[POR COMPLETAR]`
 - Decisiones tomadas por el grupo: `[POR COMPLETAR]`
+- Decisiones técnicas del responsable de la cuenta Lq922466, el 5 de noviembre:
+  - Ejecutar la publicación, el despliegue y las pruebas por fases, deteniéndose si falla una comprobación.
+  - Aplicar A6 solo con un plan regenerado de 0 altas, 1 cambio y 0 destrucciones.
+  - Dejar el servicio en la versión 1.0 tras el rollback.
+  - Tratar los fallos HTTP aislados de E3 y E6 como registros, deteniendo la prueba si no se recuperan las réplicas, si una IP sigue
+    fallando o si hay tres fallos seguidos en una IP.
+  - No repetir E4 ni E8, y no ejecutar `terraform destroy` por ahora.
 - Bloqueos y cómo se resolvieron: `[POR COMPLETAR]`. Las incidencias técnicas están en
   [la estructura del informe](entrega/INFORME-F9-estructura.md#11-incidencias-y-soluciones).
 - Tareas para la semana siguiente: consultar [PENDIENTES](entrega/PENDIENTES.md).
@@ -89,13 +98,13 @@ un seguimiento anterior.
 
 ## 5. GitHub
 
-Datos del repositorio `Lq922466/reto4-cloud-G5` hasta el commit `2cca149`.
+Datos del repositorio `Lq922466/reto4-cloud-G5` hasta el commit `9066fd9`.
 
 | Rama | Autor en Git | Commits |
 | --- | --- | --- |
 | `main` | Innnx | 3 |
 | `cloud-g5-implementacion`, además de `main` | Codex | 11 |
-| `cloud-g5-implementacion`, además de `main` | Innnx, con `Co-Authored-By` de Claude | 13 |
+| `cloud-g5-implementacion`, además de `main` | Innnx, con `Co-Authored-By` de Claude | 14 |
 
 - **Pull requests:** una, la [PR #1](https://github.com/Lq922466/reto4-cloud-G5/pull/1), abierta desde la cuenta
   Lq922466 hacia `main`, en borrador y sin revisiones.
@@ -120,7 +129,7 @@ No se deben hacer commits en nombre de otra persona ni reescribir la autoría de
 El historial muestra commits hechos con asistentes de IA:
 
 - **Codex:** 11 commits de la rama, del 4 de noviembre, con autoría propia.
-- **Claude Code:** 13 commits del 5 de noviembre, publicados con la identidad Innnx y la línea `Co-Authored-By`.
+- **Claude Code:** 14 commits del 5 de noviembre hasta `9066fd9`, publicados con la identidad Innnx y la línea `Co-Authored-By`.
 
 Las operaciones sobre AWS, Docker Hub y Swarm del 5 de noviembre se hicieron con autorización expresa dada en la
 sesión de trabajo por la persona que la dirigía. Falta confirmar en la Guía o con el profesor cómo debe declararse este uso:

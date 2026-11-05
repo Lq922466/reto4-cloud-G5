@@ -1,60 +1,93 @@
-# reto4-cloud-G5
-RETO 4 - CLOUD - 2 ASIR
+# RETO 4 CLOUD · Grupo 5
 
-**Entrega:** [estado por criterio](REVISION.md), [evidencias](evidencias/INDICE.md),
-[estructura del informe](entrega/INFORME-F9-estructura.md), [gestión](GESTION.md) y
-[tareas pendientes](entrega/PENDIENTES.md).
+Web del Gran Premio de Euskadi desplegada en AWS con Terraform y Docker Swarm. Reto de 2º de ASIR.
 
-## Componentes locales del grupo 5
+| Para ver | Documento |
+| --- | --- |
+| El informe técnico de las Fases 0–5 | [PROYECTO.md](PROYECTO.md) |
+| El estado de los 42 criterios | [REVISION.md](REVISION.md) |
+| Qué está completado y qué falta | [Checklist final](entrega/CHECKLIST-FINAL.md) |
+| Las evidencias de cada criterio | [Índice de evidencias](evidencias/INDICE.md) |
+| La defensa: guion, demostraciones y preguntas | [DEFENSA.md](entrega/DEFENSA.md) y [presentación](entrega/presentacion-cloud-g5.pptx) |
+| La organización del grupo | [GESTION.md](GESTION.md) |
+| Las tareas pendientes | [PENDIENTES.md](entrega/PENDIENTES.md) |
 
-- `terraform/scripts/bootstrap.sh.tftpl` configura el hostname, la zona horaria,
-  las claves públicas, SSH y Docker. Integrarlo con `templatefile` en los
-  recursos existentes y pasar `hostname` y `public_keys`.
-- `scripts/generar-config-ssh.sh` consume una salida Terraform `nodes` con
-  entradas por hostname y campos `public_ip`, `private_ip` e `id`.
-  Requiere jq. Genera `config/ssh.local`, excluido de Git.
-- `scripts/comprobar-ssh.sh` comprueba en paralelo el acceso por claves a los
-  cuatro nodos. Verificar antes las huellas SSH de los servidores.
-- `scripts/configurar-red-swarm.sh` configura las redes en el manager antes
-  de publicar servicios. Primero formar Swarm por las IP privadas.
-- `app/construir.sh DIRECTORIO_WEB IMAGEN VERSION` construye cada imagen a
-  partir de la versión estática real de la web F1. Publicar las etiquetas 1.0
-  y 2.0 en Docker Hub. `app/desplegar.sh IMAGEN:1.0` instala la pila.
-- `scripts/sondear-web.sh http://IP_PUBLICA/identidad.txt` registra una
-  petición por segundo con la versión y el contenedor que responde.
+**Imágenes publicadas:** [`innnx/reto4-f1:1.0` y `innnx/reto4-f1:2.0`](https://hub.docker.com/r/innnx/reto4-f1/tags).
 
-- `scripts/comprobar-web.py DIRECTORIO` valida referencias y anclas del sitio.
-  `scripts/probar-navegador.py URL VERSION` lo recorre en Chromium y requiere
-  playwright.
-- `scripts/preparar-imagenes.sh` construye y prueba las imágenes 1.0 y 2.0 en un
-  nodo. `scripts/comprobar-descarga.sh` las descarga en los workers y las compara.
-- `scripts/publicar-imagenes.sh`, `scripts/desplegar-f1.sh`,
-  `scripts/probar-actualizacion.sh` y `scripts/probar-orquestacion.sh` publican,
-  despliegan y repiten las pruebas. Estos cuatro requieren autorización.
-- `scripts/verificar-despliegue.sh` comprueba réplicas y HTTP, sin hacer cambios.
-- `scripts/capturar-pantalla.sh` captura un navegador o un terminal gráficos reales.
-  `scripts/capturas-terminal.sh` genera las capturas de terminal del informe, solo con
-  comandos de lectura.
+**Estado:** rama `cloud-g5-implementacion`, con la PR #1 en borrador. Último estado técnico comprobado: 5 de noviembre de 2026, 09:56 UTC,
+con cuatro nodos Ready/Active, `reto4_web` en 4/4 y HTTP 200 en las cuatro IP. Las IP públicas cambian al reiniciar Learner Lab.
 
-## Despliegue de la web definitiva
+## Arquitectura
 
-Imágenes publicadas: [`innnx/reto4-f1:1.0` y `innnx/reto4-f1:2.0`](https://hub.docker.com/r/innnx/reto4-f1/tags).
-El servicio `reto4_web` usa la red `red-app-g5`, cuatro réplicas y actualización y
-rollback progresivos.
+![Arquitectura](diagramas/arquitectura.png)
+
+Cuatro instancias EC2 en `us-east-1`, un grupo de seguridad, Docker Swarm por IP privada y dos redes overlay con MTU 1450. Detalle en
+[diagramas/arquitectura.md](diagramas/arquitectura.md).
+
+## Estructura
+
+| Carpeta | Contenido |
+| --- | --- |
+| [`.devcontainer/`](.devcontainer/devcontainer.json) | Codespaces con AWS CLI y Terraform |
+| [`terraform/`](terraform/) | Infraestructura: grupo de seguridad, instancias, arranque y salidas |
+| [`config/`](config/ssh_config.example) | Plantilla de configuración SSH. `ssh.local` se genera y no se versiona |
+| [`scripts/`](scripts/) | SSH, Swarm, publicación, despliegue, pruebas, capturas y revisión de secretos |
+| [`app/`](app/) | `f1`: web definitiva. `f1-release`: extra de la 2.0. `sitio`: portal provisional. Dockerfile y pila |
+| [`diagramas/`](diagramas/) | Mapa de arquitectura |
+| [`evidencias/`](evidencias/INDICE.md) | Registros y capturas reales, por criterio |
+| [`entrega/`](entrega/) | Checklist, defensa, estructura del Word y tareas pendientes |
+| [`practica-individual/`](practica-individual/README.md) | Instrucciones y plantilla. **Sin contenido todavía** |
+
+## Reproducir el despliegue
+
+Requiere una sesión activa de Learner Lab y las credenciales de AWS en el Codespace. Estos comandos crean o cambian recursos reales.
+
+### 1. Infraestructura
 
 ```bash
-# Despliega 1.0 con sondas y comprueba 4/4 y HTTP en las cuatro IP.
-bash scripts/desplegar-f1.sh config/ssh.local innnx/reto4-f1 DIRECTORIO_REGISTROS
-# Actualiza a 2.0 y vuelve a 1.0.
-bash scripts/probar-actualizacion.sh config/ssh.local innnx/reto4-f1 DIRECTORIO_REGISTROS
-# Comprueba el estado sin hacer cambios.
-bash scripts/verificar-despliegue.sh config/ssh.local innnx/reto4-f1 1.0
+cp terraform/grupo.example.tfvars terraform/terraform.tfvars   # Indicar la IP propia /32 y las claves públicas.
+terraform -chdir=terraform init
+terraform -chdir=terraform validate
+terraform -chdir=terraform plan -out=reto4.tfplan              # Revisar antes de aplicar.
+terraform -chdir=terraform apply reto4.tfplan
 ```
 
-`config/ssh.local` se genera con `scripts/generar-config-ssh.sh` y no se versiona. Ese script lee el estado de
-Terraform, que no se versiona, así que debe ejecutarse donde esté el estado. Para
-incluir la prueba en Chromium, definir `PYTHON_NAVEGADOR` con un intérprete que tenga
-playwright.
+El estado de Terraform no se versiona. Debe conservarse para poder gestionar y destruir los recursos.
 
+### 2. SSH y Swarm
 
-En Terraform, copia grupo.example.tfvars a terraform.tfvars y configura el CIDR real y las claves públicas. Valida y revisa el plan en el Learner Lab antes de solicitar autorización para desplegar. El tratamiento de vockey queda pendiente de confirmación docente por la diferencia entre la guía y B1 de la rúbrica.
+```bash
+bash scripts/generar-config-ssh.sh    # Lee el estado de Terraform y genera config/ssh.local.
+bash scripts/comprobar-ssh.sh         # Verificar antes las huellas SSH de los servidores.
+bash scripts/formar-swarm.sh          # Forma Swarm por IP privada y crea las redes con MTU 1450.
+```
+
+### 3. Imágenes y servicio
+
+Docker no puede ejecutarse en este Codespace, así que las imágenes se construyen en un nodo.
+
+```bash
+bash scripts/preparar-imagenes.sh config/ssh.local manager-g5 reto4-g5/f1-definitiva
+ssh -t -F config/ssh.local manager-g5 docker login -u CUENTA
+bash scripts/publicar-imagenes.sh config/ssh.local CUENTA/REPOSITORIO     # Cierra la sesión al terminar.
+bash scripts/comprobar-descarga.sh config/ssh.local CUENTA/REPOSITORIO
+bash scripts/desplegar-f1.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
+```
+
+### 4. Comprobaciones
+
+```bash
+# Solo lectura: réplicas, imagen y HTTP en las cuatro IP.
+bash scripts/verificar-despliegue.sh config/ssh.local CUENTA/REPOSITORIO 1.0
+
+# Modifican el servicio: actualización y rollback; E2, E3 o E6.
+bash scripts/probar-actualizacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
+bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS e2
+```
+
+## Seguridad
+
+- No se versionan claves privadas, credenciales, estado ni planes de Terraform: [`.gitignore`](.gitignore).
+- Antes de integrar cambios, ejecutar `python3 scripts/revisar-secretos.py COMMIT_BASE HEAD`.
+- `python3 scripts/validar-entrega.py` comprueba enlaces, evidencias y estados de los documentos de entrega.
+- Las capturas de AWS no deben mostrar el identificador de la cuenta.

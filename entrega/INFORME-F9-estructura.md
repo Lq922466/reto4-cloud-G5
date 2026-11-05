@@ -1,8 +1,8 @@
 # Estructura del informe F9
 
-**Es una estructura de trabajo, no el informe.** El Word definitivo se generará después de contrastarla con la Guía y
-la Rúbrica originales, que no estaban disponibles al prepararla. Sigue las fases y criterios de
-[REVISION.md](../REVISION.md); el orden, los apartados y el formato pueden cambiar con ese contraste.
+**Es la estructura para el Word.** El contenido técnico ya está en [PROYECTO.md](../PROYECTO.md). El Word se generará después de
+contrastarla con la Guía y la Rúbrica originales, que no estaban disponibles al prepararla, y el orden, los apartados y el formato
+pueden cambiar con ese contraste.
 
 Las rutas son relativas a `evidencias/`, y `CT/` equivale a `capturas-terminal/`.
 
@@ -43,7 +43,7 @@ Procede de [GESTION.md](../GESTION.md). Debe completarlo el grupo: reparto, segu
 
 ## 3. Arquitectura (F8)
 
-Diagrama de [arquitectura](../diagramas/arquitectura.md): `[USUARIO 6]`, renderizado en GitHub.
+Diagrama: [`diagramas/arquitectura.png`](../diagramas/arquitectura.png), generado a partir de [arquitectura.md](../diagramas/arquitectura.md).
 
 **Debe explicarse:** las instancias conservan sus nombres iniciales, pero desde las pruebas E8 manager-g5, worker1-g5 y
 worker2-g5 son managers de Swarm. worker1-g5 es el líder actual y solo worker3-g5 es un worker puro.
@@ -148,17 +148,17 @@ Indicar el contexto de cada prueba. Las de la web definitiva son las principales
 | E1 Balanceo | Definitiva | 16 peticiones por las cuatro IP, respondidas por cuatro contenedores | `CT/E1-reparto-peticiones.png` |
 | E2 Escalado | Definitiva | 8/8 (2-2-2-2), 12/12 (3-3-3-3), 2/2 y 4/4 (1-1-1-1), con HTTP 200 tras cada estado. Sondas: 562 correctas y dos tiempos de espera aislados durante la reducción de 12 a 2 réplicas, de causa no determinada | `F4-E2/registro.txt`, `F4-E2/terminal-e2-*.png` |
 | E3 Autorreparación | Definitiva | Contenedor eliminado (`exit 137`), tarea de reemplazo en el mismo nodo y vuelta a 4/4. Sondas: 308 correctas, 0 fallos | `F4-E3/registro.txt`, `F4-E3/terminal-e3-*.png` |
-| E4 Caída de un worker | Provisional | worker3-g5 detenido, tarea reubicada y vuelta al servicio. Sondas: 164 correctas, 0 fallos en el tramo medido | `E4-E5-E8-registro.txt`, `prototipo/E4-E5-http.txt`, `E4-web-worker-down.png` |
+| E4 Caída de un worker. **Parcial** | Provisional | worker3-g5 detenido y `Down`, tarea reubicada y reincorporación. Sondas: 164 correctas, 0 fallos en el tramo medido | `E4-E5-E8-registro.txt`, `prototipo/E4-E5-http.txt`, `E4-web-worker-down.png` |
 | E5 Reinicio de Learner Lab | Entorno | Mismas instancias y volúmenes raíz; SSH, cuórum, redes, 4/4 y HTTP correctos | `E5-verificacion-previa.txt`, `E5-verificacion-final.txt` |
 | E6 Drain | Definitiva | worker3-g5 en Drain, tarea migrada a worker2-g5, vuelta a Active y `--force` con una réplica por nodo. Sondas: 488 correctas, 0 fallos | `F4-E6/registro.txt`, `F4-E6/terminal-e6-*.png` |
 | E7 Actualización y rollback | Definitiva | 1.0 → 2.0 → 1.0, siempre en 4/4 al terminar. Sondas: 620 correctas, 0 fallos | `F3-actualizacion/registro.txt`, `F3-actualizacion/web-*.png`, `CT/E7-historial-versiones.png` |
-| E8 Elección de líder | Provisional | manager-g5 detenido, worker2-g5 elegido líder y manager-g5 de vuelta como Reachable. Sondas: 38 y 130 correctas, con 34 segundos sin muestras entre tramos | `E8-eleccion-registro.txt`, `E8-web-parada.png`, `E8-web-recuperado.png` |
+| E8 Elección de líder. **Parcial** | Provisional | Comparando antes y después: worker2-g5 pasa a líder y manager-g5 vuelve como Reachable. Sondas: 38 y 130 correctas, con 34 segundos sin muestras. Sin registro del clúster durante la parada | `E8-eleccion-registro.txt`, `E8-web-parada.png`, `E8-web-recuperado.png` |
 
 **Notas:**
 
 - `CT/E7-historial-versiones.png` es el historial de tareas, tomado después de la prueba.
 - El registro de E2 termina en `exit=1` porque entonces el script trataba cualquier fallo de sonda como error.
-- E4 y E8 no se repitieron con la web definitiva, y sus capturas de consola no existen.
+- E4 y E8 no se repitieron con la web definitiva, y sus capturas de consola no existen. [Análisis](../evidencias/auditoria/E4-E8.md).
 
 ## 10. Seguridad (F12, A3, B4)
 
@@ -182,6 +182,7 @@ Solo incidencias reales. La causa se indica únicamente cuando consta.
 | Portal provisional y web definitiva responden ambos `version=1.0` | La verificación comprueba la imagen de cada tarea | `F3-despliegue/registro.txt` |
 | Reparto desigual tras el despliegue y el rollback | E6 terminó con una réplica por nodo | `F3-estado-final.txt`, `F4-E6/registro.txt` |
 | Dos tiempos de espera aislados en E2 | Causa no determinada. Criterio de supervisión para E3 y E6 | `F4-E2/registro.txt` |
+| AWS y la web dejaron de responder a las 11:07 UTC, y la IP del Codespace cambió | Sin resolver | `auditoria/registro-acceso-en-vivo.txt` |
 
 ## 12. Conclusiones y reflexión
 

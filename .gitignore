@@ -1,39 +1,35 @@
-# Terraform
-**/.terraform/
-*.tfstate
-*.tfstate.*
-*.tfplan
-*.tfvars
-crash.log
-crash.*.log
-.terraformrc
-terraform.rc
-
-# SSH y credenciales
-*.pem
-*.ppk
-*.key
-.ssh/
-.aws/
-credentials
-
+# Terraform: estado, planes, variables locales y datos de trabajo
 **/.terraform/
 *.tfstate
 *.tfstate.*
 *.tfplan
 *.plan
-crash*.log
 *.tfvars
 !*.example.tfvars
 *.auto.tfvars.json
+crash*.log
+.terraformrc
+terraform.rc
+
+# Claves y credenciales
 *.pem
+*.ppk
 *.key
 id_rsa*
 id_ed25519*
 !*.pub
+.ssh/
+.aws/
+credentials
 .env
 .env.*
-.aws/
+
+# Configuración SSH generada con las IP actuales
 config/ssh.local
+
+# Python
+__pycache__/
+
+# Documentos de trabajo: decidir si el Word final se versiona
 evidencias-locales/
 *.docx

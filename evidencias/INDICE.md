@@ -1,7 +1,7 @@
 # Índice de evidencias por criterio
 
 Organiza las evidencias del repositorio con los mismos criterios que [REVISION.md](../REVISION.md).
-Situación a 5 de noviembre de 2026. Último estado técnico comprobado: 09:56 UTC.
+Situación a 5 de noviembre de 2026. Último estado técnico comprobado: 09:56 UTC. [Auditoría](auditoria/INFORME.md).
 
 **Contexto de cada evidencia**
 
@@ -27,11 +27,11 @@ de D3 sí. Autores: Codex el 4 de noviembre y Claude Code el 5 de noviembre.
 | F5 | Verificado con registro | [CT/F5-entorno](capturas-terminal/F5-entorno.png), [registro técnico](revision-registro-tecnico.txt) | — |
 | F6 | Verificado con registro | [CT/A1-modulo-terraform](capturas-terminal/A1-modulo-terraform.png), [CT/F6-codigo-instancias](capturas-terminal/F6-codigo-instancias.png), [apply inicial](prototipo/reto4-apply.log) | — |
 | F7 | Verificado | [CT/F7-scripts](capturas-terminal/F7-scripts.png) | — |
-| F8 | Verificado | [Diagrama](../diagramas/arquitectura.md) | Captura del diagrama renderizado en GitHub |
-| F9 | Parcial | [Estructura del informe](../entrega/INFORME-F9-estructura.md), [PROYECTO](../PROYECTO.md) | Word definitivo, tras contrastar con la Guía y la Rúbrica |
-| F10 | Parcial | Este índice | Seis capturas web de [REVISION](../REVISION.md#capturas-que-faltan) |
+| F8 | Verificado | [Diagrama](../diagramas/arquitectura.md), [renderizado](../diagramas/arquitectura.png) | Contrastar la topología con la Guía |
+| F9 | Parcial | [Informe técnico](../PROYECTO.md), [estructura del Word](../entrega/INFORME-F9-estructura.md) | Word definitivo, tras contrastar con la Guía y la Rúbrica |
+| F10 | Parcial | Este índice | Cinco capturas web de [REVISION](../REVISION.md#capturas-que-faltan) |
 | F11 | Parcial | [GESTION (borrador)](../GESTION.md) | Responsables, seguimiento, Trello y reflexión reales |
-| F12 | Verificado en archivos revisados | [CT/F12-archivos-sensibles](capturas-terminal/F12-archivos-sensibles.png) | Repetir la revisión antes de integrar la PR |
+| F12 | Verificado | [Revisión de todo el historial](auditoria/registro-repositorio.txt), [CT/F12-archivos-sensibles](capturas-terminal/F12-archivos-sensibles.png) | Repetir la revisión antes de integrar la PR |
 | F13 | Pendiente | [Estructura sin contenido](../practica-individual/README.md) | Prácticas reales de cada integrante |
 
 ## Fase 1 · Infraestructura
@@ -79,11 +79,11 @@ de D3 sí. Autores: Codex el 4 de noviembre y Claude Code el 5 de noviembre.
 | E1 | Definitiva | Verificado con registro | [CT/E1-reparto-peticiones](capturas-terminal/E1-reparto-peticiones.png), [estado](F3-estado-final.txt) | — |
 | E2 | Definitiva | Verificado con observación | [F4-E2](F4-E2/): registro, sondas y capturas por estado | — |
 | E3 | Definitiva | Verificado con registro | [F4-E3](F4-E3/): registro, sondas y capturas antes y después | — |
-| E4 | Provisional | Verificado en prototipo | [Registro](E4-E5-E8-registro.txt), [sonda](prototipo/E4-E5-http.txt), [captura](E4-web-worker-down.png) | Consola y terminal solo repitiendo la prueba |
+| E4 | Provisional | Parcial | [Registro](E4-E5-E8-registro.txt), [sonda](prototipo/E4-E5-http.txt), [captura](E4-web-worker-down.png) | Web definitiva, URL de la sonda y consola. [Análisis](auditoria/E4-E8.md) |
 | E5 | Entorno | Verificado con registro | [Verificación final](E5-verificacion-final.txt), [previa](E5-verificacion-previa.txt), [preparación](E5-preparacion.txt), [CT/estado-final](capturas-terminal/estado-final.png) | Vista de EC2 en la consola |
 | E6 | Definitiva | Verificado con registro | [F4-E6](F4-E6/): registro, sondas y capturas antes, durante y después | — |
 | E7 | Definitiva | Verificado con registro | [F3-actualizacion](F3-actualizacion/): registro, sondas y capturas, [CT/E7-historial-versiones](capturas-terminal/E7-historial-versiones.png) | Captura de terminal tomada durante la prueba: la actual es posterior |
-| E8 | Provisional | Elección verificada con límite de sondeo | [Registro](E8-eleccion-registro.txt), [quórum previo](prototipo/E8-quorum-previo.txt), [captura durante](E8-web-parada.png), [captura después](E8-web-recuperado.png), [comprobación posterior](verificacion-posterior.txt) | Capturas durante el cambio de líder, solo repitiendo la prueba |
+| E8 | Provisional | Parcial | [Registro](E8-eleccion-registro.txt), [quórum previo](prototipo/E8-quorum-previo.txt), [captura durante](E8-web-parada.png), [captura después](E8-web-recuperado.png), [comprobación posterior](verificacion-posterior.txt) | Web definitiva, y el estado del clúster durante la parada. [Análisis](auditoria/E4-E8.md) |
 
 **Límite de las sondas.** Toman una muestra por segundo y por IP, y no acreditan disponibilidad
 continua. En E2 se registraron dos tiempos de espera aislados durante la reducción de 12 a 2 réplicas.
@@ -93,9 +93,18 @@ En E8 hubo 34 segundos sin muestras entre los dos tramos de sondeo.
 
 | Criterio | Estado | Evidencia | Falta |
 | --- | --- | --- | --- |
-| G1 | Pendiente | [Guion de diez minutos](../REVISION.md#guion-de-exposición-de-diez-minutos) | Preparar y realizar la exposición |
-| G2 | Pendiente | — | Defensa individual ante el profesor |
-| G3 | Pendiente | — | Demostración técnica individual |
+| G1 | Pendiente | [Guion](../entrega/DEFENSA.md), [presentación](../entrega/presentacion-cloud-g5.pptx) | Ensayar y realizar la exposición |
+| G2 | Pendiente | [Preguntas de repaso](../entrega/DEFENSA.md#preguntas-del-profesor) | Defensa individual ante el profesor |
+| G3 | Pendiente | [Demostraciones](../entrega/DEFENSA.md#demostraciones) | Demostración técnica individual |
+
+## Auditoría
+
+| Documento | Contenido |
+| --- | --- |
+| [Informe de la auditoría](auditoria/INFORME.md) | Reglas, MTU, SSH, Swarm, imágenes, redes y repositorio |
+| [Revisión de E4 y E8](auditoria/E4-E8.md) | Qué demuestran y qué no |
+| [Intento en vivo](auditoria/registro-acceso-en-vivo.txt) | Denegación de AWS y web sin respuesta, 11:13 UTC |
+| [Terraform](auditoria/registro-terraform.txt) y [repositorio](auditoria/registro-repositorio.txt) | Salidas de las comprobaciones |
 
 ## Evidencias que no deben presentarse como resultado final
 
@@ -108,6 +117,7 @@ Son reales y se conservan como registro, pero no acreditan el estado final.
 | [E5-web-recuperado](E5-web-recuperado.png) | Portal tras reincorporar un worker en E4, no tras reiniciar Learner Lab | [CT/estado-final](capturas-terminal/estado-final.png) |
 | [D1-publicacion-intento-fallido](D1-publicacion-intento-fallido.txt) | Primer intento rechazado por Docker Hub. Útil para Incidencias | [D1-publicacion-dockerhub](D1-publicacion-dockerhub.txt) |
 | [D1-navegador 1.0](D1-navegador-1.0.png) y [2.0](D1-navegador-2.0.png), [F1-candidata-local](F1-candidata-local.png) | Web en contenedores temporales o en local, sin desplegar | [Capturas D3](D3-registro.txt) |
+| [E4-web-worker-down](E4-web-worker-down.png), [E8-web-parada](E8-web-parada.png), [E8-web-recuperado](E8-web-recuperado.png) | Portal provisional, sin IP, hora ni estado del clúster. No prueban por sí solas el momento de la captura | Registros de [E4](E4-E5-E8-registro.txt) y [E8](E8-eleccion-registro.txt) |
 | [F4C 1](F4C-nodo-1.png), [2](F4C-nodo-2.png), [3](F4C-nodo-3.png), [4](F4C-nodo-4.png), posterior-web de [manager](posterior-web-manager-g5.png), [worker 1](posterior-web-worker1-g5.png), [worker 2](posterior-web-worker2-g5.png) y [worker 3](posterior-web-worker3-g5.png) | Portal provisional, con IP antiguas | [Capturas D3](D3-registro.txt) |
 
 ## Registros originales del 4 de noviembre

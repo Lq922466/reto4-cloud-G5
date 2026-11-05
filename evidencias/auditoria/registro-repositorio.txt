@@ -1,0 +1,53 @@
+Repositorio, solo lectura. codespaces-8d43b2. 2026-11-05T11:09:12+00:00.
+
+$ gh repo view
+{"descripcion":"RETO 4 - CLOUD - 2 ASIR","licencia":null,"rama":"main","visibilidad":"PRIVATE"}
+
+$ ramas
+cloud-g5-implementacion	9066fd9	false
+main	6f3d838	false
+
+$ protección de main
+{"message":"Resource not accessible by integration","documentation_url":"https://docs.github.com/rest/branches/branch-protection#get-branch-protection","status":"403"}gh: Resource not accessible by in
+
+$ seguridad del repositorio
+no disponible con este token
+
+
+$ colaboradores
+Lq922466	admin
+EnriZx2	write
+alexguerth	write
+ibaiaretxabalaasir-collab	write
+
+$ etiquetas y publicaciones
+0
+0
+
+$ PR
+1	OPEN	true	main	cloud-g5-implementacion	Lq922466
+
+$ Revisión de secretos en todo el historial
+líneas añadidas revisadas: 65272
+coincidencias: 2
+Falso positivo: muestra de control de scripts/revisar-secretos.py
+Falso positivo: propietario público de las AMI de Canonical en terraform/main.tf
+
+$ Archivos sensibles en cualquier commit
+terraform/grupo.example.tfvars
+(fin)
+
+$ Credenciales en la web, incluido el historial
+(fin)
+
+$ Archivos más grandes
+1356	evidencias/F3-web-final-1.0-completa.png
+856	app/f1/img/mapa_circuito.jpg
+840	evidencias/F1-candidata-local.png
+732	evidencias/D3-navegador-worker3-g5.png
+728	evidencias/D3-navegador-worker2-g5.png
+12M	.git
+
+$ Autores
+     11 Codex
+     17 Innnx

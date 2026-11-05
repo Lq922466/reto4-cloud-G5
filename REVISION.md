@@ -15,7 +15,7 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | --- | --- | --- | --- |
 | F1 | Parcial | GitHub confirma repositorio privado, un administrador y tres cuentas con escritura. No hay invitaciones pendientes. | Confirmar quiénes son los integrantes y si el profesor tiene acceso. Guardar captura de Settings → Collaborators. |
 | F2 | Parcial | El historial muestra un autor humano y Codex. La consulta de PR devolvió cero. | Revisar e integrar la rama mediante una PR. Cada integrante debe aportar commits y PR reales. |
-| F3 | Parcial | README con resumen e instrucciones locales. | Actualizar instrucciones de despliegue final y enlace a las dos etiquetas de Docker Hub. |
+| F3 | Parcial | README con resumen, scripts y enlace a las etiquetas de Docker Hub. | Completar las instrucciones de despliegue final cuando la web definitiva esté desplegada. |
 | F4 | Verificado | En la rama de implementación existen terraform, app, config y .devcontainer. | Incluir la rama revisada en la entrega. |
 | F5 | Verificado con registro | devcontainer.json incluye AWS CLI y Terraform. El registro técnico contiene sus versiones desde Codespaces. | Capturar terminal con hostname, hora y ambas versiones. |
 | F6 | Verificado con registro | Terraform en el repositorio. Validación y despliegue reales de cinco recursos. | Adjuntar capturas de código y validación. |
@@ -41,7 +41,7 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | C2 | Verificado con registro | Swarm por IP privada. Red ingress red-g5 con MTU 1450. | Capturar inspección de red y direcciones privadas. |
 | C3 | Verificado con registro | Configuración inicial de un manager líder y tres workers Ready/Active. E8 dejó tres managers operativos y worker2-g5 como líder. | Capturar el estado actual y señalar qué registro acredita la topología inicial. |
 | C4 | Verificado con registro | Overlay red-app-g5 para la aplicación con MTU 1450. | Capturar listado e inspección. |
-| D1 | Parcial | Dos imágenes definitivas construidas en manager-g5 desde app/f1 y probadas en contenedores temporales: healthcheck, versión, identidad y Chromium sin errores. [Registro](evidencias/D1-imagenes-definitivas.txt) y [navegador](evidencias/D1-navegador-registro.txt). | Publicar con autorización y guardar evidencia de etiquetas y digests en Docker Hub. |
+| D1 | Verificado con registro | Dos imágenes definitivas construidas desde app/f1 y probadas en contenedores temporales. Publicadas en `innnx/reto4-f1` con etiquetas 1.0 y 2.0 y descargadas sin sesión en los tres workers, con digest y contenido idénticos. [Publicación](evidencias/D1-publicacion-dockerhub.txt), [descarga](evidencias/D1-descarga-dockerhub.txt) y [captura de etiquetas](evidencias/D1-dockerhub-etiquetas.png). | Mostrar Docker Hub en la defensa. |
 | D2 | Verificado en prototipo | stack.yml define red, cuatro réplicas y políticas. El servicio real terminó 4/4. | Repetir con imágenes definitivas y capturar configuración y servicio. |
 | D3 | Verificado en prototipo | Cuatro respuestas HTTP y cuatro capturas reales del navegador. Las IP públicas de manager y worker3 cambiaron tras las pruebas. | Repetir con la web definitiva y las IP actuales. Capturar navegador con dirección visible. |
 | E1 | Verificado en prototipo | Doce peticiones dieron cuatro identidades distintas. | Capturar respuestas del sondeo y repetir con la web final. |
@@ -214,7 +214,7 @@ y no acreditan D2, D3 ni E1–E8 con la web final.
 ### Secuencia por fases
 
 Cada fase se detiene si falla una comprobación. La siguiente no empieza sin el
-visto bueno del responsable.
+visto bueno del responsable. Las fases 1 y 2 ya están completadas.
 
 ```bash
 ssh -t -F config/ssh.local manager-g5 docker login -u CUENTA
@@ -233,11 +233,25 @@ La imagen provisional se conserva en los nodos.
 
 ### Publicación en Docker Hub
 
-Repositorio público `innnx/reto4-f1`. El primer intento, a las 09:02 UTC del 5 de
-noviembre de 2026, se detuvo porque Docker Hub rechazó el token con `access token
-has insufficient scopes`. Después se comprobó que no había etiquetas publicadas,
-que la sesión estaba cerrada y que `reto4_web` seguía sin cambios. Queda pendiente
-repetirlo con un token válido. [Registro](evidencias/D1-publicacion-intento-fallido.txt).
+Repositorio público [`innnx/reto4-f1`](https://hub.docker.com/r/innnx/reto4-f1/tags).
+
+| Etiqueta | Digest | Huella del contenido servido |
+| --- | --- | --- |
+| 1.0 | `sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca` | `a83fb4d41950fac0…` |
+| 2.0 | `sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7` | `4e8580f3094f3803…` |
+
+- El [primer intento](evidencias/D1-publicacion-intento-fallido.txt), a las 09:02 UTC del
+  5 de noviembre de 2026, se detuvo porque Docker Hub rechazó el token con `access
+  token has insufficient scopes`. No publicó etiquetas.
+- La [publicación correcta](evidencias/D1-publicacion-dockerhub.txt) se hizo a las
+  09:12 UTC, tras iniciar sesión de nuevo. El script cerró la sesión al terminar.
+- La [comprobación de descarga](evidencias/D1-descarga-dockerhub.txt) confirmó el acceso
+  anónimo al registro y las dos etiquetas en worker1-g5, worker2-g5 y worker3-g5, sin
+  sesión de Docker Hub, con el digest y la huella de lo construido en manager-g5.
+- [Captura de la página pública de etiquetas](evidencias/D1-dockerhub-etiquetas.png),
+  tomada con Chromium a las 09:15 UTC.
+- `reto4_web` sigue en 4/4 con la imagen provisional. Los workers guardan además las
+  dos imágenes publicadas. D2, D3 y E1–E8 siguen sin repetirse con la web definitiva.
 
 ### A6
 

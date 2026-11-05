@@ -137,8 +137,9 @@ correctos. [Registro](evidencias/E5-verificacion-final.txt).
 ## Web F1 e imágenes definitivas
 
 Las imágenes 1.0 y 2.0 se construyeron y probaron en contenedores temporales de
-manager-g5. El clúster sigue sirviendo el portal provisional hasta completar la
-publicación y el despliegue autorizados. Consultar
+manager-g5, se publicaron en [`innnx/reto4-f1`](https://hub.docker.com/r/innnx/reto4-f1/tags)
+y se descargaron sin sesión en los tres workers. El clúster sigue sirviendo el portal
+provisional hasta completar el despliegue autorizado. Consultar
 [el cierre técnico](REVISION.md#cierre-técnico-del-5-de-noviembre-de-2026).
 
 ## A6 · Cambio con Terraform

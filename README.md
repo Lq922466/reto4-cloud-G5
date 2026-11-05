@@ -29,4 +29,6 @@ RETO 4 - CLOUD - 2 ASIR
   despliegan y repiten las pruebas. Estos cuatro requieren autorización.
 - `scripts/verificar-despliegue.sh` comprueba réplicas y HTTP, sin hacer cambios.
 
+Imágenes publicadas: [`innnx/reto4-f1:1.0` y `innnx/reto4-f1:2.0`](https://hub.docker.com/r/innnx/reto4-f1/tags).
+
 En Terraform, copia grupo.example.tfvars a terraform.tfvars y configura el CIDR real y las claves públicas. Valida y revisa el plan en el Learner Lab antes de solicitar autorización para desplegar. El tratamiento de vockey queda pendiente de confirmación docente por la diferencia entre la guía y B1 de la rúbrica.

@@ -1,21 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Genera la configuración local a partir de las salidas vigentes de Terraform.
+# Qué hace: genera config/ssh.local a partir de la salida «nodes» de Terraform.
+# Cuándo:   justo después de crear la infraestructura. Si las IP han cambiado desde el último
+#           apply, usar scripts/actualizar-ips.sh, que las lee directamente de EC2.
+# Efecto:   solo escribe config/ssh.local, excluido de Git. Requiere jq y el estado de Terraform.
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+source "$root/scripts/lib-ssh-config.sh"
 nodes=$(terraform -chdir="$root/terraform" output -json nodes)
-destination="$root/config/ssh.local"
-umask 077
-temporary=$(mktemp "$root/config/.ssh.local.XXXXXX")
-trap 'rm -f -- "$temporary"' EXIT
-for host in manager-g5 worker{1..3}-g5; do
-    field=private_ip
-    if [[ "$host" == manager-g5 ]]; then
-        field=public_ip
-    fi
-    ip=$(jq -er --arg host "$host" --arg field "$field" '
-        .[$host][$field] | strings | select(test("^[0-9]+(\\.[0-9]+){3}$"))
-    ' <<< "$nodes")
-    printf 'Host %s\n    HostName %s\n\n' "$host" "$ip" >> "$temporary"
-done
-sed -n '/^Host worker?-g5/,$p' "$root/config/ssh_config.example" >> "$temporary"
-mv -- "$temporary" "$destination"
+escribir_config_ssh "$root" "$nodes" "$root/config/ssh.local"

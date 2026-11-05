@@ -1,6 +1,14 @@
+# Plantilla de configuración SSH del grupo 5.
+# La genera con los valores reales scripts/actualizar-ips.sh, en config/ssh.local (no versionado).
+# Después de generarla basta con el nombre corto: ssh manager-g5
+
+# Único nodo al que se entra por su IP pública, que cambia en cada sesión del laboratorio.
+# HostKeyAlias evita tener que aceptar de nuevo la misma clave de host cuando cambia la IP.
 Host manager-g5
     HostName IP_PUBLICA_MANAGER
+    HostKeyAlias manager-g5
 
+# Los workers se alcanzan por su IP privada, que no cambia.
 Host worker1-g5
     HostName IP_PRIVADA_WORKER1
 
@@ -10,9 +18,11 @@ Host worker2-g5
 Host worker3-g5
     HostName IP_PRIVADA_WORKER3
 
+# El salto: se llega a cada worker a través del manager.
 Host worker?-g5
     ProxyJump manager-g5
 
+# Opciones comunes: usuario, clave propia y sin contraseñas ni preguntas.
 Host manager-g5 worker?-g5
     User ubuntu
     IdentityFile ~/.ssh/reto4_g5

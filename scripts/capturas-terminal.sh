@@ -2,6 +2,8 @@
 set -euo pipefail
 export AWS_PAGER=""
 # Capturas reales de terminal para el informe, solo con comandos de lectura.
+# Sustituido por scripts/capturas-norma.py: estas capturas no muestran el prompt que exige la Guía. Se
+# conserva porque generó las capturas de evidencias/capturas-terminal.
 # Cada captura guarda la imagen y el texto de la salida. Requiere DISPLAY, xterm e ImageMagick.
 # Uso: capturas-terminal.sh DIRECTORIO_DE_ESTADO_TERRAFORM DIRECTORIO_DE_SALIDA
 if [[ $# != 2 ]]; then

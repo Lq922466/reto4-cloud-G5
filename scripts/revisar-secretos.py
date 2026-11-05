@@ -28,8 +28,9 @@ def main(base, final):
 
     archivos = git("diff", "--name-only", base, final).split("\n")
     # Los binarios se excluyen: sus bytes dan coincidencias falsas. Las capturas se revisan a la vista.
-    # Este script contiene los patrones y las muestras de prueba, y se excluye de su propia revisión.
-    texto = git("diff", "--no-color", base, final, "--", ".", ":!scripts/revisar-secretos.py")
+    # Estos scripts contienen patrones de detección y muestras de prueba, y darían falsos positivos.
+    excluidos = [f":!{ruta}" for ruta in ("scripts/revisar-secretos.py", "scripts/capturas-norma.py", "scripts/comprobar-laboratorio.sh")]
+    texto = git("diff", "--no-color", base, final, "--", ".", *excluidos)
     anadidas = [l for l in texto.splitlines() if l.startswith("+") and not l.startswith("+++")]
     hallazgos = [l[:70] for l in anadidas if SECRETOS.search(l)]
     sensibles = [f for f in archivos if ARCHIVOS.search(f) and not EXCEPCIONES.search(f)]

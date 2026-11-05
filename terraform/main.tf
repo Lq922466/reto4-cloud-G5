@@ -134,8 +134,8 @@ resource "aws_instance" "manager" {
   })
 
   root_block_device {
-    volume_size = 20
-    volume_type = "gp3"
+    volume_size = var.manager_disk_size
+    volume_type = var.disk_type
   }
 
   tags = {
@@ -160,8 +160,8 @@ resource "aws_instance" "workers" {
   })
 
   root_block_device {
-    volume_size = 10
-    volume_type = "gp3"
+    volume_size = var.worker_disk_size
+    volume_type = var.disk_type
   }
 
   tags = {

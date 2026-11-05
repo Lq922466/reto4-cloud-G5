@@ -2,7 +2,11 @@
 set -euo pipefail
 umask 077
 export AWS_PAGER=""
-# Ejecutar desde la raíz del worktree operativo, antes o después de E5.
+# Qué hace: comprueba que el clúster sobrevive al reinicio de Learner Lab (E5), comparándolo con una
+#           referencia guardada antes: cuenta, estado de Terraform, IDs, discos, SSH, Swarm, redes y HTTP.
+# Cuándo:   desde la raíz del worktree que contiene el estado, antes o después del reinicio.
+# Efecto:   solo lectura. Tras el cambio A6, el serial del estado ya no coincide con el respaldo de E5
+#           y la primera comprobación fallará: habría que crear una referencia nueva.
 if [[ $# != 1 ]]; then
     printf 'Uso: %s DIRECTORIO_PRIVADO_DE_RESPALDO\n' "$0" >&2
     exit 2
@@ -11,6 +15,7 @@ backup=$1
 jq -e -s '
     length == 2 and .[0].lineage == .[1].lineage and .[0].serial == .[1].serial
 ' "$backup/terraform.tfstate" <(terraform -chdir=terraform state pull) >/dev/null
+# Detiene la comprobación si la cuenta de AWS no es la misma que antes del reinicio.
 account=$(aws sts get-caller-identity --query Account --output text)
 [[ "$account" == "$(cat "$backup/aws-account.txt")" ]] || {
     printf 'La cuenta AWS difiere de la registrada antes de E5.\n' >&2
@@ -22,6 +27,7 @@ mapfile -t ids < <(jq -r '.[].id' <<< "$nodes")
 [[ ${#ids[@]} == 4 ]]
 hostname
 date -Is
+# Las cuatro instancias deben estar en ejecución y con sus dos controles correctos.
 printf '\n$ aws ec2 describe-instance-status (us-east-1)\n'
 health=$(aws ec2 describe-instance-status --region us-east-1 --include-all-instances \
     --instance-ids "${ids[@]}" --output json)
@@ -29,6 +35,7 @@ jq -r '.InstanceStatuses[] | [.InstanceId,.InstanceState.Name,.SystemStatus.Stat
 jq -e '[.InstanceStatuses[] | select(.InstanceState.Name=="running" and
     .SystemStatus.Status=="ok" and .InstanceStatus.Status=="ok")] | length == 4' <<< "$health" >/dev/null
 
+# Las IP privadas deben coincidir con el estado. Las públicas cambian, y se muestran.
 printf '\n$ aws ec2 describe-instances (direcciones actuales)\n'
 live=$(aws ec2 describe-instances --region us-east-1 --instance-ids "${ids[@]}" --output json)
 jq -e --argjson nodes "$nodes" '
@@ -38,6 +45,7 @@ jq -e --argjson nodes "$nodes" '
 ' <<< "$live" >/dev/null
 jq -r '.Reservations[].Instances[] | [.InstanceId,.PrivateIpAddress,.PublicIpAddress] | @tsv' <<< "$live"
 
+# Los discos deben ser los mismos: si no, se habrían perdido los datos de Swarm.
 printf '\n$ Comparar discos de EC2 con la referencia previa\n'
 jq -e --slurpfile baseline "$backup/e5-discos-antes.json" '
     [.Reservations[].Instances[] | {
@@ -49,6 +57,7 @@ jq -e --slurpfile baseline "$backup/e5-discos-antes.json" '
 
 manager_id=$(jq -er '."manager-g5".id' <<< "$nodes")
 manager_ip=$(jq -er --arg id "$manager_id" '.Reservations[].Instances[] | select(.InstanceId==$id) | .PublicIpAddress' <<< "$live")
+# Configuración SSH temporal con la IP actual del manager, sin tocar la original.
 config=$(mktemp)
 trap 'rm -f -- "$config"' EXIT
 python3 - "$backup/ssh.local" "$config" "$manager_ip" <<'PY'
@@ -74,6 +83,7 @@ manager=manager-g5
 printf '\n$ docker node ls; docker network inspect; docker service ls; docker service ps\n'
 status=$(remote "$manager" 'docker node ls --format "{{.Hostname}} {{.Status}} {{.Availability}} {{.ManagerStatus}}"')
 printf '%s\n' "$status"
+# Cuatro nodos activos, tres managers y un solo líder.
 [[ $(grep -c ' Ready Active' <<< "$status") == 4 ]]
 [[ $(grep -Ec ' (Reachable|Leader)$' <<< "$status") == 3 ]]
 [[ $(grep -c ' Leader$' <<< "$status") == 1 ]]
@@ -85,6 +95,7 @@ replicas=$(remote "$manager" 'docker service ls --filter name=reto4_web --format
 printf 'reto4_web %s\n' "$replicas"
 [[ "$replicas" == 4/4 ]]
 remote "$manager" 'docker service ps --filter desired-state=running reto4_web'
+# La web debe responder por las cuatro IP públicas actuales.
 while IFS= read -r ip; do
     printf '\n$ curl http://%s/identidad.txt\n' "$ip"
     date -Is

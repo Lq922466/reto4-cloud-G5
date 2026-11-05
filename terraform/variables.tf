@@ -23,6 +23,24 @@ variable "worker_type" {
   default     = "t3.small"
 }
 
+variable "manager_disk_size" {
+  description = "Tamaño en GB del disco del manager"
+  type        = number
+  default     = 20
+}
+
+variable "worker_disk_size" {
+  description = "Tamaño en GB del disco de cada worker"
+  type        = number
+  default     = 10
+}
+
+variable "disk_type" {
+  description = "Tipo de los discos"
+  type        = string
+  default     = "gp3"
+}
+
 variable "worker_count" {
   description = "Numero de workers"
   type        = number

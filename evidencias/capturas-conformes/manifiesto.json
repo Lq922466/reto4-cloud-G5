@@ -135,18 +135,18 @@
   "detalle": "El repositorio es privado. Solo muestra las cuentas con acceso: falta confirmar integrantes y profesor.",
   "autor": "Claude Code, por encargo de Lq922466",
   "ejecutado_desde": "vscode@codespaces-8d43b2",
-  "inicio_utc": "2026-11-05T12:22:47+00:00",
+  "inicio_utc": "2026-11-05T12:28:32+00:00",
   "comandos": [
    {
     "maquina": "local",
     "comandos": [
-     "gh repo view --json visibility --jq .visibility",
-     "gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_name] | @tsv'"
+     "gh repo view --json visibility --jq .visibility | cat",
+     "gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_name] | @tsv' | cat"
     ]
    }
   ],
   "captura": "F1-repositorio.png",
-  "sha256": "de1cff5969c9cb34ea2524d50a3d881ec3549dca6b7dbc9f1a2cd94cbaa0811b"
+  "sha256": "cee5c0171725b8c17c743fb716ae51b2baeb00444fe5c15ffc1cbacd208fbb37"
  },
  "F2-historial": {
   "id": "F2-historial",
@@ -156,19 +156,19 @@
   "detalle": "Muestra los autores reales: aún faltan commits y PR de los demás integrantes.",
   "autor": "Claude Code, por encargo de Lq922466",
   "ejecutado_desde": "vscode@codespaces-8d43b2",
-  "inicio_utc": "2026-11-05T12:23:04+00:00",
+  "inicio_utc": "2026-11-05T12:28:34+00:00",
   "comandos": [
    {
     "maquina": "local",
     "comandos": [
      "git log --format='%h %an %ad %s' --date=short -n 8 | cut -c1-110",
      "git log --all --format='%an' | sort | uniq -c",
-     "gh pr list --state all"
+     "gh pr list --state all | cat"
     ]
    }
   ],
   "captura": "F2-historial.png",
-  "sha256": "fface15fad80a68ce58b5e5e6c9898bed628c40281e564881450fe5b55bdfcb2"
+  "sha256": "031735090386b53f2957c40db5261b214d875a89f923f2da982d889117827874"
  },
  "F12-seguridad": {
   "id": "F12-seguridad",

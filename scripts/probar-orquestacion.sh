@@ -4,6 +4,8 @@ export AWS_PAGER=""
 # Fase 4. Repite E2, E3 o E6 con la web definitiva y una sonda independiente por IP.
 # REQUIERE AUTORIZACIÓN: modifica el servicio y la disponibilidad de un nodo de Swarm.
 # No crea ni elimina recursos AWS. Se detiene en el primer fallo.
+# E3 y E6 registran los fallos HTTP aislados y solo se detienen si hay tres seguidos en una
+# IP, si no se recuperan las réplicas o si alguna IP sigue fallando al terminar.
 # Con CAPTURAS=1 y DISPLAY definido guarda capturas reales de un terminal gráfico.
 # Uso: probar-orquestacion.sh CONFIG_SSH CUENTA/REPOSITORIO DIRECTORIO_REGISTROS e2|e3|e6
 if [[ $# != 4 || ! "$4" =~ ^e[236]$ ]]; then
@@ -82,6 +84,7 @@ probar_e3() {
     remote "$node" "docker rm -f '$container'" >/dev/null
     date -Is
     for _ in $(seq 1 40); do
+        vigilar_sondas
         after=$(ids_tareas)
         [[ "$after" != "$before" && $(replicas) == 4/4 ]] && break
         sleep 2
@@ -120,6 +123,7 @@ probar_e6() {
     manager "docker node update --availability drain '$drain_node'" >/dev/null
     date -Is
     for _ in $(seq 1 40); do
+        vigilar_sondas
         if ! tiene_tareas "$drain_node" && [[ $(replicas) == 4/4 ]]; then
             break
         fi
@@ -142,7 +146,20 @@ probar_e6() {
     capturar e6-active "docker node ls; $estado"
 
     printf '\n$ [manager-g5] docker service update --force reto4_web\n'
-    manager 'docker service update --quiet --detach=false --force reto4_web' >/dev/null
+    manager 'docker service update --quiet --detach --force reto4_web' >/dev/null
+    sleep 3
+    local state=
+    for _ in $(seq 1 60); do
+        vigilar_sondas
+        state=$(manager 'docker service inspect --format "{{.UpdateStatus.State}}" reto4_web')
+        [[ "$state" == completed ]] && break
+        case "$state" in
+            paused|rollback_*) printf 'ERROR: actualización interrumpida: %s\n' "$state" >&2; return 1 ;;
+        esac
+        sleep 3
+    done
+    printf 'Estado de la actualización: %s\n' "$state"
+    [[ "$state" == completed ]]
     esperar_replicas 4
     reparto
     verificar 4
@@ -155,5 +172,19 @@ hostname
 date -Is
 sleep 5
 "probar_$test"
+vigilar_sondas
 probar_navegador "fin-$test" 1.0
-resumir_sondas
+if [[ "$test" == e2 ]]; then
+    resumir_sondas
+else
+    resumir_sondas aislados
+fi
+if [[ "$test" == e6 ]]; then
+    printf '\n$ Comprobación final: una réplica por nodo\n'
+    distribution=$(reparto)
+    printf '%s\n' "$distribution"
+    if [[ $(grep -c '^ *1 ' <<< "$distribution") != 4 ]]; then
+        printf 'ERROR: el reparto no es de una réplica por nodo.\n' >&2
+        exit 1
+    fi
+fi

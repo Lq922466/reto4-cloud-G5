@@ -3,7 +3,8 @@ set -euo pipefail
 # Captura la pantalla real de un navegador o un terminal gráficos. No retoca la imagen.
 # Requiere un servidor X en DISPLAY (Xvfb sirve), xterm e ImageMagick.
 #   capturar-pantalla.sh web URL ARCHIVO.png       Requiere CHROME con la ruta del navegador.
-#   capturar-pantalla.sh terminal ARCHIVO.png COMANDO
+#   capturar-pantalla.sh terminal ARCHIVO.png COMANDO   Guarda también la salida en ARCHIVO.txt.
+#                                                       FILAS fija el alto del terminal.
 mode=${1:-}
 : "${DISPLAY:?Definir DISPLAY}"
 font=(-fa 'DejaVu Sans Mono' -fs 11 -bg black -fg white)
@@ -59,11 +60,10 @@ terminal)
     output=$2 command=$3
     done_file=$(mktemp -u)
     title="captura-$$"
-    xterm "${font[@]}" -T "$title" -geometry 150x30+0+0 -e bash -c '
-        printf "\$ %s\n" "$2"
-        bash -c "$2" 2>&1
+    xterm "${font[@]}" -T "$title" -geometry "150x${FILAS:-30}+0+0" -e bash -c '
+        { printf "\$ %s\n" "$2"; bash -c "$2" 2>&1; } | tee "$3"
         touch "$1"
-        sleep 120' _ "$done_file" "$command" &
+        sleep 120' _ "$done_file" "$command" "${output%.png}.txt" &
     pid=$!
     trap 'kill "$pid" 2>/dev/null || true; rm -f -- "$done_file"' EXIT
     wait_for "$done_file"

@@ -31,7 +31,7 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | A3 | Verificado en plan | SG único. SSH externo /32, TCP 80/8080 público, TCP 22 entre nodos para el salto, y 2377/7946/4789 e ICMP limitados al propio grupo. | Capturar Inbound rules en el SG de EC2. |
 | A4 | Verificado con registro | Plantilla de inicio y cloud-init completado en cuatro nodos. Hostname, Europe/Madrid, Docker y clave pública probada. | Capturar salida de arranque por rol. Claves individuales en B1. |
 | A5 | Verificado con registro | nodes devuelve IP pública, privada e ID. El registro E8 identifica la nueva IP del manager tras el arranque. | Capturar terraform output. Distinguir el último estado de Terraform de la IP actual consultada en EC2. |
-| A6 | Parcial | Validación, plan y apply iniciales reales. Cambio de etiqueta en la rama y [plan actual](evidencias/A6-plan-actual.txt) sin sustituciones ni destrucciones, no aplicado. Plan de destrucción de 5 recursos solo informativo. | Aplicar el cambio con autorización. Destrucción real solo al final y con autorización separada. |
+| A6 | Parcial | Validación, plan y apply iniciales reales. [Plan final](evidencias/A6-plan-final.txt) con 0 altas, 1 cambio y 0 destrucciones: solo la etiqueta `PruebaA6` de manager-g5. No aplicado, pendiente de revisión. | Aplicar con autorización. Destrucción real solo con autorización separada. |
 | B1 | Parcial | La clave propia del Codespace funcionó en cuatro nodos. La política de vockey difiere entre guía y rúbrica. | Recoger claves públicas individuales y verificar accesos. Aclarar con el profesor si vockey se conserva como reserva o se sustituye. |
 | B2 | Verificado con registro | Plantilla en /config y configuración local generada con alias. | Capturar alias y conexión ocultando material sensible. |
 | B3 | Verificado con registro | Comandos en paralelo por SSH, sudo comprobado y copia SCP con SHA-256 coincidente. | Capturar el registro de comandos y copia. |
@@ -211,26 +211,38 @@ servicio. Las [capturas 1.0](evidencias/D1-navegador-1.0.png) y
 [2.0](evidencias/D1-navegador-2.0.png) proceden de contenedores temporales
 y no acreditan D2, D3 ni E1–E8 con la web final.
 
-### Secuencia pendiente de autorización
+### Secuencia por fases
+
+Cada fase se detiene si falla una comprobación. La siguiente no empieza sin el
+visto bueno del responsable.
 
 ```bash
 ssh -t -F config/ssh.local manager-g5 docker login -u CUENTA
+# Fase 1. Publicar 1.0 y 2.0. El script cierra la sesión al terminar.
 bash scripts/publicar-imagenes.sh config/ssh.local CUENTA/REPOSITORIO
+# Fase 2. Descargar sin sesión en los workers y comparar con lo construido.
+bash scripts/comprobar-descarga.sh config/ssh.local CUENTA/REPOSITORIO
+# Fase 3. Desplegar 1.0, actualizar a 2.0 y hacer rollback. Termina en 1.0.
 bash scripts/desplegar-f1.sh config/ssh.local CUENTA/REPOSITORIO
 bash scripts/probar-actualizacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
+# Fase 4. E2, E3 y E6. No crea ni elimina recursos AWS.
+bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
 ```
 
-La actualización termina en 1.0, de modo que E7 pueda repetirse en la defensa. La
-imagen provisional se conserva en los nodos.
+La imagen provisional se conserva en los nodos.
 
 ### A6
 
-El estado está en `/workspaces/reto4-revision.Geeumo/terraform`. Antes de aplicar:
+El estado está en `/workspaces/reto4-revision.Geeumo/terraform`. La regla SSH activa
+no tiene descripción y `main.tf` la declaraba, lo que hacía que el plan reescribiera
+la regla. Se retiró del código la descripción de esa regla, de modo que el plan no
+toca el grupo de seguridad y no requiere ningún cambio previo en AWS.
 
-1. Usar la IP actual del Codespace en `ssh_cidr`. Tanto `terraform.tfvars` como el
-   `reto4-local.auto.tfvars.json` operativo tienen valores antiguos, y aplicarlos
-   retiraría el acceso SSH actual.
-2. Añadir a la regla SSH activa la descripción que declara Terraform, para que el
-   plan se limite a la etiqueta. Regenerar el plan y comprobar 0 altas, 1 cambio
-   y 0 destrucciones. La etiqueta y la salida `nodes` con las IP actuales son los
-   únicos efectos esperados.
+Hay que usar la IP actual del Codespace en `ssh_cidr`. Tanto `terraform.tfvars` como
+el `reto4-local.auto.tfvars.json` operativo tienen valores antiguos, y aplicarlos
+retiraría el acceso SSH actual.
+
+El [plan final](evidencias/A6-plan-final.txt) propone añadir la etiqueta `PruebaA6`
+a manager-g5 y actualizar en el estado la salida `nodes` con las IP actuales. No
+se ha aplicado. Antes de aplicar, debe regenerarse o comprobarse que sigue dando
+0 altas, 1 cambio y 0 destrucciones.

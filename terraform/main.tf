@@ -26,9 +26,8 @@ resource "aws_security_group" "cluster" {
   description = "Seguridad del cluster Docker Swarm G5"
   vpc_id      = data.aws_vpc.default.id
 
-  # SSH desde Codespaces
+  # SSH desde Codespaces. La regla activa en AWS no tiene descripción.
   ingress {
-    description = "SSH desde Codespaces"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"

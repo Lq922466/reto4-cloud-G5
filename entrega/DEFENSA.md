@@ -7,16 +7,18 @@ Material para ensayar la exposición de 10 minutos y las preguntas del profesor.
 
 - **Asignad los papeles.** A, B, C y D son etiquetas: el reparto debe decidirlo el grupo, y los nombres de la portada están sin completar.
 - **Hablad solo de lo que podáis explicar.** Adaptad el guion a lo que hizo cada uno y no os atribuyáis trabajo ajeno.
-- **Revisadlo con la Guía y la Rúbrica,** que no estaban disponibles al prepararlo. Pueden cambiar el tiempo o el contenido exigido.
+- **Lo que exige la Guía.** En grupo, 10 minutos: arquitectura, código, reparto de tareas y **una demostración en directo de caída de un nodo**. Individualmente,
+  2 o 3 preguntas a cualquier miembro sobre cualquier parte y una demostración técnica en vivo.
+- **Actualizadlo si cambia la topología.** El guion describe el estado actual, con tres managers. Si se restaura un manager y tres workers, cambian las diapositivas 3 y 6.
 
 ## Reparto de los 10 minutos
 
 | Tiempo | Quién | Diapositivas | Tema | Evidencia de apoyo |
 | --- | --- | --- | --- | --- |
-| 0:00–2:15 | Integrante A | 1–3 | Reto, resultado y arquitectura | [Diagrama](../diagramas/arquitectura.png), [gestión](../GESTION.md) |
-| 2:15–4:30 | Integrante B | 4–5 | Terraform, seguridad y SSH | [Reglas](../evidencias/capturas-terminal/A3-grupo-seguridad.png), [A6](../evidencias/A6-apply.txt) |
-| 4:30–6:45 | Integrante C | 6–7 | Swarm, redes, web e imágenes | [Nodos](../evidencias/capturas-terminal/C3-nodos.png), [D3](../evidencias/D3-registro.txt) |
-| 6:45–10:00 | Integrante D | 8–10 | Demostración, pruebas, límites y cierre | [Estado final](../evidencias/capturas-terminal/estado-final.png), [E4 y E8](../evidencias/auditoria/E4-E8.md) |
+| 0:00–2:15 | Integrante A | 1–3 | Reto, resultado, reparto de tareas y arquitectura | [Diagrama](../diagramas/arquitectura.png), [gestión](../GESTION.md) |
+| 2:15–4:30 | Integrante B | 4–5 | Código de Terraform, seguridad y SSH | [Reglas](../evidencias/capturas-terminal/A3-grupo-seguridad.png), [A6](../evidencias/A6-apply.txt) |
+| 4:30–6:45 | Integrante C | 6–7 | Swarm, redes, web e imágenes. **Al empezar: apagar worker3-g5** | [Nodos](../evidencias/capturas-terminal/C3-nodos.png), [D3](../evidencias/D3-registro.txt) |
+| 6:45–10:00 | Integrante D | 8–10 | Caída de un nodo en directo, pruebas, límites y cierre | [Estado final](../evidencias/capturas-terminal/estado-final.png), [E4 y E8](../evidencias/auditoria/E4-E8.md) |
 
 ## Guion
 
@@ -24,17 +26,17 @@ Material para ensayar la exposición de 10 minutos y las preguntas del profesor.
 
 Buenos días. Somos el grupo 5 y vamos a presentar cómo hemos desplegado en AWS la web del Gran Premio de Euskadi, con infraestructura como código y un clúster de Docker Swarm.
 
-### Diapositiva 2 · Objetivo y resultado (Integrante A, 0:50)
+### Diapositiva 2 · Objetivo, resultado y reparto (Integrante A, 0:50)
 
-El reto consistía en publicar la web del evento en una infraestructura reproducible y capaz de tolerar fallos. El resultado que comprobamos por última vez fue este: cuatro instancias EC2, un servicio con cuatro de cuatro réplicas, dos versiones de la imagen en Docker Hub y respuesta HTTP 200 por las cuatro IP públicas. De los 42 criterios que revisamos, 29 están completados, 9 son parciales y 4 están pendientes, y al final os explicaremos por qué.
+El reto consistía en publicar la web del evento en una infraestructura reproducible y capaz de tolerar fallos. El resultado que comprobamos fue este: cuatro instancias EC2, un servicio con cuatro de cuatro réplicas, dos versiones de la imagen en Docker Hub y respuesta HTTP 200 por las cuatro IP públicas. Nos repartimos el trabajo así: [explicad quién hizo cada parte, con los datos reales de GESTION.md].
 
 ### Diapositiva 3 · Arquitectura (Integrante A, 1:05)
 
 Este es el mapa. Desde Codespaces gestionamos la infraestructura con Terraform y accedemos por SSH con una regla limitada a una única IP. El navegador entra por el puerto 80 de cualquiera de las cuatro IP públicas, y la malla de enrutamiento de Swarm reparte la petición entre las réplicas. Un detalle importante: los nombres son los de la creación, pero los roles cambiaron. Para probar la elección de líder promovimos worker1 y worker2, así que hoy hay tres managers y solo worker3 es un worker puro.
 
-### Diapositiva 4 · Terraform (Integrante B, 1:10)
+### Diapositiva 4 · Terraform y código (Integrante B, 1:10)
 
-La infraestructura está en la carpeta terraform: variables, proveedor, recursos y salidas. Definimos un grupo de seguridad, un manager t3.medium y tres workers t3.small, que salen de un único recurso con count. Cada nodo se configura al arrancar con una plantilla: nombre, zona horaria, claves públicas, SSH y Docker. Primero validamos y revisamos el plan, y después aplicamos: cinco recursos creados. Para probar un cambio controlado añadimos una etiqueta al manager. El plan dio cero altas, un cambio y cero destrucciones, y un plan posterior confirmó que no quedaban cambios. La destrucción no la hemos ejecutado, porque eliminaría el clúster.
+La infraestructura está en la carpeta terraform: variables, proveedor, recursos y salidas. En pantalla veis el código de los workers: es un único recurso, multiplicado con count, y los nombres se generan con el índice y el grupo. Cada nodo se configura al arrancar con una plantilla: nombre, zona horaria, claves públicas, SSH y Docker. Primero validamos y revisamos el plan, y después aplicamos: cinco recursos creados. Para probar un cambio controlado añadimos una etiqueta al manager. El plan dio cero altas, un cambio y cero destrucciones, y un plan posterior confirmó que no quedaban cambios.
 
 ### Diapositiva 5 · Seguridad y SSH (Integrante B, 1:05)
 
@@ -48,17 +50,17 @@ Comprobamos el ping por IP privada entre todos los nodos y formamos el clúster 
 
 La web se empaqueta sobre nginx alpine. Al arrancar, cada contenedor genera un archivo con su versión y su identificador, y eso nos permite ver qué réplica responde. Publicamos dos etiquetas en Docker Hub, la 1.0 y la 2.0, que añade una página de estado. Antes de desplegar comprobamos que los tres workers las descargaban sin sesión y con el mismo contenido que habíamos construido. La pila define cuatro réplicas y una actualización progresiva que arranca cada réplica nueva antes de retirar la anterior. En pantalla veis la web servida por una de las IP.
 
-### Diapositiva 8 · Demostración (Integrante D, 1:30)
+### Diapositiva 8 · Demostración en directo: caída de un nodo (Integrante D, 1:30)
 
-Vamos a verlo funcionando. Primero, el estado de los nodos y del servicio: cuatro nodos Ready y Active, y cuatro de cuatro réplicas. Ahora, varias peticiones a identidad.txt: cambia el identificador del contenedor, así que el balanceo funciona. Y aquí, la web en el navegador. [Si el laboratorio no está disponible:] el laboratorio no está disponible ahora mismo, así que os enseñamos las capturas de la última comprobación, con su fecha y hora.
+Vamos a ver la caída de un nodo en directo. Mientras hablaban mis compañeros, hemos dejado un script consultando la web cada segundo y hemos apagado worker3. Aquí veis el listado de nodos: worker3 aparece caído. Y aquí, las réplicas: Swarm ha reubicado su tarea en otro nodo. Mirad el script: la web sigue respondiendo, y aquí la tenéis en el navegador. Después volveremos a arrancar el nodo y se reincorporará al clúster. [Si el laboratorio no está disponible:] el laboratorio no está disponible ahora mismo, así que os enseñamos el registro de la prueba anterior, con su fecha y hora.
 
 ### Diapositiva 9 · Pruebas de orquestación (Integrante D, 1:00)
 
-Con la web definitiva probamos el balanceo, el escalado a 8, 12, 2 y 4 réplicas, la eliminación de un contenedor, el drain de un nodo, y la actualización a 2.0 con su rollback. También comprobamos que el clúster sobrevivía al reinicio del laboratorio. En el escalado registramos dos tiempos de espera aislados al reducir de 12 a 2 réplicas, y no hemos determinado su causa. La caída de un worker y la elección de líder solo se hicieron con el portal provisional: por eso las consideramos parciales.
+Además, con la web definitiva probamos el balanceo, el escalado a 8, 12, 2 y 4 réplicas, la eliminación de un contenedor, el drain de un nodo, y la actualización a 2.0 sin cortes con su rollback. También comprobamos que el clúster sobrevivía al reinicio del laboratorio. En el escalado registramos dos tiempos de espera aislados al reducir de 12 a 2 réplicas, y no hemos determinado su causa.
 
 ### Diapositiva 10 · Límites y cierre (Integrante D, 0:45)
 
-Preferimos ser claros con lo que falta: la destrucción con Terraform, las claves individuales, las prácticas individuales y repetir esas dos pruebas si se nos pide. Parte del trabajo técnico se hizo con asistentes de IA, y queda declarado en la documentación. En resumen: una infraestructura reproducible, un servicio que se recupera y evidencias reales de lo que afirmamos. Muchas gracias. Estamos a vuestra disposición para las preguntas.
+Preferimos ser claros con lo que falta: [actualizad esta lista el día de la exposición]. Parte del trabajo técnico se hizo con asistentes de IA, y queda declarado en la documentación. En resumen: una infraestructura reproducible, un servicio que se recupera y evidencias reales de lo que afirmamos. Muchas gracias. Estamos a vuestra disposición para las preguntas.
 
 ## Demostraciones
 
@@ -85,6 +87,34 @@ Preferimos ser claros con lo que falta: la destrucción con Terraform, las clave
 
 7. Abrir en pestañas la web por sus cuatro IP, y tener preparadas las capturas del plan B.
 
+### Demostración obligatoria: caída de un nodo
+
+Requiere AWS activo, y solo debe hacerse el día de la exposición o en un ensayo autorizado. Ensayadla antes con el reloj en la mano: en la prueba E4, EC2 indicó `stopped` menos de dos minutos después de empezar.
+
+1. **Antes de empezar:** dejad en una terminal el script, con la IP de un nodo que **no** vayáis a apagar:
+
+   ```bash
+   bash scripts/sondear-web.sh http://IP_DE_MANAGER/identidad.txt
+   ```
+
+2. **Al empezar la parte del Integrante C (4:30):** detened worker3-g5 en la consola de EC2 (Instance state → Stop), o con:
+
+   ```bash
+   aws ec2 stop-instances --region us-east-1 --instance-ids i-0446409b26cf0a662
+   ```
+
+3. **En la parte del Integrante D (6:45):** mostrad el estado:
+
+   ```bash
+   ssh -F config/ssh.local manager-g5 'docker node ls; docker service ls; docker service ps --filter desired-state=running reto4_web'
+   ```
+
+   **Se espera:** worker3-g5 `Down` y sus tareas reubicadas. El servicio puede mostrar `5/4` un momento, porque la tarea antigua sigue contada hasta confirmar su apagado.
+4. **Mostrad el script y el navegador,** por la IP de un nodo activo.
+5. **Después de la exposición:** arrancad de nuevo worker3-g5, cuya IP pública cambiará, y reequilibrad con `docker service update --force reto4_web`.
+
+**Plan B:** el [registro de E4](../evidencias/prototipo/E4-worker-down.txt), indicando que se hizo con el portal provisional.
+
 ### Demostraciones que no cambian nada
 
 | # | Qué se muestra | Comando | Resultado esperado | Plan B |
@@ -100,7 +130,7 @@ Preferimos ser claros con lo que falta: la destrucción con Terraform, las clave
 
 ### Demostraciones que cambian el servicio
 
-Hacedlas solo si el profesor las pide, y con la verificación anterior correcta. Cada una incluye cómo volver al estado de partida.
+Pueden pedirse en la demostración individual. Hacedlas con la verificación anterior correcta. Cada una incluye cómo volver al estado de partida.
 
 | # | Qué se muestra | Comandos en el manager | Volver al estado | Plan B |
 | --- | --- | --- | --- | --- |
@@ -109,7 +139,7 @@ Hacedlas solo si el profesor las pide, y con la verificación anterior correcta.
 | 11 | Drain (E6) | `docker node update --availability drain worker3-g5` | `docker node update --availability active worker3-g5` | [F4-E6](../evidencias/F4-E6/) |
 | 12 | Actualización (E7) | `docker service update --image innnx/reto4-f1:2.0 reto4_web` | `docker service rollback reto4_web` | [F3-actualizacion](../evidencias/F3-actualizacion/) |
 
-**No hagáis en la defensa, salvo que os lo pida el profesor:** detener instancias (E4 y E8), porque interrumpe más y sus IP cambian, ni `terraform destroy`, que elimina el clúster.
+**No ejecutéis `terraform destroy` en la defensa, salvo que lo pida el profesor:** elimina el clúster.
 
 ## Preguntas del profesor
 
@@ -130,7 +160,7 @@ Crea varias instancias a partir de un solo bloque, con el índice para nombrarla
 Añadió la etiqueta `PruebaA6=reto4-g5` a manager-g5. El plan fue de 0 altas, 1 cambio y 0 destrucciones, y un plan posterior no propuso cambios.
 
 **¿Por qué no habéis ejecutado `terraform destroy`?**
-Porque eliminaría el clúster y lo necesitamos para la defensa. Tenemos el plan de destrucción de los 5 recursos, pero el criterio A6 sigue parcial hasta ejecutarlo.
+Porque eliminaría el clúster, y cada requisito debe funcionar durante la corrección. Tenemos el plan de destrucción de los 5 recursos, pero A6 sigue parcial hasta ejecutarlo.
 
 **¿Por qué cambian las IP públicas?**
 Porque son IP públicas asignadas automáticamente, sin IP elástica. Al detener y arrancar una instancia recibe otra. Las privadas se mantienen, y Swarm usa esas.
@@ -144,7 +174,7 @@ Porque son IP públicas asignadas automáticamente, sin IP elástica. Al detener
 Porque solo los necesitan los nodos del clúster. Exponerlos permitiría a terceros intentar interactuar con Swarm.
 
 **¿Por qué tenéis abierto el 8080?**
-Se abrió en la configuración inicial, pero la pila solo publica el 80, así que ningún servicio de la pila lo usa. Hay que contrastarlo con la Guía.
+Porque la Guía pide abrir 80 y 8080 desde Internet. Nuestra pila solo publica el 80.
 
 **¿Qué es ProxyJump y por qué se usa?**
 Permite llegar a un nodo pasando por otro. Conectamos al manager por su IP pública y, desde él, a los workers por su IP privada.
@@ -156,7 +186,7 @@ Con `sudo sshd -T`, que muestra la configuración efectiva: `permitrootlogin no`
 Para que solo el propietario acceda a `.ssh` y a sus claves. OpenSSH rechaza claves con permisos demasiado abiertos.
 
 **¿Qué pasa con `vockey`?**
-Sigue autorizada junto a la clave del Codespace. La revisión anterior anotó una diferencia entre la Guía y la Rúbrica, y está pendiente de aclarar con el profesor.
+Sigue autorizada junto a la clave del Codespace. La Guía la deja como reserva y la Rúbrica pide sustituirla: [indicad lo que haya respondido el profesor].
 
 ### Docker Swarm y redes
 
@@ -167,7 +197,7 @@ Los managers mantienen el estado del clúster y deciden dónde van las tareas. L
 Raft necesita mayoría. Con tres se tolera perder uno; con dos, perder uno deja sin mayoría y no se puede gestionar el clúster.
 
 **¿Por qué se llaman worker1 y worker2 si son managers?**
-Es el nombre de creación. Los promovimos antes de E8 para tener cuórum y probar la elección de líder.
+Es el nombre de creación. La Guía pide promover dos workers para probar la elección de un nuevo líder, y eso hicimos antes de E8.
 
 **¿Por qué el líder es ahora worker1?**
 Primero E8 cambió el líder a worker2. En la comprobación posterior al reinicio del laboratorio ya era worker1. El líder lo elige Raft y puede cambiar cuando se reinician los nodos.
@@ -179,7 +209,7 @@ Permite que cualquier nodo reciba la petición en el puerto publicado y la reenv
 `red-g5` es la red ingress, usada por la malla de enrutamiento. `red-app-g5` es la overlay de la aplicación, a la que se conecta el servicio.
 
 **¿Por qué MTU 1450?**
-La overlay encapsula con VXLAN y añade unos 50 bytes de cabeceras. Con 1450 el paquete encapsulado cabe en 1500 sin fragmentarse.
+La overlay encapsula con VXLAN y añade unos 50 bytes de cabeceras. Con 1450 el paquete encapsulado cabe en 1500 sin fragmentarse, lo que evita cuelgues o lentitud.
 
 **¿Habéis comprobado la MTU dentro de un contenedor?**
 No. Lo comprobado es la configuración de las redes, con `docker network inspect`.

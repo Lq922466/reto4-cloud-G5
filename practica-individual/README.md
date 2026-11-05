@@ -3,17 +3,11 @@
 > **SIN CONTENIDO.** Esta carpeta solo ofrece una estructura. Ningún integrante ha aportado todavía su práctica,
 > así que F13 sigue pendiente.
 
-## Lo que falta saber
+## Qué se pide
 
-La Guía y la Rúbrica originales no estaban disponibles al preparar esta estructura. Lo único registrado es
-el criterio F13 de [REVISION.md](../REVISION.md): debe existir `/practica-individual` con la documentación real
-de las prácticas individuales. Hay que confirmar en la Guía:
-
-- qué practica cada integrante y cómo debe documentarlo;
-- si se exige un formato, un nombre de carpeta o una entrega por otra vía;
-- la fecha de entrega y si cuenta para la nota individual.
-
-Cuando se confirme, habrá que ajustar esta estructura y la [plantilla](PLANTILLA.md).
+La Guía pide en esta carpeta la documentación de la práctica de prueba individual **realizada previamente**. La Fase 1 parte de una práctica
+individual de EC2 con Ubuntu 22.04. No indica formato ni nombre de carpeta, así que esta estructura es una propuesta. Hay que confirmar con el
+profesor si debe aportarla cada integrante.
 
 ## Cómo aportar la práctica
 

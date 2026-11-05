@@ -1,6 +1,6 @@
 # Práctica individual: [NOMBRE Y APELLIDOS]
 
-<!-- Ajustar esta plantilla a lo que pida la Guía. Eliminar lo que no aplique. -->
+<!-- Práctica individual previa de EC2 con Ubuntu 22.04. Eliminar lo que no aplique. -->
 
 | Dato | Valor |
 | --- | --- |
@@ -10,7 +10,7 @@
 
 ## Objetivo
 
-[Qué se pedía en esta práctica, según la Guía.]
+[Qué se pedía en la práctica individual de EC2 con Ubuntu 22.04.]
 
 ## Procedimiento
 
@@ -22,7 +22,7 @@
 
 ## Capturas
 
-Cada captura debe indicar fecha, autor, máquina (hostname) y una breve explicación. Oculta cualquier dato sensible.
+Norma de la Guía: debe verse el prompt con el hostname y la fecha y hora, con un comentario que indique la prueba, el resultado y el autor. No muestres credenciales ni claves privadas.
 
 | Captura | Fecha y hora | Máquina | Qué muestra |
 | --- | --- | --- | --- |

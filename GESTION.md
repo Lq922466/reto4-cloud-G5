@@ -40,6 +40,8 @@ El estado técnico procede de [REVISION.md](REVISION.md). Cada responsable debe 
 
 ## 3. Seguimiento semanal
 
+La Guía y la Rúbrica no lo exigen: `GESTION.md` debe contener el reparto de tareas, los responsables y una breve reflexión. Se mantiene como apoyo.
+
 Solo la semana del 2 al 8 de noviembre tiene datos, y proceden del historial de Git. No constan actas ni
 reuniones. Las semanas anteriores deben añadirse solo si hubo trabajo real.
 
@@ -81,6 +83,8 @@ reuniones. Las semanas anteriores deben añadirse solo si hubo trabajo real.
 
 ## 4. Trello
 
+La Guía y la Rúbrica no lo exigen. Solo hay que completarlo si el grupo lo ha usado o lo pide el profesor.
+
 El repositorio no contiene ningún enlace, exportación ni captura de Trello, y no se ha podido comprobar si
 existe un tablero.
 
@@ -92,7 +96,7 @@ existe un tablero.
 | Listas del tablero | `[POR COMPLETAR]` |
 | Capturas del tablero con fecha | `[POR COMPLETAR]` |
 
-Si el tablero no existe y la Guía lo exige, conviene crearlo con la fecha real. Las tareas de
+Si el grupo decide crear el tablero, debe hacerlo con la fecha real. Las tareas de
 [PENDIENTES](entrega/PENDIENTES.md) pueden servir como primeras tarjetas. No deben crearse tarjetas que simulen
 un seguimiento anterior.
 
@@ -132,7 +136,7 @@ El historial muestra commits hechos con asistentes de IA:
 - **Claude Code:** 14 commits del 5 de noviembre hasta `9066fd9`, publicados con la identidad Innnx y la línea `Co-Authored-By`.
 
 Las operaciones sobre AWS, Docker Hub y Swarm del 5 de noviembre se hicieron con autorización expresa dada en la
-sesión de trabajo por la persona que la dirigía. Falta confirmar en la Guía o con el profesor cómo debe declararse este uso:
+sesión de trabajo por la persona que la dirigía. La Guía y la Rúbrica no tratan este uso. Falta confirmar con el profesor cómo declararlo:
 `[POR COMPLETAR]`.
 
 ## 7. Reflexión del grupo

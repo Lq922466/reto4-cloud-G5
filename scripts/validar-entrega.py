@@ -13,7 +13,7 @@ DOCS = [
     "README.md", "REVISION.md", "PROYECTO.md", "GESTION.md", "diagramas/arquitectura.md",
     "evidencias/INDICE.md", "evidencias/capturas-terminal/INDICE.md", "evidencias/auditoria/INFORME.md",
     "evidencias/auditoria/E4-E8.md", "entrega/INFORME-F9-estructura.md", "entrega/PENDIENTES.md",
-    "entrega/DEFENSA.md", "entrega/CHECKLIST-FINAL.md", "practica-individual/README.md",
+    "entrega/DEFENSA.md", "entrega/CHECKLIST-FINAL.md", "entrega/CONTRASTE-GUIA-RUBRICA.md", "practica-individual/README.md",
 ]
 AGRUPADAS = ("capturas-terminal", "F3-despliegue", "F3-actualizacion", "F4-E2", "F4-E3", "F4-E6")
 
@@ -72,20 +72,20 @@ def main():
 
     texto = Path("entrega/CHECKLIST-FINAL.md").read_text()
     secciones = {
+        "Listo": texto.split("## Listos")[1].split("## Demostrados")[0],
+        "Demostrado, falta captura conforme": texto.split("## Demostrados")[1].split("## Parciales")[0],
         "Parcial": texto.split("## Parciales")[1].split("## Pendientes")[0],
         "Pendiente": texto.split("## Pendientes")[1].split("## Antes de entregar")[0],
     }
-    completados = texto.split("## Completados")[1].split("## Parciales")[0]
     for criterio, estado in matriz.items():
-        seccion = secciones.get(estado, completados)
-        if not re.search(rf"(?m)^\| {criterio} \|", seccion):
+        if estado not in secciones or not re.search(rf"(?m)^\| {criterio} \|", secciones[estado]):
             errores.append(f"{criterio}: no está en la sección correcta de la checklist")
 
     for error in errores:
         print("ERROR", error)
-    grupos = {"Completados": 0, "Parciales": 0, "Pendientes": 0}
+    grupos = {}
     for estado in matriz.values():
-        grupos["Parciales" if estado == "Parcial" else "Pendientes" if estado == "Pendiente" else "Completados"] += 1
+        grupos[estado] = grupos.get(estado, 0) + 1
     print(f"Criterios: {len(matriz)} {grupos}. Errores: {len(errores)}.")
     return 1 if errores else 0
 

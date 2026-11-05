@@ -39,7 +39,7 @@ que es un cambio en AWS y requiere autorización.
 | SSH externo | Una sola IP `/32` | `172.166.156.160/32` | [A3](../capturas-terminal/A3-grupo-seguridad.png) | Cumple. La IP permitida ya no es la actual del Codespace |
 | SSH entre nodos | Propio grupo | Grupo `sg-0c12ecd538a29f8d6` | [A3](../capturas-terminal/A3-grupo-seguridad.png) | Cumple |
 | HTTP | TCP 80 público | `0.0.0.0/0` | [A3](../capturas-terminal/A3-grupo-seguridad.png) | Cumple |
-| Puerto 8080 | Según la Guía | Público y sin servicio publicado | [A3](../capturas-terminal/A3-grupo-seguridad.png), [D2](../capturas-terminal/D2-pila-servicio.png) | Por contrastar |
+| Puerto 8080 | Abierto desde Internet, según la Guía | Público, y la pila no publica nada en él | [A3](../capturas-terminal/A3-grupo-seguridad.png), [D2](../capturas-terminal/D2-pila-servicio.png) | Cumple |
 | Swarm: 2377/TCP | Propio grupo | Grupo propio | [A3](../capturas-terminal/A3-grupo-seguridad.png) | Cumple |
 | Swarm: 7946/TCP y UDP | Propio grupo | Grupo propio | [A3](../capturas-terminal/A3-grupo-seguridad.png) | Cumple |
 | Swarm: 4789/UDP | Propio grupo | Grupo propio | [A3](../capturas-terminal/A3-grupo-seguridad.png) | Cumple |
@@ -52,7 +52,7 @@ que es un cambio en AWS y requiere autorización.
 | SSH: claves individuales | Una por integrante | Solo `vockey` y la clave del Codespace | [B1](../capturas-terminal/B1-claves-autorizadas.png) | **No cumple todavía** |
 | Swarm: direcciones | IP privadas | 172.31.x.x en los cuatro nodos | [C2](../capturas-terminal/C2-red-ingress.png) | Cumple |
 | Swarm: nodos | Cuatro Ready/Active | Cuatro Ready/Active | [estado final](../capturas-terminal/estado-final.png) | Cumple |
-| Swarm: topología | Según la Guía | Tres managers y un worker | [C3](../capturas-terminal/C3-nodos.png) | Por contrastar |
+| Swarm: topología | Manager líder y tres workers | Tres managers, con worker1-g5 de líder | [C3](../capturas-terminal/C3-nodos.png) | **No coincide**: estado posterior a E8 |
 | Servicio | 4/4 con la imagen publicada | 4/4, `innnx/reto4-f1:1.0`, una réplica por nodo | [estado final](../capturas-terminal/estado-final.png) | Cumple |
 | Imágenes | Etiquetas 1.0 y 2.0 | Publicadas, y con el digest esperado también a las 11:13 UTC | [D1](../capturas-terminal/D1-imagenes.png), [acceso](registro-acceso-en-vivo.txt) | Cumple |
 | Terraform | Válido y sin cambios | `validate` y `fmt` correctos; plan sin cambios a las 09:52 UTC | [A6](../capturas-terminal/A6-sin-cambios.png), [registro](registro-terraform.txt) | Cumple en la última comprobación posible |
@@ -73,11 +73,16 @@ de un contenedor en ejecución.
 | Archivos sensibles en cualquier commit | Ninguno. Solo aparece `terraform/grupo.example.tfvars`, una plantilla sin datos |
 | Credenciales en la web, con su historial | Ninguna |
 | Funciones de seguridad de GitHub y protección de ramas | No se pueden consultar con el token del Codespace. Hay que verlas en Settings |
-| Licencia | No consta. Decidir si la Guía la pide |
+| Licencia | No consta, y ni la Guía ni la Rúbrica la piden |
 
 **Dos correcciones hechas durante esta auditoría.** El primer registro de AWS contenía el identificador de la cuenta dentro de
 los mensajes de error. Se detectó antes de subirlo y se sustituyó por uno enmascarado. Además, el repositorio contiene IP
 públicas del laboratorio y del Codespace: no son secretos, pero conviene tenerlo en cuenta si algún día deja de ser privado.
+
+## Contraste
+
+El resultado frente a los originales está en el [contraste con la Guía y la Rúbrica](../../entrega/CONTRASTE-GUIA-RUBRICA.md). Ahí se recoge también que
+ninguna captura de terminal cumple la norma del prompt.
 
 ## E4 y E8
 

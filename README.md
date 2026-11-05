@@ -7,6 +7,7 @@ Web del Gran Premio de Euskadi desplegada en AWS con Terraform y Docker Swarm. R
 | El informe técnico de las Fases 0–5 | [PROYECTO.md](PROYECTO.md) |
 | El estado de los 42 criterios | [REVISION.md](REVISION.md) |
 | Qué está completado y qué falta | [Checklist final](entrega/CHECKLIST-FINAL.md) |
+| El contraste con la Guía y la Rúbrica | [CONTRASTE-GUIA-RUBRICA.md](entrega/CONTRASTE-GUIA-RUBRICA.md) |
 | Las evidencias de cada criterio | [Índice de evidencias](evidencias/INDICE.md) |
 | La defensa: guion, demostraciones y preguntas | [DEFENSA.md](entrega/DEFENSA.md) y [presentación](entrega/presentacion-cloud-g5.pptx) |
 | La organización del grupo | [GESTION.md](GESTION.md) |

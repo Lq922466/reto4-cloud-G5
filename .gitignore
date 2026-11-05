@@ -30,6 +30,6 @@ config/ssh.local
 # Python
 __pycache__/
 
-# Documentos de trabajo: decidir si el Word final se versiona
+# Documentos de trabajo y del profesor: no se versionan
 evidencias-locales/
 *.docx

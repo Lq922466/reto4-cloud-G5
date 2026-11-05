@@ -1,8 +1,7 @@
 # Estructura del informe F9
 
-**Es la estructura para el Word.** El contenido técnico ya está en [PROYECTO.md](../PROYECTO.md). El Word se generará después de
-contrastarla con la Guía y la Rúbrica originales, que no estaban disponibles al prepararla, y el orden, los apartados y el formato
-pueden cambiar con ese contraste.
+**Opcional.** Ni la Guía ni la Rúbrica piden un Word: F9 es [PROYECTO.md](../PROYECTO.md). Esta estructura solo sirve si el grupo quiere además un
+documento Word. Las capturas de terminal citadas deben rehacerse según la norma de la Guía.
 
 Las rutas son relativas a `evidencias/`, y `CT/` equivale a `capturas-terminal/`.
 

@@ -39,7 +39,8 @@ terminó la sesión de Learner Lab. No se pudo confirmar el estado de las instan
   registro guarda la salida, pero no la línea de comando exacta.
 - **Web definitiva y portal provisional.** Son imágenes distintas, aunque ambas responden `version=1.0`. Se indica en cada prueba.
 - **Sondas.** Toman una muestra por segundo y no acreditan disponibilidad continua.
-- **Referencia.** La Guía y la Rúbrica originales no estaban disponibles al redactarlo.
+- **Capturas.** La Guía exige ver el prompt con el hostname y la fecha, y un comentario con la prueba, el resultado y el autor. Las de terminal de este
+  informe aún no muestran el prompt: se rehará cuando el laboratorio esté activo. [Contraste con la Guía y la Rúbrica](entrega/CONTRASTE-GUIA-RUBRICA.md).
 
 ## Arquitectura
 
@@ -55,7 +56,7 @@ terminó la sesión de Learner Lab. No se pudo confirmar el estado de las instan
 | worker3-g5 | `i-0446409b26cf0a662` | t3.small, 10 GB gp3 | 172.31.31.183 | Worker | Worker |
 
 Los nombres no cambian, pero los roles sí: worker1-g5 y worker2-g5 se promovieron a managers para probar la elección de líder
-de E8. Las IP públicas cambian cada vez que se detiene una instancia.
+de E8. La Guía pide manager líder y tres workers antes de esa prueba, así que hay que decidir el estado final. Las IP públicas cambian cada vez que se detiene una instancia.
 
 ## Fase 0: Codespaces y repositorio
 
@@ -99,7 +100,7 @@ terraform apply reto4-review-cidr.tfplan
 | --- | --- | --- | --- |
 | 22 | TCP | IP del Codespace `/32` y el propio grupo | SSH externo y salto entre nodos |
 | 80 | TCP | `0.0.0.0/0` | Web |
-| 8080 | TCP | `0.0.0.0/0` | Abierto, sin servicio publicado |
+| 8080 | TCP | `0.0.0.0/0` | Lo exige la Guía. La pila no publica ningún servicio en él |
 | 2377 | TCP | Propio grupo | Gestión de Swarm |
 | 7946 | TCP y UDP | Propio grupo | Comunicación entre nodos |
 | 4789 | UDP | Propio grupo | Red overlay |
@@ -426,10 +427,10 @@ el servicio estaba en 4/4. La IP pública de manager-g5 cambió, lo que indica q
 | Disponibilidad continua | Las sondas son muestras por segundo y, en E2, hubo dos tiempos de espera |
 | Claves SSH individuales (B1) | Solo constan `vockey` y la clave del Codespace |
 | Estado actual del clúster | Último dato: 09:56 UTC del 5 de noviembre |
-| Ajuste a la Guía y la Rúbrica | Falta contrastarlo con los originales |
+| Cumplimiento de la Guía y la Rúbrica | Faltan capturas conformes y trabajo del grupo. [Contraste](entrega/CONTRASTE-GUIA-RUBRICA.md) |
 
 ## Referencias
 
 [Criterios](REVISION.md) · [evidencias](evidencias/INDICE.md) · [capturas de terminal](evidencias/capturas-terminal/INDICE.md) ·
 [auditoría](evidencias/auditoria/INFORME.md) · [E4 y E8](evidencias/auditoria/E4-E8.md) · [gestión](GESTION.md) ·
-[defensa](entrega/DEFENSA.md) · [checklist](entrega/CHECKLIST-FINAL.md)
+[defensa](entrega/DEFENSA.md) · [checklist](entrega/CHECKLIST-FINAL.md) · [contraste](entrega/CONTRASTE-GUIA-RUBRICA.md)

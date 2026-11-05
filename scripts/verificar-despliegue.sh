@@ -2,12 +2,12 @@
 set -euo pipefail
 export AWS_PAGER=""
 # Comprobación de solo lectura del servicio web. Usa las IP públicas actuales de EC2.
-# Uso: verificar-despliegue.sh CONFIG_SSH IMAGEN VERSION
-if [[ $# != 3 ]]; then
-    printf 'Uso: %s CONFIG_SSH IMAGEN VERSION\n' "$0" >&2
+# Uso: verificar-despliegue.sh CONFIG_SSH IMAGEN VERSION [RÉPLICAS]
+if [[ $# != 3 && $# != 4 ]]; then
+    printf 'Uso: %s CONFIG_SSH IMAGEN VERSION [RÉPLICAS]\n' "$0" >&2
     exit 2
 fi
-config=$1 image=$2 version=$3
+config=$1 image=$2 version=$3 expected=${4:-4}
 remote() { ssh -n -F "$config" -o BatchMode=yes -o StrictHostKeyChecking=yes manager-g5 "$@"; }
 
 hostname
@@ -17,13 +17,13 @@ remote 'hostname; docker node ls --format "{{.Hostname}} {{.Status}} {{.Availabi
 replicas=$(remote 'docker service ls --filter name=reto4_web --format "{{.Replicas}}"')
 spec=$(remote 'docker service inspect --format "{{.Spec.TaskTemplate.ContainerSpec.Image}}" reto4_web')
 printf 'reto4_web réplicas=%s imagen=%s\n' "$replicas" "$spec"
-[[ "$replicas" == 4/4 ]]
+[[ "$replicas" == "$expected/$expected" ]]
 [[ "$spec" == "$image:$version" || "$spec" == "$image:$version@"* ]]
 tasks=$(remote 'docker service ps --filter desired-state=running --format "{{.Name}} {{.Image}} {{.Node}} {{.CurrentState}}" reto4_web')
 printf '%s\n' "$tasks"
 # El portal provisional y la web definitiva responden ambos version=1.0: la imagen los distingue.
 matching=$(awk -v expected="$image:$version" '{ split($2, name, "@"); if (name[1] == expected) count++ } END { print count + 0 }' <<< "$tasks")
-[[ "$matching" == 4 && $(wc -l <<< "$tasks") == 4 ]]
+[[ "$matching" == "$expected" && $(wc -l <<< "$tasks") == "$expected" ]]
 
 printf '\n$ IP públicas actuales en EC2\n'
 mapfile -t ips < <(aws ec2 describe-instances --region us-east-1 \

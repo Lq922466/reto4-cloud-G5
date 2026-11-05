@@ -225,8 +225,10 @@ bash scripts/comprobar-descarga.sh config/ssh.local CUENTA/REPOSITORIO
 # Fase 3. Desplegar 1.0, actualizar a 2.0 y hacer rollback. Termina en 1.0.
 bash scripts/desplegar-f1.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
 bash scripts/probar-actualizacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
-# Fase 4. E2, E3 y E6. No crea ni elimina recursos AWS.
-bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
+# Fase 4. E2, E3 y E6, uno a uno. No crea ni elimina recursos AWS.
+bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS e2
+bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS e3
+bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS e6
 ```
 
 La imagen provisional se conserva en los nodos.

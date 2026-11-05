@@ -231,6 +231,14 @@ bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTOR
 
 La imagen provisional se conserva en los nodos.
 
+### Publicación en Docker Hub
+
+Repositorio público `innnx/reto4-f1`. El primer intento, a las 09:02 UTC del 5 de
+noviembre de 2026, se detuvo porque Docker Hub rechazó el token con `access token
+has insufficient scopes`. Después se comprobó que no había etiquetas publicadas,
+que la sesión estaba cerrada y que `reto4_web` seguía sin cambios. Queda pendiente
+repetirlo con un token válido. [Registro](evidencias/D1-publicacion-intento-fallido.txt).
+
 ### A6
 
 El estado está en `/workspaces/reto4-revision.Geeumo/terraform`. La regla SSH activa

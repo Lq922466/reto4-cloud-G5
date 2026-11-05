@@ -140,3 +140,10 @@ Las imágenes 1.0 y 2.0 se construyeron y probaron en contenedores temporales de
 manager-g5. El clúster sigue sirviendo el portal provisional hasta completar la
 publicación y el despliegue autorizados. Consultar
 [el cierre técnico](REVISION.md#cierre-técnico-del-5-de-noviembre-de-2026).
+
+## A6 · Cambio con Terraform
+
+El 5 de noviembre de 2026 se aplicó un plan revisado de 0 altas, 1 cambio y 0
+destrucciones que añade la etiqueta `PruebaA6=reto4-g5` a manager-g5. Un plan
+posterior no propone cambios. [Registro](evidencias/A6-apply.txt). La destrucción no
+se ha ejecutado.

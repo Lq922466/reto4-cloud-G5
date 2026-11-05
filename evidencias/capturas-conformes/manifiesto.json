@@ -1,0 +1,238 @@
+{
+ "F5-entorno": {
+  "id": "F5-entorno",
+  "criterio": "F5",
+  "prueba": "Codespace aprovisionado con AWS CLI y Terraform",
+  "resultado": "CORRECTO",
+  "detalle": "El devcontainer incluye AWS CLI y Terraform, y ambos funcionan en el Codespace.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:35+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "cat .devcontainer/devcontainer.json",
+     "aws --version",
+     "terraform version | head -n 1",
+     "gh --version | head -n 1"
+    ]
+   }
+  ],
+  "captura": "F5-entorno.png",
+  "sha256": "bc17cf27497a0a40fd98914644ef481fb9906a16b72008caf80297362ac269c6"
+ },
+ "F4-estructura": {
+  "id": "F4-estructura",
+  "criterio": "F4",
+  "prueba": "Estructura del repositorio",
+  "resultado": "CORRECTO",
+  "detalle": "Existen las carpetas pedidas en la rama de implementación.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:37+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "git branch --show-current",
+     "ls -d .devcontainer terraform app config scripts diagramas practica-individual",
+     "ls -p | tr '\\n' ' '; echo"
+    ]
+   }
+  ],
+  "captura": "F4-estructura.png",
+  "sha256": "e029a748656356d171c4cd9bc30c792eca06a987b6627abfc8af087ef4ea7286"
+ },
+ "F6-codigo": {
+  "id": "F6-codigo",
+  "criterio": "F6",
+  "prueba": "Código Terraform: workers multiplicados con un único recurso",
+  "resultado": "CORRECTO",
+  "detalle": "Los workers salen de un único recurso multiplicado con count.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:38+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "sed -n '/Instancias Workers/,/^}/p' terraform/main.tf"
+    ]
+   }
+  ],
+  "captura": "F6-codigo.png",
+  "sha256": "dd9f487ce4ff6d7c44964f5b52e3fd051179faee128e42be771867bbd003347e"
+ },
+ "A1-modulo": {
+  "id": "A1-modulo",
+  "criterio": "A1, F6",
+  "prueba": "Módulo Terraform con variables y validación",
+  "resultado": "CORRECTO",
+  "detalle": "El módulo está organizado, usa variables y terraform validate es correcto.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:39+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "ls terraform terraform/scripts",
+     "grep '^variable' terraform/variables.tf | tr '\\n' ' '; echo",
+     "terraform -chdir=terraform validate -no-color"
+    ]
+   }
+  ],
+  "captura": "A1-modulo.png",
+  "sha256": "f01af476ee3467b3cf71809f0d4222ddd246305ee59f03d9079c211d3dff5414"
+ },
+ "A4-script": {
+  "id": "A4-script",
+  "criterio": "A4",
+  "prueba": "Script de arranque: hostname, zona, claves y Docker",
+  "resultado": "CORRECTO",
+  "detalle": "El script configura hostname, zona horaria, claves públicas, SSH y Docker.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:45+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "grep -nE 'hostnamectl|timedatectl|authorized_keys|PermitRootLogin|PasswordAuthentication|docker.io' terraform/scripts/bootstrap.sh.tftpl | cut -c1-110"
+    ]
+   }
+  ],
+  "captura": "A4-script.png",
+  "sha256": "78dfa754b5b29d850d4ab611df009a04b0458230b6a9d5ab00d99f852f2f3c1a"
+ },
+ "F7-scripts": {
+  "id": "F7-scripts",
+  "criterio": "F7",
+  "prueba": "Scripts comentados",
+  "resultado": "CORRECTO",
+  "detalle": "Los scripts están en /scripts y explican qué hacen.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:46+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "ls scripts | tr '\\n' ' '; echo",
+     "sed -n 1,10p scripts/actualizar-ips.sh | cut -c1-120"
+    ]
+   }
+  ],
+  "captura": "F7-scripts.png",
+  "sha256": "3862c76dfa638832dcaaf96ee9fedeba2e2ca4e607123a38daab211f68feefce"
+ },
+ "F1-repositorio": {
+  "id": "F1-repositorio",
+  "criterio": "F1",
+  "prueba": "Repositorio privado y cuentas con acceso",
+  "resultado": "CORRECTO",
+  "detalle": "El repositorio es privado. Solo muestra las cuentas con acceso: falta confirmar integrantes y profesor.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:47+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "gh repo view --json visibility --jq .visibility",
+     "gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_name] | @tsv'"
+    ]
+   }
+  ],
+  "captura": "F1-repositorio.png",
+  "sha256": "de1cff5969c9cb34ea2524d50a3d881ec3549dca6b7dbc9f1a2cd94cbaa0811b"
+ },
+ "F2-historial": {
+  "id": "F2-historial",
+  "criterio": "F2",
+  "prueba": "Historial de commits y PR",
+  "resultado": "CORRECTO",
+  "detalle": "Muestra los autores reales: aún faltan commits y PR de los demás integrantes.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:23:04+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "git log --format='%h %an %ad %s' --date=short -n 8 | cut -c1-110",
+     "git log --all --format='%an' | sort | uniq -c",
+     "gh pr list --state all"
+    ]
+   }
+  ],
+  "captura": "F2-historial.png",
+  "sha256": "fface15fad80a68ce58b5e5e6c9898bed628c40281e564881450fe5b55bdfcb2"
+ },
+ "F12-seguridad": {
+  "id": "F12-seguridad",
+  "criterio": "F12",
+  "prueba": "Sin credenciales, claves ni estado de Terraform",
+  "resultado": "CORRECTO",
+  "detalle": "Solo se versiona la plantilla de variables, y la revisión no encuentra secretos.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:23:11+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "git ls-files | grep -Ei 'tfstate|tfplan|[.]pem$|[.]key$|ssh[.]local|[.]tfvars$'",
+     "git check-ignore terraform/terraform.tfvars config/ssh.local",
+     "python3 scripts/revisar-secretos.py origin/main HEAD | tail -n 2"
+    ]
+   }
+  ],
+  "captura": "F12-seguridad.png",
+  "sha256": "bea96cb1ad64be198b327303894fceca0549606fdc5f8c6a5ffec2cd971f4d7e"
+ },
+ "D1-dockerhub": {
+  "id": "D1-dockerhub",
+  "criterio": "D1",
+  "prueba": "Etiquetas 1.0 y 2.0 en Docker Hub",
+  "resultado": "CORRECTO",
+  "detalle": "Docker Hub publica las dos etiquetas con los digests construidos.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:23:12+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "curl -s 'https://hub.docker.com/v2/repositories/innnx/reto4-f1/tags/?page_size=10' | jq -r '.results|sort_by(.name)[]|[.name,.digest,.tag_status]|@tsv'"
+    ]
+   }
+  ],
+  "captura": "D1-dockerhub.png",
+  "sha256": "c6956b22e7f274b6042aa615b6f32caf07fed5c6147c373ebdd277882b051e86"
+ },
+ "B2-plantilla": {
+  "id": "B2-plantilla",
+  "criterio": "B2",
+  "prueba": "Configuración SSH con nombre corto",
+  "resultado": "CORRECTO",
+  "detalle": "Los alias se resuelven solo con el nombre corto. La conexión real se comprueba en B2-conexion.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:23:14+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "cat ~/.ssh/config | cut -c1-110",
+     "ls config",
+     "ssh -G manager-g5 2>/dev/null | grep -E '^(user|hostname|hostkeyalias) '",
+     "ssh -G worker1-g5 2>/dev/null | grep -E '^(hostname|proxyjump) '"
+    ]
+   }
+  ],
+  "captura": "B2-plantilla.png",
+  "sha256": "c824738a3b94be5a31b23276da077f3dc1dea348d3ff1fe6533ef97483a24829"
+ }
+}

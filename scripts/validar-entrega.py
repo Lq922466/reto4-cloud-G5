@@ -13,9 +13,10 @@ DOCS = [
     "README.md", "REVISION.md", "PROYECTO.md", "GESTION.md", "diagramas/arquitectura.md",
     "evidencias/INDICE.md", "evidencias/capturas-terminal/INDICE.md", "evidencias/auditoria/INFORME.md",
     "evidencias/auditoria/E4-E8.md", "entrega/INFORME-F9-estructura.md", "entrega/PENDIENTES.md",
-    "entrega/DEFENSA.md", "entrega/CHECKLIST-FINAL.md", "entrega/CONTRASTE-GUIA-RUBRICA.md", "practica-individual/README.md",
+    "entrega/DEFENSA.md", "entrega/CHECKLIST-FINAL.md", "entrega/CONTRASTE-GUIA-RUBRICA.md", "entrega/PROCEDIMIENTO-CAPTURAS.md",
+    "entrega/PLAN-C3-E4-E8.md", "config/README.md", "evidencias/capturas-conformes/INDICE.md", "practica-individual/README.md",
 ]
-AGRUPADAS = ("capturas-terminal", "F3-despliegue", "F3-actualizacion", "F4-E2", "F4-E3", "F4-E6")
+AGRUPADAS = ("capturas-terminal", "capturas-conformes", "F3-despliegue", "F3-actualizacion", "F4-E2", "F4-E3", "F4-E6")
 
 
 def ancla(titulo):
@@ -62,7 +63,9 @@ def main():
     def estados(texto):
         return {c: e.strip() for c, e in re.findall(r"(?m)^\| ([FABCDEG]\d+) \| (?:(?:Definitiva|Provisional|Entorno) \| )?([^|]+) \|", texto)}
 
-    matriz = estados(Path("REVISION.md").read_text().split("## Capturas que faltan")[0])
+    # En REVISION.md la fila tiene además los dos textos de la Rúbrica antes del estado.
+    matriz = {c: e.strip() for c, e in re.findall(r"(?m)^\| ([FABCDEG]\d+) \| [^|]+ \| [^|]+ \| ([^|]+) \|",
+                                                 Path("REVISION.md").read_text().split("## Capturas que faltan")[0])}
     indice = estados(Path("evidencias/INDICE.md").read_text().split("## Auditoría")[0])
     if len(matriz) != 42:
         errores.append(f"La matriz tiene {len(matriz)} criterios, no 42")

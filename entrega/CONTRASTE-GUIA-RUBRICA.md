@@ -17,13 +17,15 @@ repositorio y no están en ningún commit. Este documento los resume con palabra
 
 | Situación | Nº | Criterios |
 | --- | --- | --- |
-| **Listo** | 8 | A1, D1, D2, F3, F4, F6, F8, F12 |
-| **Demostrado, falta captura conforme** | 18 | A2–A5, B3–B5, C1, C2, C4, D3, E1–E3, E5–E7, F5 |
-| **Parcial** | 12 | A6, B1, B2, C3, E4, E8, F1, F2, F7, F9, F10, F11 |
+| **Listo** | 10 | A1, D1, D2, F3–F8, F12 |
+| **Demostrado, falta captura conforme** | 17 | A2–A5, B3–B5, C1, C2, C4, D3, E1–E3, E5–E7 |
+| **Parcial** | 11 | A6, B1, B2, C3, E4, E8, F1, F2, F9, F10, F11 |
 | **Pendiente** | 4 | F13, G1, G2, G3 |
 
-**Orientación sobre 8 puntos, sin la defensa:** entre 4,6 y 6,7, con el laboratorio funcionando el día de la corrección. El mínimo cuenta como
-parciales los 18 criterios sin captura conforme, y el máximo los acepta completos. Es solo una estimación: **la Rúbrica no indica cuánto vale
+**Actualización.** Tras las mejoras locales, A1, F5 y F7 están listos, y B2 solo espera comprobar la conexión. Hay 11 capturas conformes generadas. Los requisitos exactos están en [REVISION.md](../REVISION.md) y en la [checklist](CHECKLIST-FINAL.md).
+
+**Orientación sobre 8 puntos, sin la defensa:** entre 4,8 y 6,8, con el laboratorio funcionando el día de la corrección. El mínimo cuenta como
+parciales los 17 criterios sin captura conforme, y el máximo los acepta completos. Es solo una estimación: **la Rúbrica no indica cuánto vale
 cada ítem dentro de su bloque**, así que supone un reparto igual.
 
 ## Qué cambia respecto a lo que suponíamos
@@ -58,10 +60,10 @@ Conviene preguntarlas al profesor.
 
 | Criterio | Exige, en resumen | Situación | Qué falta | Quién |
 | --- | --- | --- | --- | --- |
-| A1 | Proyecto ordenado con variables | **Listo.** Los discos no son variables: la Guía pide variables de tamaños | Mejora: variables de disco, sin cambios en AWS | Claude |
+| A1 | Proyecto ordenado con variables | **Listo.** Incluye variables de disco, con los mismos valores | Confirmar con un plan que no hay cambios | Claude-lab |
 | A2 | Manager y workers definidos una vez, con etiquetas | **Demostrado.** `count` en los workers | Captura de la consola de EC2 | Tú |
 | A3 | Grupo de seguridad de mínimos | **Demostrado.** Coincide con la Guía. El 22 entre nodos es necesario para el salto | Captura de reglas en la consola | Tú |
-| A4 | Arranque con hostname, zona, Docker y claves | **Demostrado** | Captura conforme | Claude-lab |
+| A4 | Arranque con hostname, zona, Docker y claves | **Demostrado.** Ya está la captura conforme del script | Captura conforme del log en los nodos | Claude-lab |
 | A5 | Salidas con IP e ID | **Demostrado** | Captura conforme | Claude-lab |
 | A6 | Validación, plan, cambio y destrucción | **Parcial.** Falta la destrucción y la secuencia en capturas | Decidir con el profesor. Capturar la secuencia | Tú, Claude-aut |
 
@@ -70,7 +72,7 @@ Conviene preguntarlas al profesor.
 | Criterio | Exige, en resumen | Situación | Qué falta | Quién |
 | --- | --- | --- | --- | --- |
 | B1 | Clave propia en los 4 nodos y `vockey` sustituida | **Parcial.** Solo una clave propia, `vockey` activa y ninguna clave en el repositorio | Claves de cada integrante en `/terraform` e instalarlas. Aclarar `vockey` | Grupo, Claude-aut |
-| B2 | Config SSH con nombre corto | **Parcial.** Se usa `-F config/ssh.local`, no `ssh manager-g5`. `/config` solo tiene la plantilla | Crear `~/.ssh/config`. Añadir las configuraciones aplicadas | Claude |
+| B2 | Config SSH con nombre corto | **Parcial.** `~/.ssh/config` y `/config` preparados. Falta probar la conexión real | Comprobar y capturar la conexión | Claude-lab |
 | B3 | Control, órdenes simultáneas y copia | **Demostrado** | Captura conforme | Claude-lab |
 | B4 | Sin contraseña ni root, y permisos | **Demostrado** | Captura conforme | Claude-lab |
 | B5 | Workers por IP privada con salto | **Demostrado** | Captura conforme | Claude-lab |
@@ -115,12 +117,12 @@ La Guía pide capturas antes, durante y después, con un script consultando la w
 | F2 | Commits repartidos y PR de los colaboradores | **Parcial.** Solo Innnx y Codex | Commits y PR reales de cada integrante | Grupo |
 | F3 | README | **Listo** | — | — |
 | F4 | Estructura | **Listo** en la rama. `main` solo tiene `.devcontainer` y `terraform` | Integrar la PR antes de la entrega | Tú |
-| F5 | Devcontainer y capturas del Codespace | **Demostrado** | Captura del Codespace y captura conforme | Tú, Claude-lab |
+| F5 | Devcontainer y capturas del Codespace | **Listo.** Captura conforme integrada en `PROYECTO.md` | Opcional: vista del Codespace en el navegador | Tú |
 | F6 | Terraform funcional | **Listo** | — | — |
-| F7 | Scripts comentados | **Parcial.** Cinco scripts con una sola línea de comentario y sin script propio para actualizar las IP | Ampliar comentarios y añadir el script | Claude |
+| F7 | Scripts comentados | **Listo.** Comentarios ampliados y `scripts/actualizar-ips.sh` | — | — |
 | F8 | Mapa de arquitectura | **Listo** | — | — |
-| F9 | `PROYECTO.md`, paso a paso | **Parcial.** Completo en texto, con solo 7 capturas integradas | Integrar las capturas conformes | Claude |
-| F10 | Capturas según la norma y comentadas | **Parcial.** Ninguna de terminal muestra el prompt | Rehacerlas y comentar cada una | Claude-lab, Tú |
+| F9 | `PROYECTO.md`, paso a paso | **Parcial.** Con los requisitos por fase y capturas conformes locales | Integrar las capturas restantes | Claude-lab |
+| F10 | Capturas según la norma y comentadas | **Parcial.** 11 de 50 conformes, con el [procedimiento](PROCEDIMIENTO-CAPTURAS.md) | Generar las demás y las de consola | Claude-lab, Tú |
 | F11 | Reparto, responsables y reflexión | **Parcial.** Borrador sin esos datos | Datos reales del grupo | Grupo |
 | F12 | Sin credenciales, claves ni estado | **Listo.** Revisado todo el historial | Repetir antes de integrar | Claude |
 | F13 | Práctica individual previa | **Pendiente** | Documentación real | Grupo |
@@ -145,10 +147,10 @@ ayuda con F2 y con la defensa. Conviene preguntar al profesor si admite capturas
 | --- | --- | --- | --- |
 | 1 | Iniciar el laboratorio, renovar credenciales y actualizar la regla SSH | Tú, Claude-aut | Desbloquea casi todo lo técnico |
 | 2 | Preguntar al profesor: `vockey`, topología final, destrucción de A6 y autoría de las capturas | Tú | Evita repetir trabajo |
-| 3 | Mejoras sin AWS: `~/.ssh/config`, `/config`, comentarios, script de IP y variables de disco | Claude | B2, F7 y A1 |
+| 3 | **Hecho:** `~/.ssh/config`, `/config`, comentarios, script de IP, variables de disco y procedimiento de capturas | Claude | B2, F7, A1 y F5 |
 | 4 | Rehacer las capturas de solo lectura con prompt real y comentario, e integrarlas en `PROYECTO.md` | Claude-lab | F9, F10 y unos 12 criterios |
-| 5 | Repetir E2, E3, E4, E6, E7 y E8 con la web definitiva y capturas conformes | Claude-aut | 6 criterios. También sirve de ensayo para la caída en directo |
-| 6 | Dejar la topología acordada e instalar las claves | Claude-aut | C3 y B1 |
+| 5 | Corregir C3 y repetir E4 y E8 según el [plan](PLAN-C3-E4-E8.md), y E2, E3, E6 y E7 con capturas conformes | Claude-aut | 6 criterios. También sirve de ensayo para la caída en directo |
+| 6 | Instalar las claves públicas de cada integrante | Claude-aut | B1 |
 | 7 | Trabajo de cada integrante: PR, `GESTION.md`, práctica y clave | Grupo | F2, F11, F13 y B1 |
 | 8 | Capturas de consola y GitHub, e invitar al profesor | Tú | A2, A3, A6, F1, F5 y F10 |
 | 9 | Ensayar la defensa con la caída en directo | Grupo | 2 puntos |

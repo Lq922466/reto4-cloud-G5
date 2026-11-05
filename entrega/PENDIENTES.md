@@ -52,28 +52,28 @@ Para cada persona que se confirme como integrante. Las cuentas con acceso son En
 
 | # | Tarea | Criterio |
 | --- | --- | --- |
-| 1 | Crear `~/.ssh/config` y añadir a `/config` las configuraciones aplicadas, sin secretos | B2 |
-| 2 | Ampliar los comentarios de los scripts y añadir uno que actualice las IP desde EC2 | F7 |
-| 3 | Convertir en variables los tamaños de disco, con los mismos valores | A1 |
-| 4 | Incorporar a [GESTION.md](../GESTION.md) los datos reales que aporte el grupo | F11 |
-| 5 | Repetir la revisión de secretos con `scripts/revisar-secretos.py` antes de integrar | F12, F2 |
+| 1 | Incorporar a [GESTION.md](../GESTION.md) los datos reales que aporte el grupo | F11 |
+| 2 | Repetir la revisión de secretos con `scripts/revisar-secretos.py` antes de integrar | F12, F2 |
+
+**Ya hecho:** `~/.ssh/config`, `/config`, comentarios de los scripts, `scripts/actualizar-ips.sh`, `scripts/comprobar-laboratorio.sh`, variables de disco, [procedimiento de capturas](PROCEDIMIENTO-CAPTURAS.md) y 11 capturas conformes.
 
 ### Solo lectura, con el laboratorio activo y SSH
 
 | # | Tarea | Criterio |
 | --- | --- | --- |
-| 1 | Repetir la auditoría y un plan de Terraform | Fases 1–5 |
-| 2 | Rehacer las capturas de lectura con el prompt real y comentario | A4, A5, B3–B5, C1, C2, C4, D3, E1, E5, F5 |
-| 3 | Integrar las capturas conformes en `PROYECTO.md` | F9, F10 |
+| 1 | Ejecutar `scripts/comprobar-laboratorio.sh` e indicar la regla SSH exacta | Todos |
+| 2 | Repetir la auditoría y un plan de Terraform, para confirmar que las variables de disco no proponen cambios | Fases 1–5, A1 |
+| 3 | Generar las capturas del grupo «laboratorio» | A2–A5, B1–B5, C1–C4, D2, D3, E1, E5 |
+| 4 | Integrar las capturas conformes en `PROYECTO.md` | F9, F10 |
 
 ### Solo con autorización expresa de Lq922466
 
 | # | Tarea | Motivo |
 | --- | --- | --- |
 | 1 | Actualizar la regla SSH con la IP actual del Codespace | Cambia AWS |
-| 2 | Repetir E2, E3, E4, E6, E7 y E8 con la web definitiva y capturas conformes. [Qué registrar](../evidencias/auditoria/E4-E8.md#qué-haría-falta-para-cerrarlos) | Cambia el servicio y detiene instancias |
-| 3 | Dejar la topología acordada | Cambia los roles de Swarm |
-| 4 | Instalar las claves públicas y, si se decide, retirar `vockey` | Cambia los nodos. Con Terraform cambiaría `user_data`, lo que puede detener y arrancar las instancias: conviene hacerlo por SSH |
+| 2 | Corregir C3 y repetir E4 y E8 según el [plan](PLAN-C3-E4-E8.md) | Cambia roles de Swarm y detiene instancias |
+| 3 | Repetir E2, E3, E6 y E7 con capturas conformes | Cambia el servicio |
+| 4 | Añadir las claves públicas a `/terraform`, instalarlas y, si se decide, retirar `vockey` | Cambia los nodos. Con Terraform cambiaría `user_data`, lo que puede detener y arrancar las instancias: conviene hacerlo por SSH |
 | 5 | Ejecutar `terraform destroy` | Elimina el clúster, de forma irreversible |
 | 6 | Subir los cambios, sacar la PR de borrador o fusionarla | Afecta a GitHub y a la rama de entrega |
 

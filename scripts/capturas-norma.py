@@ -229,7 +229,8 @@ CATALOGO = [
     instantanea("E7-version-2", "E7", "Actualización a 2.0", replicas(4, "innnx/reto4-f1:2.0") + [r"version=2\.0"], "La versión 2.0 está en 4/4, sin fallos en la sonda."),
     instantanea("E7-rollback", "E7", "Rollback a 1.0", replicas(4) + [r"version=1\.0"], "Rollback a 1.0 en 4/4, sin fallos en la sonda."),
     instantanea("E8-antes", "E8", "Elección de líder: tres managers antes de apagar el líder", [r"manager-g5\s+Ready\s+Active\s+Leader", r"worker1-g5\s+Ready\s+Active\s+Reachable", r"worker2-g5\s+Ready\s+Active\s+Reachable"], "manager-g5 es el líder y hay otros dos managers.", nodo="worker1-g5"),
-    instantanea("E8-durante", "E8", "Elección de líder: durante la parada, visto desde otro manager", [r"worker[12]-g5\s+Ready\s+Active\s+Leader"], "Con manager-g5 apagado, un nuevo líder aparece desde otro nodo.", nodo="worker1-directo"),
+    instantanea("E8-durante", "E8", "Elección de líder: durante la parada, visto desde otro manager", [r"\bstopped\b", r"worker[12]-g5\s+Ready\s+Active\s+Leader"], "Con manager-g5 apagado, un nuevo líder aparece desde otro nodo.", nodo="worker1-directo",
+                extra=[("local", ["aws ec2 describe-instances --region us-east-1 --instance-ids i-0e6ebf2af63facc60 --query 'Reservations[].Instances[].State.Name' --output text"])]),
     instantanea("E8-despues", "E8", "Elección de líder: después", [r"manager-g5\s+Ready\s+Active\s+Reachable", CUATRO_LISTOS], "manager-g5 vuelve como Reachable, sin ser líder.", nodo="worker1-g5"),
 ]
 # Una captura de navegador por nodo, con la dirección visible y un terminal real debajo.

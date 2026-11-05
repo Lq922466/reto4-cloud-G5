@@ -1,33 +1,30 @@
 # Revisión de entrega RETO 4 CLOUD
 
-Estado de los 42 criterios a 5 de noviembre de 2026, **contrastado con la Guía y la Rúbrica originales**, que se conservan fuera del repositorio.
-El detalle, las diferencias entre ambos documentos y el plan están en el [contraste](entrega/CONTRASTE-GUIA-RUBRICA.md).
+Estado de los 42 criterios a 5 de noviembre de 2026, **con los requisitos exactos de la Rúbrica**. Los documentos originales se conservan fuera del repositorio. El análisis, las diferencias entre la Guía y la Rúbrica y el plan están en el [contraste](entrega/CONTRASTE-GUIA-RUBRICA.md).
+
+**Regla de la Rúbrica:** cada requisito puntúa solo si funciona durante la corrección y está respaldado por la captura correspondiente (según instrucciones) y los archivos correspondientes en el repositorio.
+
+**Normas de la Guía para las capturas:** debe verse claramente el prompt con el hostname y la fecha/hora; cada captura debe incluir un comentario indicando qué prueba es, el resultado y el autor; y está estrictamente prohibido mostrar credenciales de AWS o claves privadas.
 
 - **Listo:** cumple lo exigido con los archivos del repositorio.
-- **Demostrado, falta captura conforme:** hay una comprobación real registrada, pero su captura no cumple la norma, o falta la de la consola.
+- **Demostrado, falta captura conforme:** hay una comprobación real registrada, pero falta su captura según la norma o la de la consola.
 - **Parcial:** una parte del requisito está sin cumplir.
 - **Pendiente:** no hay trabajo real que presentar.
 
-Ningún estado es una calificación. La Rúbrica solo puntúa lo que funcione **durante la corrección**.
+Ningún estado es una calificación.
 
 ## Resumen
 
 | Situación | Nº | Criterios |
 | --- | --- | --- |
-| Listo | 8 | A1, D1, D2, F3, F4, F6, F8, F12 |
-| Demostrado, falta captura conforme | 18 | A2–A5, B3–B5, C1, C2, C4, D3, E1–E3, E5–E7, F5 |
-| Parcial | 12 | A6, B1, B2, C3, E4, E8, F1, F2, F7, F9, F10, F11 |
+| Listo | 10 | A1, D1, D2, F3–F8, F12 |
+| Demostrado, falta captura conforme | 17 | A2–A5, B3–B5, C1, C2, C4, D3, E1–E3, E5–E7 |
+| Parcial | 11 | A6, B1, B2, C3, E4, E8, F1, F2, F9, F10, F11 |
 | Pendiente | 4 | F13, G1, G2, G3 |
 
-**Norma de capturas de la Guía:** deben mostrar el prompt con el hostname y la fecha y hora, y llevar un comentario con la prueba, el resultado y el
-autor. Ninguna captura de terminal actual muestra el prompt.
+**Último estado técnico comprobado: 09:56 UTC.** A las 12:15 UTC, AWS seguía denegando las lecturas. [Informe de la auditoría](evidencias/auditoria/INFORME.md).
 
-**Último estado técnico comprobado: 09:56 UTC.** A las 11:29 UTC, AWS seguía denegando las lecturas y la web no respondía.
-[Informe de la auditoría](evidencias/auditoria/INFORME.md).
-
-**Documentos de entrega:** [informe técnico](PROYECTO.md), [contraste](entrega/CONTRASTE-GUIA-RUBRICA.md),
-[checklist final](entrega/CHECKLIST-FINAL.md), [defensa](entrega/DEFENSA.md), [índice de evidencias](evidencias/INDICE.md), [gestión](GESTION.md) y
-[tareas pendientes](entrega/PENDIENTES.md).
+**Documentos de entrega:** [informe técnico](PROYECTO.md), [contraste](entrega/CONTRASTE-GUIA-RUBRICA.md), [checklist final](entrega/CHECKLIST-FINAL.md), [procedimiento de capturas](entrega/PROCEDIMIENTO-CAPTURAS.md), [plan de C3, E4 y E8](entrega/PLAN-C3-E4-E8.md), [defensa](entrega/DEFENSA.md), [índice de evidencias](evidencias/INDICE.md), [gestión](GESTION.md) y [tareas pendientes](entrega/PENDIENTES.md).
 
 ## Evidencias disponibles
 
@@ -42,50 +39,84 @@ autor. Ninguna captura de terminal actual muestra el prompt.
 
 ## Matriz por criterio
 
-| Criterio | Estado | Comprobación o evidencia disponible | Pendiente para la entrega |
-| --- | --- | --- | --- |
-| F1 | Parcial | GitHub confirma repositorio privado, un administrador y tres cuentas con escritura. La consulta de invitaciones no está disponible con el token actual (HTTP 403). | Confirmar integrantes e invitar al profesor antes de la fecha límite. Captura de Settings → Collaborators. |
-| F2 | Parcial | Hasta `2cca149`: 3 commits de Innnx en main y, en la rama, 11 de Codex y 13 de Innnx con `Co-Authored-By` de Claude. PR #1 abierta desde Lq922466, en borrador y sin revisiones. No constan commits ni PR de las otras cuentas. | Commits y PR reales de cada integrante. Vista web de la PR. |
-| F3 | Listo | [README](README.md) con resumen, estructura, despliegue y enlace a las dos etiquetas de Docker Hub. | Nada. |
-| F4 | Listo | En la rama de implementación existen terraform, app, config y .devcontainer. | Integrar la PR: `main` solo contiene `.devcontainer` y `terraform`. |
-| F5 | Demostrado, falta captura conforme | devcontainer.json incluye AWS CLI y Terraform. El registro técnico contiene sus versiones desde Codespaces. | Captura del Codespace funcionando y capturas conformes en `PROYECTO.md`. |
-| F6 | Listo | Terraform en el repositorio. Validación y despliegue reales de cinco recursos. | Nada. Comprobar con un plan cuando el laboratorio esté activo. |
-| F7 | Parcial | Scripts versionados y comentados en scripts. | Ampliar los comentarios de los scripts con una sola línea y añadir un script que actualice las IP desde EC2. |
-| F8 | Listo | Mapa propio Mermaid con los roles actuales, en [diagramas/arquitectura.md](diagramas/arquitectura.md) y [renderizado](diagramas/arquitectura.png). | Nada. Si cambia la topología, actualizar el diagrama. |
-| F9 | Parcial | Informe de las Fases 0–5 completo en [PROYECTO.md](PROYECTO.md). El Word no existe aún; su [estructura](entrega/INFORME-F9-estructura.md) está preparada. | Integrar en `PROYECTO.md` las capturas conformes y comentadas. **El Word no es necesario.** |
-| F10 | Parcial | Capturas web y de terminal reales de las Fases 0–5, con [índice](evidencias/INDICE.md). Las capturas durante E4 y E8 son insuficientes. | Ninguna captura de terminal muestra el prompt con el hostname. Rehacerlas, comentar cada una con prueba, resultado y autor, y añadir las de consola. |
-| F11 | Parcial | [GESTION.md](GESTION.md) es un borrador con datos reales de GitHub y Git. | El grupo debe completar reparto, responsables y reflexión. Trello y el seguimiento semanal no se exigen. |
-| F12 | Listo | Revisión de todo el historial, con 65.272 líneas añadidas: sin credenciales, claves privadas, estado ni planes. [Registro](evidencias/auditoria/registro-repositorio.txt) y [captura](evidencias/capturas-terminal/F12-archivos-sensibles.png). | Repetir con `scripts/revisar-secretos.py` antes de integrar la PR. |
-| F13 | Pendiente | [`practica-individual/`](practica-individual/README.md) solo contiene instrucciones y una plantilla, sin ninguna práctica. | Cada integrante debe aportar la documentación de su práctica individual previa de EC2. |
-| A1 | Listo | Módulo /terraform con variables, proveedor, recursos y salidas. | Mejora: variables para el tamaño de los discos, sin cambios en AWS. |
-| A2 | Demostrado, falta captura conforme | Un manager t3.medium y tres workers t3.small a partir de un único recurso multiplicado, con etiquetas. Cuatro instancias desplegadas. | Captura de la consola de EC2 con la norma de capturas. |
-| A3 | Demostrado, falta captura conforme | Reglas reales del grupo: SSH externo /32, TCP 80/8080 público, TCP 22 entre nodos para el salto, y 2377/7946/4789 e ICMP limitados al propio grupo. [A3-grupo-seguridad](evidencias/capturas-terminal/A3-grupo-seguridad.png). | Captura de reglas en la consola. El puerto 8080 lo exige la Guía. |
-| A4 | Demostrado, falta captura conforme | Plantilla de inicio y cloud-init completado en cuatro nodos. Hostname, Europe/Madrid, Docker y clave pública probada. | Rehacer la captura con prompt y comentario. |
-| A5 | Demostrado, falta captura conforme | nodes devuelve IP pública, privada e ID. El registro E8 identifica la nueva IP del manager tras el arranque. | Rehacer la captura con prompt y comentario. |
-| A6 | Parcial | Validación, plan y apply iniciales reales. Cambio real aplicado el 5 de noviembre: 0 altas, 1 cambio, 0 destrucciones, solo la etiqueta `PruebaA6` de manager-g5. El plan posterior no propone cambios. [Plan](evidencias/A6-plan-final.txt) y [apply](evidencias/A6-apply.txt). | Destrucción real, con autorización aparte y tras aclararlo con el profesor. Secuencia completa en capturas. |
-| B1 | Parcial | La clave propia del Codespace funcionó en cuatro nodos. La política de vockey difiere entre guía y rúbrica. | Clave de cada integrante, en `/terraform` e instalada. Aclarar `vockey`: la Guía la deja de reserva y la Rúbrica la sustituye. |
-| B2 | Parcial | Plantilla en /config y configuración local generada con alias. | Permitir `ssh manager-g5` sin `-F`, con `~/.ssh/config`. Añadir a `/config` las configuraciones aplicadas. |
-| B3 | Demostrado, falta captura conforme | Comandos en paralelo por SSH, sudo comprobado y copia SCP con SHA-256 coincidente. | Rehacer las capturas con prompt y comentario. |
-| B4 | Demostrado, falta captura conforme | sshd confirma root y contraseña deshabilitados. Permisos 700 y 600 comprobados. | Rehacer la captura con prompt y comentario. |
-| B5 | Demostrado, falta captura conforme | Los tres workers respondieron por IP privada con ProxyJump. Tras E8 volvió a funcionar el salto. | Rehacer la captura con prompt y comentario. |
-| C1 | Demostrado, falta captura conforme | Docker 29.1.3 y ping entre IP privadas. | Rehacer la captura con prompt y comentario. |
-| C2 | Demostrado, falta captura conforme | Swarm por IP privada. Red ingress red-g5 con MTU 1450. | Rehacer la captura con prompt y comentario. |
-| C3 | Parcial | Configuración inicial de un manager líder y tres workers Ready/Active. E8 dejó tres managers operativos y worker2-g5 como líder. | Hoy hay tres managers y el líder es worker1-g5, y se pide manager líder y tres workers. Decidir si se restaura, con autorización, y capturar. |
-| C4 | Demostrado, falta captura conforme | Overlay red-app-g5 para la aplicación con MTU 1450. | Rehacer la captura con prompt y comentario. |
-| D1 | Listo | Dos imágenes definitivas construidas desde app/f1 y probadas en contenedores temporales. Publicadas en `innnx/reto4-f1` con etiquetas 1.0 y 2.0 y descargadas sin sesión en los tres workers, con digest y contenido idénticos. [Publicación](evidencias/D1-publicacion-dockerhub.txt), [descarga](evidencias/D1-descarga-dockerhub.txt) y [captura de etiquetas](evidencias/D1-dockerhub-etiquetas.png). | Nada. Mostrar Docker Hub en la defensa. |
-| D2 | Listo | Con la web definitiva: stack.yml define red, cuatro réplicas y políticas de actualización y rollback. `reto4_web` terminó en 4/4 con `innnx/reto4-f1:1.0`. [Registro](evidencias/F3-despliegue/registro.txt) y [estado final](evidencias/F3-estado-final.txt). | Nada. |
-| D3 | Demostrado, falta captura conforme | Con la web definitiva: HTTP 200 y Chromium sin errores por las cuatro IP. Capturas de un navegador gráfico real con la dirección visible en [manager-g5](evidencias/D3-navegador-manager-g5.png), [worker1-g5](evidencias/D3-navegador-worker1-g5.png), [worker2-g5](evidencias/D3-navegador-worker2-g5.png) y [worker3-g5](evidencias/D3-navegador-worker3-g5.png). [Método y horas](evidencias/D3-registro.txt). | Comentario en cada captura, y rehacerlas con las IP del día. |
-| E1 | Demostrado, falta captura conforme | Con la web definitiva: 12 peticiones por las cuatro IP respondidas por cuatro contenedores distintos. [Estado final](evidencias/F3-estado-final.txt). | Rehacer la captura con prompt y comentario. |
-| E2 | Demostrado, falta captura conforme | Con la web definitiva: 8/8 (2-2-2-2), 12/12 (3-3-3-3), 2/2 (1-1) y 4/4 (1-1-1-1), con HTTP 200 en las cuatro IP tras cada estado. Las sondas registraron 562 respuestas correctas y dos tiempos de espera aislados durante la reducción de 12 a 2 réplicas. [Registro y capturas](evidencias/F4-E2/). | Capturas conformes antes, durante y después, con la sonda visible. Requiere autorización. Conservar la observación de los dos tiempos de espera. |
-| E3 | Demostrado, falta captura conforme | Con la web definitiva: se eliminó un contenedor de la tarea `reto4_web.1`. Swarm registró el fallo y creó una tarea de reemplazo en el mismo nodo, con vuelta a 4/4 y HTTP 200 en las cuatro IP. Las sondas registraron 308 respuestas correctas y 0 fallos. [Registro y capturas](evidencias/F4-E3/). | Capturas conformes, con la sonda visible. Requiere autorización. |
-| E4 | Parcial | Con el portal provisional: solo worker3-g5 se detuvo, Swarm lo marcó `Down`, reubicó su tarea y volvió a 4/4. 164 respuestas de sonda correctas y 0 fallos. [Análisis](evidencias/auditoria/E4-E8.md). | Repetir con la web definitiva y capturas conformes, con autorización. También es la demostración obligatoria de la exposición. |
-| E5 | Demostrado, falta captura conforme | Learner Lab reiniciado, según confirmó el usuario; las IP públicas difieren de las anteriores. El 5 de noviembre coinciden IDs y volúmenes raíz con la referencia previa. SSH, Swarm con tres managers, 4/4 y HTTP correctos. [Registro](evidencias/E5-verificacion-final.txt). | Captura conforme de nodos y servicio tras el próximo inicio del laboratorio, y vista de EC2. |
-| E6 | Demostrado, falta captura conforme | Con la web definitiva: worker3-g5 pasó a Drain, su tarea migró a worker2-g5 y el servicio siguió en 4/4. Volvió a Active y la actualización `--force` dejó una réplica por nodo. HTTP 200 en las cuatro IP tras cada paso. Las sondas registraron 488 respuestas correctas y 0 fallos. [Registro y capturas](evidencias/F4-E6/). | Capturas conformes, con la sonda visible. Requiere autorización. |
-| E7 | Demostrado, falta captura conforme | Con la web definitiva: actualización 1.0 → 2.0 y rollback a 1.0, ambos 4/4, con 620 peticiones de sonda y 0 fallos. [Registro](evidencias/F3-actualizacion/registro.txt). | Capturas conformes durante la actualización y el rollback, con la sonda y el navegador. Requiere autorización. |
-| E8 | Parcial | Con el portal provisional: de tres managers, se detuvo solo el líder. Comparando antes y después, worker2-g5 pasó a líder y manager-g5 volvió como Reachable, con 4/4. Sondas: 38 y 130 correctas, con 34 s sin muestras. [Análisis](evidencias/auditoria/E4-E8.md). | Repetir con la web definitiva y capturas conformes, con autorización, listando desde otro manager durante la parada. |
-| G1 | Pendiente | Material preparado: [guion para cuatro integrantes, demostraciones y preguntas](entrega/DEFENSA.md) y [presentación](entrega/presentacion-cloud-g5.pptx). No consta exposición realizada. | Asignar partes, ensayar y hacer la exposición, con caída de un nodo en directo. |
-| G2 | Pendiente | [Preguntas de repaso](entrega/DEFENSA.md#preguntas-del-profesor) preparadas. No consta defensa individual. | Cada integrante debe prepararla: 2 o 3 preguntas sobre cualquier parte. |
-| G3 | Pendiente | [Demostraciones](entrega/DEFENSA.md#demostraciones) preparadas. No consta demostración individual evaluada. | Cada integrante debe hacerla en directo. Requiere laboratorio activo y acceso SSH. |
+«Qué pide» y «Evidencia exigida» son el texto de la Rúbrica. Ítem completo: puntuación entera. Ítem parcial: mitad. No conseguido: 0.
+
+### A · Infraestructura con Terraform — 2 p
+
+| Cód. | Qué pide | Evidencia exigida | Estado | Comprobación o evidencia | Pendiente |
+| --- | --- | --- | --- | --- | --- |
+| A1 | Proyecto organizado, con variables | Ficheros en /terraform | Listo | Módulo /terraform con variables de grupo, tipos, discos e imagen. [Captura conforme](evidencias/capturas-conformes/A1-modulo.png). | Comprobar con un plan que las variables de disco no proponen cambios, cuando el laboratorio esté activo. |
+| A2 | Manager + 3 workers definidos una vez; etiquetas | Código; consola EC2 | Demostrado, falta captura conforme | Un manager t3.medium y tres workers t3.small a partir de un único recurso multiplicado, con etiquetas. Cuatro instancias desplegadas. | Captura de la consola de EC2 con la norma de capturas. |
+| A3 | Security group con política de mínimos | Código; reglas EC2 | Demostrado, falta captura conforme | Reglas reales del grupo: SSH externo /32, TCP 80/8080 público, TCP 22 entre nodos para el salto, y 2377/7946/4789 e ICMP limitados al propio grupo. [A3-grupo-seguridad](evidencias/capturas-terminal/A3-grupo-seguridad.png). | Captura de reglas en la consola. El puerto 8080 lo exige la Guía. |
+| A4 | Script de arranque (hostname, zona, Docker, claves) | Script /terraform; log | Demostrado, falta captura conforme | Plantilla de inicio con hostname, zona, claves, SSH y Docker: [captura conforme](evidencias/capturas-conformes/A4-script.png). Cloud-init completado en cuatro nodos: [registro](evidencias/capturas-terminal/A4-arranque.txt). | Captura conforme del log de arranque en los nodos. Ya está la del script. |
+| A5 | Salidas con IP pública, privada e ID | Salida de Terraform | Demostrado, falta captura conforme | nodes devuelve IP pública, privada e ID. El registro E8 identifica la nueva IP del manager tras el arranque. | Rehacer la captura con prompt y comentario. |
+| A6 | Pruebas clave: validación, plan, cambio, destrucción | Secuencia capturas | Parcial | Validación, plan y apply iniciales reales. Cambio real aplicado el 5 de noviembre: 0 altas, 1 cambio, 0 destrucciones, solo la etiqueta `PruebaA6` de manager-g5. El plan posterior no propone cambios. [Plan](evidencias/A6-plan-final.txt) y [apply](evidencias/A6-apply.txt). | Destrucción real, con autorización aparte y tras aclararlo con el profesor. Secuencia completa en capturas. |
+
+### B · Acceso remoto por SSH — 1 p
+
+| Cód. | Qué pide | Evidencia exigida | Estado | Comprobación o evidencia | Pendiente |
+| --- | --- | --- | --- | --- | --- |
+| B1 | Clave propia en 4 nodos; vockey sustituida | Repositorio; authorized_keys | Parcial | La clave propia del Codespace funcionó en cuatro nodos. La política de vockey difiere entre guía y rúbrica. | Clave de cada integrante, en `/terraform` e instalada. Aclarar `vockey`: la Guía la deja de reserva y la Rúbrica la sustituye. |
+| B2 | Archivo config SSH con nombre corto | /config; conexión | Parcial | Plantilla y configuraciones en [/config](config/README.md), `~/.ssh/config` y alias resueltos: [captura conforme](evidencias/capturas-conformes/B2-plantilla.png). | Comprobar la conexión real con el nombre corto cuando el laboratorio esté activo, y capturarla. |
+| B3 | Control total, órdenes simultáneas y copia ficheros | Capturas cliente | Demostrado, falta captura conforme | Comandos en paralelo por SSH, sudo comprobado y copia SCP con SHA-256 coincidente. | Rehacer las capturas con prompt y comentario. |
+| B4 | Sin contraseña ni root; permisos locales | Config SSH; permisos | Demostrado, falta captura conforme | sshd confirma root y contraseña deshabilitados. Permisos 700 y 600 comprobados. | Rehacer la captura con prompt y comentario. |
+| B5 | Acceso a workers por IP privada (salto) | Conexión con salto | Demostrado, falta captura conforme | Los tres workers respondieron por IP privada con ProxyJump. Tras E8 volvió a funcionar el salto. | Rehacer la captura con prompt y comentario. |
+
+### C · Clúster Docker Swarm — 1 p
+
+| Cód. | Qué pide | Evidencia exigida | Estado | Comprobación o evidencia | Pendiente |
+| --- | --- | --- | --- | --- | --- |
+| C1 | Docker en 4 nodos; conectividad por IP privada | Ping entre nodos | Demostrado, falta captura conforme | Docker 29.1.3 y ping entre IP privadas. | Rehacer la captura con prompt y comentario. |
+| C2 | Clúster por IP privada; MTU ajustado (1450) | Info clúster y redes | Demostrado, falta captura conforme | Swarm por IP privada. Red ingress red-g5 con MTU 1450. | Rehacer la captura con prompt y comentario. |
+| C3 | 4 nodos activos, manager líder, 3 workers unidos | Listado de nodos | Parcial | Configuración inicial de un manager líder y tres workers Ready/Active. E8 dejó tres managers operativos y worker2-g5 como líder. | Hoy hay tres managers y el líder es worker1-g5. Ver el [plan](entrega/PLAN-C3-E4-E8.md), que requiere autorización. |
+| C4 | Red overlay propia para servicios | Listado de redes | Demostrado, falta captura conforme | Overlay red-app-g5 para la aplicación con MTU 1450. | Rehacer la captura con prompt y comentario. |
+
+### D · Despliegue de la web — 0,5 p
+
+| Cód. | Qué pide | Evidencia exigida | Estado | Comprobación o evidencia | Pendiente |
+| --- | --- | --- | --- | --- | --- |
+| D1 | Imagen propia (identifica contenedor); ver 1.0 y 2.0 | /app; Docker Hub | Listo | Imagen propia que identifica el contenedor, con etiquetas 1.0 y 2.0: [captura conforme](evidencias/capturas-conformes/D1-dockerhub.png) y [registros](evidencias/INDICE.md). | Nada. Mostrar Docker Hub en la defensa. |
+| D2 | Servicio 4 réplicas, red grupo, políticas reinicio | Fichero despliegue | Listo | Con la web definitiva: stack.yml define red, cuatro réplicas y políticas de actualización y rollback. `reto4_web` terminó en 4/4 con `innnx/reto4-f1:1.0`. [Registro](evidencias/F3-despliegue/registro.txt) y [estado final](evidencias/F3-estado-final.txt). | Nada. |
+| D3 | Accesible por IP pública de los 4 nodos | Navegador | Demostrado, falta captura conforme | Con la web definitiva: HTTP 200 y Chromium sin errores por las cuatro IP. Capturas de un navegador gráfico real con la dirección visible en [manager-g5](evidencias/D3-navegador-manager-g5.png), [worker1-g5](evidencias/D3-navegador-worker1-g5.png), [worker2-g5](evidencias/D3-navegador-worker2-g5.png) y [worker3-g5](evidencias/D3-navegador-worker3-g5.png). [Método y horas](evidencias/D3-registro.txt). | Comentario en cada captura, y rehacerlas con las IP del día. |
+
+### E · Pruebas de orquestación — 1,5 p
+
+| Cód. | Qué pide | Evidencia exigida | Estado | Comprobación o evidencia | Pendiente |
+| --- | --- | --- | --- | --- | --- |
+| E1 | Balanceo de carga | Respuestas distintas | Demostrado, falta captura conforme | Con la web definitiva: 12 peticiones por las cuatro IP respondidas por cuatro contenedores distintos. [Estado final](evidencias/F3-estado-final.txt). | Rehacer la captura con prompt y comentario. |
+| E2 | Escalado (8, 12, 2) | Reparto de réplicas | Demostrado, falta captura conforme | Con la web definitiva: 8/8 (2-2-2-2), 12/12 (3-3-3-3), 2/2 (1-1) y 4/4 (1-1-1-1), con HTTP 200 en las cuatro IP tras cada estado. Las sondas registraron 562 respuestas correctas y dos tiempos de espera aislados durante la reducción de 12 a 2 réplicas. [Registro y capturas](evidencias/F4-E2/). | Capturas conformes antes, durante y después, con la sonda visible. Requiere autorización. Conservar la observación de los dos tiempos de espera. |
+| E3 | Autorreparación (eliminar contenedor) | Servicio antes/después | Demostrado, falta captura conforme | Con la web definitiva: se eliminó un contenedor de la tarea `reto4_web.1`. Swarm registró el fallo y creó una tarea de reemplazo en el mismo nodo, con vuelta a 4/4 y HTTP 200 en las cuatro IP. Las sondas registraron 308 respuestas correctas y 0 fallos. [Registro y capturas](evidencias/F4-E3/). | Capturas conformes, con la sonda visible. Requiere autorización. |
+| E4 | Alta disponibilidad (caída worker) | Nodo caído; script OK | Parcial | Con el portal provisional: solo worker3-g5 se detuvo, Swarm lo marcó `Down`, reubicó su tarea y volvió a 4/4. 164 respuestas de sonda correctas y 0 fallos. [Análisis](evidencias/auditoria/E4-E8.md). | Repetir con la web definitiva y capturas conformes: ver el [plan](entrega/PLAN-C3-E4-E8.md). También es la demostración obligatoria de la exposición. |
+| E5 | Reincorporación y reequilibrio; reinicio lab | Nodos y servicio | Demostrado, falta captura conforme | Learner Lab reiniciado, según confirmó el usuario; las IP públicas difieren de las anteriores. El 5 de noviembre coinciden IDs y volúmenes raíz con la referencia previa. SSH, Swarm con tres managers, 4/4 y HTTP correctos. [Registro](evidencias/E5-verificacion-final.txt). | Captura conforme de nodos y servicio tras el próximo inicio del laboratorio, y vista de EC2. |
+| E6 | Mantenimiento (modo drain) | Nodos y servicio | Demostrado, falta captura conforme | Con la web definitiva: worker3-g5 pasó a Drain, su tarea migró a worker2-g5 y el servicio siguió en 4/4. Volvió a Active y la actualización `--force` dejó una réplica por nodo. HTTP 200 en las cuatro IP tras cada paso. Las sondas registraron 488 respuestas correctas y 0 fallos. [Registro y capturas](evidencias/F4-E6/). | Capturas conformes, con la sonda visible. Requiere autorización. |
+| E7 | Actualización (1.0 a 2.0) sin corte y rollback | Script y navegador | Demostrado, falta captura conforme | Con la web definitiva: actualización 1.0 → 2.0 y rollback a 1.0, ambos 4/4, con 620 peticiones de sonda y 0 fallos. [Registro](evidencias/F3-actualizacion/registro.txt). | Capturas conformes durante la actualización y el rollback, con la sonda y el navegador. Requiere autorización. |
+| E8 | Alta disp. managers (nuevo líder) | Listado desde otro | Parcial | Con el portal provisional: de tres managers, se detuvo solo el líder. Comparando antes y después, worker2-g5 pasó a líder y manager-g5 volvió como Reachable, con 4/4. Sondas: 38 y 130 correctas, con 34 s sin muestras. [Análisis](evidencias/auditoria/E4-E8.md). | Repetir con la web definitiva y capturas desde otro manager durante la parada: ver el [plan](entrega/PLAN-C3-E4-E8.md). |
+
+### F · Repositorio GitHub y Entorno (Fase 0) — 2 p
+
+| Cód. | Qué pide | Evidencia exigida | Estado | Comprobación o evidencia | Pendiente |
+| --- | --- | --- | --- | --- | --- |
+| F1 | Privado, todos colaboradores, profesor invitado | Settings | Parcial | GitHub confirma repositorio privado, un administrador y tres cuentas con escritura: [captura conforme](evidencias/capturas-conformes/F1-repositorio.png). La consulta de invitaciones no está disponible con el token actual. | Confirmar integrantes e invitar al profesor antes de la fecha límite. Captura de Settings → Collaborators. Ya está la de terminal. |
+| F2 | Commits repartidos y uso de Pull Requests por colaboradores | Historial y PRs | Parcial | Solo constan commits de Innnx y Codex, y una PR de Lq922466, en borrador: [captura conforme](evidencias/capturas-conformes/F2-historial.png). | Commits y PR reales de cada integrante. Vista web de la PR. Ya está la captura del historial. |
+| F3 | README.md (resumen, instrucciones rápidas, enlaces) | README.md | Listo | [README](README.md) con resumen, estructura, despliegue y enlace a las dos etiquetas de Docker Hub. | Nada. |
+| F4 | Estructura (/terraform, /app, /config, y .devcontainer) | Árbol repo | Listo | Existen las carpetas pedidas en la rama de implementación: [captura conforme](evidencias/capturas-conformes/F4-estructura.png). | Integrar la PR: `main` solo contiene `.devcontainer`, `.gitignore`, `README.md` y `terraform`. |
+| F5 | Entorno colaborativo: .devcontainer (AWS CLI, Terraform) y capturas Codespace | .devcontainer.json, proyecto.md | Listo | `devcontainer.json` con AWS CLI y Terraform, funcionando en el Codespace: [captura conforme](evidencias/capturas-conformes/F5-entorno.png), integrada en `PROYECTO.md`. | Nada imprescindible. Una vista del Codespace en el navegador sería un apoyo. |
+| F6 | Código Terraform funcional | /terraform | Listo | Código validado, y desplegó cinco recursos reales: [captura conforme](evidencias/capturas-conformes/F6-codigo.png). | Nada. Comprobar con un plan cuando el laboratorio esté activo. |
+| F7 | Scripts comentados | /scripts | Listo | Scripts comentados: qué hacen, cuándo se usan y su efecto. Incluye la actualización de IP, comprobaciones y consultas. [Captura conforme](evidencias/capturas-conformes/F7-scripts.png). | Nada. Si cambian los scripts, mantener los comentarios. |
+| F8 | Mapa arquitectura propio | /diagramas | Listo | Mapa propio Mermaid con los roles actuales, en [diagramas/arquitectura.md](diagramas/arquitectura.md) y [renderizado](diagramas/arquitectura.png). | Nada. Si cambia la topología, actualizar el diagrama. |
+| F9 | proyecto.md: Informe extenso Fases 0-5 paso a paso | proyecto.md | Parcial | Informe de las Fases 0–5 en [PROYECTO.md](PROYECTO.md), con los requisitos de la Guía por fase, comandos, resultados e incidencias. | Integrar las capturas conformes que faltan, con su comentario. **El Word no es necesario.** |
+| F10 | Capturas de evidencias (Fases 0-5) con normativa y comentadas | proyecto.md | Parcial | [Capturas conformes](evidencias/capturas-conformes/INDICE.md) generadas con el [procedimiento](entrega/PROCEDIMIENTO-CAPTURAS.md). Las demás capturas son reales, pero no cumplen la norma. | Hay 11 capturas conformes de 50, más las 6 con sesión de una persona. El resto requiere laboratorio activo, SSH y, para las pruebas, autorización. |
+| F11 | Reparto tareas y reflexión | gestion.md | Parcial | [GESTION.md](GESTION.md) es un borrador con datos reales de GitHub y Git. | El grupo debe completar reparto, responsables y reflexión. Trello y el seguimiento semanal no se exigen. |
+| F12 | Sin credenciales, claves ni estado de tf | Repo y .gitignore | Listo | Revisión de todo el historial sin credenciales, claves ni estado: [registro](evidencias/auditoria/registro-repositorio.txt) y [captura conforme](evidencias/capturas-conformes/F12-seguridad.png). | Repetir con `scripts/revisar-secretos.py` antes de integrar la PR. |
+| F13 | Documentación práctica individual | /practica-individual | Pendiente | [`practica-individual/`](practica-individual/README.md) solo contiene instrucciones y una plantilla, sin ninguna práctica. | Cada integrante debe aportar la documentación de su práctica individual previa de EC2. |
+
+### G · Exposición y defensa — 2 p (G1 0,5 · G2 1 · G3 0,5)
+
+| Cód. | Qué pide | Evidencia exigida | Estado | Comprobación o evidencia | Pendiente |
+| --- | --- | --- | --- | --- | --- |
+| G1 | Exposición (10 min): demo, arquitectura, código | Día exposición | Pendiente | Material preparado: [guion para cuatro integrantes, demostraciones y preguntas](entrega/DEFENSA.md) y [presentación](entrega/presentacion-cloud-g5.pptx). No consta exposición realizada. | Asignar partes, ensayar y hacer la exposición, con caída de un nodo en directo. |
+| G2 | Preguntas individuales a cualquier miembro | Día exposición | Pendiente | [Preguntas de repaso](entrega/DEFENSA.md#preguntas-del-profesor) preparadas. No consta defensa individual. | Cada integrante debe prepararla: 2 o 3 preguntas sobre cualquier parte. |
+| G3 | Demostración técnica individual | Día exposición | Pendiente | [Demostraciones](entrega/DEFENSA.md#demostraciones) preparadas. No consta demostración individual evaluada. | Cada integrante debe hacerla en directo. Requiere laboratorio activo y acceso SSH. |
 
 ## Capturas que faltan
 
@@ -96,12 +127,13 @@ autor. Ninguna captura de terminal actual muestra el prompt.
 3. **A3.** EC2 → Security Groups → `reto4-cloud-g5` → Inbound rules.
 4. **F1.** GitHub → Settings → Collaborators, incluyendo la cuenta del profesor.
 5. **F2.** GitHub → Pull requests → PR #1, pestañas Conversation y Commits.
-6. **F5.** El Codespace abierto y funcionando, con su terminal.
+6. **F5, opcional.** El Codespace abierto en el navegador, como apoyo a la [captura conforme](evidencias/capturas-conformes/F5-entorno.png).
 
 Guardarlas en `evidencias/capturas-web/`.
 
-**De terminal, que hay que rehacer con el prompt real y comentario:** todas las de [capturas-terminal](evidencias/capturas-terminal/INDICE.md) y las de E2,
-E3, E6 y E7. Las de solo lectura solo necesitan el laboratorio activo y acceso SSH. Las pruebas requieren autorización.
+**Durante E4 y E8:** la consola de EC2 con la instancia detenida.
+
+**De terminal:** [11 capturas conformes ya generadas](evidencias/capturas-conformes/INDICE.md). El resto se genera con el [procedimiento](entrega/PROCEDIMIENTO-CAPTURAS.md): las de solo lectura, con el laboratorio activo y SSH, y las de pruebas, además, con autorización.
 
 ## Cierre técnico del 5 de noviembre de 2026
 

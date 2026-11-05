@@ -39,8 +39,11 @@ terminó la sesión de Learner Lab. No se pudo confirmar el estado de las instan
   registro guarda la salida, pero no la línea de comando exacta.
 - **Web definitiva y portal provisional.** Son imágenes distintas, aunque ambas responden `version=1.0`. Se indica en cada prueba.
 - **Sondas.** Toman una muestra por segundo y no acreditan disponibilidad continua.
-- **Capturas.** La Guía exige ver el prompt con el hostname y la fecha, y un comentario con la prueba, el resultado y el autor. Las de terminal de este
-  informe aún no muestran el prompt: se rehará cuando el laboratorio esté activo. [Contraste con la Guía y la Rúbrica](entrega/CONTRASTE-GUIA-RUBRICA.md).
+- **Capturas.** La Guía exige ver el prompt con el hostname y la fecha/hora, y un comentario con la prueba, el resultado y el autor. Cumplen la norma las que
+  se muestran con prompt real y resultado, generadas con el [procedimiento](entrega/PROCEDIMIENTO-CAPTURAS.md). Las demás son reales, pero anteriores: **no
+  muestran el prompt** y hay que rehacerlas con el laboratorio activo.
+- **Requisitos.** Cada fase empieza con lo que pide la Guía y su situación. Regla de la Rúbrica: cada requisito puntúa solo si funciona durante la corrección y
+  está respaldado por la captura correspondiente y sus archivos. [Contraste completo](entrega/CONTRASTE-GUIA-RUBRICA.md).
 
 ## Arquitectura
 
@@ -60,6 +63,15 @@ de E8. La Guía pide manager líder y tres workers antes de esa prueba, así que
 
 ## Fase 0: Codespaces y repositorio
 
+| Qué pide la Guía | Situación |
+| --- | --- |
+| Crear el repositorio del proyecto en GitHub | **Cumple** |
+| Codespace aprovisionado con un `devcontainer` que incluya AWS CLI y Terraform | **Cumple** |
+| `git add`, `commit` y `push` desde el Codespace | **Cumple** |
+| Invitar al resto de miembros a colaborar | **Parcial:** tres cuentas con acceso, sin confirmar |
+| Los demás miembros clonan y trabajan desde otros terminales Linux, como WSL o Git Bash | **No consta** |
+| Los demás miembros integran su código mediante Pull Requests | **No consta** |
+
 **Qué se hizo.** Se preparó un `devcontainer` con AWS CLI y Terraform, y se usó el Codespace como máquina de control. El trabajo se
 hizo en `cloud-g5-implementacion`, con la PR #1 en borrador hacia `main`.
 
@@ -75,11 +87,35 @@ hostname; date -Is; aws --version; terraform version; gh --version | head -n 1; 
 **Falta.** Confirmar los integrantes y el acceso del profesor. En el repositorio solo constan commits de Innnx y de Codex, y la PR
 de la cuenta Lq922466.
 
-**Evidencias:** [entorno](evidencias/capturas-terminal/F5-entorno.png), [estructura](evidencias/capturas-terminal/F4-estructura.png),
-[colaboradores](evidencias/capturas-terminal/F1-colaboradores.png), [historial](evidencias/capturas-terminal/F2-historial.png) y
-[archivos sensibles](evidencias/capturas-terminal/F12-archivos-sensibles.png).
+![Codespace aprovisionado con AWS CLI y Terraform](evidencias/capturas-conformes/F5-entorno.png)
+
+*Figura 3. Codespace aprovisionado con AWS CLI y Terraform. Resultado: El devcontainer incluye AWS CLI y Terraform, y ambos funcionan en el Codespace. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+
+![Estructura del repositorio](evidencias/capturas-conformes/F4-estructura.png)
+
+*Figura 4. Estructura del repositorio. Resultado: Existen las carpetas pedidas en la rama de implementación. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+
+![Repositorio privado y cuentas con acceso](evidencias/capturas-conformes/F1-repositorio.png)
+
+*Figura 5. Repositorio privado y cuentas con acceso. Resultado: El repositorio es privado. Solo muestra las cuentas con acceso: falta confirmar integrantes y profesor. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+
+![Historial de commits y PR](evidencias/capturas-conformes/F2-historial.png)
+
+*Figura 6. Historial de commits y PR. Resultado: Muestra los autores reales: aún faltan commits y PR de los demás integrantes. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:23 UTC. Máquina: codespaces-8d43b2.*
 
 ## Fase 1: Infraestructura con Terraform
+
+La Guía asigna 1,5 puntos a esta fase, y la Rúbrica, 2 puntos al bloque A.
+
+| Qué pide la Guía | Situación |
+| --- | --- |
+| Partir de la práctica individual de EC2 Ubuntu 22.04 y ampliarla a 4 nodos | **Cumple** en los cuatro nodos. Falta documentar la práctica (F13) |
+| Definir como variables el número de grupo, tamaños e imagen | **Cumple:** `grupo`, tipos, discos y patrón de la imagen |
+| Los 3 workers, multiplicando el recurso en el mismo archivo | **Cumple:** `count` |
+| Script de arranque: hostname, zona horaria Europe/Madrid, claves públicas y Docker | **Cumple** |
+| Salidas: IP pública, IP privada e ID de cada nodo | **Cumple** |
+| Security Group único: 22 desde aula o alumno, 80 y 8080 desde Internet; 2377, 7946, 4789 e ICMP solo entre nodos | **Cumple.** Además, el 22 entre nodos, necesario para el salto |
+| Pruebas clave de la Rúbrica (A6): validación, plan, cambio y destrucción | **Parcial:** falta la destrucción y la secuencia en capturas |
 
 **Qué se hizo.** El módulo [`terraform/`](terraform/) define en `us-east-1` un grupo de seguridad, un manager y tres workers. Los
 workers salen de un único recurso multiplicado con `count`. Cada nodo se configura al arrancar con
@@ -93,6 +129,20 @@ terraform apply reto4-review-cidr.tfplan
 # Plan: 5 to add, 0 to change, 0 to destroy.
 # Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ```
+
+![Módulo Terraform con variables y validación](evidencias/capturas-conformes/A1-modulo.png)
+
+*Figura 7. Módulo Terraform con variables y validación. Resultado: El módulo está organizado, usa variables y terraform validate es correcto. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+
+![Código Terraform: workers multiplicados con un único recurso](evidencias/capturas-conformes/F6-codigo.png)
+
+*Figura 8. Código Terraform: workers multiplicados con un único recurso. Resultado: Los workers salen de un único recurso multiplicado con count. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+
+![Script de arranque: hostname, zona, claves y Docker](evidencias/capturas-conformes/A4-script.png)
+
+*Figura 9. Script de arranque: hostname, zona, claves y Docker. Resultado: El script configura hostname, zona horaria, claves públicas, SSH y Docker. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+
+**Discos.** El tamaño y el tipo son variables desde el 5 de noviembre (`manager_disk_size`, `worker_disk_size` y `disk_type`), con los mismos valores: 20 GB, 10 GB y gp3. Falta confirmar con un plan que no proponen cambios, cuando el laboratorio esté activo.
 
 **Grupo de seguridad `reto4-cloud-g5`:**
 
@@ -108,7 +158,7 @@ terraform apply reto4-review-cidr.tfplan
 
 ![Reglas del grupo de seguridad](evidencias/capturas-terminal/A3-grupo-seguridad.png)
 
-*Figura 3. Reglas de entrada. 5 de noviembre de 2026, 09:52 UTC. Captura: Claude Code. Máquina: codespaces-8d43b2.*
+*Figura 10. Reglas de entrada. 5 de noviembre de 2026, 09:52 UTC. Captura: Claude Code. Máquina: codespaces-8d43b2.*
 
 **Cambio controlado (A6).** Se añadió la etiqueta `PruebaA6=reto4-g5` a manager-g5, regenerando y revisando el plan justo antes.
 
@@ -134,7 +184,14 @@ manager-g5 tiene la etiqueta, los ID y discos son los mismos, y un nuevo plan in
 
 ## Fase 2: Acceso SSH
 
-**Qué se hizo.** Se generó una configuración con alias, en la que los workers se alcanzan por su IP privada a través de manager-g5.
+| Qué pide la Guía | Situación |
+| --- | --- |
+| Cada alumno usa sus propias claves SSH; `vockey` queda como reserva | **Parcial:** solo una clave propia. La Rúbrica pide además `vockey` sustituida |
+| Archivo `config` en el cliente para entrar con el nombre corto | **Preparado:** falta comprobar la conexión con el laboratorio activo |
+| Deshabilitar el acceso root y por contraseña | **Cumple** |
+| Workers accesibles por IP privada, con el manager como salto | **Cumple** |
+
+**Qué se hizo.** Se generó una configuración con alias, en la que los workers se alcanzan por su IP privada a través de manager-g5. `~/.ssh/config` incluye `config/ssh.local`, y `scripts/actualizar-ips.sh` la regenera cuando cambian las IP. Las plantillas y configuraciones aplicadas están en [`config/`](config/README.md).
 
 ```bash
 # Literal: scripts del repositorio.
@@ -152,15 +209,25 @@ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
 conservó el SHA-256 tanto al subir (4 de noviembre) como al descargar (5 de noviembre). `sudo` funciona, `permitrootlogin` y
 `passwordauthentication` están en `no`, y los permisos son 700 y 600.
 
-**Falta.** Las claves individuales. Solo constan `vockey` y la clave del Codespace. Además, la regla SSH permite una única IP y la
+**Falta.** Las claves individuales, que además deben estar en `/terraform`. Solo constan `vockey` y la clave del Codespace. Además, la regla SSH permite una única IP y la
 del Codespace ha cambiado, así que hay que actualizar esa regla para volver a conectarse desde él.
 
-**Evidencias:** [claves](evidencias/capturas-terminal/B1-claves-autorizadas.png), [alias](evidencias/capturas-terminal/B2-alias.png),
+![Configuración SSH con nombre corto](evidencias/capturas-conformes/B2-plantilla.png)
+
+*Figura 11. Configuración SSH con nombre corto. Resultado: Los alias se resuelven solo con el nombre corto. La conexión real se comprueba en B2-conexion. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:23 UTC. Máquina: codespaces-8d43b2.*
+
+**Evidencias anteriores:** [claves](evidencias/capturas-terminal/B1-claves-autorizadas.png), [alias](evidencias/capturas-terminal/B2-alias.png),
 [simultaneidad y sudo](evidencias/capturas-terminal/B3-simultaneo-sudo.png), [copia](evidencias/capturas-terminal/B3-copia-scp.png),
 [endurecimiento](evidencias/capturas-terminal/B4-endurecimiento.png), [salto](evidencias/capturas-terminal/B5-salto.png) y
 [registro inicial](evidencias/prototipo/fase2-3.txt).
 
 ## Fase 3: Docker Swarm y redes
+
+| Qué pide la Guía | Situación |
+| --- | --- |
+| Iniciar Swarm en el manager usando su IP privada | **Cumple** |
+| Red ingress overlay personalizada con MTU 1450 (`red-g5`) | **Cumple** |
+| Los 4 nodos activos y el manager como líder | **No coincide hoy:** tres managers con `worker1-g5` de líder. [Plan de corrección](entrega/PLAN-C3-E4-E8.md) |
 
 **Qué se hizo.** Se comprobó el ping entre todos los nodos por IP privada, se formó el clúster anunciando la IP privada del manager
 y se crearon dos redes overlay.
@@ -193,6 +260,12 @@ red-app-g5 driver=overlay ingress=false MTU=1450
 [red-app-g5](evidencias/capturas-terminal/C4-red-aplicacion.png) y [promoción](evidencias/prototipo/E8-quorum-previo.txt).
 
 ## Fase 4: Web e imágenes
+
+| Qué pide la Guía | Situación |
+| --- | --- |
+| Subir la imagen a Docker Hub en dos versiones, 1.0 y 2.0 | **Cumple** |
+| 4 réplicas en el puerto 80, conectadas a la red del grupo | **Cumple** |
+| La web carga desde la IP pública de cualquiera de los 4 nodos | **Cumple** en la última comprobación. Debe funcionar durante la corrección |
 
 **Qué se hizo.** La web del grupo, en [`app/f1`](app/f1), se empaqueta sobre `nginx:alpine`. Al arrancar, cada contenedor genera
 `/identidad.txt` con su versión e identificador. La versión 2.0 añade una página de estado de la réplica.
@@ -227,11 +300,15 @@ actualización y rollback de una réplica cada vez, arrancando la nueva antes de
 
 ![Web definitiva con la dirección visible](evidencias/D3-navegador-manager-g5.png)
 
-*Figura 4. Web definitiva por la IP de manager-g5, con Chromium gráfico en un escritorio virtual del Codespace. 5 de noviembre de
+*Figura 12. Web definitiva por la IP de manager-g5, con Chromium gráfico en un escritorio virtual del Codespace. 5 de noviembre de
 2026, 09:37 UTC. Captura: Claude Code. Máquina: codespaces-8d43b2.*
 
 **Límites.** Falta confirmar que el profesor acepta estas capturas. Los enlaces `#` de Bilbao y de los avisos legales no tienen
 destino, y los formularios son de demostración y no envían datos.
+
+![Etiquetas 1.0 y 2.0 en Docker Hub](evidencias/capturas-conformes/D1-dockerhub.png)
+
+*Figura 13. Etiquetas 1.0 y 2.0 en Docker Hub. Resultado: Docker Hub publica las dos etiquetas con los digests construidos. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:23 UTC. Máquina: codespaces-8d43b2.*
 
 **Evidencias:** [construcción](evidencias/D1-imagenes-definitivas.txt), [publicación](evidencias/D1-publicacion-dockerhub.txt),
 [descarga](evidencias/D1-descarga-dockerhub.txt), [etiquetas](evidencias/D1-dockerhub-etiquetas.png),
@@ -241,6 +318,19 @@ capturas D3 de [worker1-g5](evidencias/D3-navegador-worker1-g5.png), [worker2-g5
 [portada completa](evidencias/F3-web-final-1.0-completa.png).
 
 ## Fase 5: Orquestación
+
+La Guía pide documentar con capturas antes, durante y después, mientras un script consulta la web cada segundo. Las sondas se ejecutaron, pero las capturas actuales no cumplen la norma y no muestran el script.
+
+| Qué pide la Guía | Situación |
+| --- | --- |
+| Comprobar el reparto de tráfico y escalar a 8, 12 y bajar a 2 réplicas | **Demostrado** |
+| Borrar un contenedor manualmente y ver cómo Swarm lo recupera | **Demostrado** |
+| Apagar un worker y verificar que la web sigue activa y las réplicas se reubican | **Parcial:** solo con el portal provisional y en texto |
+| Poner un nodo en modo drain y luego reactivarlo | **Demostrado** |
+| Pasar de 1.0 a 2.0 sin cortes, y luego revertir | **Demostrado** |
+| Promover 2 workers a manager, apagar el líder y comprobar que se elige uno nuevo | **Parcial:** solo con el portal provisional y sin el estado durante la parada |
+
+[Plan para completar E4 y E8](entrega/PLAN-C3-E4-E8.md), sin ejecutar.
 
 | Prueba | Web | Resultado | Sondas | Situación |
 | --- | --- | --- | --- | --- |
@@ -283,7 +373,7 @@ peticiones. **No se ha determinado la causa.**
 
 ![Servicio con 12 réplicas](evidencias/F4-E2/terminal-e2-escalado-12.png)
 
-*Figura 5. Doce réplicas. 5 de noviembre de 2026, 10:35 Madrid. Captura: Claude Code. Máquina: manager-g5.*
+*Figura 14. Doce réplicas. 5 de noviembre de 2026, 10:35 Madrid. Captura: Claude Code. Máquina: manager-g5.*
 
 [Registro y capturas de cada estado](evidencias/F4-E2/).
 
@@ -300,7 +390,7 @@ Swarm marcó la tarea como fallida (`non-zero exit (137)`) y creó `lgmt4tdycl4a
 
 ![Tarea fallida y reemplazo](evidencias/F4-E3/terminal-e3-despues.png)
 
-*Figura 6. Reemplazo de la tarea. 5 de noviembre de 2026, 10:45 Madrid. Captura: Claude Code. Máquina: manager-g5.*
+*Figura 15. Reemplazo de la tarea. 5 de noviembre de 2026, 10:45 Madrid. Captura: Claude Code. Máquina: manager-g5.*
 
 [Registro y capturas](evidencias/F4-E3/).
 
@@ -353,7 +443,7 @@ actualización forzada dejó una réplica por nodo.
 
 ![Nodo en Drain y tarea migrada](evidencias/F4-E6/terminal-e6-durante-drain.png)
 
-*Figura 7. worker3-g5 en Drain. 5 de noviembre de 2026, 10:46 Madrid. Captura: Claude Code. Máquina: manager-g5.*
+*Figura 16. worker3-g5 en Drain. 5 de noviembre de 2026, 10:46 Madrid. Captura: Claude Code. Máquina: manager-g5.*
 
 [Registro y capturas](evidencias/F4-E6/).
 
@@ -395,6 +485,10 @@ el servicio estaba en 4/4. La IP pública de manager-g5 cambió, lo que indica q
 
 ## Seguridad
 
+![Sin credenciales, claves ni estado de Terraform](evidencias/capturas-conformes/F12-seguridad.png)
+
+*Figura 17. Sin credenciales, claves ni estado de Terraform. Resultado: Solo se versiona la plantilla de variables, y la revisión no encuentra secretos. Autor: Claude Code, por encargo de Lq922466. 2026-11-05, 12:23 UTC. Máquina: codespaces-8d43b2.*
+
 - **Secretos.** La revisión de todo el historial no encontró credenciales, claves privadas ni archivos de estado.
   [Registro](evidencias/auditoria/registro-repositorio.txt).
 - **Red.** SSH externo limitado a una IP, y puertos de Swarm limitados al propio grupo de seguridad.
@@ -429,8 +523,25 @@ el servicio estaba en 4/4. La IP pública de manager-g5 cambió, lo que indica q
 | Estado actual del clúster | Último dato: 09:56 UTC del 5 de noviembre |
 | Cumplimiento de la Guía y la Rúbrica | Faltan capturas conformes y trabajo del grupo. [Contraste](entrega/CONTRASTE-GUIA-RUBRICA.md) |
 
+## Entregables y exposición
+
+| Qué pide la Guía | Situación |
+| --- | --- |
+| Repositorio privado, con el profesor antes de la fecha límite y commits y PR de todos | **Parcial:** privado. Falta el profesor, y commits y PR de los demás |
+| `/.devcontainer` con evidencias del Codespace funcionando | **Cumple** |
+| `/terraform`: código, script de arranque y claves públicas | **Parcial:** faltan las claves públicas |
+| `/app`: Dockerfile, código en sus dos versiones y script de despliegue | **Cumple** |
+| `/config`: plantilla SSH y configuraciones aplicadas | **Cumple** |
+| `/scripts`: comentados, con actualización de IP, comprobaciones y consultas | **Cumple** |
+| `/diagramas`: mapa de la arquitectura | **Cumple**, con la topología actual |
+| `/practica-individual`: práctica de prueba previa | **Pendiente** |
+| `README.md`, `PROYECTO.md` y `GESTION.md` | `README.md` listo. `PROYECTO.md` con capturas por completar. `GESTION.md` en borrador |
+| Exposición: arquitectura, código, caída de nodo en directo y reparto de tareas | **Pendiente.** [Material preparado](entrega/DEFENSA.md) |
+| Individual: 2 o 3 preguntas y demostración técnica en vivo | **Pendiente** |
+
 ## Referencias
 
 [Criterios](REVISION.md) · [evidencias](evidencias/INDICE.md) · [capturas de terminal](evidencias/capturas-terminal/INDICE.md) ·
 [auditoría](evidencias/auditoria/INFORME.md) · [E4 y E8](evidencias/auditoria/E4-E8.md) · [gestión](GESTION.md) ·
-[defensa](entrega/DEFENSA.md) · [checklist](entrega/CHECKLIST-FINAL.md) · [contraste](entrega/CONTRASTE-GUIA-RUBRICA.md)
+[defensa](entrega/DEFENSA.md) · [checklist](entrega/CHECKLIST-FINAL.md) · [contraste](entrega/CONTRASTE-GUIA-RUBRICA.md) ·
+[procedimiento de capturas](entrega/PROCEDIMIENTO-CAPTURAS.md) · [plan de C3, E4 y E8](entrega/PLAN-C3-E4-E8.md)

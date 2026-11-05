@@ -1,0 +1,18 @@
+# Evidencia A4-script · Criterio A4 · RETO 4 CLOUD, Grupo 5
+# Prueba: Script de arranque: hostname, zona, claves y Docker
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:22:45 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ grep -nE 'hostnamectl|timedatectl|authorized_keys|PermitRootLogin|PasswordAuthentication|docker.io' terraform/scripts/bootstrap.sh.tftpl | cut -c1-110
+4:hostnamectl set-hostname '${hostname}'
+5:timedatectl set-timezone Europe/Madrid
+9:touch "$ssh_dir/authorized_keys"
+10:chown ubuntu:ubuntu "$ssh_dir/authorized_keys"
+11:chmod 0600 "$ssh_dir/authorized_keys"
+14:    grep -Fxq -- "$key" "$ssh_dir/authorized_keys" ||
+15:        printf '%s\n' "$key" >> "$ssh_dir/authorized_keys"
+22:PermitRootLogin no
+23:PasswordAuthentication no
+31:apt-get install -y docker.io
+[2026-11-05 12:22:45 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. El script configura hostname, zona horaria, claves públicas, SSH y Docker.

@@ -68,17 +68,9 @@ Preferimos ser claros con lo que falta: [actualizad esta lista el día de la exp
 
 1. Iniciar Learner Lab (**Start Lab**) y esperar al indicador verde.
 2. Copiar las credenciales nuevas de **AWS Details** a `~/.aws/credentials` en Codespaces.
-3. Obtener las IP públicas nuevas, porque cambian con cada reinicio:
-
-   ```bash
-   aws ec2 describe-instances --region us-east-1 \
-     --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' 'Name=instance-state-name,Values=running' \
-     --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,PublicIpAddress]' --output table
-   ```
-
-4. Poner la IP nueva de manager-g5 en `HostName` de `config/ssh.local`.
-5. Comprobar la IP de salida con `curl https://checkip.amazonaws.com`. Si no es la de la regla SSH, hay que actualizar la regla: es un cambio en
-   AWS que debe autorizar el responsable.
+3. Comprobar el laboratorio, sin cambiar nada: `bash scripts/comprobar-laboratorio.sh`. Si la regla SSH no coincide con la IP actual, muestra los comandos exactos: es un cambio en AWS que debe autorizar el responsable.
+4. Actualizar los alias: `bash scripts/actualizar-ips.sh`.
+5. Comprobar que entra con el nombre corto: `ssh manager-g5 hostname`.
 6. Verificar antes de empezar, sin cambiar nada:
 
    ```bash

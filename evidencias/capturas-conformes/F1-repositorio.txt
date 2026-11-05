@@ -1,0 +1,14 @@
+# Evidencia F1-repositorio · Criterio F1 · RETO 4 CLOUD, Grupo 5
+# Prueba: Repositorio privado y cuentas con acceso
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:22:47 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ gh repo view --json visibility --jq .visibility
+]11;?\]11;?\PRIVATE
+[2026-11-05 12:22:58 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_name] | @tsv'
+]11;?\Lq922466	admin
+EnriZx2	write
+alexguerth	write
+ibaiaretxabalaasir-collab	write
+[2026-11-05 12:23:03 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. El repositorio es privado. Solo muestra las cuentas con acceso: falta confirmar integrantes y profesor.

@@ -1,0 +1,25 @@
+# Evidencia F2-historial · Criterio F2 · RETO 4 CLOUD, Grupo 5
+# Prueba: Historial de commits y PR
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:23:04 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ git log --format='%h %an %ad %s' --date=short -n 8 | cut -c1-110
+090dea9 Innnx 2026-11-05 Prepara alias SSH, actualización de IP, variables de disco y capturas conformes
+d4d0c2e Innnx 2026-11-05 Contrasta la entrega con la Guía y la Rúbrica y corrige criterios y defensa
+8641188 Innnx 2026-11-05 Completa el informe, la auditoría, la defensa y la checklist final de entrega
+9066fd9 Innnx 2026-11-05 Organiza las evidencias por criterio y prepara los documentos de entrega
+2cca149 Innnx 2026-11-05 Registra E3, E6 y las capturas de terminal, y precisa los tiempos de espera de E2
+5e451f5 Innnx 2026-11-05 Aplica el criterio de supervisión de E3 y E6 y guarda el texto de las capturas
+63ccce7 Innnx 2026-11-05 Registra E2 con la web definitiva y las capturas D3 con la dirección visible
+3145f02 Innnx 2026-11-05 Separa E2, E3 y E6, fija el drain en worker3-g5 y añade capturas gráficas reales
+[2026-11-05 12:23:04 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ git log --all --format='%an' | sort | uniq -c
+     11 Codex
+     20 Innnx
+[2026-11-05 12:23:04 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ gh pr list --state all
+]11;?\
+Showing 1 of 1 pull request in Lq922466/reto4-cloud-G5 that matches your search
+
+ID  TITLE                                                               BRANCH                   CREATED AT        
+#1  RETO 4 CLOUD G5 — implementación, evidencias y revisión de entrega  cloud-g5-implementacion  about 15 hours ago
+[2026-11-05 12:23:10 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Muestra los autores reales: aún faltan commits y PR de los demás integrantes.

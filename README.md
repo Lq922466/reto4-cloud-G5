@@ -8,6 +8,8 @@ Web del Gran Premio de Euskadi desplegada en AWS con Terraform y Docker Swarm. R
 | El estado de los 42 criterios | [REVISION.md](REVISION.md) |
 | Qué está completado y qué falta | [Checklist final](entrega/CHECKLIST-FINAL.md) |
 | El contraste con la Guía y la Rúbrica | [CONTRASTE-GUIA-RUBRICA.md](entrega/CONTRASTE-GUIA-RUBRICA.md) |
+| Cómo obtener capturas según la norma | [PROCEDIMIENTO-CAPTURAS.md](entrega/PROCEDIMIENTO-CAPTURAS.md) |
+| El plan pendiente para C3, E4 y E8 | [PLAN-C3-E4-E8.md](entrega/PLAN-C3-E4-E8.md) |
 | Las evidencias de cada criterio | [Índice de evidencias](evidencias/INDICE.md) |
 | La defensa: guion, demostraciones y preguntas | [DEFENSA.md](entrega/DEFENSA.md) y [presentación](entrega/presentacion-cloud-g5.pptx) |
 | La organización del grupo | [GESTION.md](GESTION.md) |
@@ -31,7 +33,7 @@ Cuatro instancias EC2 en `us-east-1`, un grupo de seguridad, Docker Swarm por IP
 | --- | --- |
 | [`.devcontainer/`](.devcontainer/devcontainer.json) | Codespaces con AWS CLI y Terraform |
 | [`terraform/`](terraform/) | Infraestructura: grupo de seguridad, instancias, arranque y salidas |
-| [`config/`](config/ssh_config.example) | Plantilla de configuración SSH. `ssh.local` se genera y no se versiona |
+| [`config/`](config/README.md) | Plantilla SSH y configuraciones aplicadas. `ssh.local` se genera y no se versiona |
 | [`scripts/`](scripts/) | SSH, Swarm, publicación, despliegue, pruebas, capturas y revisión de secretos |
 | [`app/`](app/) | `f1`: web definitiva. `f1-release`: extra de la 2.0. `sitio`: portal provisional. Dockerfile y pila |
 | [`diagramas/`](diagramas/) | Mapa de arquitectura |
@@ -59,6 +61,7 @@ El estado de Terraform no se versiona. Debe conservarse para poder gestionar y d
 
 ```bash
 bash scripts/generar-config-ssh.sh    # Lee el estado de Terraform y genera config/ssh.local.
+install -m 600 config/ssh_config.usuario.example ~/.ssh/config   # Permite usar solo: ssh manager-g5
 bash scripts/comprobar-ssh.sh         # Verificar antes las huellas SSH de los servidores.
 bash scripts/formar-swarm.sh          # Forma Swarm por IP privada y crea las redes con MTU 1450.
 ```
@@ -73,6 +76,15 @@ ssh -t -F config/ssh.local manager-g5 docker login -u CUENTA
 bash scripts/publicar-imagenes.sh config/ssh.local CUENTA/REPOSITORIO     # Cierra la sesión al terminar.
 bash scripts/comprobar-descarga.sh config/ssh.local CUENTA/REPOSITORIO
 bash scripts/desplegar-f1.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
+```
+
+### Al reiniciar Learner Lab
+
+Las IP públicas cambian. Con las credenciales renovadas:
+
+```bash
+bash scripts/comprobar-laboratorio.sh  # Solo lectura: EC2, IP, regla SSH, web y Swarm. Propone la regla, sin aplicarla.
+bash scripts/actualizar-ips.sh         # Regenera los alias con las IP actuales.
 ```
 
 ### 4. Comprobaciones

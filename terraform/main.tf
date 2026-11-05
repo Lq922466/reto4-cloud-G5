@@ -140,7 +140,8 @@ resource "aws_instance" "manager" {
   }
 
   tags = {
-    Name = "manager-${var.grupo}"
+    Name     = "manager-${var.grupo}"
+    PruebaA6 = "reto4-${var.grupo}"
   }
 }
 

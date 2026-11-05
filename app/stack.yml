@@ -16,6 +16,9 @@ services:
         parallelism: 1
         order: start-first
         failure_action: rollback
+      rollback_config:
+        parallelism: 1
+        order: start-first
 
 networks:
   red-app-g5:

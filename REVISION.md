@@ -31,7 +31,7 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | A3 | Verificado en plan | SG único. SSH externo /32, TCP 80/8080 público, TCP 22 entre nodos para el salto, y 2377/7946/4789 e ICMP limitados al propio grupo. | Capturar Inbound rules en el SG de EC2. |
 | A4 | Verificado con registro | Plantilla de inicio y cloud-init completado en cuatro nodos. Hostname, Europe/Madrid, Docker y clave pública probada. | Capturar salida de arranque por rol. Claves individuales en B1. |
 | A5 | Verificado con registro | nodes devuelve IP pública, privada e ID. El registro E8 identifica la nueva IP del manager tras el arranque. | Capturar terraform output. Distinguir el último estado de Terraform de la IP actual consultada en EC2. |
-| A6 | Parcial | Validación, plan y apply reales. Parar y arrancar una EC2 demuestra E4/E8, pero no acredita el cambio y destrucción con Terraform. | Obtener secuencia del cambio y de la destrucción con autorizaciones independientes. Capturar plan y apply ya ejecutados desde sus registros. |
+| A6 | Parcial | Validación, plan y apply iniciales reales. Cambio de etiqueta en la rama y [plan actual](evidencias/A6-plan-actual.txt) sin sustituciones ni destrucciones, no aplicado. Plan de destrucción de 5 recursos solo informativo. | Aplicar el cambio con autorización. Destrucción real solo al final y con autorización separada. |
 | B1 | Parcial | La clave propia del Codespace funcionó en cuatro nodos. La política de vockey difiere entre guía y rúbrica. | Recoger claves públicas individuales y verificar accesos. Aclarar con el profesor si vockey se conserva como reserva o se sustituye. |
 | B2 | Verificado con registro | Plantilla en /config y configuración local generada con alias. | Capturar alias y conexión ocultando material sensible. |
 | B3 | Verificado con registro | Comandos en paralelo por SSH, sudo comprobado y copia SCP con SHA-256 coincidente. | Capturar el registro de comandos y copia. |
@@ -41,14 +41,14 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | C2 | Verificado con registro | Swarm por IP privada. Red ingress red-g5 con MTU 1450. | Capturar inspección de red y direcciones privadas. |
 | C3 | Verificado con registro | Configuración inicial de un manager líder y tres workers Ready/Active. E8 dejó tres managers operativos y worker2-g5 como líder. | Capturar el estado actual y señalar qué registro acredita la topología inicial. |
 | C4 | Verificado con registro | Overlay red-app-g5 para la aplicación con MTU 1450. | Capturar listado e inspección. |
-| D1 | Parcial | Dockerfile y dos imágenes del portal provisional, con versión e identidad del contenedor. | El código definitivo y sus dos contextos se probaron localmente. Compilar y verificar las imágenes en Docker, publicar con autorización y guardar evidencia de etiquetas en Docker Hub. |
+| D1 | Parcial | Dos imágenes definitivas construidas en manager-g5 desde app/f1 y probadas en contenedores temporales: healthcheck, versión, identidad y Chromium sin errores. [Registro](evidencias/D1-imagenes-definitivas.txt) y [navegador](evidencias/D1-navegador-registro.txt). | Publicar con autorización y guardar evidencia de etiquetas y digests en Docker Hub. |
 | D2 | Verificado en prototipo | stack.yml define red, cuatro réplicas y políticas. El servicio real terminó 4/4. | Repetir con imágenes definitivas y capturar configuración y servicio. |
 | D3 | Verificado en prototipo | Cuatro respuestas HTTP y cuatro capturas reales del navegador. Las IP públicas de manager y worker3 cambiaron tras las pruebas. | Repetir con la web definitiva y las IP actuales. Capturar navegador con dirección visible. |
 | E1 | Verificado en prototipo | Doce peticiones dieron cuatro identidades distintas. | Capturar respuestas del sondeo y repetir con la web final. |
 | E2 | Verificado en prototipo | Se observaron 8/8, 12/12 y 2/2, con vuelta a 4/4. | Capturar los tres repartos con docker service ps y repetir con la web final. |
 | E3 | Verificado en prototipo | Se eliminó un contenedor y Swarm creó una tarea de reemplazo, con vuelta a 4/4. | Capturar identificador anterior, eliminación y reemplazo. |
 | E4 | Verificado en prototipo | Solo worker3-g5 se detuvo. Su tarea se reubicó, con 164 respuestas HTTP correctas y 0 fallos en el tramo medido. Registro de EC2/Swarm y captura web. | Completar capturas de consola y terminal del antes, durante y después. |
-| E5 | Parcial | worker3-g5 volvió Ready/Active. El servicio quedó 4/4. El despliegue escalonado volvió a asignar tareas al worker, con reparto 2–1–1 y un nodo sin tareas. | Reinicio de Learner Lab pendiente de autorización. Verificar después IP, SSH, nodos, reparto y HTTP. Capturar consola y terminal. |
+| E5 | Verificado con registro | Learner Lab reiniciado, según confirmó el usuario; las IP públicas difieren de las anteriores. El 5 de noviembre coinciden IDs y volúmenes raíz con la referencia previa. SSH, Swarm con tres managers, 4/4 y HTTP correctos. [Registro](evidencias/E5-verificacion-final.txt). | Capturar consola y terminal. No repetir el reinicio. |
 | E6 | Verificado en prototipo | worker1-g5 pasó a Drain y volvió a Active. El registro muestra el estado del nodo y recuperación de 4/4. | Completar capturas de migración de tareas antes, durante y después. |
 | E7 | Verificado en prototipo | Actualización 1.0 → 2.0 y rollback a 1.0. El sondeo de la secuencia de orquestación registró 156 respuestas y cero fallos observados. | Capturar cambio de versión, retorno y registro. Repetir con la web definitiva. |
 | E8 | Elección verificada con límite de sondeo | worker2-g5 fue elegido Leader. manager-g5 volvió Reachable y los cuatro nodos quedaron Ready/Active con 4/4. Swarm informó Unknown/Unreachable y el script activó recuperación. Hubo 38 y 130 HTTP correctas, cero fallos observados y un intervalo sin muestras entre ambos tramos. | Capturas de terminal del cambio de líder. Si el docente exige sondeo ininterrumpido, repetir solo con autorización y ejecutar la sonda en un proceso independiente. |
@@ -189,3 +189,48 @@ anterior de Codespaces requiere credenciales temporales nuevas. El error
 no permite confirmar ni descartar cambios en los recursos. E5 sigue
 pendiente de la comparación de EC2, discos, SSH, cuórum y HTTP.
 [Registro posterior saneado](evidencias/E5-verificacion-posterior.txt).
+
+## Cierre técnico del 5 de noviembre de 2026
+
+La Guía CLOUD y la Rúbrica CLOUD originales no están en el Codespace ni en el
+repositorio. Esta revisión parte de la matriz anterior y no vuelve a cotejar
+los documentos originales.
+
+### Web e imágenes
+
+`scripts/comprobar-web.py` detectó enlaces a `index.html#escuderias` sin destino.
+Se añadió el destino, el menú de la portada apunta a sus tres secciones y los
+enlaces de `.bloque-principal` se leen sobre el fondo oscuro. Los enlaces con `#`
+de Bilbao y de los avisos legales siguen sin destino porque el grupo no tiene ese
+contenido.
+
+Docker no puede ejecutarse en el Codespace, que no tiene `SYS_ADMIN` ni *user
+namespaces*. `scripts/preparar-imagenes.sh` construye en manager-g5 como
+`reto4-g5/f1-definitiva:1.0` y `:2.0`, sin afectar a la imagen provisional ni al
+servicio. Las [capturas 1.0](evidencias/D1-navegador-1.0.png) y
+[2.0](evidencias/D1-navegador-2.0.png) proceden de contenedores temporales
+y no acreditan D2, D3 ni E1–E8 con la web final.
+
+### Secuencia pendiente de autorización
+
+```bash
+ssh -t -F config/ssh.local manager-g5 docker login -u CUENTA
+bash scripts/publicar-imagenes.sh config/ssh.local CUENTA/REPOSITORIO
+bash scripts/desplegar-f1.sh config/ssh.local CUENTA/REPOSITORIO
+bash scripts/probar-actualizacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
+```
+
+La actualización termina en 1.0, de modo que E7 pueda repetirse en la defensa. La
+imagen provisional se conserva en los nodos.
+
+### A6
+
+El estado está en `/workspaces/reto4-revision.Geeumo/terraform`. Antes de aplicar:
+
+1. Usar la IP actual del Codespace en `ssh_cidr`. Tanto `terraform.tfvars` como el
+   `reto4-local.auto.tfvars.json` operativo tienen valores antiguos, y aplicarlos
+   retiraría el acceso SSH actual.
+2. Añadir a la regla SSH activa la descripción que declara Terraform, para que el
+   plan se limite a la etiqueta. Regenerar el plan y comprobar 0 altas, 1 cambio
+   y 0 destrucciones. La etiqueta y la salida `nodes` con las IP actuales son los
+   únicos efectos esperados.

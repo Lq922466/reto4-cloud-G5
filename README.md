@@ -19,4 +19,13 @@ RETO 4 - CLOUD - 2 ASIR
 - `scripts/sondear-web.sh http://IP_PUBLICA/identidad.txt` registra una
   petición por segundo con la versión y el contenedor que responde.
 
-La web F1 debe incorporarse con las dos versiones del grupo. En Terraform, copia grupo.example.tfvars a terraform.tfvars y configura el CIDR real y las claves públicas. Valida y revisa el plan en el Learner Lab antes de solicitar autorización para desplegar. El tratamiento de vockey queda pendiente de confirmación docente por la diferencia entre la guía y B1 de la rúbrica.
+- `scripts/comprobar-web.py DIRECTORIO` valida referencias y anclas del sitio.
+  `scripts/probar-navegador.py URL VERSION` lo recorre en Chromium y requiere
+  playwright.
+- `scripts/preparar-imagenes.sh` construye y prueba las imágenes 1.0 y 2.0 en un
+  nodo. `scripts/publicar-imagenes.sh`, `scripts/desplegar-f1.sh` y
+  `scripts/probar-actualizacion.sh` publican, despliegan y prueban la
+  actualización. Estos tres requieren autorización.
+- `scripts/verificar-despliegue.sh` comprueba réplicas y HTTP, sin hacer cambios.
+
+En Terraform, copia grupo.example.tfvars a terraform.tfvars y configura el CIDR real y las claves públicas. Valida y revisa el plan en el Learner Lab antes de solicitar autorización para desplegar. El tratamiento de vockey queda pendiente de confirmación docente por la diferencia entre la guía y B1 de la rúbrica.

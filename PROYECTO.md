@@ -127,3 +127,16 @@ posterior se detuvo porque la política de la sesión AWS anterior rechazó la
 consulta de EC2. El [registro](evidencias/E5-verificacion-posterior.txt) se
 conserva sin identificadores de sesión. Se requiere renovar las credenciales
 temporales en Codespaces y completar las comprobaciones antes de cerrar E5.
+
+### E5 completado
+
+El 5 de noviembre de 2026, tras renovar las credenciales, EC2 mostró las mismas
+instancias y los mismos volúmenes raíz. SSH, cuórum, redes, 4/4 y HTTP resultaron
+correctos. [Registro](evidencias/E5-verificacion-final.txt).
+
+## Web F1 e imágenes definitivas
+
+Las imágenes 1.0 y 2.0 se construyeron y probaron en contenedores temporales de
+manager-g5. El clúster sigue sirviendo el portal provisional hasta completar la
+publicación y el despliegue autorizados. Consultar
+[el cierre técnico](REVISION.md#cierre-técnico-del-5-de-noviembre-de-2026).

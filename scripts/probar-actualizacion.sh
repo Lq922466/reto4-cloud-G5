@@ -22,10 +22,12 @@ remote "docker service update --quiet --detach=false --image '$target:2.0' reto4
 date -Is
 sleep 5
 bash "$root/scripts/verificar-despliegue.sh" "$config" "$target" 2.0
+probar_navegador actualizada-2.0 2.0
 
 printf '\n$ [manager-g5] docker service rollback reto4_web\n'
 remote 'docker service rollback --quiet --detach=false reto4_web' >/dev/null
 date -Is
 sleep 5
 bash "$root/scripts/verificar-despliegue.sh" "$config" "$target" 1.0
+probar_navegador rollback-1.0 1.0
 resumir_sondas

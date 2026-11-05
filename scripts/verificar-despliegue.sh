@@ -19,7 +19,11 @@ spec=$(remote 'docker service inspect --format "{{.Spec.TaskTemplate.ContainerSp
 printf 'reto4_web réplicas=%s imagen=%s\n' "$replicas" "$spec"
 [[ "$replicas" == 4/4 ]]
 [[ "$spec" == "$image:$version" || "$spec" == "$image:$version@"* ]]
-remote 'docker service ps --filter desired-state=running --format "{{.Name}} {{.Image}} {{.Node}} {{.CurrentState}}" reto4_web'
+tasks=$(remote 'docker service ps --filter desired-state=running --format "{{.Name}} {{.Image}} {{.Node}} {{.CurrentState}}" reto4_web')
+printf '%s\n' "$tasks"
+# El portal provisional y la web definitiva responden ambos version=1.0: la imagen los distingue.
+matching=$(awk -v expected="$image:$version" '{ split($2, name, "@"); if (name[1] == expected) count++ } END { print count + 0 }' <<< "$tasks")
+[[ "$matching" == 4 && $(wc -l <<< "$tasks") == 4 ]]
 
 printf '\n$ IP públicas actuales en EC2\n'
 mapfile -t ips < <(aws ec2 describe-instances --region us-east-1 \

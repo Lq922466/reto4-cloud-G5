@@ -24,6 +24,18 @@ parar_sondas() {
     fi
 }
 
+# Recorre la web en Chromium por cada IP y guarda una captura. Requiere que
+# PYTHON_NAVEGADOR apunte a un intérprete con playwright; si no, no hace nada.
+probar_navegador() {
+    local label=$1 version=$2 ip
+    [[ -n "${PYTHON_NAVEGADOR:-}" ]] || return 0
+    for ip in "${ips[@]}"; do
+        printf '\n$ probar-navegador.py http://%s/ %s\n' "$ip" "$version"
+        date -Is
+        "$PYTHON_NAVEGADOR" "$root/scripts/probar-navegador.py" "http://$ip/" "$version" "$logs/web-$label-$ip.png"
+    done
+}
+
 # Devuelve error si alguna sonda ha registrado un fallo.
 resumir_sondas() {
     local failures=0 file failed

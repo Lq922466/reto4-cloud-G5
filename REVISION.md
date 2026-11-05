@@ -223,7 +223,7 @@ bash scripts/publicar-imagenes.sh config/ssh.local CUENTA/REPOSITORIO
 # Fase 2. Descargar sin sesión en los workers y comparar con lo construido.
 bash scripts/comprobar-descarga.sh config/ssh.local CUENTA/REPOSITORIO
 # Fase 3. Desplegar 1.0, actualizar a 2.0 y hacer rollback. Termina en 1.0.
-bash scripts/desplegar-f1.sh config/ssh.local CUENTA/REPOSITORIO
+bash scripts/desplegar-f1.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
 bash scripts/probar-actualizacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS
 # Fase 4. E2, E3 y E6. No crea ni elimina recursos AWS.
 bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTORIO_REGISTROS

@@ -1,0 +1,14 @@
+$ hostname; date -Is; terraform -chdir=terraform plan -no-color -compact-warnings -input=false -state=/workspaces/reto4-revision.Geeumo/terraform/terraform.tfstate -var-file=/workspaces/reto4-revision.Geeumo/terraform/reto4-local.auto.tfvars.json -var ssh_cidr=172.166.156.160/32 | grep -vE '^$|Refreshing|Reading|Read complete'; aws ec2 describe-instances --region us-east-1 --filters Name=tag:PruebaA6,Values=reto4-g5 --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,InstanceId]' --output table
+codespaces-8d43b2
+2026-11-05T09:52:35+00:00
+Warnings:
+- Deprecated flag: -state
+To see the full warning notes, run Terraform without -compact-warnings.
+No changes. Your infrastructure matches the configuration.
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+---------------------------------------
+|          DescribeInstances          |
++-------------+-----------------------+
+|  manager-g5 |  i-0e6ebf2af63facc60  |
++-------------+-----------------------+

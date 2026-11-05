@@ -59,8 +59,8 @@ Los cuatro accesos devolvieron la misma página mediante la malla de enrutamient
 
 ## Fase 5 · Orquestación
 
-Esta tabla recoge las pruebas con el portal provisional. E1 y E7 se repitieron con la
-web definitiva: consultar [su apartado](#despliegue-de-la-web-definitiva).
+Esta tabla recoge las pruebas con el portal provisional. E1, E2, E3, E6 y E7 se repitieron
+con la web definitiva: consultar [su apartado](#despliegue-de-la-web-definitiva).
 
 | Criterio | Resultado observado |
 | --- | --- |
@@ -171,10 +171,23 @@ Capturas de un navegador gráfico real con la dirección visible:
 [worker2-g5](evidencias/D3-navegador-worker2-g5.png) ·
 [worker3-g5](evidencias/D3-navegador-worker3-g5.png).
 
-### E2 con la web definitiva
+### E2, E3 y E6 con la web definitiva
 
-El servicio se escaló a 8, 12, 2 y 4 réplicas, con HTTP 200 en las cuatro IP tras cada
-estado, y terminó en 4/4 con una réplica por nodo. Las sondas registraron 562 respuestas
-correctas y 2 fallos, en una sola muestra de dos IP durante el paso de 12 a 2.
-[Registro y capturas de terminal](evidencias/F4-E2/). E3 y E6 no se han repetido aún con la
-web definitiva: [detalle](REVISION.md#fase-4-e2-con-la-web-definitiva).
+| Prueba | Resultado | Sondas |
+| --- | --- | --- |
+| [E2](evidencias/F4-E2/) | 8/8, 12/12, 2/2 y 4/4, con HTTP 200 en las cuatro IP tras cada estado | 562 correctas, 2 tiempos de espera aislados durante la reducción de 12 a 2 réplicas |
+| [E3](evidencias/F4-E3/) | Se eliminó un contenedor y Swarm creó una tarea de reemplazo, con vuelta a 4/4 | 308 correctas, 0 fallos |
+| [E6](evidencias/F4-E6/) | worker3-g5 pasó a Drain, su tarea migró y volvió a Active. `--force` dejó una réplica por nodo | 488 correctas, 0 fallos |
+
+Las sondas toman una muestra por segundo y por IP, y no acreditan disponibilidad continua. No se ha
+determinado la causa de los dos tiempos de espera.
+[Detalle](REVISION.md#fase-4-e2-e3-y-e6-con-la-web-definitiva).
+
+El servicio queda en 4/4 con la versión 1.0, una réplica por nodo, cuatro nodos Ready/Active y HTTP
+200 en las cuatro IP. [Estado final](evidencias/capturas-terminal/estado-final.png).
+
+## Capturas de terminal
+
+Las capturas por criterio de las Fases 0–5 están en el
+[índice](evidencias/capturas-terminal/INDICE.md). Las de AWS Console y GitHub que faltan, en
+[REVISION.md](REVISION.md#capturas-que-faltan).

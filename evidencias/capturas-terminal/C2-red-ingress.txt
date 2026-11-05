@@ -1,0 +1,9 @@
+$ ssh -F config/ssh.local manager-g5 'hostname; date -Is; docker info --format "NodeAddr={{.Swarm.NodeAddr}}"; docker node inspect --format "{{.Description.Hostname}} estado={{.Status.Addr}} manager={{if .ManagerStatus}}{{.ManagerStatus.Addr}}{{else}}no{{end}}" manager-g5 worker1-g5 worker2-g5 worker3-g5; docker network inspect --format "{{.Name}} driver={{.Driver}} ingress={{.Ingress}} MTU={{index .Options \"com.docker.network.driver.mtu\"}}" red-g5'
+manager-g5
+2026-11-05T10:54:16+01:00
+NodeAddr=172.31.28.10
+manager-g5 estado=172.31.28.10 manager=172.31.28.10:2377
+worker1-g5 estado=0.0.0.0 manager=172.31.17.168:2377
+worker2-g5 estado=172.31.29.192 manager=172.31.29.192:2377
+worker3-g5 estado=172.31.31.183 manager=no
+red-g5 driver=overlay ingress=true MTU=1450

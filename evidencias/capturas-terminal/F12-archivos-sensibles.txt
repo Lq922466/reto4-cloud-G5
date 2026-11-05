@@ -1,0 +1,6 @@
+$ hostname; date -Is; git ls-files | grep -Ei 'tfstate|tfplan|[.]pem$|[.]key$|ssh[.]local|tfvars$'; git check-ignore terraform/terraform.tfvars config/ssh.local
+codespaces-8d43b2
+2026-11-05T09:52:06+00:00
+terraform/grupo.example.tfvars
+terraform/terraform.tfvars
+config/ssh.local

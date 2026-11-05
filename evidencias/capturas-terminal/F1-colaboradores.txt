@@ -1,0 +1,8 @@
+$ hostname; date -Is; gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_name] | @tsv'; gh repo view Lq922466/reto4-cloud-G5 --json visibility --jq .visibility
+codespaces-8d43b2
+2026-11-05T09:52:05+00:00
+Lq922466	admin
+EnriZx2	write
+alexguerth	write
+ibaiaretxabalaasir-collab	write
+PRIVATE

@@ -1,0 +1,19 @@
+$ hostname; date -Is; for ip in $(aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].PublicIpAddress' --output text); do for i in 1 2 3 4; do printf '%s ' $ip; curl -s --max-time 5 http://$ip/identidad.txt | tr '\n' ' '; echo; done; done
+codespaces-8d43b2
+2026-11-05T09:53:40+00:00
+34.230.4.20 version=1.0 contenedor=186a776a5096 
+34.230.4.20 version=1.0 contenedor=3899d0398872 
+34.230.4.20 version=1.0 contenedor=25ed10d85adc 
+34.230.4.20 version=1.0 contenedor=cd63f3d80ea1 
+98.81.203.125 version=1.0 contenedor=25ed10d85adc 
+98.81.203.125 version=1.0 contenedor=cd63f3d80ea1 
+98.81.203.125 version=1.0 contenedor=186a776a5096 
+98.81.203.125 version=1.0 contenedor=3899d0398872 
+100.27.223.129 version=1.0 contenedor=cd63f3d80ea1 
+100.27.223.129 version=1.0 contenedor=186a776a5096 
+100.27.223.129 version=1.0 contenedor=3899d0398872 
+100.27.223.129 version=1.0 contenedor=25ed10d85adc 
+23.22.135.121 version=1.0 contenedor=cd63f3d80ea1 
+23.22.135.121 version=1.0 contenedor=186a776a5096 
+23.22.135.121 version=1.0 contenedor=3899d0398872 
+23.22.135.121 version=1.0 contenedor=25ed10d85adc 

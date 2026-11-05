@@ -1,0 +1,13 @@
+$ ssh -F config/ssh.local manager-g5 'hostname; date -Is; docker --version; for ip in 172.31.17.168 172.31.29.192 172.31.31.183; do ping -c 2 -W 2 $ip | tail -n 3; done'
+manager-g5
+2026-11-05T10:54:11+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+--- 172.31.17.168 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1024ms
+rtt min/avg/max/mdev = 0.247/0.254/0.261/0.007 ms
+--- 172.31.29.192 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+rtt min/avg/max/mdev = 0.221/0.245/0.270/0.024 ms
+--- 172.31.31.183 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+rtt min/avg/max/mdev = 0.311/0.315/0.319/0.004 ms

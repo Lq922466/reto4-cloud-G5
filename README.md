@@ -29,6 +29,8 @@ RETO 4 - CLOUD - 2 ASIR
   despliegan y repiten las pruebas. Estos cuatro requieren autorización.
 - `scripts/verificar-despliegue.sh` comprueba réplicas y HTTP, sin hacer cambios.
 - `scripts/capturar-pantalla.sh` captura un navegador o un terminal gráficos reales.
+  `scripts/capturas-terminal.sh` genera las capturas de terminal del informe, solo con
+  comandos de lectura.
 
 ## Despliegue de la web definitiva
 

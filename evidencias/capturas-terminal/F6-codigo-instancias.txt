@@ -1,0 +1,51 @@
+$ hostname; date -Is; sed -n '/Instancia Manager/,$p' terraform/main.tf
+codespaces-8d43b2
+2026-11-05T09:52:13+00:00
+# Instancia Manager
+resource "aws_instance" "manager" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.manager_type
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.cluster.id]
+
+  associate_public_ip_address = true
+  user_data = templatefile("${path.module}/scripts/bootstrap.sh.tftpl", {
+    hostname    = "manager-${var.grupo}"
+    public_keys = var.ssh_public_keys
+  })
+
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+  }
+
+  tags = {
+    Name     = "manager-${var.grupo}"
+    PruebaA6 = "reto4-${var.grupo}"
+  }
+}
+
+# Instancias Workers
+resource "aws_instance" "workers" {
+  count = var.worker_count
+
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.worker_type
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.cluster.id]
+
+  associate_public_ip_address = true
+  user_data = templatefile("${path.module}/scripts/bootstrap.sh.tftpl", {
+    hostname    = "worker${count.index + 1}-${var.grupo}"
+    public_keys = var.ssh_public_keys
+  })
+
+  root_block_device {
+    volume_size = 10
+    volume_type = "gp3"
+  }
+
+  tags = {
+    Name = "worker${count.index + 1}-${var.grupo}"
+  }
+}

@@ -2,34 +2,76 @@
 
 Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del profesor. La verificación funcional se distingue de la evidencia exigida para la corrección. «Verificado en prototipo» se refiere al portal provisional. La web definitiva se desplegó el 5 de noviembre, y los criterios repetidos con ella lo indican. Un registro de comandos conserva una salida real y se identifica como tal. Las imágenes son capturas reales del navegador.
 
+## Resumen
+
+De los 42 criterios, a 5 de noviembre de 2026:
+
+| Situación | Nº | Criterios |
+| --- | --- | --- |
+| Verificado | 28 | F3–F8, F12, A1–A5, B2–B5, C1–C4, D1–D3, E1, E3, E5–E7 |
+| Verificado con límite | 3 | E2 (dos tiempos de espera aislados), E4 (solo portal provisional), E8 (solo portal provisional y hueco de sondeo) |
+| Parcial | 7 | F1, F2, F9, F10, F11, A6, B1 |
+| Pendiente | 4 | F13, G1, G2, G3 |
+
+«Verificado» indica que hay una comprobación técnica registrada, no una calificación. La matriz procede del cotejo que
+hizo Codex el 4 de noviembre. Los originales no estaban disponibles el 5 de noviembre, así que debe
+[contrastarse con ellos](#contraste-pendiente-con-la-guía-y-la-rúbrica).
+
+**Documentos de entrega:** [índice de evidencias por criterio](evidencias/INDICE.md),
+[estructura del informe F9](entrega/INFORME-F9-estructura.md), [tareas pendientes](entrega/PENDIENTES.md),
+[GESTION.md](GESTION.md) y [`practica-individual/`](practica-individual/README.md).
+
+## Contraste pendiente con la Guía y la Rúbrica
+
+Antes de generar el Word hay que comprobar en los originales:
+
+| Punto | Situación actual | Qué depende de ello |
+| --- | --- | --- |
+| Lista y redacción de los criterios | Matriz de 42 criterios heredada del cotejo anterior | Toda la revisión |
+| Topología de Swarm | Tres managers (manager-g5, worker1-g5 y worker2-g5) y un worker puro (worker3-g5). La configuración inicial era de un manager y tres workers | C3, F8. Cambiarla requiere autorización |
+| Autoría y método de las capturas | Hechas con Codex y Claude Code; las D3, con Chromium gráfico en un escritorio virtual | D3, F10 |
+| Uso de asistentes de IA | Consta en el historial, y falta saber cómo debe declararse | F2, F11, G2, G3 |
+| Pruebas con la web definitiva | E4 y E8 solo se hicieron con el portal provisional, y E8 tiene un hueco de sondeo | E4, E8 |
+| Destrucción de A6 | Sin ejecutar. Hay que saber si se exige ejecutarla, cuándo y cómo se evidencia | A6 |
+| Claves SSH y vockey | Guía y Rúbrica difieren según la revisión anterior | B1 |
+| Versión activa al entregar | 1.0, para poder repetir E7 en la defensa | D1–D3, E7 |
+| Puerto 8080 | Regla abierta, sin servicio publicado en ese puerto | A3 |
+| Formato del informe | Estructura propia por fases, porque no consta el formato exigido. `.gitignore` excluye `*.docx` | F9 |
+| Gestión y Trello | No consta qué exige la Guía ni si existe el tablero | F11 |
+| Prácticas individuales | No consta su contenido, formato ni vía de entrega | F13 |
+| Acceso y entrega | No constan la cuenta del profesor, la fecha ni si hay que integrar en main | F1, F2, F4 |
+
 ## Evidencias disponibles
+
+Índice completo: [evidencias/INDICE.md](evidencias/INDICE.md).
 
 - [Registro técnico recuperado de Codespaces](evidencias/revision-registro-tecnico.txt) — entorno, validación, plan, apply, arranque y orquestación.
 - [E4 y reincorporación](evidencias/E4-E5-E8-registro.txt) y [elección y recuperación E8](evidencias/E8-eleccion-registro.txt).
 - [Captura durante E4](evidencias/E4-web-worker-down.png), [captura tras reincorporar el worker](evidencias/E5-web-recuperado.png), [captura durante E8](evidencias/E8-web-parada.png) y [captura tras recuperar el manager](evidencias/E8-web-recuperado.png).
 - Las cuatro capturas F4C están enlazadas en [PROYECTO.md](PROYECTO.md).
+- [Registros originales de las pruebas del 4 de noviembre](evidencias/prototipo/), antes sin versionar.
 - [Índice de capturas de terminal](evidencias/capturas-terminal/INDICE.md), capturas [D3](evidencias/D3-registro.txt) y pruebas [E2](evidencias/F4-E2/), [E3](evidencias/F4-E3/) y [E6](evidencias/F4-E6/) con la web definitiva.
 
 ## Matriz por criterio
 
 | Criterio | Estado | Comprobación o evidencia disponible | Pendiente para la entrega |
 | --- | --- | --- | --- |
-| F1 | Parcial | GitHub confirma repositorio privado, un administrador y tres cuentas con escritura. No hay invitaciones pendientes. | Confirmar quiénes son los integrantes y si el profesor tiene acceso. Capturado por CLI: [F1-colaboradores](evidencias/capturas-terminal/F1-colaboradores.png). Falta Settings → Collaborators. |
-| F2 | Parcial | El historial muestra un autor humano y Codex. La consulta de PR devolvió cero. | Cada integrante debe aportar commits y PR reales. La PR #1 sigue en borrador. Capturado por CLI: [F2-historial](evidencias/capturas-terminal/F2-historial.png). Falta la vista web de la PR. |
+| F1 | Parcial | GitHub confirma repositorio privado, un administrador y tres cuentas con escritura. La consulta de invitaciones no está disponible con el token actual (HTTP 403). | Confirmar quiénes son los integrantes y si el profesor tiene acceso. Capturado por CLI: [F1-colaboradores](evidencias/capturas-terminal/F1-colaboradores.png). Falta Settings → Collaborators. |
+| F2 | Parcial | Hasta `2cca149`: 3 commits de Innnx en main y, en la rama, 11 de Codex y 13 de Innnx con `Co-Authored-By` de Claude. PR #1 abierta desde Lq922466, en borrador y sin revisiones. No constan commits ni PR de las otras cuentas. | Cada integrante debe aportar commits y PR reales. Capturado por CLI: [F2-historial](evidencias/capturas-terminal/F2-historial.png). Falta la vista web de la PR. |
 | F3 | Verificado | README con resumen, instrucciones de despliegue final y enlace a las dos etiquetas de Docker Hub. | Revisar antes de la entrega. |
 | F4 | Verificado | En la rama de implementación existen terraform, app, config y .devcontainer. | Incluir la rama revisada en la entrega. Capturado: [F4-estructura](evidencias/capturas-terminal/F4-estructura.png). |
 | F5 | Verificado con registro | devcontainer.json incluye AWS CLI y Terraform. El registro técnico contiene sus versiones desde Codespaces. | Capturado: [F5-entorno](evidencias/capturas-terminal/F5-entorno.png). |
 | F6 | Verificado con registro | Terraform en el repositorio. Validación y despliegue reales de cinco recursos. | Capturado: [A1-modulo-terraform](evidencias/capturas-terminal/A1-modulo-terraform.png), [F6-codigo-instancias](evidencias/capturas-terminal/F6-codigo-instancias.png). |
 | F7 | Verificado | Scripts versionados y comentados en scripts. | Capturado: [F7-scripts](evidencias/capturas-terminal/F7-scripts.png). Mostrar los scripts durante la defensa. |
 | F8 | Verificado | Mapa propio Mermaid en diagramas/arquitectura.md. | Capturar el diagrama renderizado en GitHub y revisar el papel de los tres managers tras E8. |
-| F9 | Parcial | PROYECTO.md cubre Fases 0–5. El informe Word amplía procedimiento y pruebas. | Integrar los apartados y evidencias pendientes en el informe técnico final. |
+| F9 | Parcial | PROYECTO.md cubre las Fases 0–5. El informe Word aún no existe; está preparada su [estructura](entrega/INFORME-F9-estructura.md). | Contrastar con la Guía y la Rúbrica. Después, generar el Word con las capturas reales. `.gitignore` excluye `*.docx`. |
 | F10 | Parcial | Capturas web reales y capturas reales de terminal de las Fases 0–5, con [índice](evidencias/capturas-terminal/INDICE.md). | Faltan las capturas de AWS Console y GitHub de «Capturas que faltan». Añadir autor y comentario en el informe. |
-| F11 | Pendiente | GESTION.md solo contiene una nota de seguimiento. | Completar reparto, responsables y reflexión con datos del grupo. |
+| F11 | Parcial | [GESTION.md](GESTION.md) es un borrador con datos reales de GitHub y Git. | El grupo debe completar responsables, seguimiento semanal, Trello y reflexión. |
 | F12 | Verificado en archivos revisados | No se identificaron claves privadas, credenciales, estado ni planes en los archivos versionados inspeccionados. .gitignore excluye esos archivos. | Capturado: [F12-archivos-sensibles](evidencias/capturas-terminal/F12-archivos-sensibles.png). Repetir la revisión antes de integrar la PR. |
-| F13 | Pendiente | No existe /practica-individual en la rama de entrega. | Incorporar la documentación real de las prácticas individuales. |
+| F13 | Pendiente | [`practica-individual/`](practica-individual/README.md) solo contiene instrucciones y una plantilla, sin ninguna práctica. | Cada integrante debe aportar su práctica real. Confirmar el formato en la Guía. |
 | A1 | Verificado | Módulo /terraform con variables, proveedor, recursos y salidas. | Capturado: [A1-modulo-terraform](evidencias/capturas-terminal/A1-modulo-terraform.png). |
 | A2 | Verificado con registro | Un manager t3.medium y tres workers t3.small a partir de un único recurso multiplicado, con etiquetas. Cuatro instancias desplegadas. | Capturado por CLI: [A2-instancias](evidencias/capturas-terminal/A2-instancias.png). Falta la vista de EC2 en la consola. |
-| A3 | Verificado en plan | SG único. SSH externo /32, TCP 80/8080 público, TCP 22 entre nodos para el salto, y 2377/7946/4789 e ICMP limitados al propio grupo. | Capturado por CLI: [A3-grupo-seguridad](evidencias/capturas-terminal/A3-grupo-seguridad.png). Falta Inbound rules en la consola. |
+| A3 | Verificado con registro | Reglas reales del grupo: SSH externo /32, TCP 80/8080 público, TCP 22 entre nodos para el salto, y 2377/7946/4789 e ICMP limitados al propio grupo. [A3-grupo-seguridad](evidencias/capturas-terminal/A3-grupo-seguridad.png). | Falta Inbound rules en la consola. La regla 8080 está abierta y la pila solo publica el 80: contrastar con la Guía. |
 | A4 | Verificado con registro | Plantilla de inicio y cloud-init completado en cuatro nodos. Hostname, Europe/Madrid, Docker y clave pública probada. | Capturado: [A4-arranque](evidencias/capturas-terminal/A4-arranque.png). Claves individuales en B1. |
 | A5 | Verificado con registro | nodes devuelve IP pública, privada e ID. El registro E8 identifica la nueva IP del manager tras el arranque. | Capturado: [A5-salida-nodes](evidencias/capturas-terminal/A5-salida-nodes.png). Tras A6, el estado de Terraform coincide con las IP actuales de EC2. |
 | A6 | Parcial | Validación, plan y apply iniciales reales. Cambio real aplicado el 5 de noviembre: 0 altas, 1 cambio, 0 destrucciones, solo la etiqueta `PruebaA6` de manager-g5. El plan posterior no propone cambios. [Plan](evidencias/A6-plan-final.txt) y [apply](evidencias/A6-apply.txt). | Capturado: [A6-sin-cambios](evidencias/capturas-terminal/A6-sin-cambios.png). Destrucción real solo con autorización separada. Falta la etiqueta en la consola de EC2. |
@@ -71,14 +113,14 @@ mostrar el identificador de la cuenta de AWS.
 5. **F2.** GitHub → Pull requests → PR #1, pestañas Conversation y Commits.
 6. **F8.** GitHub → `diagramas/arquitectura.md`, con el diagrama renderizado.
 
-Las capturas de D3 solo habría que repetirlas si el profesor exige que se tomen desde el equipo
+Guardarlas en `evidencias/capturas-web/`. Las capturas de D3 solo habría que repetirlas si el profesor exige que se tomen desde el equipo
 de un integrante. Las de consola durante E4, E8 y el reinicio de E5 ya no se pueden obtener sin
 repetir esas pruebas.
 
 ## Orden de cierre
 
-Plan original, conservado como registro. El estado vigente está en la matriz y en el
-[cierre técnico](#cierre-técnico-del-5-de-noviembre-de-2026).
+Plan original, conservado como registro. Las tareas vigentes están en
+[PENDIENTES](entrega/PENDIENTES.md).
 
 1. Completar capturas y contrastarlas con los registros existentes. Identificar la cuenta del profesor y confirmar su acceso.
 2. Incorporar las claves públicas de los colaboradores y la práctica individual real. Aclarar con el profesor la discrepancia sobre vockey. Completar GESTION.md con el reparto real.

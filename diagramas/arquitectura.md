@@ -12,3 +12,7 @@ flowchart LR
         SW --- O[red-g5 ingress y red-app-g5 overlay MTU 1450]
     end
 ```
+
+Los nombres de las instancias son los de su creación. Desde las pruebas E8, manager-g5, worker1-g5 y worker2-g5 son
+managers de Swarm, y solo worker3-g5 es un worker puro. worker1-g5 era el líder en la última comprobación, del 5 de
+noviembre de 2026. [Captura de los nodos](../evidencias/capturas-terminal/C3-nodos.png).

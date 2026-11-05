@@ -1,6 +1,10 @@
 # reto4-cloud-G5
 RETO 4 - CLOUD - 2 ASIR
 
+**Entrega:** [estado por criterio](REVISION.md), [evidencias](evidencias/INDICE.md),
+[estructura del informe](entrega/INFORME-F9-estructura.md), [gestión](GESTION.md) y
+[tareas pendientes](entrega/PENDIENTES.md).
+
 ## Componentes locales del grupo 5
 
 - `terraform/scripts/bootstrap.sh.tftpl` configura el hostname, la zona horaria,
@@ -47,7 +51,8 @@ bash scripts/probar-actualizacion.sh config/ssh.local innnx/reto4-f1 DIRECTORIO_
 bash scripts/verificar-despliegue.sh config/ssh.local innnx/reto4-f1 1.0
 ```
 
-`config/ssh.local` se genera con `scripts/generar-config-ssh.sh` y no se versiona. Para
+`config/ssh.local` se genera con `scripts/generar-config-ssh.sh` y no se versiona. Ese script lee el estado de
+Terraform, que no se versiona, así que debe ejecutarse donde esté el estado. Para
 incluir la prueba en Chromium, definir `PYTHON_NAVEGADOR` con un intérprete que tenga
 playwright.
 

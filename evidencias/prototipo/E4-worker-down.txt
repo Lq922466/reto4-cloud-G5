@@ -1,0 +1,32 @@
+codespaces-8d43b2
+2026-11-04T20:05:38+00:00
+stopped
+manager-g5
+2026-11-04T21:05:40+01:00
+ID                            HOSTNAME     STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+xf46ytyuxo4bvn8lbxixhfhtv *   manager-g5   Ready     Active         Leader           29.1.3
+m69w5hsyyyegwivfhoi8fbihd     worker1-g5   Ready     Active                          29.1.3
+7zff6zyro5ir31bz19ozwmt4q     worker2-g5   Ready     Active                          29.1.3
+ci4mgenau4xvzypqk3ljka8fi     worker3-g5   Down      Active                          29.1.3
+ID             NAME        MODE         REPLICAS   IMAGE             PORTS
+yzxg8z52dukm   reto4_web   replicated   5/4        reto4-g5/f1:1.0   *:80->80/tcp
+ID             NAME              IMAGE             NODE         DESIRED STATE   CURRENT STATE                ERROR     PORTS
+pdb7zybpiuvn   reto4_web.1       reto4-g5/f1:1.0   manager-g5   Running         Running about a minute ago             
+tg5ntpjkci20    \_ reto4_web.1   reto4-g5/f1:1.0   worker3-g5   Shutdown        Running 8 minutes ago                  
+gkc9aux56syr    \_ reto4_web.1   reto4-g5/f1:2.0   worker3-g5   Shutdown        Shutdown 9 minutes ago                 
+b9wwu0iw7v1o    \_ reto4_web.1   reto4-g5/f1:1.0   manager-g5   Shutdown        Shutdown 9 minutes ago                 
+jq3wivdlts2o    \_ reto4_web.1   reto4-g5/f1:1.0   worker1-g5   Shutdown        Shutdown 9 minutes ago                 
+c48bh6fqdz9f   reto4_web.2       reto4-g5/f1:1.0   manager-g5   Running         Running 8 minutes ago                  
+xp66x1ow62b2    \_ reto4_web.2   reto4-g5/f1:2.0   manager-g5   Shutdown        Shutdown 8 minutes ago                 
+gb11jgz4carg    \_ reto4_web.2   reto4-g5/f1:1.0   worker2-g5   Shutdown        Shutdown 9 minutes ago                 
+oz75prkd8p6j   reto4_web.3       reto4-g5/f1:1.0   worker2-g5   Running         Running 8 minutes ago                  
+jsw6brjw51tz    \_ reto4_web.3   reto4-g5/f1:2.0   worker2-g5   Shutdown        Shutdown 8 minutes ago                 
+hir3qsh9jgf0    \_ reto4_web.3   reto4-g5/f1:1.0   worker3-g5   Shutdown        Shutdown 9 minutes ago                 
+lnotqnevpqsf   reto4_web.4       reto4-g5/f1:1.0   worker1-g5   Running         Running 9 minutes ago                  
+p2jqql7t8llv    \_ reto4_web.4   reto4-g5/f1:2.0   worker1-g5   Shutdown        Shutdown 9 minutes ago                 
+20z5sbq8vobz    \_ reto4_web.4   reto4-g5/f1:1.0   manager-g5   Shutdown        Shutdown 9 minutes ago                 
+2026-11-04T20:05:35+00:00 OK version=1.0 contenedor=c2833dc850ea
+2026-11-04T20:05:36+00:00 OK version=1.0 contenedor=e5742563d8cb
+2026-11-04T20:05:37+00:00 OK version=1.0 contenedor=a7d7e47e095f
+2026-11-04T20:05:38+00:00 OK version=1.0 contenedor=39832f8d7468
+2026-11-04T20:05:39+00:00 OK version=1.0 contenedor=c2833dc850ea

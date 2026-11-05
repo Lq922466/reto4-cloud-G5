@@ -1,0 +1,16 @@
+Node worker1-g5 promoted to a manager in the swarm.
+Node worker2-g5 promoted to a manager in the swarm.
+manager-g5
+2026-11-04T21:07:37+01:00
+ID                            HOSTNAME     STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+xf46ytyuxo4bvn8lbxixhfhtv *   manager-g5   Ready     Active         Leader           29.1.3
+m69w5hsyyyegwivfhoi8fbihd     worker1-g5   Ready     Active         Reachable        29.1.3
+7zff6zyro5ir31bz19ozwmt4q     worker2-g5   Ready     Active         Reachable        29.1.3
+ci4mgenau4xvzypqk3ljka8fi     worker3-g5   Ready     Active                          29.1.3
+manager-g5 172.31.28.10:2377 reachable true
+worker1-g5 172.31.17.168:2377 reachable false
+worker2-g5 172.31.29.192:2377 reachable false
+ID             NAME        MODE         REPLICAS   IMAGE             PORTS
+yzxg8z52dukm   reto4_web   replicated   4/4        reto4-g5/f1:1.0   *:80->80/tcp
+version=1.0
+contenedor=a7d7e47e095f

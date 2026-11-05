@@ -191,3 +191,9 @@ El servicio queda en 4/4 con la versión 1.0, una réplica por nodo, cuatro nodo
 Las capturas por criterio de las Fases 0–5 están en el
 [índice](evidencias/capturas-terminal/INDICE.md). Las de AWS Console y GitHub que faltan, en
 [REVISION.md](REVISION.md#capturas-que-faltan).
+
+## Preparación de la entrega
+
+Las evidencias están [organizadas por criterio](evidencias/INDICE.md). El informe tiene preparada su
+[estructura](entrega/INFORME-F9-estructura.md), pendiente de contrastar con la Guía y la Rúbrica. Las tareas
+restantes están en [PENDIENTES](entrega/PENDIENTES.md).

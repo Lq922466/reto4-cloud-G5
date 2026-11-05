@@ -157,10 +157,24 @@ El 5 de noviembre de 2026, sin recrear EC2 ni reinicializar Swarm, `reto4_web` p
 portal provisional a `innnx/reto4-f1:1.0`, se actualizó a 2.0 y volvió a 1.0 con rollback.
 Cada paso terminó en 4/4, con HTTP 200 y Chromium sin errores en las cuatro IP públicas.
 Las sondas por IP registraron 948 respuestas correctas y 0 fallos. El servicio queda en
-1.0, con un reparto de 1, 1, 2 y 0 tareas por nodo.
+1.0.
 
 [Despliegue](evidencias/F3-despliegue/registro.txt) ·
 [actualización y rollback](evidencias/F3-actualizacion/registro.txt) ·
 [estado final](evidencias/F3-estado-final.txt) ·
 [captura completa](evidencias/F3-web-final-1.0-completa.png) ·
 [detalle y límites](REVISION.md#despliegue-y-actualización-de-la-web-definitiva)
+
+Capturas de un navegador gráfico real con la dirección visible:
+[manager-g5](evidencias/D3-navegador-manager-g5.png) ·
+[worker1-g5](evidencias/D3-navegador-worker1-g5.png) ·
+[worker2-g5](evidencias/D3-navegador-worker2-g5.png) ·
+[worker3-g5](evidencias/D3-navegador-worker3-g5.png).
+
+### E2 con la web definitiva
+
+El servicio se escaló a 8, 12, 2 y 4 réplicas, con HTTP 200 en las cuatro IP tras cada
+estado, y terminó en 4/4 con una réplica por nodo. Las sondas registraron 562 respuestas
+correctas y 2 fallos, en una sola muestra de dos IP durante el paso de 12 a 2.
+[Registro y capturas de terminal](evidencias/F4-E2/). E3 y E6 no se han repetido aún con la
+web definitiva: [detalle](REVISION.md#fase-4-e2-con-la-web-definitiva).

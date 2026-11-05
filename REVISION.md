@@ -43,13 +43,13 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | C4 | Verificado con registro | Overlay red-app-g5 para la aplicación con MTU 1450. | Capturar listado e inspección. |
 | D1 | Verificado con registro | Dos imágenes definitivas construidas desde app/f1 y probadas en contenedores temporales. Publicadas en `innnx/reto4-f1` con etiquetas 1.0 y 2.0 y descargadas sin sesión en los tres workers, con digest y contenido idénticos. [Publicación](evidencias/D1-publicacion-dockerhub.txt), [descarga](evidencias/D1-descarga-dockerhub.txt) y [captura de etiquetas](evidencias/D1-dockerhub-etiquetas.png). | Mostrar Docker Hub en la defensa. |
 | D2 | Verificado con registro | Con la web definitiva: stack.yml define red, cuatro réplicas y políticas de actualización y rollback. `reto4_web` terminó en 4/4 con `innnx/reto4-f1:1.0`. [Registro](evidencias/F3-despliegue/registro.txt) y [estado final](evidencias/F3-estado-final.txt). | Capturar configuración y servicio en terminal. |
-| D3 | Parcial | Con la web definitiva: HTTP 200 y Chromium con 0 errores por las cuatro IP públicas actuales. [Captura completa](evidencias/F3-web-final-1.0-completa.png) y una captura por IP en [F3-despliegue](evidencias/F3-despliegue/). | Las capturas son de navegador sin interfaz y no muestran la dirección. Capturar el navegador con la dirección visible en cada nodo. |
+| D3 | Verificado con registro | Con la web definitiva: HTTP 200 y Chromium sin errores por las cuatro IP. Capturas de un navegador gráfico real con la dirección visible en [manager-g5](evidencias/D3-navegador-manager-g5.png), [worker1-g5](evidencias/D3-navegador-worker1-g5.png), [worker2-g5](evidencias/D3-navegador-worker2-g5.png) y [worker3-g5](evidencias/D3-navegador-worker3-g5.png). [Método y horas](evidencias/D3-registro.txt). | Confirmar con el profesor que este método le sirve. La Rúbrica original no estaba disponible para cotejarlo. |
 | E1 | Verificado con registro | Con la web definitiva: 12 peticiones por las cuatro IP respondidas por cuatro contenedores distintos. [Estado final](evidencias/F3-estado-final.txt). | Capturar las respuestas del sondeo. |
-| E2 | Verificado en prototipo | Se observaron 8/8, 12/12 y 2/2, con vuelta a 4/4. | Capturar los tres repartos con docker service ps y repetir con la web final. |
-| E3 | Verificado en prototipo | Se eliminó un contenedor y Swarm creó una tarea de reemplazo, con vuelta a 4/4. | Capturar identificador anterior, eliminación y reemplazo. |
+| E2 | Verificado con observación | Con la web definitiva: 8/8 (2-2-2-2), 12/12 (3-3-3-3), 2/2 (1-1) y 4/4 (1-1-1-1), con HTTP 200 en las cuatro IP tras cada estado. Las sondas registraron 562 respuestas correctas y 2 fallos, en una sola muestra de dos IP durante el paso de 12 a 2. [Registro y capturas de terminal](evidencias/F4-E2/). | Decidir cómo se valoran esos fallos. |
+| E3 | Verificado en prototipo | Se eliminó un contenedor del portal provisional y Swarm creó una tarea de reemplazo, con vuelta a 4/4. | Repetir con la web definitiva. Autorizado, detenido tras los fallos de sonda de E2 y pendiente de decisión. |
 | E4 | Verificado en prototipo | Solo worker3-g5 se detuvo. Su tarea se reubicó, con 164 respuestas HTTP correctas y 0 fallos en el tramo medido. Registro de EC2/Swarm y captura web. | Completar capturas de consola y terminal del antes, durante y después. |
 | E5 | Verificado con registro | Learner Lab reiniciado, según confirmó el usuario; las IP públicas difieren de las anteriores. El 5 de noviembre coinciden IDs y volúmenes raíz con la referencia previa. SSH, Swarm con tres managers, 4/4 y HTTP correctos. [Registro](evidencias/E5-verificacion-final.txt). | Capturar consola y terminal. No repetir el reinicio. |
-| E6 | Verificado en prototipo | worker1-g5 pasó a Drain y volvió a Active. El registro muestra el estado del nodo y recuperación de 4/4. | Completar capturas de migración de tareas antes, durante y después. |
+| E6 | Verificado en prototipo | worker1-g5 pasó a Drain y volvió a Active con el portal provisional. El registro muestra el estado del nodo y recuperación de 4/4. | Repetir con worker3-g5 y la web definitiva. Autorizado, detenido tras los fallos de sonda de E2 y pendiente de decisión. |
 | E7 | Verificado con registro | Con la web definitiva: actualización 1.0 → 2.0 y rollback a 1.0, ambos 4/4, con 620 peticiones de sonda y 0 fallos. [Registro](evidencias/F3-actualizacion/registro.txt). | Capturar cambio de versión y retorno en terminal. |
 | E8 | Elección verificada con límite de sondeo | worker2-g5 fue elegido Leader. manager-g5 volvió Reachable y los cuatro nodos quedaron Ready/Active con 4/4. Swarm informó Unknown/Unreachable y el script activó recuperación. Hubo 38 y 130 HTTP correctas, cero fallos observados y un intervalo sin muestras entre ambos tramos. | Capturas de terminal del cambio de líder. Si el docente exige sondeo ininterrumpido, repetir solo con autorización y ejecutar la sonda en un proceso independiente. |
 | G1 | Pendiente | Existe una guía de comprobación, pero no consta exposición grupal realizada. | Preparar exposición de 10 minutos, arquitectura, código, reparto y demo. |
@@ -214,7 +214,7 @@ y no acreditan D2, D3 ni E1–E8 con la web final.
 ### Secuencia por fases
 
 Cada fase se detiene si falla una comprobación. La siguiente no empieza sin el
-visto bueno del responsable. Las fases 1, 2 y 3 ya están completadas. La fase 4 sigue sin autorizar ni ejecutar.
+visto bueno del responsable. Las fases 1, 2 y 3 ya están completadas. En la fase 4 se ejecutó E2, y E3 y E6 están detenidas a la espera de una decisión.
 
 ```bash
 ssh -t -F config/ssh.local manager-g5 docker login -u CUENTA
@@ -273,11 +273,41 @@ terminó en **versión 1.0 de la web definitiva, 4/4**.
   Swarm no reequilibra por sí solo tras una actualización con `start-first`. worker3-g5
   responde por la malla de enrutamiento, como muestran su HTTP 200 y [el estado
   final](evidencias/F3-estado-final.txt). La fase 4 reequilibra al final de E6.
-- Las capturas salen de Chromium sin interfaz y no muestran la dirección. La IP está en
-  el nombre del archivo y la hora en el registro. Son idénticas entre IP porque el
-  contenido servido es el mismo.
-- E2, E3 y E6 siguen sin repetirse con la web definitiva. E4 y E8 solo se probaron con el
-  portal provisional.
+- Las capturas de este apartado salen de Chromium sin interfaz y no muestran la dirección.
+  La IP está en el nombre del archivo y la hora en el registro. Son idénticas entre IP
+  porque el contenido servido es el mismo. Las que muestran la dirección son las de D3.
+- E4 y E8 solo se probaron con el portal provisional.
+
+### Capturas D3 con la dirección visible
+
+Tomadas a las 09:37–09:38 UTC del 5 de noviembre de 2026 con Chromium gráfico en un
+escritorio virtual Xvfb del Codespace, capturando la pantalla entera con
+`scripts/capturar-pantalla.sh`. La barra de direcciones es la del propio navegador y la
+imagen no se retoca. Un terminal real, en la parte inferior, muestra máquina, hora, HTTP
+200 e identidad de la réplica.
+
+- Chromium omite `http://` en la barra y muestra la IP y «No es seguro», porque la web se
+  sirve por HTTP. El terminal muestra la URL completa.
+- La barra informativa de Chrome for Testing es del navegador y se dejó visible.
+- Al lanzarlo se desactivaron el aviso previo de HTTPS, la traducción y el aviso de sandbox.
+  El Codespace no admite sandbox de navegador. [Registro](evidencias/D3-registro.txt).
+
+### Fase 4: E2 con la web definitiva
+
+Se escaló a 8, 12, 2 y 4 réplicas, comprobando réplicas, reparto y HTTP en las cuatro IP
+tras cada estado. Todos los estados se alcanzaron. El [registro](evidencias/F4-E2/registro.txt)
+termina en `exit=1` porque el script trata cualquier fallo de sonda como error:
+
+- A las 09:35:38 UTC, durante el paso de 12 a 2, una muestra de 34.230.4.20 y otra de
+  98.81.203.125 agotaron el límite de 0,9 s. Las muestras anterior y siguiente fueron
+  correctas. Son 2 de 564 peticiones.
+- Esas IP son las de worker1-g5 y worker3-g5, los nodos que se quedaron sin tareas en ese
+  paso. manager-g5 y worker2-g5, que conservaron la suya, no registraron fallos. No se ha
+  determinado la causa: lo observado es compatible con una actualización transitoria del
+  balanceo al retirar tareas, pero no lo demuestra.
+- Al terminar, 4/4 con reparto 1-1-1-1, cuatro nodos Ready/Active y versión 1.0.
+
+Se detuvieron E3 y E6 en aplicación de la condición de parar ante un fallo.
 
 ### A6
 

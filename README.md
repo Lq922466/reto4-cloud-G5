@@ -28,6 +28,7 @@ RETO 4 - CLOUD - 2 ASIR
   `scripts/probar-actualizacion.sh` y `scripts/probar-orquestacion.sh` publican,
   despliegan y repiten las pruebas. Estos cuatro requieren autorización.
 - `scripts/verificar-despliegue.sh` comprueba réplicas y HTTP, sin hacer cambios.
+- `scripts/capturar-pantalla.sh` captura un navegador o un terminal gráficos reales.
 
 ## Despliegue de la web definitiva
 

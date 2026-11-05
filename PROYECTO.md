@@ -44,8 +44,8 @@ aparecieron Ready y Active con Docker 29.1.3.
 Las dos versiones del portal provisional están en `app/sitio`. Se construyeron
 con `app/construir.sh`, se distribuyeron a los nodos con `docker save` y
 `docker load` y se desplegaron con `docker stack deploy --resolve-image never`.
-El servicio respondió por las cuatro IP públicas. Faltan la web definitiva del
-grupo y la publicación autorizada en Docker Hub.
+El servicio respondió por las cuatro IP públicas. La web definitiva se publicó y
+desplegó después: consultar [su apartado](#despliegue-de-la-web-definitiva).
 
 Capturas reales del portal 1.0, obtenidas por Codex el 4 de noviembre de 2026.
 Los cuatro accesos devolvieron la misma página mediante la malla de enrutamiento.
@@ -59,13 +59,16 @@ Los cuatro accesos devolvieron la misma página mediante la malla de enrutamient
 
 ## Fase 5 · Orquestación
 
+Esta tabla recoge las pruebas con el portal provisional. E1 y E7 se repitieron con la
+web definitiva: consultar [su apartado](#despliegue-de-la-web-definitiva).
+
 | Criterio | Resultado observado |
 | --- | --- |
 | E1 | 12 respuestas, repartidas por igual entre cuatro contenedores. |
 | E2 | 8/8, 12/12 y 2/2. Se restauró 4/4. |
 | E3 | Se eliminó un contenedor y Swarm recuperó 4/4. |
 | E4 | Se detuvo worker3-g5. Swarm reubicó su tarea en manager-g5. El sondeo registró 164 respuestas HTTP correctas y 0 fallos. |
-| E5 | worker3-g5 volvió Ready/Active y el servicio a 4/4. El despliegue escalonado volvió a asignar tareas al worker. Sigue pendiente reiniciar Learner Lab. |
+| E5 | worker3-g5 volvió Ready/Active y el servicio a 4/4. El despliegue escalonado volvió a asignar tareas al worker. El reinicio de Learner Lab se registra en [E5 completado](#e5-completado). |
 | E6 | worker1-g5 pasó por Drain y volvió a Active. |
 | E7 | La web respondió en 2.0 y volvió a 1.0 tras rollback. |
 | E8 | Con tres managers operativos, se detuvo únicamente manager-g5. worker2-g5 asumió el liderazgo. manager-g5 volvió Reachable y el servicio terminó 4/4. |
@@ -118,7 +121,7 @@ La web definitiva del grupo ya está en app/f1. Las versiones de entrega 1.0
 y 2.0 tienen contextos de construcción preparados y comprobaciones HTTP
 locales. La variante 2.0 incorpora una vista de estado de réplica. Consultar
 [la revisión del ZIP y el alcance de D1–D3](REVISION.md#revisión-del-zip-de-la-web-f1-definitiva).
-El clúster sigue sirviendo el portal provisional.
+El clúster la sirve desde el 5 de noviembre de 2026.
 
 ### E5 Verificación posterior interrumpida
 
@@ -138,8 +141,7 @@ correctos. [Registro](evidencias/E5-verificacion-final.txt).
 
 Las imágenes 1.0 y 2.0 se construyeron y probaron en contenedores temporales de
 manager-g5, se publicaron en [`innnx/reto4-f1`](https://hub.docker.com/r/innnx/reto4-f1/tags)
-y se descargaron sin sesión en los tres workers. El clúster sigue sirviendo el portal
-provisional hasta completar el despliegue autorizado. Consultar
+y se descargaron sin sesión en los tres workers. Consultar
 [el cierre técnico](REVISION.md#cierre-técnico-del-5-de-noviembre-de-2026).
 
 ## A6 · Cambio con Terraform
@@ -148,3 +150,17 @@ El 5 de noviembre de 2026 se aplicó un plan revisado de 0 altas, 1 cambio y 0
 destrucciones que añade la etiqueta `PruebaA6=reto4-g5` a manager-g5. Un plan
 posterior no propone cambios. [Registro](evidencias/A6-apply.txt). La destrucción no
 se ha ejecutado.
+
+## Despliegue de la web definitiva
+
+El 5 de noviembre de 2026, sin recrear EC2 ni reinicializar Swarm, `reto4_web` pasó del
+portal provisional a `innnx/reto4-f1:1.0`, se actualizó a 2.0 y volvió a 1.0 con rollback.
+Cada paso terminó en 4/4, con HTTP 200 y Chromium sin errores en las cuatro IP públicas.
+Las sondas por IP registraron 948 respuestas correctas y 0 fallos. El servicio queda en
+1.0, con un reparto de 1, 1, 2 y 0 tareas por nodo.
+
+[Despliegue](evidencias/F3-despliegue/registro.txt) ·
+[actualización y rollback](evidencias/F3-actualizacion/registro.txt) ·
+[estado final](evidencias/F3-estado-final.txt) ·
+[captura completa](evidencias/F3-web-final-1.0-completa.png) ·
+[detalle y límites](REVISION.md#despliegue-y-actualización-de-la-web-definitiva)

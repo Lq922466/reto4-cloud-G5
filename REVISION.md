@@ -1,6 +1,6 @@
 # Revisión de entrega RETO 4 CLOUD
 
-Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del profesor. La verificación funcional se distingue de la evidencia exigida para la corrección. «Verificado en prototipo» se refiere al portal provisional que se desplegó, y la web final del grupo sigue pendiente. Un registro de comandos conserva una salida real y se identifica como tal. Las imágenes son capturas reales del navegador.
+Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del profesor. La verificación funcional se distingue de la evidencia exigida para la corrección. «Verificado en prototipo» se refiere al portal provisional. La web definitiva se desplegó el 5 de noviembre, y los criterios repetidos con ella lo indican. Un registro de comandos conserva una salida real y se identifica como tal. Las imágenes son capturas reales del navegador.
 
 ## Evidencias disponibles
 
@@ -15,7 +15,7 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | --- | --- | --- | --- |
 | F1 | Parcial | GitHub confirma repositorio privado, un administrador y tres cuentas con escritura. No hay invitaciones pendientes. | Confirmar quiénes son los integrantes y si el profesor tiene acceso. Guardar captura de Settings → Collaborators. |
 | F2 | Parcial | El historial muestra un autor humano y Codex. La consulta de PR devolvió cero. | Revisar e integrar la rama mediante una PR. Cada integrante debe aportar commits y PR reales. |
-| F3 | Parcial | README con resumen, scripts y enlace a las etiquetas de Docker Hub. | Completar las instrucciones de despliegue final cuando la web definitiva esté desplegada. |
+| F3 | Verificado | README con resumen, instrucciones de despliegue final y enlace a las dos etiquetas de Docker Hub. | Revisar antes de la entrega. |
 | F4 | Verificado | En la rama de implementación existen terraform, app, config y .devcontainer. | Incluir la rama revisada en la entrega. |
 | F5 | Verificado con registro | devcontainer.json incluye AWS CLI y Terraform. El registro técnico contiene sus versiones desde Codespaces. | Capturar terminal con hostname, hora y ambas versiones. |
 | F6 | Verificado con registro | Terraform en el repositorio. Validación y despliegue reales de cinco recursos. | Adjuntar capturas de código y validación. |
@@ -42,15 +42,15 @@ Cotejo del 4 de noviembre de 2026 con la Guía CLOUD y la Rúbrica CLOUD del pro
 | C3 | Verificado con registro | Configuración inicial de un manager líder y tres workers Ready/Active. E8 dejó tres managers operativos y worker2-g5 como líder. | Capturar el estado actual y señalar qué registro acredita la topología inicial. |
 | C4 | Verificado con registro | Overlay red-app-g5 para la aplicación con MTU 1450. | Capturar listado e inspección. |
 | D1 | Verificado con registro | Dos imágenes definitivas construidas desde app/f1 y probadas en contenedores temporales. Publicadas en `innnx/reto4-f1` con etiquetas 1.0 y 2.0 y descargadas sin sesión en los tres workers, con digest y contenido idénticos. [Publicación](evidencias/D1-publicacion-dockerhub.txt), [descarga](evidencias/D1-descarga-dockerhub.txt) y [captura de etiquetas](evidencias/D1-dockerhub-etiquetas.png). | Mostrar Docker Hub en la defensa. |
-| D2 | Verificado en prototipo | stack.yml define red, cuatro réplicas y políticas. El servicio real terminó 4/4. | Repetir con imágenes definitivas y capturar configuración y servicio. |
-| D3 | Verificado en prototipo | Cuatro respuestas HTTP y cuatro capturas reales del navegador. Las IP públicas de manager y worker3 cambiaron tras las pruebas. | Repetir con la web definitiva y las IP actuales. Capturar navegador con dirección visible. |
-| E1 | Verificado en prototipo | Doce peticiones dieron cuatro identidades distintas. | Capturar respuestas del sondeo y repetir con la web final. |
+| D2 | Verificado con registro | Con la web definitiva: stack.yml define red, cuatro réplicas y políticas de actualización y rollback. `reto4_web` terminó en 4/4 con `innnx/reto4-f1:1.0`. [Registro](evidencias/F3-despliegue/registro.txt) y [estado final](evidencias/F3-estado-final.txt). | Capturar configuración y servicio en terminal. |
+| D3 | Parcial | Con la web definitiva: HTTP 200 y Chromium con 0 errores por las cuatro IP públicas actuales. [Captura completa](evidencias/F3-web-final-1.0-completa.png) y una captura por IP en [F3-despliegue](evidencias/F3-despliegue/). | Las capturas son de navegador sin interfaz y no muestran la dirección. Capturar el navegador con la dirección visible en cada nodo. |
+| E1 | Verificado con registro | Con la web definitiva: 12 peticiones por las cuatro IP respondidas por cuatro contenedores distintos. [Estado final](evidencias/F3-estado-final.txt). | Capturar las respuestas del sondeo. |
 | E2 | Verificado en prototipo | Se observaron 8/8, 12/12 y 2/2, con vuelta a 4/4. | Capturar los tres repartos con docker service ps y repetir con la web final. |
 | E3 | Verificado en prototipo | Se eliminó un contenedor y Swarm creó una tarea de reemplazo, con vuelta a 4/4. | Capturar identificador anterior, eliminación y reemplazo. |
 | E4 | Verificado en prototipo | Solo worker3-g5 se detuvo. Su tarea se reubicó, con 164 respuestas HTTP correctas y 0 fallos en el tramo medido. Registro de EC2/Swarm y captura web. | Completar capturas de consola y terminal del antes, durante y después. |
 | E5 | Verificado con registro | Learner Lab reiniciado, según confirmó el usuario; las IP públicas difieren de las anteriores. El 5 de noviembre coinciden IDs y volúmenes raíz con la referencia previa. SSH, Swarm con tres managers, 4/4 y HTTP correctos. [Registro](evidencias/E5-verificacion-final.txt). | Capturar consola y terminal. No repetir el reinicio. |
 | E6 | Verificado en prototipo | worker1-g5 pasó a Drain y volvió a Active. El registro muestra el estado del nodo y recuperación de 4/4. | Completar capturas de migración de tareas antes, durante y después. |
-| E7 | Verificado en prototipo | Actualización 1.0 → 2.0 y rollback a 1.0. El sondeo de la secuencia de orquestación registró 156 respuestas y cero fallos observados. | Capturar cambio de versión, retorno y registro. Repetir con la web definitiva. |
+| E7 | Verificado con registro | Con la web definitiva: actualización 1.0 → 2.0 y rollback a 1.0, ambos 4/4, con 620 peticiones de sonda y 0 fallos. [Registro](evidencias/F3-actualizacion/registro.txt). | Capturar cambio de versión y retorno en terminal. |
 | E8 | Elección verificada con límite de sondeo | worker2-g5 fue elegido Leader. manager-g5 volvió Reachable y los cuatro nodos quedaron Ready/Active con 4/4. Swarm informó Unknown/Unreachable y el script activó recuperación. Hubo 38 y 130 HTTP correctas, cero fallos observados y un intervalo sin muestras entre ambos tramos. | Capturas de terminal del cambio de líder. Si el docente exige sondeo ininterrumpido, repetir solo con autorización y ejecutar la sonda en un proceso independiente. |
 | G1 | Pendiente | Existe una guía de comprobación, pero no consta exposición grupal realizada. | Preparar exposición de 10 minutos, arquitectura, código, reparto y demo. |
 | G2 | Pendiente | No consta defensa individual ante el profesor. | Preparar las preguntas de cada integrante sobre todas las fases. |
@@ -214,7 +214,7 @@ y no acreditan D2, D3 ni E1–E8 con la web final.
 ### Secuencia por fases
 
 Cada fase se detiene si falla una comprobación. La siguiente no empieza sin el
-visto bueno del responsable. Las fases 1 y 2 ya están completadas.
+visto bueno del responsable. Las fases 1, 2 y 3 ya están completadas. La fase 4 sigue sin autorizar ni ejecutar.
 
 ```bash
 ssh -t -F config/ssh.local manager-g5 docker login -u CUENTA
@@ -250,8 +250,32 @@ Repositorio público [`innnx/reto4-f1`](https://hub.docker.com/r/innnx/reto4-f1/
   sesión de Docker Hub, con el digest y la huella de lo construido en manager-g5.
 - [Captura de la página pública de etiquetas](evidencias/D1-dockerhub-etiquetas.png),
   tomada con Chromium a las 09:15 UTC.
-- `reto4_web` sigue en 4/4 con la imagen provisional. Los workers guardan además las
-  dos imágenes publicadas. D2, D3 y E1–E8 siguen sin repetirse con la web definitiva.
+- Los cuatro nodos conservan las imágenes provisionales y las publicadas.
+
+### Despliegue y actualización de la web definitiva
+
+Realizados el 5 de noviembre de 2026 sin recrear EC2 ni reinicializar Swarm. El servicio
+terminó en **versión 1.0 de la web definitiva, 4/4**.
+
+| Paso | Fin (UTC) | Resultado | Sondas (4 IP, 1 petición/s) | Registro |
+| --- | --- | --- | --- | --- |
+| Portal provisional → `innnx/reto4-f1:1.0` | 09:20:42 | 4/4, HTTP 200 y Chromium sin errores en las cuatro IP | 328 OK, 0 fallos, hueco máximo 2 s | [Despliegue](evidencias/F3-despliegue/registro.txt) |
+| 1.0 → 2.0 | 09:22:22 | 4/4, HTTP 200 y Chromium sin errores en las cuatro IP | 620 OK, 0 fallos, hueco máximo 1 s, con el rollback | [Actualización](evidencias/F3-actualizacion/registro.txt) |
+| Rollback 2.0 → 1.0 | 09:23:39 | 4/4, HTTP 200 y Chromium sin errores en las cuatro IP | Incluidas en la fila anterior | [Actualización](evidencias/F3-actualizacion/registro.txt) |
+
+- La hora es la registrada al terminar el paso. Las sondas se guardan por IP junto a cada
+  registro y cubren también las pruebas posteriores en Chromium.
+- Las imágenes anteriores se conservan en los cuatro nodos. El rollback automático de
+  Swarm no llegó a activarse.
+- **Reparto final desigual:** manager-g5 1, worker1-g5 1, worker2-g5 2 y worker3-g5 0.
+  Swarm no reequilibra por sí solo tras una actualización con `start-first`. worker3-g5
+  responde por la malla de enrutamiento, como muestran su HTTP 200 y [el estado
+  final](evidencias/F3-estado-final.txt). La fase 4 reequilibra al final de E6.
+- Las capturas salen de Chromium sin interfaz y no muestran la dirección. La IP está en
+  el nombre del archivo y la hora en el registro. Son idénticas entre IP porque el
+  contenido servido es el mismo.
+- E2, E3 y E6 siguen sin repetirse con la web definitiva. E4 y E8 solo se probaron con el
+  portal provisional.
 
 ### A6
 

@@ -29,6 +29,24 @@ RETO 4 - CLOUD - 2 ASIR
   despliegan y repiten las pruebas. Estos cuatro requieren autorización.
 - `scripts/verificar-despliegue.sh` comprueba réplicas y HTTP, sin hacer cambios.
 
+## Despliegue de la web definitiva
+
 Imágenes publicadas: [`innnx/reto4-f1:1.0` y `innnx/reto4-f1:2.0`](https://hub.docker.com/r/innnx/reto4-f1/tags).
+El servicio `reto4_web` usa la red `red-app-g5`, cuatro réplicas y actualización y
+rollback progresivos.
+
+```bash
+# Despliega 1.0 con sondas y comprueba 4/4 y HTTP en las cuatro IP.
+bash scripts/desplegar-f1.sh config/ssh.local innnx/reto4-f1 DIRECTORIO_REGISTROS
+# Actualiza a 2.0 y vuelve a 1.0.
+bash scripts/probar-actualizacion.sh config/ssh.local innnx/reto4-f1 DIRECTORIO_REGISTROS
+# Comprueba el estado sin hacer cambios.
+bash scripts/verificar-despliegue.sh config/ssh.local innnx/reto4-f1 1.0
+```
+
+`config/ssh.local` se genera con `scripts/generar-config-ssh.sh` y no se versiona. Para
+incluir la prueba en Chromium, definir `PYTHON_NAVEGADOR` con un intérprete que tenga
+playwright.
+
 
 En Terraform, copia grupo.example.tfvars a terraform.tfvars y configura el CIDR real y las claves públicas. Valida y revisa el plan en el Learner Lab antes de solicitar autorización para desplegar. El tratamiento de vockey queda pendiente de confirmación docente por la diferencia entre la guía y B1 de la rúbrica.

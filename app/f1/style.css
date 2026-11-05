@@ -195,6 +195,10 @@ nav a:hover {
     border-top: 4px solid #ff1801;
 }
 
+.bloque-principal a {
+    color: #ff8a7a;
+}
+
 .aside-lateral {
     background: #151922;
     padding: 25px;

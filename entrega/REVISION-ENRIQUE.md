@@ -2,37 +2,40 @@
 
 **Responsable asignado:** Enrique (EnriZx2)  
 **Revisión original:** 06/11/2026, PR #2  
-**Actualización documental preparada con asistencia de ChatGPT:** 09/11/2026  
-**Estado:** pendiente de comprobación y conformidad personal de Enrique. No se atribuyen a Enrique comprobaciones que no haya ejecutado.
+**Actualización preparada con asistencia de ChatGPT:** 09/11/2026  
+**Estado:** pendiente de comprobación y conformidad personal de Enrique.
 
 ## Objetivo
 
-Comprobar la organización documental y los enlaces principales del RETO 4 CLOUD G5, diferenciando la accesibilidad de los documentos de la validación técnica del proyecto.
+Comprobar que la documentación principal del RETO 4 CLOUD G5 está disponible y permite localizar los procedimientos y las evidencias técnicas.
 
 ## Procedimiento y comprobaciones
 
-Se han contrastado los destinos indicados en el README de la rama `cloud-g5-implementacion` con los archivos existentes en el repositorio. La revisión original de Enrique se conserva como antecedente en la PR #2.
+Se han contrastado los destinos indicados en el README de la rama `cloud-g5-implementacion` con los archivos publicados.
 
-| Documento | Ruta en el repositorio | Resultado documental |
+| Documento | Comprobación | Resultado |
 | --- | --- | --- |
-| Informe técnico | [PROYECTO.md](../PROYECTO.md) | Disponible |
-| Estado de criterios | [REVISION.md](../REVISION.md) | Disponible; contiene pendientes |
-| Checklist final | [CHECKLIST-FINAL.md](CHECKLIST-FINAL.md) | Disponible |
-| Contraste Guía–Rúbrica | [CONTRASTE-GUIA-RUBRICA.md](CONTRASTE-GUIA-RUBRICA.md) | Disponible |
-| Procedimiento de capturas | [PROCEDIMIENTO-CAPTURAS.md](PROCEDIMIENTO-CAPTURAS.md) | Disponible |
-| Defensa | [DEFENSA.md](DEFENSA.md) | Disponible; defensa pendiente |
-| Gestión | [GESTION.md](../GESTION.md) | Disponible; aportaciones personales pendientes |
-| Índice de evidencias | [INDICE.md](../evidencias/INDICE.md) | Disponible |
-| Revisión independiente | [README.md](segunda-revision-2026-11-09/README.md) | Disponible |
-| Instrucciones F2 | [INSTRUCCIONES-F2-INTEGRANTES.md](INSTRUCCIONES-F2-INTEGRANTES.md) | Disponible |
+| [PROYECTO.md](../PROYECTO.md) | Informe técnico de las fases | Disponible |
+| [REVISION.md](../REVISION.md) | Estado de criterios | Disponible |
+| [CHECKLIST-FINAL.md](CHECKLIST-FINAL.md) | Lista de comprobación | Disponible |
+| [CONTRASTE-GUIA-RUBRICA.md](CONTRASTE-GUIA-RUBRICA.md) | Contraste de requisitos | Disponible |
+| [PROCEDIMIENTO-CAPTURAS.md](PROCEDIMIENTO-CAPTURAS.md) | Procedimiento de evidencias | Disponible |
+| [DEFENSA.md](DEFENSA.md) | Guion de defensa | Disponible |
+| [GESTION.md](../GESTION.md) | Organización del grupo | Disponible |
+| [INDICE.md](../evidencias/INDICE.md) | Índice de evidencias | Disponible |
 
-## Incidencias y observaciones
+## Incidencias técnicas detectadas
 
-1. Se corrige el error de formato `[CORRECTO` de la revisión original.
-2. El README indica expresamente que `main` no contiene todavía toda la implementación; los enlaces deben consultarse en `cloud-g5-implementacion` hasta su integración.
-3. La existencia de un documento no acredita por sí sola el funcionamiento de AWS, la corrección de C3, las pruebas E1–E8 ni el cumplimiento de F2/F13.
-4. Las capturas y registros históricos deben distinguirse de las comprobaciones actuales.
+La revisión de enlaces no detecta por sí misma fallos técnicos. Al consultar el estado técnico documentado se identifican estas **incidencias del proyecto**, que requieren comprobación actual:
+
+| Criterio | Incidencia técnica | Acción y prioridad |
+| --- | --- | --- |
+| C3 | El último registro muestra tres managers, cuando la topología final solicitada es un manager y tres workers | Corregible; prioridad alta. Verificar quorum antes de cambiar roles |
+| A6 | El plan de Terraform registrado no está limpio; las salidas de IP pueden estar desactualizadas | Corregible tras comprobar estado y credenciales; no ejecutar `apply` o `destroy` sin autorización |
+| A3 | Consta una regla SSH temporal adicional | Revisar necesidad y retirar con autorización, sin cortar el acceso |
+
+No se consideran incidencias técnicas los errores de redacción, formato, enlaces de documentos o capturas que aún no se hayan incorporado.
 
 ## Resultado y conclusión
 
-La estructura documental principal está disponible y enlazada en la rama de implementación. Permanecen pendientes verificaciones técnicas y evidencias identificadas en la matriz de 42 criterios. **Esta actualización la ha preparado ChatGPT a petición de Cristina; Enrique debe comprobarla y aprobarla antes de presentarla como revisión personal.**
+Los documentos principales están disponibles. Las incidencias técnicas mencionadas tienen un procedimiento de corrección, pero su resolución debe verificarse sobre el entorno real. Esta actualización fue preparada con ChatGPT por encargo de Cristina y está pendiente de validación por Enrique.

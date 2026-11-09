@@ -1,0 +1,249 @@
+# Evidencia F2 — Ibai (producto asignado; ejecución de Codex)
+# Sesión real del Codespace. Autoría: Codex; identidad Git Innnx y cuenta GitHub Lq922466.
+# Estas órdenes no fueron ejecutadas personalmente por Ibai. Sin AWS ni conexiones SSH.
+
+[2026-11-09T13:09:15.478990+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ date --iso-8601=seconds
+2026-11-09T12:09:15+00:00
+
+# Código de salida: 0
+
+[2026-11-09T13:09:15.480494+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ hostname
+codespaces-8d43b2
+
+# Código de salida: 0
+
+[2026-11-09T13:09:15.481517+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ git branch --show-current
+ibai-revision-individual
+
+# Código de salida: 0
+
+[2026-11-09T13:09:15.485204+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ git config --get user.name
+Innnx
+
+# Código de salida: 0
+
+[2026-11-09T13:09:15.487656+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ git config --get user.email
+124345158+Lq922466@users.noreply.github.com
+
+# Código de salida: 0
+
+[2026-11-09T13:09:15.490028+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ gh api user --jq .login
+Lq922466
+
+# Código de salida: 0
+
+[2026-11-09T13:09:15.800414+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ git log -4 '--format=%h %an %aI %s'
+a81b3d5 Innnx 2026-11-09T11:48:14Z docs: publica documentación y evidencias pendientes para iniciar F2
+56e5a46 Innnx 2026-11-09T11:30:30Z docs: añade segunda revisión independiente del RETO 4 CLOUD G5
+a267503 Innnx 2026-11-06T12:06:43+01:00 Merge pull request #2 from Lq922466/enrique-revision-documentacion
+3a67659 EnriZx2 2026-11-06T10:36:19+01:00 Add documentation review for project RETO 4 CLOUD G5
+
+# Código de salida: 0
+
+[2026-11-09T13:09:15.803213+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ python3 scripts/validar-entrega.py
+Criterios: 42 {'Listo': 10, 'Demostrado, falta captura conforme': 17, 'Parcial': 11, 'Pendiente': 4}. Errores: 0.
+
+# Código de salida: 0
+
+[2026-11-09T13:09:15.877115+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ python3 scripts/revisar-secretos.py origin/main HEAD
+Líneas añadidas revisadas: 20365. Archivos: 375.
+Imágenes no revisadas por este script: 149.
+Coincidencias: 0 []
+Archivos sensibles: []
+
+# Código de salida: 0
+
+[2026-11-09T13:09:16.051832+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ python3 -c 'import subprocess,json
+ignored=["terraform/terraform.tfstate","terraform/terraform.tfstate.backup","terraform/ejemplo.tfplan","terraform/terraform.tfvars","terraform/reto4.auto.tfvars.json","terraform/claves/enrique_reto4","terraform/claves/alexandra_reto4","terraform/claves/ibai_reto4","terraform/claves/cristina_reto4","prueba.pem","id_ed25519",".aws/credentials",".env","config/ssh.local"]
+allowed=["terraform/grupo.example.tfvars","terraform/claves/enrique_reto4.pub","terraform/claves/alexandra_reto4.pub","terraform/claves/ibai_reto4.pub","terraform/claves/cristina_reto4.pub"]
+rows=[]
+for p in ignored+allowed:
+ q=subprocess.run(["git","check-ignore","--no-index",p],capture_output=True,text=True)
+ expect=0 if p in ignored else 1
+ assert q.returncode==expect,(p,q.returncode)
+ rows.append({"ruta":p,"ignorado":q.returncode==0,"salida":q.returncode})
+print(json.dumps(rows,ensure_ascii=False,indent=2))
+'
+[
+  {
+    "ruta": "terraform/terraform.tfstate",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/terraform.tfstate.backup",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/ejemplo.tfplan",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/terraform.tfvars",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/reto4.auto.tfvars.json",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/claves/enrique_reto4",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/claves/alexandra_reto4",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/claves/ibai_reto4",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/claves/cristina_reto4",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "prueba.pem",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "id_ed25519",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": ".aws/credentials",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": ".env",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "config/ssh.local",
+    "ignorado": true,
+    "salida": 0
+  },
+  {
+    "ruta": "terraform/grupo.example.tfvars",
+    "ignorado": false,
+    "salida": 1
+  },
+  {
+    "ruta": "terraform/claves/enrique_reto4.pub",
+    "ignorado": false,
+    "salida": 1
+  },
+  {
+    "ruta": "terraform/claves/alexandra_reto4.pub",
+    "ignorado": false,
+    "salida": 1
+  },
+  {
+    "ruta": "terraform/claves/ibai_reto4.pub",
+    "ignorado": false,
+    "salida": 1
+  },
+  {
+    "ruta": "terraform/claves/cristina_reto4.pub",
+    "ignorado": false,
+    "salida": 1
+  }
+]
+
+# Código de salida: 0
+
+[2026-11-09T13:09:16.108674+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ python3 -c 'import subprocess,re,json
+patterns=[r"-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----",r"\b(?:AKIA|ASIA)[A-Z0-9]{16}\b",r"\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github[_]pat[_][A-Za-z0-9_]{20,})\b",r"\bdckr_(?:pat|oat)_[A-Za-z0-9_-]{20,}",r"\bSWMTKN[-]1[-][a-z0-9]{20,}-[a-z0-9]{20,}"]
+seen=set();count=0;hits=[]
+for line in subprocess.check_output(["git","rev-list","--objects","--all"],text=True).splitlines():
+ sha,_,path=line.partition(" ")
+ if sha in seen:continue
+ seen.add(sha)
+ if subprocess.check_output(["git","cat-file","-t",sha],text=True).strip()!="blob":continue
+ data=subprocess.check_output(["git","cat-file","blob",sha])
+ if b"\0" in data:continue
+ try:text=data.decode()
+ except UnicodeDecodeError:continue
+ count+=1
+ if any(re.search(p,text) for p in patterns):hits.append({"blob":sha,"ruta":path})
+print(json.dumps({"blobs_texto_unicos_revisados":count,"patrones_reales_detectados":hits},ensure_ascii=False))
+assert not hits
+'
+{"blobs_texto_unicos_revisados": 366, "patrones_reales_detectados": []}
+
+# Código de salida: 0
+
+[2026-11-09T13:09:18.478722+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ git ls-files terraform/claves
+terraform/claves/alexandra_reto4.pub
+terraform/claves/cristina_reto4.pub
+terraform/claves/enrique_reto4.pub
+terraform/claves/ibai_reto4.pub
+
+# Código de salida: 0
+
+[2026-11-09T13:09:18.480553+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ cat config/sshd_00-reto4.conf
+# Configuración aplicada en los cuatro nodos como /etc/ssh/sshd_config.d/00-reto4.conf.
+# La instala terraform/scripts/bootstrap.sh.tftpl al arrancar cada instancia.
+# Comprobación: sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '
+PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+
+# Código de salida: 0
+
+[2026-11-09T13:09:18.481713+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ bash -n scripts/instalar-clave-publica.sh
+
+# Código de salida: 0
+
+[2026-11-09T13:09:18.483453+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ python3 -c 'from pathlib import Path
+import re,runpy,urllib.parse,json
+v=runpy.run_path("scripts/validar-entrega.py")
+errors=[];n=0
+for f in ["README.md","entrega/REVISION-ENRIQUE.md","entrega/REVISION-ALEXANDRA.md","entrega/REVISION-IBAI.md","GESTION.md"]:
+ p=Path(f)
+ if not p.exists():continue
+ for d in re.findall(r"\]\(([^)\s]+)\)",v["sin_codigo"](p.read_text())):
+  if d.startswith(("http://","https://")):continue
+  a,_,frag=d.partition("#");t=(p.parent/urllib.parse.unquote(a)).resolve() if a else p.resolve();n+=1
+  if not t.exists():errors.append([f,d,"destino inexistente"])
+  elif frag and t.suffix==".md":
+   headings=re.findall(r"(?m)^#+\s+(.*)$",v["sin_codigo"](t.read_text()))
+   if urllib.parse.unquote(frag) not in {v["ancla"](h) for h in headings}:errors.append([f,d,"ancla inexistente"])
+print(json.dumps({"enlaces_locales":n,"errores":errors},ensure_ascii=False))
+raise SystemExit(bool(errors))
+'
+{"enlaces_locales": 66, "errores": []}
+
+# Código de salida: 0
+
+[2026-11-09T13:09:18.516463+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ ssh-keygen -lf terraform/claves/alexandra_reto4.pub
+256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+
+# Código de salida: 0
+
+[2026-11-09T13:09:18.520730+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ ssh-keygen -lf terraform/claves/cristina_reto4.pub
+256 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4 (ED25519)
+
+# Código de salida: 0
+
+[2026-11-09T13:09:18.524785+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ ssh-keygen -lf terraform/claves/enrique_reto4.pub
+256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+
+# Código de salida: 0
+
+[2026-11-09T13:09:18.528727+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/ibai$ ssh-keygen -lf terraform/claves/ibai_reto4.pub
+256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+
+# Código de salida: 0

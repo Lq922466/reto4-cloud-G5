@@ -1,0 +1,335 @@
+{
+  "version_registro": 2,
+  "fecha_validacion_utc": "2026-11-09T11:30:18.861083+00:00",
+  "fecha_validacion_madrid": "2026-11-09T12:30:18.863960+01:00",
+  "alcance": "Corrección y validación de siete archivos de segunda revisión. Sin operaciones en AWS ni merge. Los demás cambios del Codespace quedan excluidos.",
+  "estado_publicacion": "Instantánea previa al commit y push autorizados; el SHA final y el éxito del push se verifican en Git después de crear el commit.",
+  "rama_destino": "cloud-g5-implementacion",
+  "commit_base": "a2675032a9a6fb76e3afb4e75ff127d7290359bb",
+  "mensaje_commit_autorizado": "docs: añade segunda revisión independiente del RETO 4 CLOUD G5",
+  "archivos_autorizados": [
+    "entrega/segunda-revision-2026-11-09/ALEXANDRA.md",
+    "entrega/segunda-revision-2026-11-09/CRISTINA.md",
+    "entrega/segunda-revision-2026-11-09/ENRIQUE.md",
+    "entrega/segunda-revision-2026-11-09/IBAI.md",
+    "entrega/segunda-revision-2026-11-09/MATRIZ-REQUISITOS.md",
+    "entrega/segunda-revision-2026-11-09/README.md",
+    "entrega/segunda-revision-2026-11-09/REGISTRO.json"
+  ],
+  "documentos_md_sha256": {
+    "ALEXANDRA.md": "716edd146e3f45f04d9de776fcf7831f49cf249c73725ff3cbbd0df129838e26",
+    "CRISTINA.md": "75fa0006720d000dc1dce1aca66c0adc4454e9e8a215edea9c62a5b0b655414c",
+    "ENRIQUE.md": "1da2e72132a836e5a43c61f78c7b7d7b033ad3a6f446a007808e46a37ae748d9",
+    "IBAI.md": "8de1ce7520f35453a4152f4b474b94299936e886e4923fabba9c9a8c6de7e5af",
+    "MATRIZ-REQUISITOS.md": "04908d688fdc4e62978c4d9fa5d9db894c9849719069488739846a60a5acf269",
+    "README.md": "6b7f6ddbb5e1b52729b056d468557ef3b169c5bf612d14d6bfc342fc370df1f1"
+  },
+  "nota_autorreferencia": "Se excluye REGISTRO.json de sus propias huellas. El SHA final del commit no se incorpora al archivo que ese mismo commit contiene.",
+  "fuentes_originales": {
+    "/workspaces/guia-rubrica/Guia_2_ASIR_CLOUD_Reto4_GITHUB_CODESPACE_AWS_TERRAFORM_DOCKER_SWARM.docx": {
+      "sha256": "19f93e2fccefc784f9d579e4aef44bcd7039d350e062cd176e28067a86fe1899",
+      "lectura": "XML completo del DOCX"
+    },
+    "/workspaces/guia-rubrica/Rubrica_2_ASIR_CLOUD_Reto4.docx": {
+      "sha256": "182a47822d1fb10470714808512662a874d4e177c63fba196aa6f569c4c08763",
+      "lectura": "XML completo del DOCX"
+    }
+  },
+  "contraste_normativo": {
+    "metodo": "Lectura completa y contraste manual de los dos DOCX; comprobación automática de códigos y orden frente a la Rúbrica.",
+    "numero_criterios": 42,
+    "criterios": [
+      {
+        "codigo": "A1",
+        "requisito_resumido": "Organización y variables",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "A2",
+        "requisito_resumido": "Manager y 3 workers, etiquetas",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "A3",
+        "requisito_resumido": "Grupo con mínimos",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "A4",
+        "requisito_resumido": "Arranque: hostname, zona, Docker, claves",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "A5",
+        "requisito_resumido": "Salidas de IP e ID",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "A6",
+        "requisito_resumido": "Validación, plan, cambio y destrucción",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "B1",
+        "requisito_resumido": "Clave propia en 4 nodos, vockey sustituida",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "B2",
+        "requisito_resumido": "Config y nombre corto",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "B3",
+        "requisito_resumido": "Control, simultaneidad y copia",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "B4",
+        "requisito_resumido": "Sin contraseña/root y permisos",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "B5",
+        "requisito_resumido": "Workers por IP privada y salto",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "C1",
+        "requisito_resumido": "Docker y conectividad privada",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "C2",
+        "requisito_resumido": "IP privada y MTU 1450",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "C3",
+        "requisito_resumido": "Manager líder y 3 workers activos",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "C4",
+        "requisito_resumido": "Overlay propia para servicios",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "D1",
+        "requisito_resumido": "Imagen propia identificable, 1.0/2.0",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "D2",
+        "requisito_resumido": "4 réplicas, red y reinicio",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "D3",
+        "requisito_resumido": "Navegador en 4 IP públicas",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "E1",
+        "requisito_resumido": "Balanceo",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "E2",
+        "requisito_resumido": "Escalar 8,12,2",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "E3",
+        "requisito_resumido": "Eliminar contenedor y autorreparar",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "E4",
+        "requisito_resumido": "Caída worker, web disponible",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "E5",
+        "requisito_resumido": "Reincorporar, reequilibrar, reiniciar lab",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "E6",
+        "requisito_resumido": "Drain y reactivación",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "E7",
+        "requisito_resumido": "Actualizar sin corte y rollback",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "E8",
+        "requisito_resumido": "Nuevo líder desde otro nodo",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "F1",
+        "requisito_resumido": "Privado, colaboradores y profesor",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "F2",
+        "requisito_resumido": "Commits y PR de todos",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "F3",
+        "requisito_resumido": "README con resumen y enlaces",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "F4",
+        "requisito_resumido": "Estructura requerida",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "F5",
+        "requisito_resumido": "Devcontainer y Codespace",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "F6",
+        "requisito_resumido": "Terraform funcional",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "F7",
+        "requisito_resumido": "Scripts comentados",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "F8",
+        "requisito_resumido": "Mapa propio de arquitectura",
+        "estado_documental": "Documentado"
+      },
+      {
+        "codigo": "F9",
+        "requisito_resumido": "Informe extenso fases 0–5",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "F10",
+        "requisito_resumido": "Capturas normativas y comentadas",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "F11",
+        "requisito_resumido": "Reparto y reflexión",
+        "estado_documental": "Parcial"
+      },
+      {
+        "codigo": "F12",
+        "requisito_resumido": "Sin credenciales, privadas ni estado",
+        "estado_documental": "Verificación limitada"
+      },
+      {
+        "codigo": "F13",
+        "requisito_resumido": "Práctica individual",
+        "estado_documental": "Pendiente"
+      },
+      {
+        "codigo": "G1",
+        "requisito_resumido": "Exposición 10 min y demo",
+        "estado_documental": "Pendiente"
+      },
+      {
+        "codigo": "G2",
+        "requisito_resumido": "Preguntas individuales",
+        "estado_documental": "Pendiente"
+      },
+      {
+        "codigo": "G3",
+        "requisito_resumido": "Demostración individual",
+        "estado_documental": "Pendiente"
+      }
+    ],
+    "observaciones": [
+      "Las condiciones adicionales de la Guía se vinculan a códigos existentes, sin añadir ítems.",
+      "La Rúbrica exige funcionamiento y evidencia durante corrección; documentado no equivale a puntuación definitiva.",
+      "Guía y Rúbrica difieren sobre vockey y en los pesos de A-E.",
+      "El destino de integración procede del usuario; los originales no exigen main, merge ni otra PR individual de Cristina.",
+      "Las capturas SSH adicionales son una propuesta de acreditación; no se impone un número por persona o nodo."
+    ]
+  },
+  "rama_ibai": "ibai-revision-individual",
+  "ramas_remotas": {
+    "exit_code": 0,
+    "salida": "6f3d8385dafe25de91552b8f84b7f0101fb8e041\trefs/heads/alexandra-revision-evidencias\na2675032a9a6fb76e3afb4e75ff127d7290359bb\trefs/heads/cloud-g5-implementacion\n3a67659e48bd4389097e4e9ffe54b58c3f0d209d\trefs/heads/enrique-revision-documentacion\n6f3d8385dafe25de91552b8f84b7f0101fb8e041\trefs/heads/ibai-revision-individual\n6f3d8385dafe25de91552b8f84b7f0101fb8e041\trefs/heads/main\n",
+    "error": ""
+  },
+  "pull_requests": {
+    "exit_code": 0,
+    "salida": "{\"base\":\"cloud-g5-implementacion\",\"draft\":false,\"head\":\"enrique-revision-documentacion\",\"merged_at\":\"2026-11-06T11:06:44Z\",\"number\":2,\"state\":\"closed\",\"user\":\"EnriZx2\"}\n{\"base\":\"main\",\"draft\":true,\"head\":\"cloud-g5-implementacion\",\"merged_at\":null,\"number\":1,\"state\":\"open\",\"user\":\"Lq922466\"}\n",
+    "error": ""
+  },
+  "enlaces": {
+    "locales_verificados": 48,
+    "errores": 0,
+    "externos_verificados": [
+      "https://github.com/Lq922466/reto4-cloud-G5/pull/1",
+      "https://github.com/Lq922466/reto4-cloud-G5/pull/2"
+    ],
+    "metodo_externos": "PR #1 y #2 leídas con el conector GitHub y corroboradas con API autenticada. Repositorio privado.",
+    "referencias_solo_locales_excluidas": [
+      "entrega/INSTRUCCIONES-F2-INTEGRANTES.md",
+      "evidencias/capturas-conformes/A3-reglas.txt",
+      "evidencias/capturas-conformes/A5-salidas.txt",
+      "evidencias/capturas-conformes/B1-clave-nodos.txt",
+      "evidencias/capturas-conformes/B1-registro-cristina.txt",
+      "evidencias/capturas-conformes/B1-registro-manager.txt",
+      "evidencias/capturas-conformes/B2-conexion.txt",
+      "evidencias/capturas-conformes/B3-simultaneo.txt",
+      "evidencias/capturas-conformes/B4-endurecimiento.txt",
+      "evidencias/capturas-conformes/B5-salto.txt",
+      "evidencias/capturas-conformes/C1-ping.txt",
+      "evidencias/capturas-conformes/C2-cluster.txt",
+      "evidencias/capturas-conformes/C3-nodos.txt",
+      "evidencias/capturas-conformes/C4-red.txt",
+      "evidencias/capturas-conformes/E1-balanceo.txt",
+      "evidencias/capturas-integrantes/B1-acceso-alexandra.png",
+      "evidencias/capturas-integrantes/B1-acceso-enrique.png",
+      "evidencias/capturas-integrantes/B1-acceso-ibai.png",
+      "evidencias/capturas-integrantes/INDICE.md",
+      "terraform/claves/alexandra_reto4.pub",
+      "terraform/claves/enrique_reto4.pub",
+      "terraform/claves/ibai_reto4.pub"
+    ]
+  },
+  "validacion_preexistente": {
+    "exit_code": 0,
+    "salida": "Criterios: 42 {'Listo': 10, 'Demostrado, falta captura conforme': 17, 'Parcial': 11, 'Pendiente': 4}. Errores: 0.\n",
+    "error": ""
+  },
+  "limite_validador_preexistente": "Comprueba enlaces y coherencia de los estados anteriores; no valida cumplimiento normativo, AWS ni este paquete por sí solo.",
+  "capturas_manifiesto": 32,
+  "capturas_no_correctas": [
+    "A6-sin-cambios",
+    "C3-nodos"
+  ],
+  "preservacion_archivos_ajenos": {
+    "comparacion": "SHA-256 antes y después de preparar los siete documentos",
+    "archivos_comparados": 370,
+    "alterados_por_esta_sesion": 0
+  },
+  "revision_secretos": {
+    "alcance": "Contenido completo de los siete archivos del paquete; sin análisis exhaustivo del resto del historial.",
+    "metodo": "Lectura manual y patrones de claves privadas, claves AWS, tokens, asignaciones de contraseñas, correos e IP literales.",
+    "hallazgos": 0
+  },
+  "validaciones_paquete": {
+    "archivos_exactos": 7,
+    "criterios_originales_y_matriz": 42,
+    "duplicados": 0,
+    "enlaces_rotos": 0,
+    "rama_ibai_coherente": true,
+    "genero_innecesario_corregido": true,
+    "documentos_originales_conservados": true
+  }
+}

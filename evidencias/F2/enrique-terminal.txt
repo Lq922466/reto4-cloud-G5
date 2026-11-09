@@ -113,3 +113,71 @@ raise SystemExit(bool(errors))
 [2026-11-09T13:07:24.321582+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git diff --check
 
 # Código de salida: 0
+
+[2026-11-09T13:11:15.528965+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git log -2 '--format=%H%nAutor: %an%nFecha: %aI%n%s%n%b'
+3bb538bd86b83efded87e485c5c5b2cebb1444fe
+Autor: Innnx
+Fecha: 2026-11-09T12:09:55Z
+docs: actualiza revisión de Enrique con ejecución de Codex
+Trabajo documental ejecutado por Codex con la identidad autorizada Innnx (Lq922466). No se atribuye ejecución personal a Enrique. Sin AWS ni merge.
+
+a81b3d56ed9382e6ae444908b00ae6b3bf955f9c
+Autor: Innnx
+Fecha: 2026-11-09T11:48:14Z
+docs: publica documentación y evidencias pendientes para iniciar F2
+
+
+# Código de salida: 0
+
+[2026-11-09T13:11:15.532446+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git status --short
+ M evidencias/F2/enrique-terminal.txt
+
+# Código de salida: 0
+
+[2026-11-09T13:11:15.538201+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git ls-remote --heads origin refs/heads/enrique-correccion-revision
+3bb538bd86b83efded87e485c5c5b2cebb1444fe	refs/heads/enrique-correccion-revision
+
+# Código de salida: 0
+
+[2026-11-09T13:11:16.110499+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ gh api repos/Lq922466/reto4-cloud-G5/pulls/3 --jq '{number,url:.html_url,state,user:.user.login,base:.base.ref,base_sha:.base.sha,head:.head.ref,head_sha:.head.sha,created_at,updated_at,merged,mergeable,commits,changed_files}'
+{"base":"cloud-g5-implementacion","base_sha":"a81b3d56ed9382e6ae444908b00ae6b3bf955f9c","changed_files":3,"commits":1,"created_at":"2026-11-09T12:10:24Z","head":"enrique-correccion-revision","head_sha":"3bb538bd86b83efded87e485c5c5b2cebb1444fe","mergeable":true,"merged":false,"number":3,"state":"open","updated_at":"2026-11-09T12:10:24Z","url":"https://github.com/Lq922466/reto4-cloud-G5/pull/3","user":"Lq922466"}
+
+# Código de salida: 0
+
+[2026-11-09T13:11:16.666437+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ python3 scripts/validar-entrega.py
+Criterios: 42 {'Listo': 10, 'Demostrado, falta captura conforme': 17, 'Parcial': 11, 'Pendiente': 4}. Errores: 0.
+
+# Código de salida: 0
+
+[2026-11-09T13:11:16.755871+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ python3 -c 'from pathlib import Path
+import re,runpy,urllib.parse,json
+v=runpy.run_path("scripts/validar-entrega.py")
+errors=[];n=0
+for f in ["README.md","entrega/REVISION-ENRIQUE.md","entrega/REVISION-ALEXANDRA.md","entrega/REVISION-IBAI.md","GESTION.md"]:
+ p=Path(f)
+ if not p.exists():continue
+ for d in re.findall(r"\]\(([^)\s]+)\)",v["sin_codigo"](p.read_text())):
+  if d.startswith(("http://","https://")):continue
+  a,_,frag=d.partition("#");t=(p.parent/urllib.parse.unquote(a)).resolve() if a else p.resolve();n+=1
+  if not t.exists():errors.append([f,d,"destino inexistente"])
+  elif frag and t.suffix==".md":
+   headings=re.findall(r"(?m)^#+\s+(.*)$",v["sin_codigo"](t.read_text()))
+   if urllib.parse.unquote(frag) not in {v["ancla"](h) for h in headings}:errors.append([f,d,"ancla inexistente"])
+print(json.dumps({"enlaces_locales":n,"errores":errors},ensure_ascii=False))
+raise SystemExit(bool(errors))
+'
+{"enlaces_locales": 65, "errores": []}
+
+# Código de salida: 0
+
+[2026-11-09T13:11:16.788882+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ python3 scripts/revisar-secretos.py origin/cloud-g5-implementacion HEAD
+Líneas añadidas revisadas: 166. Archivos: 3.
+Imágenes no revisadas por este script: 0.
+Coincidencias: 0 []
+Archivos sensibles: []
+
+# Código de salida: 0
+
+[2026-11-09T13:11:16.817053+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git diff --check
+
+# Código de salida: 0

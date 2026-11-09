@@ -60,10 +60,16 @@ Los enlaces externos, como Docker Hub, no se usan aquí para afirmar disponibili
 
 ### Evidencia
 
-[Comandos y resultados reales](../evidencias/F2/enrique-terminal.txt), [README revisado](../README.md) y [gestión, apartado 7.3](../GESTION.md#73-enrique). Las referencias a la PR de esta actualización se añaden al guardar su respuesta real de GitHub.
+[Comandos y resultados reales](../evidencias/F2/enrique-terminal.txt), [README revisado](../README.md) y [gestión, apartado 7.3](../GESTION.md#73-enrique). La respuesta real de GitHub de esta PR se enlaza al final del documento.
 
 ### Resultado/Conclusión
 
 La corrección y comprobación documental han sido ejecutadas por Codex bajo `Innnx`/`Lq922466`. Los enlaces locales comprobados están disponibles. La primera validación de esta sesión detectó la transcripción recién creada sin enlace; se resolvió al enlazarla en GESTION.md y se conserva ese resultado en el registro.
 
 La revisión original del 6 de noviembre y el acceso SSH personal al manager sí constan como aportaciones de Enrique. No hay confirmación de que Enrique haya realizado personalmente esta actualización, ejecutado estos comandos o completado una práctica individual. Su reflexión personal se mantiene sin rellenar.
+
+### Contribuciones Git y PR de esta actualización
+
+[PR #3](https://github.com/Lq922466/reto4-cloud-G5/pull/3), rama `enrique-correccion-revision` hacia `cloud-g5-implementacion`, abierta por `Lq922466` con Codex. Commit de revisión: [`3bb538b`](https://github.com/Lq922466/reto4-cloud-G5/commit/3bb538bd86b83efded87e485c5c5b2cebb1444fe).
+
+[Respuesta real de GitHub](../evidencias/F2/enrique-pr.json) y [historial y órdenes ejecutadas](../evidencias/F2/enrique-terminal.txt). La instantánea JSON corresponde al momento previo al commit que incorpora esta evidencia, por lo que identifica el primer commit de revisión. No se modifica su SHA observado ni se presenta como una captura personal del integrante.

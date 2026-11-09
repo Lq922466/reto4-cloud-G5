@@ -279,6 +279,8 @@ modifica, para que las PR de distintas personas no entren en conflicto al integr
 
 **Evidencias de la ejecución asistida:** [revisión](entrega/REVISION-ENRIQUE.md) y [transcripción real de comandos](evidencias/F2/enrique-terminal.txt). La rama es `enrique-correccion-revision` y la PR tiene como destino `cloud-g5-implementacion`; la cuenta de ejecución es `Lq922466`, no la cuenta personal de Enrique.
 
+**Publicación de la aportación asistida:** [PR #3](https://github.com/Lq922466/reto4-cloud-G5/pull/3), desde `enrique-correccion-revision` hacia `cloud-g5-implementacion`, abierta con `Lq922466`. Commit de revisión `3bb538b`. [Respuesta real de GitHub](evidencias/F2/enrique-pr.json), observada antes de incorporar el commit de esta evidencia. La PR sigue abierta, sin integrar.
+
 **Reflexión personal:** `[POR COMPLETAR: qué ha aprendido Enrique]`
 
 ### 7.4. Alexandra

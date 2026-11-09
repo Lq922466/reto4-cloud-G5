@@ -1,0 +1,22 @@
+{
+  "observado_madrid": "2026-11-09T13:11:16.665438+01:00",
+  "ejecucion": "Codex con la cuenta autorizada Lq922466. No es una PR abierta desde la cuenta personal del integrante.",
+  "momento": "Tras publicar el commit de revisión y abrir la PR, antes del commit que incorpora esta evidencia. Los SHA son los observados en ese momento.",
+  "fuente": "GitHub REST GET /repos/Lq922466/reto4-cloud-G5/pulls/3",
+  "respuesta_observada": {
+    "base": "cloud-g5-implementacion",
+    "base_sha": "a81b3d56ed9382e6ae444908b00ae6b3bf955f9c",
+    "changed_files": 3,
+    "commits": 1,
+    "created_at": "2026-11-09T12:10:24Z",
+    "head": "enrique-correccion-revision",
+    "head_sha": "3bb538bd86b83efded87e485c5c5b2cebb1444fe",
+    "mergeable": true,
+    "merged": false,
+    "number": 3,
+    "state": "open",
+    "updated_at": "2026-11-09T12:10:24Z",
+    "url": "https://github.com/Lq922466/reto4-cloud-G5/pull/3",
+    "user": "Lq922466"
+  }
+}

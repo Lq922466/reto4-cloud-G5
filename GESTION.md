@@ -287,4 +287,6 @@ modifica, para que las PR de distintas personas no entren en conflicto al integr
 
 **Evidencias de la ejecución asistida:** [revisión](entrega/REVISION-IBAI.md) y [transcripción real de comandos](evidencias/F2/ibai-terminal.txt). La rama es `ibai-revision-individual` y la PR tiene como destino `cloud-g5-implementacion`; la cuenta de ejecución es `Lq922466`, no la cuenta personal de Ibai.
 
+**Publicación de la aportación asistida:** [PR #5](https://github.com/Lq922466/reto4-cloud-G5/pull/5), desde `ibai-revision-individual` hacia `cloud-g5-implementacion`, abierta con `Lq922466`. Commit de revisión `73860b1`. [Respuesta real de GitHub](evidencias/F2/ibai-pr.json), observada antes de incorporar el commit de esta evidencia. La PR sigue abierta, sin integrar.
+
 **Reflexión personal:** `[POR COMPLETAR: qué ha aprendido Ibai]`

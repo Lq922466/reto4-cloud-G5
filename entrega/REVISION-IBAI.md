@@ -34,3 +34,9 @@ No se han encontrado secretos reales ni archivos sensibles dentro del alcance co
 El registro histórico B4 acredita permisos remotos 700/600 y restricciones SSH en la fecha registrada; esta sesión no los revalida. Los permisos de las públicas del Codespace no equivalen a permisos de privadas ni de authorized_keys en servidores. vockey sigue autorizada según el registro; se conserva la discrepancia entre Guía y Rúbrica.
 
 **Verificación personal acreditada de Ibai:** acceso al manager con su clave en la captura y el registro del 9 de noviembre. No consta comprobación personal de esta revisión, acceso personal a workers, práctica individual ni defensa realizada. La ejecución de esta revisión y su PR corresponde a Codex bajo la cuenta autorizada. La reflexión personal permanece sin rellenar en GESTION.md.
+
+### Contribuciones Git y PR de esta actualización
+
+[PR #5](https://github.com/Lq922466/reto4-cloud-G5/pull/5), rama `ibai-revision-individual` hacia `cloud-g5-implementacion`, abierta por `Lq922466` con Codex. Commit de revisión: [`73860b1`](https://github.com/Lq922466/reto4-cloud-G5/commit/73860b1280874ed26207f4cffc3758f1ea882304).
+
+[Respuesta real de GitHub](../evidencias/F2/ibai-pr.json) y [historial y órdenes ejecutadas](../evidencias/F2/ibai-terminal.txt). La instantánea JSON corresponde al momento previo al commit que incorpora esta evidencia, por lo que identifica el primer commit de revisión. No se modifica su SHA observado ni se presenta como una captura personal del integrante.

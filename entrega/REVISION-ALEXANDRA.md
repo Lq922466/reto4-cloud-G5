@@ -63,3 +63,9 @@ La captura antigua E7 muestra historial posterior, sin el prompt normativo ni co
 **Verificación personal acreditada de Alexandra:** su captura muestra acceso con `ssh -i`, `whoami`, `hostname` y `date -Is` en manager-g5 a las 10:37:03 CET; el registro recoge su huella a las 10:36:44 CET del 9 de noviembre. No consta acceso personal a los workers ni comprobación personal de esta revisión documental. Esa imagen carece del comentario normativo y muestra la fecha mediante la salida de date.
 
 La revisión de hoy, los comandos y la PR son trabajo de Codex con la cuenta autorizada. La reflexión personal permanece en GESTION.md sin inventarla.
+
+### Contribuciones Git y PR de esta actualización
+
+[PR #4](https://github.com/Lq922466/reto4-cloud-G5/pull/4), rama `alexandra-revision-evidencias` hacia `cloud-g5-implementacion`, abierta por `Lq922466` con Codex. Commit de revisión: [`7802c35`](https://github.com/Lq922466/reto4-cloud-G5/commit/7802c3580033adf0cd7ea59eb6f413b0eb73d6d7).
+
+[Respuesta real de GitHub](../evidencias/F2/alexandra-pr.json) y [historial y órdenes ejecutadas](../evidencias/F2/alexandra-terminal.txt). La instantánea JSON corresponde al momento previo al commit que incorpora esta evidencia, por lo que identifica el primer commit de revisión. No se modifica su SHA observado ni se presenta como una captura personal del integrante.

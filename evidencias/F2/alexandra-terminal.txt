@@ -285,3 +285,71 @@ raise SystemExit(bool(errors))
 [2026-11-09T13:07:24.897128+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git diff --check
 
 # Código de salida: 0
+
+[2026-11-09T13:11:16.820853+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git log -2 '--format=%H%nAutor: %an%nFecha: %aI%n%s%n%b'
+7802c3580033adf0cd7ea59eb6f413b0eb73d6d7
+Autor: Innnx
+Fecha: 2026-11-09T12:09:58Z
+docs: documenta evidencias para Alexandra con ejecución de Codex
+Trabajo documental ejecutado por Codex con la identidad autorizada Innnx (Lq922466). No se atribuye ejecución personal a Alexandra. Sin AWS ni merge.
+
+a81b3d56ed9382e6ae444908b00ae6b3bf955f9c
+Autor: Innnx
+Fecha: 2026-11-09T11:48:14Z
+docs: publica documentación y evidencias pendientes para iniciar F2
+
+
+# Código de salida: 0
+
+[2026-11-09T13:11:16.823158+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git status --short
+ M evidencias/F2/alexandra-terminal.txt
+
+# Código de salida: 0
+
+[2026-11-09T13:11:16.827408+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git ls-remote --heads origin refs/heads/alexandra-revision-evidencias
+7802c3580033adf0cd7ea59eb6f413b0eb73d6d7	refs/heads/alexandra-revision-evidencias
+
+# Código de salida: 0
+
+[2026-11-09T13:11:17.317727+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ gh api repos/Lq922466/reto4-cloud-G5/pulls/4 --jq '{number,url:.html_url,state,user:.user.login,base:.base.ref,base_sha:.base.sha,head:.head.ref,head_sha:.head.sha,created_at,updated_at,merged,mergeable,commits,changed_files}'
+{"base":"cloud-g5-implementacion","base_sha":"a81b3d56ed9382e6ae444908b00ae6b3bf955f9c","changed_files":3,"commits":1,"created_at":"2026-11-09T12:10:25Z","head":"alexandra-revision-evidencias","head_sha":"7802c3580033adf0cd7ea59eb6f413b0eb73d6d7","mergeable":true,"merged":false,"number":4,"state":"open","updated_at":"2026-11-09T12:10:25Z","url":"https://github.com/Lq922466/reto4-cloud-G5/pull/4","user":"Lq922466"}
+
+# Código de salida: 0
+
+[2026-11-09T13:11:17.746408+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ python3 scripts/validar-entrega.py
+Criterios: 42 {'Listo': 10, 'Demostrado, falta captura conforme': 17, 'Parcial': 11, 'Pendiente': 4}. Errores: 0.
+
+# Código de salida: 0
+
+[2026-11-09T13:11:17.820531+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ python3 -c 'from pathlib import Path
+import re,runpy,urllib.parse,json
+v=runpy.run_path("scripts/validar-entrega.py")
+errors=[];n=0
+for f in ["README.md","entrega/REVISION-ENRIQUE.md","entrega/REVISION-ALEXANDRA.md","entrega/REVISION-IBAI.md","GESTION.md"]:
+ p=Path(f)
+ if not p.exists():continue
+ for d in re.findall(r"\]\(([^)\s]+)\)",v["sin_codigo"](p.read_text())):
+  if d.startswith(("http://","https://")):continue
+  a,_,frag=d.partition("#");t=(p.parent/urllib.parse.unquote(a)).resolve() if a else p.resolve();n+=1
+  if not t.exists():errors.append([f,d,"destino inexistente"])
+  elif frag and t.suffix==".md":
+   headings=re.findall(r"(?m)^#+\s+(.*)$",v["sin_codigo"](t.read_text()))
+   if urllib.parse.unquote(frag) not in {v["ancla"](h) for h in headings}:errors.append([f,d,"ancla inexistente"])
+print(json.dumps({"enlaces_locales":n,"errores":errors},ensure_ascii=False))
+raise SystemExit(bool(errors))
+'
+{"enlaces_locales": 130, "errores": []}
+
+# Código de salida: 0
+
+[2026-11-09T13:11:17.855699+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ python3 scripts/revisar-secretos.py origin/cloud-g5-implementacion HEAD
+Líneas añadidas revisadas: 367. Archivos: 3.
+Imágenes no revisadas por este script: 0.
+Coincidencias: 0 []
+Archivos sensibles: []
+
+# Código de salida: 0
+
+[2026-11-09T13:11:17.884545+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git diff --check
+
+# Código de salida: 0

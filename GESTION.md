@@ -206,7 +206,9 @@ comprobar su contenido. Para este reto, lo que exige la Guía debe estar tambié
 
 ### GitHub
 
-Datos del repositorio `Lq922466/reto4-cloud-G5` a 9 de noviembre, hasta el commit `a267503`.
+Datos históricos del repositorio `Lq922466/reto4-cloud-G5` hasta el commit `a267503`.
+
+**Actualización F2 del 9 de noviembre:** por autorización expresa se preparan las revisiones y las PR de Enrique, Alexandra e Ibai con Codex, utilizando exclusivamente la cuenta disponible `Lq922466` y la identidad Git `Innnx`. Los apartados 7.3–7.5 incorporan cada aportación al integrarse su PR. Estas PR acreditan trabajo documental asistido y no commits ejecutados personalmente por las tres personas. No se ha usado AWS ni se ha hecho merge durante esta ejecución.
 
 | Rama | Autor en Git | Persona | Commits |
 | --- | --- | --- | --- |
@@ -226,9 +228,9 @@ Datos del repositorio `Lq922466/reto4-cloud-G5` a 9 de noviembre, hasta el commi
 - **Después de `a267503`:** el 9 de noviembre, a las 11:30 UTC, se añadió el commit `56e5a46` con la
   [segunda revisión](entrega/segunda-revision-2026-11-09/README.md). Lleva la identidad Innnx, sin línea `Co-Authored-By`, pero su
   contenido lo preparó Codex, como indica la propia revisión.
-- **Sin aportaciones en el repositorio:** no constan commits ni PR de Alexandra ni de Ibai. Esto no descarta trabajo hecho fuera del
+- **Situación histórica hasta `a267503`:** no constaban commits ni PR de Alexandra ni de Ibai. Esto no descarta trabajo hecho fuera del
   repositorio, como la web del ZIP, Trello o Drive.
-- **Pendiente:** cada integrante debe aportar su trabajo real desde su propia cuenta.
+- **Autoría de la actualización F2:** las operaciones de esta sesión las realiza Codex con la cuenta autorizada. La validación personal de estas nuevas revisiones por Enrique, Alexandra o Ibai no está confirmada; no se les atribuyen los comandos de Codex.
 
 Flujo para aportar trabajo. Los pasos detallados para Enrique, Alexandra e Ibai, con sus ramas ya creadas y lo que revisa cada
 integrante, están en las [instrucciones de F2](entrega/INSTRUCCIONES-F2-INTEGRANTES.md).
@@ -247,12 +249,12 @@ No se deben hacer commits en nombre de otra persona ni reescribir la autoría de
 
 | Asistente | Qué consta | Cómo figura en Git |
 | --- | --- | --- |
-| Codex | 11 commits del 4 de noviembre, y la segunda revisión del 9 de noviembre en el commit `56e5a46` | Los 11 primeros, con autoría propia, `Codex`. El de la segunda revisión, con la identidad Innnx de Cristina y sin línea `Co-Authored-By` |
-| Claude Code | 19 commits del 5 de noviembre, y el trabajo del 6 y 9 de noviembre, aún sin commit | Identidad Innnx de Cristina, con la línea `Co-Authored-By` |
+| Codex | 11 commits del 4 de noviembre, segunda revisión `56e5a46`, publicación de los 82 archivos `a81b3d5` y actualizaciones F2 de esta sesión | Los 11 primeros con identidad Codex; los posteriores y las PR F2 usan la identidad autorizada Innnx/Lq922466. La intervención de Codex se declara en documentos, mensajes de commit y PR |
+| Claude Code | 19 commits del 5 de noviembre y trabajo del 6 y 9 de noviembre, publicado con la corrección de atribución de claves en `a81b3d5` | Identidad Innnx de Cristina, con la línea `Co-Authored-By` |
 
 Las operaciones sobre AWS, Docker Hub y Swarm se hicieron con autorización expresa de Cristina en cada sesión de trabajo. Las capturas
 generadas por Claude Code indican como autor «Claude Code, por encargo de Lq922466», que es la cuenta de Cristina. La Guía y la Rúbrica
-no tratan el uso de asistentes. Falta confirmar con el profesor cómo declararlo: `[POR COMPLETAR]`.
+no tratan el uso de asistentes. La ejecución asistida se declara expresamente en esta actualización y en sus PR, sin afirmar validación personal no acreditada.
 
 ## 7. Reflexión del grupo
 
@@ -275,7 +277,13 @@ modifica, para que las PR de distintas personas no entren en conflicto al integr
 
 ### 7.4. Alexandra
 
-`[POR COMPLETAR: qué ha aprendido Alexandra]`
+**Trabajo documental de esta actualización, ejecutado por Codex:** Comprobación de las 32 parejas PNG/TXT, huellas del manifiesto, cabeceras, enlaces y muestra visual; separación de resultados negativos e históricos.
+
+**Verificación personal que ya consta:** Acceso con su clave al manager el 9 de noviembre, corroborado por captura y huella de autenticación. La comprobación personal de esta actualización documental no está confirmada. El acceso al manager no demuestra revisión de evidencias, seguridad o enlaces realizada por la persona.
+
+**Evidencias de la ejecución asistida:** [revisión](entrega/REVISION-ALEXANDRA.md) y [transcripción real de comandos](evidencias/F2/alexandra-terminal.txt). La rama es `alexandra-revision-evidencias` y la PR tiene como destino `cloud-g5-implementacion`; la cuenta de ejecución es `Lq922466`, no la cuenta personal de Alexandra.
+
+**Reflexión personal:** `[POR COMPLETAR: qué ha aprendido Alexandra]`
 
 ### 7.5. Ibai
 

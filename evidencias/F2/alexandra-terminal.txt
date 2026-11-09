@@ -1,0 +1,287 @@
+# Evidencia F2 — Alexandra (producto asignado; ejecución de Codex)
+# Sesión real del Codespace. Autoría: Codex; identidad Git Innnx y cuenta GitHub Lq922466.
+# Estas órdenes no fueron ejecutadas personalmente por Alexandra. Sin AWS ni conexiones SSH.
+
+[2026-11-09T13:07:24.407813+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ date --iso-8601=seconds
+2026-11-09T12:07:24+00:00
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.409230+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ hostname
+codespaces-8d43b2
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.410191+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git branch --show-current
+alexandra-revision-evidencias
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.411922+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git config --get user.name
+Innnx
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.413547+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git config --get user.email
+124345158+Lq922466@users.noreply.github.com
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.415108+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ gh api user --jq .login
+Lq922466
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.757649+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git log -4 '--format=%h %an %aI %s'
+a81b3d5 Innnx 2026-11-09T11:48:14Z docs: publica documentación y evidencias pendientes para iniciar F2
+56e5a46 Innnx 2026-11-09T11:30:30Z docs: añade segunda revisión independiente del RETO 4 CLOUD G5
+a267503 Innnx 2026-11-06T12:06:43+01:00 Merge pull request #2 from Lq922466/enrique-revision-documentacion
+3a67659 EnriZx2 2026-11-06T10:36:19+01:00 Add documentation review for project RETO 4 CLOUD G5
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.760524+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ python3 scripts/validar-entrega.py
+Criterios: 42 {'Listo': 10, 'Demostrado, falta captura conforme': 17, 'Parcial': 11, 'Pendiente': 4}. Errores: 0.
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.834536+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ python3 -c 'from pathlib import Path
+import json,hashlib,re
+p=Path("evidencias/capturas-conformes");m=json.loads((p/"manifiesto.json").read_text());rows=[]
+for k,v in sorted(m.items()):
+ image=p/v["captura"];txt=p/(k+".txt");data=txt.read_text()
+ assert hashlib.sha256(image.read_bytes()).hexdigest()==v["sha256"]
+ assert all(s in data for s in ["# Prueba:","# Autor:","# Resultado:"])
+ assert re.search(r"\[\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [^\]]+\] \S+@\S+:",data)
+ rows.append({"evidencia":k,"resultado":v["resultado"],"integridad":"SHA-256 coincide","transcripcion":"prueba/autor/resultado y prompt fechado presentes"})
+print(json.dumps({"entradas":len(rows),"correctos":sum(v["resultado"]=="CORRECTO" for v in m.values()),"no_correctos":[k for k,v in m.items() if v["resultado"]!="CORRECTO"],"detalle":rows},ensure_ascii=False,indent=2))
+'
+{
+  "entradas": 32,
+  "correctos": 30,
+  "no_correctos": [
+    "A6-sin-cambios",
+    "C3-nodos"
+  ],
+  "detalle": [
+    {
+      "evidencia": "A1-modulo",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "A2-instancias",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "A3-reglas",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "A4-arranque",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "A4-script",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "A5-salidas",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "A6-sin-cambios",
+      "resultado": "NO CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B1-clave-nodos",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B1-claves",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B1-registro-cristina",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B1-registro-manager",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B2-conexion",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B2-plantilla",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B3-copia",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B3-simultaneo",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B4-endurecimiento",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "B5-salto",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "C1-ping",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "C2-cluster",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "C3-nodos",
+      "resultado": "NO CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "C4-red",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "D1-dockerhub",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "D2-servicio",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "E1-balanceo",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "E5-estado",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "F1-repositorio",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "F12-seguridad",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "F2-historial",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "F4-estructura",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "F5-entorno",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "F6-codigo",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    },
+    {
+      "evidencia": "F7-scripts",
+      "resultado": "CORRECTO",
+      "integridad": "SHA-256 coincide",
+      "transcripcion": "prueba/autor/resultado y prompt fechado presentes"
+    }
+  ]
+}
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.862676+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ python3 -c 'from pathlib import Path
+import re,runpy,urllib.parse,json
+v=runpy.run_path("scripts/validar-entrega.py")
+errors=[];n=0
+for f in ["README.md","entrega/REVISION-ENRIQUE.md","entrega/REVISION-ALEXANDRA.md","entrega/REVISION-IBAI.md","GESTION.md"]:
+ p=Path(f)
+ if not p.exists():continue
+ for d in re.findall(r"\]\(([^)\s]+)\)",v["sin_codigo"](p.read_text())):
+  if d.startswith(("http://","https://")):continue
+  a,_,frag=d.partition("#");t=(p.parent/urllib.parse.unquote(a)).resolve() if a else p.resolve();n+=1
+  if not t.exists():errors.append([f,d,"destino inexistente"])
+  elif frag and t.suffix==".md":
+   headings=re.findall(r"(?m)^#+\s+(.*)$",v["sin_codigo"](t.read_text()))
+   if urllib.parse.unquote(frag) not in {v["ancla"](h) for h in headings}:errors.append([f,d,"ancla inexistente"])
+print(json.dumps({"enlaces_locales":n,"errores":errors},ensure_ascii=False))
+raise SystemExit(bool(errors))
+'
+{"enlaces_locales": 127, "errores": []}
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.897128+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/alexandra$ git diff --check
+
+# Código de salida: 0

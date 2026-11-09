@@ -2,41 +2,39 @@
 
 **Responsable asignada:** Alexandra (alexguerth)  
 **Preparación documental:** ChatGPT, por encargo de Cristina, 09/11/2026  
-**Estado:** revisión preliminar de archivos del repositorio; pendiente de comprobación personal de Alexandra.
+**Estado:** pendiente de comprobación personal de Alexandra.
 
 ## Objetivo
 
-Revisar si las evidencias de RETO 4 CLOUD G5 están localizables, correctamente identificadas y si permiten distinguir resultados correctos, incompletos y no correctos.
+Comprobar que las evidencias técnicas disponibles permiten identificar el estado de la infraestructura y las pruebas de Docker Swarm.
 
 ## Procedimiento
 
-Se han consultado [el índice general](../evidencias/INDICE.md), [el índice de capturas conformes](../evidencias/capturas-conformes/INDICE.md) y [la matriz de requisitos](segunda-revision-2026-11-09/MATRIZ-REQUISITOS.md). Esta revisión documental **no equivale a abrir visualmente todas las imágenes ni a repetir las pruebas de AWS**.
+Se han consultado [el índice general](../evidencias/INDICE.md), [el índice de capturas conformes](../evidencias/capturas-conformes/INDICE.md) y [la matriz de requisitos](segunda-revision-2026-11-09/MATRIZ-REQUISITOS.md). Se trata de una revisión documental de resultados registrados, no de una nueva ejecución en AWS ni de una inspección visual exhaustiva de todos los PNG.
 
 ## Comprobaciones
 
-| Evidencia o grupo | Comprobación documental | Resultado |
+| Prueba | Resultado registrado | Estado |
 | --- | --- | --- |
-| [A2-instancias](../evidencias/capturas-conformes/A2-instancias.png) | Registrada con fecha, autor y resultado; falta contraste con vista EC2 actual | Documentada; verificación actual pendiente |
-| [A3-reglas](../evidencias/capturas-conformes/A3-reglas.png) | Registrada; existe una regla SSH temporal que debe revisarse | Documentada; revisión de consola pendiente |
-| [A6-sin-cambios](../evidencias/capturas-conformes/A6-sin-cambios.png) | El propio índice indica NO CORRECTO | No válida como prueba de plan limpio |
-| [B1-clave-nodos](../evidencias/capturas-conformes/B1-clave-nodos.png) | Índice registra claves de cuatro integrantes en cuatro nodos | Documentada; faltan comprobaciones individuales de acceso a workers |
-| [C3-nodos](../evidencias/capturas-conformes/C3-nodos.png) | Índice indica NO CORRECTO por tres managers | Pendiente de corrección técnica |
-| [D1-dockerhub](../evidencias/capturas-conformes/D1-dockerhub.png) | Registro de versiones 1.0 y 2.0 | Documentada |
-| [D2-servicio](../evidencias/capturas-conformes/D2-servicio.png) | Registro de cuatro réplicas | Documentada; comprobar estado actual |
-| [D3 — navegadores](../evidencias/D3-registro.txt) | Existen pruebas históricas de las cuatro IP | Falta completar capturas normativas actuales |
-| E1–E8 | Existen registros y capturas históricas de orquestación | Faltan secuencias normativas antes/durante/después en varios ensayos |
-| [F1-repositorio](../evidencias/capturas-conformes/F1-repositorio.png) | Registro de repositorio privado | Falta confirmar invitación del profesor |
-| [F2-historial](../evidencias/capturas-conformes/F2-historial.png) | Registro histórico de Git | No acredita aún PR y commits personales de todos |
-| [F12-seguridad](../evidencias/capturas-conformes/F12-seguridad.png) | Revisión histórica sin secretos | Repetir escaneo tras cambios recientes |
-| F13 | Existe [plantilla](../practica-individual/PLANTILLA.md) | Prácticas personales pendientes |
+| A2 — EC2 | Cuatro instancias con tipos previstos en el registro | Documentado; confirmar estado actual |
+| A3 — Security Group | Reglas registradas; consta acceso SSH temporal | Revisar regla temporal |
+| A6 — Terraform | Captura `A6-sin-cambios` marcada NO CORRECTO | Pendiente |
+| B1 — SSH | Claves públicas de los cuatro integrantes instaladas según registro | Documentado; pruebas individuales incompletas |
+| C2 — Swarm/MTU | Red ingress con MTU 1450 registrada | Documentado |
+| C3 — Roles | Captura `C3-nodos` marcada NO CORRECTO | Pendiente |
+| D1–D2 — Web | Versiones 1.0/2.0 y cuatro réplicas documentadas | Documentado |
+| E1–E8 — Orquestación | Hay registros de balanceo, escalado, recuperación y actualización | Resultados históricos; comprobar pruebas pendientes |
 
-## Incidencias detectadas
+## Incidencias técnicas detectadas
 
-- Los índices incluyen evidencias de diferentes fechas; las IP y estados pueden haber cambiado.
-- Las capturas de A6 y C3 reflejan expresamente resultados **NO CORRECTO** y no deben contarse como pruebas de cumplimiento.
-- La existencia de capturas de E1–E8 no garantiza que cada secuencia tenga las tres fases requeridas ni que se vea la sonda.
-- El índice general contiene referencias históricas que deben actualizarse tras las últimas publicaciones y correcciones técnicas.
+| Criterio | Incidencia | ¿Se puede resolver? |
+| --- | --- | --- |
+| C3 | El último estado registrado tiene tres managers en lugar de uno | Sí; ajustar roles con un procedimiento seguro |
+| A6 | El plan no muestra todavía el estado esperado sin cambios | Sí; revisar salidas y estado Terraform, sin aplicar cambios no autorizados |
+| E8 | La prueba histórica de elección de líder no cubre de forma continua todo el intervalo de parada | Sí; repetir o completar la prueba autorizada si el profesor exige esa evidencia |
+
+La falta de una captura, de un comentario o de un enlace **no se clasifica aquí como fallo técnico**. Se trata por separado como evidencia pendiente.
 
 ## Resultado y conclusión
 
-Hay una base documental amplia de evidencias, pero **no está justificado marcar todas como completas**. La revisión visual de cada PNG y la validación personal de Alexandra siguen pendientes. Documento preparado con ChatGPT a petición de Cristina, sin atribuirle a Alexandra verificaciones no realizadas.
+Las evidencias registran una implementación funcional de buena parte del proyecto. C3 y A6 siguen pendientes de corrección o comprobación; E8 necesita validación adicional de su prueba. Documento preparado con ChatGPT por encargo de Cristina y pendiente de revisión personal de Alexandra.

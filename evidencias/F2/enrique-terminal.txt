@@ -1,0 +1,115 @@
+# Evidencia F2 — Enrique (producto asignado; ejecución de Codex)
+# Sesión real del Codespace. Autoría: Codex; identidad Git Innnx y cuenta GitHub Lq922466.
+# Estas órdenes no fueron ejecutadas personalmente por Enrique. Sin AWS ni conexiones SSH.
+
+[2026-11-09T13:05:06.187673+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ date --iso-8601=seconds
+2026-11-09T12:05:06+00:00
+
+# Código de salida: 0
+
+[2026-11-09T13:05:06.189795+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ hostname
+codespaces-8d43b2
+
+# Código de salida: 0
+
+[2026-11-09T13:05:06.192688+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git branch --show-current
+enrique-correccion-revision
+
+# Código de salida: 0
+
+[2026-11-09T13:05:06.195339+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git config --get user.name
+Innnx
+
+# Código de salida: 0
+
+[2026-11-09T13:05:06.199629+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git config --get user.email
+124345158+Lq922466@users.noreply.github.com
+
+# Código de salida: 0
+
+[2026-11-09T13:05:06.201892+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ gh api user --jq .login
+Lq922466
+
+# Código de salida: 0
+
+[2026-11-09T13:05:06.529531+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git log -4 '--format=%h %an %aI %s'
+a81b3d5 Innnx 2026-11-09T11:48:14Z docs: publica documentación y evidencias pendientes para iniciar F2
+56e5a46 Innnx 2026-11-09T11:30:30Z docs: añade segunda revisión independiente del RETO 4 CLOUD G5
+a267503 Innnx 2026-11-06T12:06:43+01:00 Merge pull request #2 from Lq922466/enrique-revision-documentacion
+3a67659 EnriZx2 2026-11-06T10:36:19+01:00 Add documentation review for project RETO 4 CLOUD G5
+
+# Código de salida: 0
+
+[2026-11-09T13:05:06.532290+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ python3 scripts/validar-entrega.py
+ERROR Evidencia sin enlazar en los documentos: F2/enrique-terminal.txt
+Criterios: 42 {'Listo': 10, 'Demostrado, falta captura conforme': 17, 'Parcial': 11, 'Pendiente': 4}. Errores: 1.
+
+# Código de salida: 1
+
+[2026-11-09T13:07:23.864098+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ date --iso-8601=seconds
+2026-11-09T12:07:23+00:00
+
+# Código de salida: 0
+
+[2026-11-09T13:07:23.865605+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ hostname
+codespaces-8d43b2
+
+# Código de salida: 0
+
+[2026-11-09T13:07:23.866544+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git branch --show-current
+enrique-correccion-revision
+
+# Código de salida: 0
+
+[2026-11-09T13:07:23.868325+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git config --get user.name
+Innnx
+
+# Código de salida: 0
+
+[2026-11-09T13:07:23.869913+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git config --get user.email
+124345158+Lq922466@users.noreply.github.com
+
+# Código de salida: 0
+
+[2026-11-09T13:07:23.871504+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ gh api user --jq .login
+Lq922466
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.206246+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git log -4 '--format=%h %an %aI %s'
+a81b3d5 Innnx 2026-11-09T11:48:14Z docs: publica documentación y evidencias pendientes para iniciar F2
+56e5a46 Innnx 2026-11-09T11:30:30Z docs: añade segunda revisión independiente del RETO 4 CLOUD G5
+a267503 Innnx 2026-11-06T12:06:43+01:00 Merge pull request #2 from Lq922466/enrique-revision-documentacion
+3a67659 EnriZx2 2026-11-06T10:36:19+01:00 Add documentation review for project RETO 4 CLOUD G5
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.209291+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ python3 scripts/validar-entrega.py
+Criterios: 42 {'Listo': 10, 'Demostrado, falta captura conforme': 17, 'Parcial': 11, 'Pendiente': 4}. Errores: 0.
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.288130+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ python3 -c 'from pathlib import Path
+import re,runpy,urllib.parse,json
+v=runpy.run_path("scripts/validar-entrega.py")
+errors=[];n=0
+for f in ["README.md","entrega/REVISION-ENRIQUE.md","entrega/REVISION-ALEXANDRA.md","entrega/REVISION-IBAI.md","GESTION.md"]:
+ p=Path(f)
+ if not p.exists():continue
+ for d in re.findall(r"\]\(([^)\s]+)\)",v["sin_codigo"](p.read_text())):
+  if d.startswith(("http://","https://")):continue
+  a,_,frag=d.partition("#");t=(p.parent/urllib.parse.unquote(a)).resolve() if a else p.resolve();n+=1
+  if not t.exists():errors.append([f,d,"destino inexistente"])
+  elif frag and t.suffix==".md":
+   headings=re.findall(r"(?m)^#+\s+(.*)$",v["sin_codigo"](t.read_text()))
+   if urllib.parse.unquote(frag) not in {v["ancla"](h) for h in headings}:errors.append([f,d,"ancla inexistente"])
+print(json.dumps({"enlaces_locales":n,"errores":errors},ensure_ascii=False))
+raise SystemExit(bool(errors))
+'
+{"enlaces_locales": 62, "errores": []}
+
+# Código de salida: 0
+
+[2026-11-09T13:07:24.321582+01:00] vscode@codespaces-8d43b2:/tmp/reto4-f2-j6z7zd8o/enrique$ git diff --check
+
+# Código de salida: 0

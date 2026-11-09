@@ -1,6 +1,6 @@
 # Plan para corregir C3 y completar E4 y E8
 
-**Plan sin ejecutar.** Cambia roles de Swarm y detiene instancias, así que **cada bloque requiere autorización expresa de Lq922466**. Los comandos de este documento no se han lanzado.
+**Plan sin ejecutar.** Cambia roles de Swarm y detiene instancias, así que **cada bloque requiere autorización expresa de Cristina**. Los comandos de este documento no se han lanzado.
 
 ## Objetivo
 
@@ -24,7 +24,7 @@
 
 Puede autorizarse por bloques. Si algo falla, el proceso se detiene y se consulta antes de seguir.
 
-**Autor de las capturas.** El que ejecute cada comprobación. Si las lanza Claude Code, constará `Claude Code, por encargo de Lq922466`. Un integrante solo debe figurar si las ejecuta él mismo.
+**Autor de las capturas.** El que ejecute cada comprobación. Si las lanza Claude Code, constará `Claude Code, por encargo de Lq922466`, que es la cuenta de Cristina. Un integrante solo debe figurar si las ejecuta en su propia sesión.
 
 ## Riesgos
 

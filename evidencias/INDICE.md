@@ -20,7 +20,7 @@ de D3 sí. **Solo las de [capturas-conformes/](capturas-conformes/INDICE.md) mue
 
 | Criterio | Estado | Evidencia | Falta |
 | --- | --- | --- | --- |
-| F1 | Parcial | [Captura conforme](capturas-conformes/F1-repositorio.png), [CT/F1-colaboradores](capturas-terminal/F1-colaboradores.png) | Confirmar integrantes e invitar al profesor antes de la fecha límite. Captura de Settings → Collaborators. Ya está la de terminal. |
+| F1 | Parcial | [Captura conforme](capturas-conformes/F1-repositorio.png), [CT/F1-colaboradores](capturas-terminal/F1-colaboradores.png) | Invitar al profesor antes de la fecha límite. Captura de Settings → Collaborators. Ya está la de terminal. Los integrantes ya constan en la organización del equipo: Cristina, Enrique, Alexandra e Ibai. |
 | F2 | Parcial | [Captura conforme](capturas-conformes/F2-historial.png), [CT/F2-historial](capturas-terminal/F2-historial.png) | Commits y PR reales de cada integrante. Vista web de la PR. Ya está la captura del historial. |
 | F3 | Listo | [README](../README.md), [etiquetas en Docker Hub](D1-dockerhub-etiquetas.png) | Nada. |
 | F4 | Listo | [Captura conforme](capturas-conformes/F4-estructura.png), [CT/F4-estructura](capturas-terminal/F4-estructura.png) | Integrar la PR: `main` solo contiene `.devcontainer`, `.gitignore`, `README.md` y `terraform`. |
@@ -30,7 +30,7 @@ de D3 sí. **Solo las de [capturas-conformes/](capturas-conformes/INDICE.md) mue
 | F8 | Listo | [Diagrama](../diagramas/arquitectura.md), [renderizado](../diagramas/arquitectura.png) | Nada. Si cambia la topología, actualizar el diagrama. |
 | F9 | Parcial | [Informe técnico](../PROYECTO.md), [estructura del Word](../entrega/INFORME-F9-estructura.md) | Integrar las capturas conformes que faltan, con su comentario. **El Word no es necesario.** |
 | F10 | Parcial | Este índice | Hay 11 capturas conformes de 50, más las 6 con sesión de una persona. El resto requiere laboratorio activo, SSH y, para las pruebas, autorización. |
-| F11 | Parcial | [GESTION (borrador)](../GESTION.md) | El grupo debe completar reparto, responsables y reflexión. Trello y el seguimiento semanal no se exigen. |
+| F11 | Parcial | [GESTION (borrador)](../GESTION.md) | Ya recoge la organización acordada y separa lo asignado de lo realizado. Falta el trabajo real de cada integrante, sus seguimientos de los viernes y la reflexión. Trello y el seguimiento semanal son normas internas del grupo, no requisitos de la Rúbrica. |
 | F12 | Listo | [Captura conforme](capturas-conformes/F12-seguridad.png), [Revisión de todo el historial](auditoria/registro-repositorio.txt), [CT/F12-archivos-sensibles](capturas-terminal/F12-archivos-sensibles.png) | Repetir con `scripts/revisar-secretos.py` antes de integrar la PR. |
 | F13 | Pendiente | [Estructura sin contenido](../practica-individual/README.md) | Cada integrante debe aportar la documentación de su práctica individual previa de EC2. |
 
@@ -49,7 +49,7 @@ de D3 sí. **Solo las de [capturas-conformes/](capturas-conformes/INDICE.md) mue
 
 | Criterio | Estado | Evidencia | Falta |
 | --- | --- | --- | --- |
-| B1 | Parcial | [CT/B1-claves-autorizadas](capturas-terminal/B1-claves-autorizadas.png) | Clave de cada integrante, en `/terraform` e instalada. Aclarar `vockey`: la Guía la deja de reserva y la Rúbrica la sustituye. |
+| B1 | Parcial | [Captura conforme](capturas-conformes/B1-clave-nodos.png), [registro de manager-g5](capturas-conformes/B1-registro-manager.png), accesos de [Enrique](capturas-integrantes/B1-acceso-enrique.png), [Alexandra](capturas-integrantes/B1-acceso-alexandra.png) e [Ibai](capturas-integrantes/B1-acceso-ibai.png) a manager-g5, accesos de Cristina a [manager-g5](capturas-integrantes/B1-acceso-cristina-manager.png), [worker1-g5](capturas-integrantes/B1-acceso-cristina-worker1.png), [worker2-g5](capturas-integrantes/B1-acceso-cristina-worker2.png) y [worker3-g5](capturas-integrantes/B1-acceso-cristina-worker3.png), su [alias](capturas-integrantes/B1-cristina-config-alias.png) y su [config](capturas-integrantes/B1-cristina-config-ruta.png), [registro de Cristina en los cuatro nodos](capturas-conformes/B1-registro-cristina.png), [registro de la instalación](auditoria/registro-2026-11-09-b1.txt), [CT/B1-claves-autorizadas](capturas-terminal/B1-claves-autorizadas.png) | Las claves de Enrique, Alexandra e Ibai, y después la de Cristina, se instalaron el 9 de noviembre en los cuatro nodos (captura conforme `B1-clave-nodos`, con las cuatro). Ese día, Cristina entró con su clave en los cuatro nodos, por salto en los workers (`B1-registro-cristina`), y Enrique, Alexandra e Ibai entraron en manager-g5 (`B1-registro-manager`, con los cuatro). Lo muestran sus capturas y lo confirma el registro de cada nodo. Falta que Enrique, Alexandra e Ibai entren en los tres workers, capturas con el comentario de la norma, subir las claves a GitHub y retirar la regla temporal `88.14.93.201/32`. Aclarar `vockey`: la Guía la deja de reserva y la Rúbrica la sustituye. |
 | B2 | Parcial | [Captura conforme](capturas-conformes/B2-plantilla.png), [CT/B2-alias](capturas-terminal/B2-alias.png) | Comprobar la conexión real con el nombre corto cuando el laboratorio esté activo, y capturarla. |
 | B3 | Demostrado, falta captura conforme | [CT/B3-simultaneo-sudo](capturas-terminal/B3-simultaneo-sudo.png), [CT/B3-copia-scp](capturas-terminal/B3-copia-scp.png) | Rehacer las capturas con prompt y comentario. |
 | B4 | Demostrado, falta captura conforme | [CT/B4-endurecimiento](capturas-terminal/B4-endurecimiento.png) | Rehacer la captura con prompt y comentario. |
@@ -61,7 +61,7 @@ de D3 sí. **Solo las de [capturas-conformes/](capturas-conformes/INDICE.md) mue
 | --- | --- | --- | --- |
 | C1 | Demostrado, falta captura conforme | [CT/C1-docker-ping](capturas-terminal/C1-docker-ping.png) | Rehacer la captura con prompt y comentario. |
 | C2 | Demostrado, falta captura conforme | [CT/C2-red-ingress](capturas-terminal/C2-red-ingress.png), [registro inicial](prototipo/fase2-3.txt) | Rehacer la captura con prompt y comentario. |
-| C3 | Parcial | [CT/C3-nodos](capturas-terminal/C3-nodos.png), [topología inicial](prototipo/fase2-3.txt) | Hoy hay tres managers y el líder es worker1-g5. Ver el [plan](../entrega/PLAN-C3-E4-E8.md), que requiere autorización. |
+| C3 | Parcial | [CT/C3-nodos](capturas-terminal/C3-nodos.png), [topología inicial](prototipo/fase2-3.txt) | El 9 de noviembre, a las 09:26 UTC, hay tres managers y el líder es worker2-g5. Ver el [plan](../entrega/PLAN-C3-E4-E8.md), que requiere autorización. |
 | C4 | Demostrado, falta captura conforme | [CT/C4-red-aplicacion](capturas-terminal/C4-red-aplicacion.png) | Rehacer la captura con prompt y comentario. |
 
 ## Fase 4 · Web e imágenes (definitiva)

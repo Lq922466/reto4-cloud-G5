@@ -1,6 +1,30 @@
 # Auditoría técnica de solo lectura
 
-Realizada por Claude Code el 5 de noviembre de 2026. No se ha modificado AWS, Swarm ni Terraform.
+Realizada por Claude Code el 5 de noviembre de 2026 y repetida en vivo el 6 de noviembre. No se ha modificado Swarm ni Terraform. En AWS, los únicos cambios son las dos sustituciones autorizadas de la regla SSH del 6 de noviembre.
+
+## Repetición en vivo: 6 de noviembre de 2026
+
+Con el laboratorio activo y las credenciales renovadas, entre las 09:14 y las 09:19 UTC. [Registro completo](registro-2026-11-06.txt).
+
+| Requisito | Observado | Resultado |
+| --- | --- | --- |
+| EC2 | Cuatro instancias con los tipos esperados, en ejecución y con controles `ok` | Cumple |
+| Grupo de seguridad | SSH desde una IP `/32` y el propio grupo; 80 y 8080 públicos; Swarm e ICMP solo entre nodos; salida general | Cumple |
+| SSH | Sin root ni contraseña, permisos 700 y 600, sudo y salto por el manager en los cuatro nodos | Cumple |
+| SSH: claves individuales | Solo `vockey` y la clave del Codespace | **No cumple todavía** |
+| Swarm: nodos | Cuatro Ready/Active, por IP privada | Cumple |
+| Swarm: topología | Tres managers, con `manager-g5` de líder | **No coincide** |
+| Redes | `red-g5` y `red-app-g5` declaran MTU 1450; sus interfaces miden 1400 dentro de los contenedores | Cumple en la configuración de la red. Falta aclarar qué pide la Guía |
+| Servicio | 4/4, `innnx/reto4-f1:1.0` con el digest publicado, una réplica por nodo | Cumple |
+| Web | HTTP 200 por el puerto 80 en las cuatro IP. El 8080 está abierto, pero nada responde en él | Cumple |
+| Imágenes | Etiquetas 1.0 y 2.0 con los digests publicados | Cumple |
+| Estado de Terraform | ID, AMI, tipo, disco, etiquetas, grupo y cuenta coinciden con AWS. Archivos sin modificar: mismo SHA-256 | Corresponde a los recursos actuales |
+| Plan de Terraform | Ninguna acción sobre recursos. Solo cambiarían las salidas, por las IP públicas (código de salida 2) | Cumple en los recursos. Las salidas no están sincronizadas |
+| Secretos | 0 coincidencias en los commits pendientes de `main` | Cumple |
+
+**Después de la comprobación.** A las 10:27 UTC, la IP del Codespace había cambiado a `172.166.151.115`, mientras la regla seguía en `172.166.156.104/32`, y el SSH agotaba el tiempo de espera. A las 10:50 UTC, con nueva autorización, se añadió la regla de la IP nueva, se comprobó SSH en los cuatro nodos y se retiró la antigua. Después, nodos, servicio, redes y plan dieron los mismos resultados, y los archivos de estado de Terraform siguen sin cambios.
+
+El resto de este informe corresponde a la auditoría del 5 de noviembre.
 
 ## Resultado
 

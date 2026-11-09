@@ -1,0 +1,22 @@
+# Evidencia B5-salto · Criterio B5 · RETO 4 CLOUD, Grupo 5
+# Prueba: Acceso a los workers por IP privada con salto
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 09:18:57 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ ssh -G worker1-g5 2>/dev/null | grep -E '^(hostname|proxyjump) '
+hostname 172.31.17.168
+proxyjump manager-g5
+[2026-11-06 09:18:57 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+[2026-11-06 10:18:58 CET] ubuntu@worker1-g5:~$ hostname -I
+172.31.17.168 172.17.0.1 172.18.0.1 
+[2026-11-06 10:18:59 CET] ubuntu@worker1-g5:~$ exit
+exit
+[2026-11-06 10:19:01 CET] ubuntu@worker2-g5:~$ hostname -I
+172.31.29.192 172.18.0.1 172.17.0.1 
+[2026-11-06 10:19:01 CET] ubuntu@worker2-g5:~$ exit
+exit
+[2026-11-06 10:19:03 CET] ubuntu@worker3-g5:~$ hostname -I
+172.31.31.183 172.18.0.1 172.17.0.1 
+[2026-11-06 10:19:03 CET] ubuntu@worker3-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. Los tres workers se alcanzan por IP privada, a través del manager.

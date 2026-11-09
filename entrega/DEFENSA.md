@@ -13,6 +13,9 @@ Material para ensayar la exposición de 10 minutos y las preguntas del profesor.
 
 ## Reparto de los 10 minutos
 
+La organización del equipo encarga la presentación final a todos, pero no asigna estas partes. «Integrante A» a «D» son
+marcadores: el grupo debe decidir qué parte presenta Cristina, Enrique, Alexandra e Ibai.
+
 | Tiempo | Quién | Diapositivas | Tema | Evidencia de apoyo |
 | --- | --- | --- | --- | --- |
 | 0:00–2:15 | Integrante A | 1–3 | Reto, resultado, reparto de tareas y arquitectura | [Diagrama](../diagramas/arquitectura.png), [gestión](../GESTION.md) |
@@ -68,7 +71,7 @@ Preferimos ser claros con lo que falta: [actualizad esta lista el día de la exp
 
 1. Iniciar Learner Lab (**Start Lab**) y esperar al indicador verde.
 2. Copiar las credenciales nuevas de **AWS Details** a `~/.aws/credentials` en Codespaces.
-3. Comprobar el laboratorio, sin cambiar nada: `bash scripts/comprobar-laboratorio.sh`. Si la regla SSH no coincide con la IP actual, muestra los comandos exactos: es un cambio en AWS que debe autorizar el responsable.
+3. Comprobar el laboratorio, sin cambiar nada: `bash scripts/comprobar-laboratorio.sh`. Si la regla SSH no coincide con la IP actual, muestra los comandos exactos: es un cambio en AWS que debe autorizar Cristina.
 4. Actualizar los alias: `bash scripts/actualizar-ips.sh`.
 5. Comprobar que entra con el nombre corto: `ssh manager-g5 hostname`.
 6. Verificar antes de empezar, sin cambiar nada:
@@ -249,7 +252,7 @@ No lo sabemos, porque no se midió.
 ### Gestión y uso de IA
 
 **¿Quién hizo cada parte?**
-Respondedlo cada uno con vuestra participación real. En el repositorio, hasta ahora, solo constan commits de Innnx y Codex.
+Respondedlo cada uno con vuestra participación real. En el repositorio, a 9 de noviembre, constan commits de Cristina, con su identidad Innnx, de Codex y uno de Enrique, en la PR #2. La organización del equipo asigna el Producto 6, Cloud, a Cristina, pero la Guía pide que todos aporten commits y PR.
 
 **¿Habéis usado inteligencia artificial?**
 Sí. El historial muestra commits con Codex y con Claude Code, y los cambios sobre el servicio y AWS del 5 de noviembre se hicieron con autorización expresa. Cada integrante debe poder explicar lo que presenta.

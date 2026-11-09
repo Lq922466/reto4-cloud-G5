@@ -1,0 +1,410 @@
+Registro de los cambios autorizados para B1, 9 de noviembre de 2026.
+Autorización: Cristina (GitHub: Lq922466), pasos 1, 3 y 4. Ejecutado por Claude Code desde codespaces-8d43b2.
+No se modifica Terraform ni Docker Swarm. Los identificadores de cuenta se ocultan. No contiene credenciales.
+
+$ Fase 1. Comprobación previa. 2026-11-09 09:21:56 UTC
+Credenciales de AWS válidas
+IP pública actual del Codespace: 172.166.151.114
+Reglas de entrada del grupo sg-0c12ecd538a29f8d6 (reto4-cloud-g5), ANTES:
+icmp	-1	grupo sg-0c12ecd538a29f8d6	ICMP entre nodos
+tcp	22	172.166.151.115/32	sin descripción
+tcp	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+tcp	2377	grupo sg-0c12ecd538a29f8d6	Swarm 2377 TCP
+tcp	7946	grupo sg-0c12ecd538a29f8d6	Swarm 7946 TCP
+tcp	80	0.0.0.0/0	HTTP
+tcp	8080	0.0.0.0/0	Web 8080
+udp	4789	grupo sg-0c12ecd538a29f8d6	Swarm 4789 UDP
+udp	7946	grupo sg-0c12ecd538a29f8d6	Swarm 7946 UDP
+
+$ Fase 1. Añadir la regla del Codespace. 2026-11-09 09:22:11 UTC
+aws ec2 authorize-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --protocol tcp --port 22 --cidr 172.166.151.114/32
+sgr-0983f669c504b94f8	tcp	22	172.166.151.114/32
+exit=0
+
+$ Fase 1. SSH a los cuatro nodos con la regla nueva. 2026-11-09 09:22:21 UTC. Configuración temporal: la de config/ssh.local con la IP actual del manager, 107.23.128.135
+manager-g5: manager-g5 172.31.28.10
+worker1-g5: worker1-g5 172.31.17.168
+worker2-g5: worker2-g5 172.31.29.192
+worker3-g5: worker3-g5 172.31.31.183
+fallos=0
+
+$ Fase 1. Retirar la regla antigua. 2026-11-09 09:22:45 UTC
+aws ec2 revoke-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --protocol tcp --port 22 --cidr 172.166.151.115/32
+True
+exit=0
+Reglas DESPUÉS de la fase 1:
+icmp	-1	grupo sg-0c12ecd538a29f8d6	ICMP entre nodos
+tcp	22	172.166.151.114/32	sin descripción
+tcp	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+tcp	2377	grupo sg-0c12ecd538a29f8d6	Swarm 2377 TCP
+tcp	7946	grupo sg-0c12ecd538a29f8d6	Swarm 7946 TCP
+tcp	80	0.0.0.0/0	HTTP
+tcp	8080	0.0.0.0/0	Web 8080
+udp	4789	grupo sg-0c12ecd538a29f8d6	Swarm 4789 UDP
+udp	7946	grupo sg-0c12ecd538a29f8d6	Swarm 7946 UDP
+Diferencias con el estado inicial (< antes, > después):
+2c2
+< tcp	22	172.166.151.115/32	sin descripción
+---
+> tcp	22	172.166.151.114/32	sin descripción
+
+$ Fase 2. bash scripts/actualizar-ips.sh. 2026-11-09 09:22:54 UTC
+manager-g5	i-0e6ebf2af63facc60	172.31.28.10	107.23.128.135
+worker1-g5	i-066a1ad3b7a8e0db9	172.31.17.168	3.87.79.9
+worker2-g5	i-0ed6d9c9957251a18	172.31.29.192	98.89.45.93
+worker3-g5	i-0446409b26cf0a662	172.31.31.183	54.243.27.22
+La IP pública de manager-g5 ha cambiado: 54.197.30.8 → 107.23.128.135
+Configuración actualizada: /workspaces/reto4-cloud-G5/config/ssh.local
+exit=0
+HostName de manager-g5 en config/ssh.local: 107.23.128.135
+Conexión con los alias de ~/.ssh/config:
+manager-g5: manager-g5
+worker1-g5: worker1-g5
+worker2-g5: worker2-g5
+worker3-g5: worker3-g5
+
+$ Fase 3. Comprobación previa, solo lectura. 2026-11-09 09:23:11 UTC
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/enrique_reto4.pub
+Clave: 256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+manager-g5	ausente	claves=2	vockey=1	permisos=600
+worker1-g5	ausente	claves=2	vockey=1	permisos=600
+worker2-g5	ausente	claves=2	vockey=1	permisos=600
+worker3-g5	ausente	claves=2	vockey=1	permisos=600
+salida=2
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/alexandra_reto4.pub
+Clave: 256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+manager-g5	ausente	claves=2	vockey=1	permisos=600
+worker1-g5	ausente	claves=2	vockey=1	permisos=600
+worker2-g5	ausente	claves=2	vockey=1	permisos=600
+worker3-g5	ausente	claves=2	vockey=1	permisos=600
+salida=2
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/ibai_reto4.pub
+Clave: 256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+manager-g5	ausente	claves=2	vockey=1	permisos=600
+worker1-g5	ausente	claves=2	vockey=1	permisos=600
+worker2-g5	ausente	claves=2	vockey=1	permisos=600
+worker3-g5	ausente	claves=2	vockey=1	permisos=600
+salida=2
+
+$ Fase 3. Huellas de authorized_keys ANTES de instalar, en cada nodo. 2026-11-09 09:23:42 UTC
+manager-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+manager-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker1-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker1-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker2-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker2-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker3-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker3-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+
+$ Fase 3. Instalación autorizada. 2026-11-09 09:24:00 UTC
+$ bash scripts/instalar-clave-publica.sh --instalar terraform/claves/enrique_reto4.pub
+Clave: 256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+manager-g5	ausente	claves=2	vockey=1	permisos=600
+worker1-g5	ausente	claves=2	vockey=1	permisos=600
+worker2-g5	ausente	claves=2	vockey=1	permisos=600
+worker3-g5	ausente	claves=2	vockey=1	permisos=600
+manager-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102409
+worker1-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102411
+worker2-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102413
+worker3-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102415
+manager-g5	presente	claves=3	vockey=1	permisos=600
+worker1-g5	presente	claves=3	vockey=1	permisos=600
+worker2-g5	presente	claves=3	vockey=1	permisos=600
+worker3-g5	presente	claves=3	vockey=1	permisos=600
+salida=0
+$ bash scripts/instalar-clave-publica.sh --instalar terraform/claves/alexandra_reto4.pub
+Clave: 256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+manager-g5	ausente	claves=3	vockey=1	permisos=600
+worker1-g5	ausente	claves=3	vockey=1	permisos=600
+worker2-g5	ausente	claves=3	vockey=1	permisos=600
+worker3-g5	ausente	claves=3	vockey=1	permisos=600
+manager-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102432
+worker1-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102435
+worker2-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102437
+worker3-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102440
+manager-g5	presente	claves=4	vockey=1	permisos=600
+worker1-g5	presente	claves=4	vockey=1	permisos=600
+worker2-g5	presente	claves=4	vockey=1	permisos=600
+worker3-g5	presente	claves=4	vockey=1	permisos=600
+salida=0
+$ bash scripts/instalar-clave-publica.sh --instalar terraform/claves/ibai_reto4.pub
+Clave: 256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+manager-g5	ausente	claves=4	vockey=1	permisos=600
+worker1-g5	ausente	claves=4	vockey=1	permisos=600
+worker2-g5	ausente	claves=4	vockey=1	permisos=600
+worker3-g5	ausente	claves=4	vockey=1	permisos=600
+manager-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102456
+worker1-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102458
+worker2-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102501
+worker3-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-102503
+manager-g5	presente	claves=5	vockey=1	permisos=600
+worker1-g5	presente	claves=5	vockey=1	permisos=600
+worker2-g5	presente	claves=5	vockey=1	permisos=600
+worker3-g5	presente	claves=5	vockey=1	permisos=600
+salida=0
+
+$ Fase 3. Verificación tras la instalación. 2026-11-09 09:25:22 UTC
+manager-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+manager-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+manager-g5  256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+manager-g5  256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+manager-g5  256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+worker1-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker1-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker1-g5  256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+worker1-g5  256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+worker1-g5  256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+worker2-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker2-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker2-g5  256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+worker2-g5  256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+worker2-g5  256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+worker3-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker3-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker3-g5  256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+worker3-g5  256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+worker3-g5  256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+Por nodo: líneas de authorized_keys, huellas repetidas, material repetido y permisos:
+manager-g5 lineas=5 huellas_repetidas=0 material_repetido=0 permisos=700 600 
+worker1-g5 lineas=5 huellas_repetidas=0 material_repetido=0 permisos=700 600 
+worker2-g5 lineas=5 huellas_repetidas=0 material_repetido=0 permisos=700 600 
+worker3-g5 lineas=5 huellas_repetidas=0 material_repetido=0 permisos=700 600 
+¿Siguen todas las huellas anteriores? (líneas de antes que faltan ahora; vacío = todas siguen):
+(fin)
+Huellas nuevas en cada nodo:
+manager-g5 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4
+manager-g5 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4
+manager-g5 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4
+worker1-g5 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4
+worker1-g5 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4
+worker1-g5 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4
+worker2-g5 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4
+worker2-g5 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4
+worker2-g5 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4
+worker3-g5 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4
+worker3-g5 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4
+worker3-g5 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/enrique_reto4.pub
+manager-g5	presente	claves=5	vockey=1	permisos=600
+worker1-g5	presente	claves=5	vockey=1	permisos=600
+worker2-g5	presente	claves=5	vockey=1	permisos=600
+worker3-g5	presente	claves=5	vockey=1	permisos=600
+salida=0
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/alexandra_reto4.pub
+manager-g5	presente	claves=5	vockey=1	permisos=600
+worker1-g5	presente	claves=5	vockey=1	permisos=600
+worker2-g5	presente	claves=5	vockey=1	permisos=600
+worker3-g5	presente	claves=5	vockey=1	permisos=600
+salida=0
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/ibai_reto4.pub
+manager-g5	presente	claves=5	vockey=1	permisos=600
+worker1-g5	presente	claves=5	vockey=1	permisos=600
+worker2-g5	presente	claves=5	vockey=1	permisos=600
+worker3-g5	presente	claves=5	vockey=1	permisos=600
+salida=0
+
+$ Fase 4. Regla de los integrantes. 2026-11-09 09:26:20 UTC
+IP compartida de Enrique, Alexandra e Ibai: 88.14.93.201, comunicada por Cristina. Desde el Codespace no se puede comprobar; cada integrante debe confirmarla con curl -s https://checkip.amazonaws.com
+Comprobación del formato: IPv4 pública = True
+aws ec2 authorize-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --ip-permissions 'IpProtocol=tcp,FromPort=22,ToPort=22,IpRanges=[{CidrIp=88.14.93.201/32,Description="Enrique, Alexandra e Ibai, temporal para B1"}]'
+sgr-01b490492a4242d7a	tcp	22	88.14.93.201/32	Enrique, Alexandra e Ibai, temporal para B1
+exit=0
+Reglas DESPUÉS de la fase 4:
+icmp	-1	grupo sg-0c12ecd538a29f8d6	ICMP entre nodos
+tcp	22	172.166.151.114/32	sin descripción
+tcp	22	88.14.93.201/32	Enrique, Alexandra e Ibai, temporal para B1
+tcp	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+tcp	2377	grupo sg-0c12ecd538a29f8d6	Swarm 2377 TCP
+tcp	7946	grupo sg-0c12ecd538a29f8d6	Swarm 7946 TCP
+tcp	80	0.0.0.0/0	HTTP
+tcp	8080	0.0.0.0/0	Web 8080
+udp	4789	grupo sg-0c12ecd538a29f8d6	Swarm 4789 UDP
+udp	7946	grupo sg-0c12ecd538a29f8d6	Swarm 7946 UDP
+Diferencias con el estado inicial de hoy (< antes, > después):
+2c2,3
+< tcp	22	172.166.151.115/32	sin descripción
+---
+> tcp	22	172.166.151.114/32	sin descripción
+> tcp	22	88.14.93.201/32	Enrique, Alexandra e Ibai, temporal para B1
+¿Alguna regla SSH abierta a 0.0.0.0/0? no
+
+$ Fase 5. Verificación desde el Codespace, solo lectura: bash scripts/comprobar-laboratorio.sh. 2026-11-09 09:26:35 UTC
+Aviso esperado: el script espera una sola regla SSH, la del Codespace, y propone retirar la temporal de los integrantes. No se ejecuta esa propuesta.
+Máquina: codespaces-8d43b2. Hora: 2026-11-09T09:26:35+00:00
+IP pública actual del Codespace: 172.166.151.114
+
+1. Instancias EC2
+manager-g5	i-0e6ebf2af63facc60	running	ok/ok	172.31.28.10	107.23.128.135	correcto
+worker1-g5	i-066a1ad3b7a8e0db9	running	ok/ok	172.31.17.168	3.87.79.9	correcto
+worker2-g5	i-0ed6d9c9957251a18	running	ok/ok	172.31.29.192	98.89.45.93	correcto
+worker3-g5	i-0446409b26cf0a662	running	ok/ok	172.31.31.183	54.243.27.22	correcto
+
+2. Regla SSH del grupo de seguridad reto4-cloud-g5
+Grupo: sg-0c12ecd538a29f8d6. Origen SSH actual: 172.166.151.114/32 88.14.93.201/32
+La regla debe limitarse a 172.166.151.114/32. Comandos propuestos, que NO se han ejecutado y requieren autorización:
+
+  aws ec2 authorize-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --protocol tcp --port 22 --cidr 172.166.151.114/32
+  aws ec2 revoke-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --protocol tcp --port 22 --cidr 88.14.93.201/32
+
+Después, los planes de Terraform deben usar: -var ssh_cidr=172.166.151.114/32
+
+3. Web por las IP públicas
+107.23.128.135 HTTP 200 version=1.0 contenedor=0ec98a04e2fe 
+3.87.79.9 HTTP 200 version=1.0 contenedor=0ec98a04e2fe 
+98.89.45.93 HTTP 200 version=1.0 contenedor=ab9d99e974f3 
+54.243.27.22 HTTP 200 version=1.0 contenedor=0ec98a04e2fe 
+
+4. SSH y Swarm, sin cambiar nada
+manager-g5
+2026-11-09T10:26:43+01:00
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Reachable
+worker2-g5 Ready Active Leader
+worker3-g5 Ready Active 
+reto4_web 4/4 innnx/reto4-f1:1.0
+red-g5 ingress=true MTU=1450
+red-app-g5 ingress=false MTU=1450
+
+Resultado: falta corregir algo: ver arriba
+exit=2
+
+$ Configuración de sshd efectiva en los cuatro nodos, solo lectura
+manager-g5 permitrootlogin no pubkeyauthentication yes passwordauthentication no 
+worker1-g5 permitrootlogin no pubkeyauthentication yes passwordauthentication no 
+worker2-g5 permitrootlogin no pubkeyauthentication yes passwordauthentication no 
+worker3-g5 permitrootlogin no pubkeyauthentication yes passwordauthentication no 
+
+$ Fase 6. Evidencia conforme generada. 2026-11-09 09:27:47 UTC
+python3 -I scripts/capturas-norma.py --autor "Claude Code, por encargo de Cristina (Lq922466)" --solo '^B1-clave-nodos$'
+B1-clave-nodos: CORRECTO. Las claves de Enrique, Alexandra e Ibai están en los cuatro nodos. Se conservan vockey y la clave del Codespace.
+
+Resumen del estado al terminar:
+- Regla SSH del Codespace: 172.166.151.114/32 (sgr-0983f669c504b94f8). Retirada 172.166.151.115/32.
+- Regla temporal de los integrantes: 88.14.93.201/32 (sgr-01b490492a4242d7a). Hay que retirarla al terminar sus pruebas.
+- Claves instaladas en los cuatro nodos: Enrique, Alexandra e Ibai, sin duplicados. Siguen vockey y reto4-g5-codespace.
+- Copias previas en cada nodo: ~/.ssh/authorized_keys.antes-20261109-*.
+- Swarm: 4 nodos Ready/Active, reto4_web 4/4. El líder es worker2-g5, sin ningún cambio hecho hoy en Swarm.
+- Pendiente: la prueba de cada integrante desde su propio equipo, y retirar la regla temporal.
+
+$ Fase 7. Pruebas de los integrantes y comprobación en los nodos, solo lectura. 09:40 UTC
+Cristina facilitó purebas_ssh.docx, con una captura de Enrique, otra de Alexandra y otra de Ibai, que no se versiona. Las imágenes se
+copiaron sin cambios a evidencias/capturas-integrantes/, con el mismo SHA-256.
+Lo que muestran: ssh -i "$env:USERPROFILE\.ssh\NOMBRE_reto4" ubuntu@107.23.128.135 desde PowerShell, frase de paso de la clave, y
+whoami, hostname y date -Is en manager-g5. Fechas de date -Is: 10:35:26 (Enrique), 10:37:03 (Alexandra) y 10:37:45 (Ibai), hora de Madrid.
+Las tres claves están en el mismo perfil de Windows, C:\Users\Alumno\.ssh\. Ninguna captura incluye el comentario con la prueba, el resultado y el autor.
+
+Accesos aceptados con la huella de cada integrante en /var/log/auth.log de cada nodo:
+manager-g5: Enrique=1 Alexandra=1 Ibai=1
+worker1-g5: Enrique=0 Alexandra=0 Ibai=0
+worker2-g5: Enrique=0 Alexandra=0 Ibai=0
+worker3-g5: Enrique=0 Alexandra=0 Ibai=0
+Líneas de manager-g5, con la IP de origen oculta:
+Nov  9 10:34:22 manager-g5 sshd[35058]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys
+Nov  9 10:36:44 manager-g5 sshd[35757]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs
+Nov  9 10:37:41 manager-g5 sshd[36053]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8
+Intentos fallidos desde la IP de los integrantes: 0.
+Captura conforme: B1-registro-manager, CORRECTO. Los workers no registran ningún acceso con estas claves: falta esa prueba.
+
+$ Fase 8. Clave de Cristina: comprobación previa, solo lectura. 2026-11-09 09:47:52 UTC
+Cristina entregó cristina_reto4.pub. Clave Ed25519 válida, distinta de las demás, de reto4-g5-codespace y de vockey. Se retiró su salto de línea de Windows sin cambiar la huella.
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/cristina_reto4.pub
+Clave: 256 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4 (ED25519)
+manager-g5	ausente	claves=5	vockey=1	permisos=600
+worker1-g5	ausente	claves=5	vockey=1	permisos=600
+worker2-g5	ausente	claves=5	vockey=1	permisos=600
+worker3-g5	ausente	claves=5	vockey=1	permisos=600
+salida=2
+
+$ Fase 9. Instalación de la clave de Cristina, autorizada por ella. 2026-11-09 09:54:19 UTC
+Huella esperada: SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Huella del archivo: SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Coinciden
+Huellas de authorized_keys ANTES:
+manager-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+manager-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+manager-g5  256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+manager-g5  256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+manager-g5  256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+worker1-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker1-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker1-g5  256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+worker1-g5  256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+worker1-g5  256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+worker2-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker2-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker2-g5  256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+worker2-g5  256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+worker2-g5  256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+worker3-g5  2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+worker3-g5  256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker3-g5  256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+worker3-g5  256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+worker3-g5  256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+$ bash scripts/instalar-clave-publica.sh --instalar terraform/claves/cristina_reto4.pub
+Clave: 256 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4 (ED25519)
+manager-g5	ausente	claves=5	vockey=1	permisos=600
+worker1-g5	ausente	claves=5	vockey=1	permisos=600
+worker2-g5	ausente	claves=5	vockey=1	permisos=600
+worker3-g5	ausente	claves=5	vockey=1	permisos=600
+manager-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-105447
+worker1-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-105449
+worker2-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-105451
+worker3-g5: instalada. Copia previa: /home/ubuntu/.ssh/authorized_keys.antes-20261109-105453
+manager-g5	presente	claves=6	vockey=1	permisos=600
+worker1-g5	presente	claves=6	vockey=1	permisos=600
+worker2-g5	presente	claves=6	vockey=1	permisos=600
+worker3-g5	presente	claves=6	vockey=1	permisos=600
+salida=0
+$ Verificación tras instalar la clave de Cristina. 2026-11-09 09:55:11 UTC
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/cristina_reto4.pub
+Clave: 256 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4 (ED25519)
+manager-g5	presente	claves=6	vockey=1	permisos=600
+worker1-g5	presente	claves=6	vockey=1	permisos=600
+worker2-g5	presente	claves=6	vockey=1	permisos=600
+worker3-g5	presente	claves=6	vockey=1	permisos=600
+salida=0
+Por nodo: líneas, huellas repetidas, material repetido y permisos:
+manager-g5 lineas=6 huellas_repetidas=0 material_repetido=0 permisos=700 600 
+worker1-g5 lineas=6 huellas_repetidas=0 material_repetido=0 permisos=700 600 
+worker2-g5 lineas=6 huellas_repetidas=0 material_repetido=0 permisos=700 600 
+worker3-g5 lineas=6 huellas_repetidas=0 material_repetido=0 permisos=700 600 
+Huellas anteriores que faltan ahora (vacío = siguen todas):
+(fin)
+Claves nuevas:
+manager-g5 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4
+worker1-g5 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4
+worker2-g5 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4
+worker3-g5 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4
+Claves por nodo y comentario:
+manager-g5: EnriZx2-reto4 alexguerth-reto4 cristina-reto4 ibai-reto4 reto4-g5-codespace vockey
+worker1-g5: EnriZx2-reto4 alexguerth-reto4 cristina-reto4 ibai-reto4 reto4-g5-codespace vockey
+worker2-g5: EnriZx2-reto4 alexguerth-reto4 cristina-reto4 ibai-reto4 reto4-g5-codespace vockey
+worker3-g5: EnriZx2-reto4 alexguerth-reto4 cristina-reto4 ibai-reto4 reto4-g5-codespace vockey
+Captura conforme regenerada: B1-clave-nodos, con las claves de los cuatro integrantes. 2026-11-09 09:56:21 UTC
+# Prueba: Claves de los cuatro integrantes autorizadas en los cuatro nodos, con vockey de reserva
+# Resultado: CORRECTO. Las claves de Cristina, Enrique, Alexandra e Ibai están en los cuatro nodos. Se conservan vockey y la clave del Codespace.
+
+$ Fase 10. Pruebas de Cristina y comprobación en los nodos, solo lectura. 10:42 UTC
+Cristina facilitó la versión actualizada de purebas_ssh.docx, que no se versiona: 9 imágenes. Las 3 primeras son idénticas (SHA-256) a las de
+Enrique, Alexandra e Ibai ya incorporadas. Las 6 de Cristina se copiaron sin cambios a evidencias/capturas-integrantes/:
+  Test-Path del archivo config (True); ssh -G manager-g5, que resuelve 107.23.128.135 e identityfile ~/.ssh/cristina_reto4;
+  ssh manager-g5 / worker1-g5 / worker2-g5 / worker3-g5 con whoami, hostname y date -Is: 11:36:24, 11:37:38, 11:38:31 y 11:39:31 (Madrid).
+  Huellas de servidor aceptadas en los workers: 2j/3XgX7…, j6Yx2EXL… y TI7cmQM8…, que coinciden con las verificadas en los nodos.
+Accesos aceptados por huella y nodo:
+manager-g5: Cristina=6 Enrique=1 Alexandra=1 Ibai=1
+worker1-g5: Cristina=1 Enrique=0 Alexandra=0 Ibai=0
+worker2-g5: Cristina=1 Enrique=0 Alexandra=0 Ibai=0
+worker3-g5: Cristina=1 Enrique=0 Alexandra=0 Ibai=0
+Accesos con la clave de Cristina, con la IP de origen oculta:
+Nov  9 11:23:50 manager-g5 sshd[51315]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:32:16 manager-g5 sshd[53604]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:36:09 manager-g5 sshd[54662]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:37:25 manager-g5 sshd[55060]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:38:18 manager-g5 sshd[55353]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:39:09 manager-g5 sshd[55623]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:37:36 worker1-g5 sshd[42931]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:38:23 worker2-g5 sshd[43367]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:39:16 worker3-g5 sshd[48837]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+En los workers, el origen es la IP privada del manager, por el salto. Fallos de autenticación hoy en los cuatro nodos: 0.
+Capturas conformes: B1-registro-cristina y B1-registro-manager (cuatro integrantes), las dos CORRECTO.
+Pendiente: Enrique, Alexandra e Ibai no registran ningún acceso en los workers.

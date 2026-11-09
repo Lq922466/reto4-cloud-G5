@@ -1,0 +1,25 @@
+# Evidencia B1-claves · Criterio B1 · RETO 4 CLOUD, Grupo 5
+# Prueba: Claves autorizadas en los cuatro nodos
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 10:18:17 CET] ubuntu@manager-g5:~$ ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+[2026-11-06 10:18:17 CET] ubuntu@manager-g5:~$ exit
+exit
+[2026-11-06 10:18:19 CET] ubuntu@worker1-g5:~$ ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+[2026-11-06 10:18:19 CET] ubuntu@worker1-g5:~$ exit
+exit
+[2026-11-06 10:18:21 CET] ubuntu@worker2-g5:~$ ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+[2026-11-06 10:18:21 CET] ubuntu@worker2-g5:~$ exit
+exit
+[2026-11-06 10:18:23 CET] ubuntu@worker3-g5:~$ ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+[2026-11-06 10:18:23 CET] ubuntu@worker3-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. Muestra las claves reales. Solo consta la clave del Codespace y vockey: faltan las de cada integrante.

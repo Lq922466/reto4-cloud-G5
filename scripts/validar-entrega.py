@@ -14,7 +14,7 @@ DOCS = [
     "evidencias/INDICE.md", "evidencias/capturas-terminal/INDICE.md", "evidencias/auditoria/INFORME.md",
     "evidencias/auditoria/E4-E8.md", "entrega/INFORME-F9-estructura.md", "entrega/PENDIENTES.md",
     "entrega/DEFENSA.md", "entrega/CHECKLIST-FINAL.md", "entrega/CONTRASTE-GUIA-RUBRICA.md", "entrega/PROCEDIMIENTO-CAPTURAS.md",
-    "entrega/PLAN-C3-E4-E8.md", "config/README.md", "evidencias/capturas-conformes/INDICE.md", "practica-individual/README.md",
+    "entrega/PLAN-C3-E4-E8.md", "entrega/PROCEDIMIENTO-CLAVES.md", "config/README.md", "evidencias/capturas-conformes/INDICE.md", "practica-individual/README.md",
 ]
 AGRUPADAS = ("capturas-terminal", "capturas-conformes", "F3-despliegue", "F3-actualizacion", "F4-E2", "F4-E3", "F4-E6")
 

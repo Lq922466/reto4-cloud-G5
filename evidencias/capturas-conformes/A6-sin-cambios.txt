@@ -1,0 +1,9 @@
+# Evidencia A6-sin-cambios · Criterio A6 · RETO 4 CLOUD, Grupo 5
+# Prueba: Plan posterior al cambio, sin aplicar nada
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 10:52:35 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ terraform -chdir=terraform plan -no-color -compact-warnings -input=false -lock=false -state=/workspaces/reto4-revision.Geeumo/terraform/terraform.tfstate -var-file=/workspaces/reto4-revision.Geeumo/terraform/reto4-local.auto.tfvars.json -var ssh_cidr=$(curl -s https://checkip.amazonaws.com)/32 | grep -E '^No changes|^Plan:|^Changes to Outputs'
+Changes to Outputs:
+[2026-11-06 10:52:42 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: NO CORRECTO. falta: No changes|Plan: 0 to add, 0 to change, 0 to destroy

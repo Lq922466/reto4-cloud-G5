@@ -30,7 +30,7 @@ Evento y objetivo del reto, arquitectura en una frase y estado final con sus lí
 
 ## 2. Equipo y gestión (F1, F2, F11)
 
-Procede de [GESTION.md](../GESTION.md). Debe completarlo el grupo: reparto, seguimiento semanal, Trello y uso de IA.
+Procede de [GESTION.md](../GESTION.md), que ya recoge la organización acordada del equipo. Debe completarlo el grupo con el trabajo real de cada integrante, su seguimiento semanal y su reflexión.
 
 | Figura | Archivo |
 | --- | --- |
@@ -38,7 +38,7 @@ Procede de [GESTION.md](../GESTION.md). Debe completarlo el grupo: reparto, segu
 | Historial y PR, por terminal | `CT/F2-historial.png` |
 | Colaboradores en la web | `[USUARIO 4]` GitHub → Settings → Collaborators |
 | PR #1 en la web | `[USUARIO 5]` GitHub → Pull requests → PR #1, Conversation y Commits |
-| Tablero de Trello | `[POR COMPLETAR]`, si existe |
+| Tablero de Trello del grupo | `[POR COMPLETAR]`. El enlace de invitación no debe aparecer en la captura |
 
 ## 3. Arquitectura (F8)
 

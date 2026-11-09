@@ -16,7 +16,7 @@ Cada integrante:
 1. Crea `practica-individual/CUENTA_DE_GITHUB/`.
 2. Copia ahí la [plantilla](PLANTILLA.md) como `README.md` y la completa con su propio trabajo.
 3. Añade sus capturas reales en esa misma carpeta.
-4. Lo sube desde su cuenta, con una rama y una pull request propias, como explica [GESTION.md](../GESTION.md#5-github).
+4. Lo sube desde su cuenta, con una rama y una pull request propias, como explica [GESTION.md](../GESTION.md#github).
 
 ## Reglas
 

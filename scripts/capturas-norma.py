@@ -45,6 +45,9 @@ SALIDA = ROOT / "evidencias/capturas-conformes"
 # El prompt lo genera el propio shell, en cada línea: hora, usuario y hostname reales.
 PS1 = r"[\D{%F %T %Z}] \u@\h:\w\$ "
 PROMPT = re.compile(r"\[\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [^\]]+\] \S+@\S+:\S*[$#] $")
+# El prompt demuestra en qué máquina se está, pero el comando escrito no demuestra nada: si se evaluara,
+# un patrón como el de «grep 'No changes'» daría por correcta una salida vacía.
+ORDEN = re.compile(r"(?m)^(\[\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [^\]]+\] \S+@\S+:\S*[$#] ).*$")
 ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]|\x1b[()][A-Z0-9]|\x1b\][^\x07]*\x07")
 COLUMNAS, FILAS_MAX = 150, 54
 
@@ -71,6 +74,15 @@ AWS_NODOS = "--region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worke
 AWS_TABLA = ("aws ec2 describe-instances " + AWS_NODOS +
              " --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,InstanceType,State.Name,PrivateIpAddress,PublicIpAddress]' --output table")
 NODOS = ["manager-g5", "worker1-g5", "worker2-g5", "worker3-g5"]
+# Claves públicas de los integrantes (B1), en terraform/claves/NOMBRE_reto4.pub. La huella identifica
+# cada clave aunque cambie su comentario.
+HUELLAS = {
+    "enrique": "SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys",
+    "alexandra": "SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs",
+    "ibai": "SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8",
+    "cristina": "SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA",
+}
+PRIVADAS = " ".join(f"terraform/claves/{n}_reto4" for n in HUELLAS)
 ESTADO_SERVICIO = ["docker node ls", "docker service ls", "docker service ps --filter desired-state=running reto4_web"]
 SONDA = ("local", ['tail -n 6 "$SONDA"'])
 CUATRO_LISTOS = r"(?s)manager-g5\s+Ready\s+Active.*worker1-g5\s+Ready\s+Active.*worker2-g5\s+Ready\s+Active.*worker3-g5\s+Ready\s+Active"
@@ -90,6 +102,15 @@ def instantanea(ident, criterio, prueba, esperado, correcto, nodo="manager-g5", 
 
 def replicas(n, imagen="innnx/reto4-f1:1.0"):
     return [rf"reto4_web\s+replicated\s+{n}/{n}\s+{re.escape(imagen)}"]
+
+
+def en_cada_nodo(patron):
+    """Exige el patrón en la salida de cada nodo, sin que lo que responde un nodo cuente para otro."""
+    partes = []
+    for nodo, siguiente in zip(NODOS, NODOS[1:] + [None]):
+        limite = f"(?!@{siguiente}:)" if siguiente else ""
+        partes.append(f"@{nodo}:(?:{limite}.)*?{patron}")
+    return "(?s)" + ".*?".join(partes)
 
 
 CATALOGO = [
@@ -152,7 +173,7 @@ CATALOGO = [
             ["public_ip", "private_ip", '"id"'],
             "La salida nodes muestra IP pública, IP privada e ID de cada nodo. Las IP públicas son las del último apply."),
     entrada("A6-sin-cambios", "A6", "Plan posterior al cambio, sin aplicar nada",
-            [("local", [f"terraform -chdir=terraform plan -no-color -compact-warnings -input=false -state={TF_ESTADO}/terraform.tfstate -var-file={TF_ESTADO}/reto4-local.auto.tfvars.json -var ssh_cidr=$(curl -s https://checkip.amazonaws.com)/32 | grep -E '^No changes|^Plan:'"])],
+            [("local", [f"terraform -chdir=terraform plan -no-color -compact-warnings -input=false -lock=false -state={TF_ESTADO}/terraform.tfstate -var-file={TF_ESTADO}/reto4-local.auto.tfvars.json -var ssh_cidr=$(curl -s https://checkip.amazonaws.com)/32 | grep -E '^No changes|^Plan:|^Changes to Outputs'"])],
             [r"No changes|Plan: 0 to add, 0 to change, 0 to destroy"],
             "El plan no propone cambios, tampoco con las variables de disco."),
     entrada("A4-arranque", "A4", "Resultado del arranque en los cuatro nodos",
@@ -162,7 +183,41 @@ CATALOGO = [
     entrada("B1-claves", "B1", "Claves autorizadas en los cuatro nodos",
             [(n, ["ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100"]) for n in NODOS],
             ["reto4-g5-codespace"],
-            "Muestra las claves reales. Solo consta la clave del Codespace y vockey: faltan las de cada integrante."),
+            "Muestra las claves autorizadas realmente en los cuatro nodos."),
+    # ---------- Claves de los integrantes (B1). Se ejecutan tras subirlas a GitHub, instalarlas y
+    # que cada integrante entre con la suya. Cada B1-registro-* se hace tras la prueba de esa persona.
+    entrada("B1-repositorio", "B1", "Claves públicas de los cuatro integrantes en GitHub, con las privadas excluidas de Git",
+            [("local", ["git fetch --quiet origin", "git rev-parse --abbrev-ref '@{u}'",
+                        "git ls-tree -r --name-only '@{u}' -- terraform/claves",
+                        "for n in " + " ".join(HUELLAS) + "; do git show \"@{u}:terraform/claves/${n}_reto4.pub\" | ssh-keygen -lf -; done",
+                        "echo \"Archivos de terraform/claves en GitHub que no son .pub: $(git ls-tree -r --name-only '@{u}' -- terraform/claves | grep -cv '[.]pub$')\"",
+                        f"git check-ignore {PRIVADAS}"])],
+            [r"(?m)^origin/\S+$"]
+            + [rf"(?m)^terraform/claves/{n}_reto4\.pub$" for n in HUELLAS]
+            + [rf"{re.escape(h)} .*\(ED25519\)" for h in HUELLAS.values()]
+            + [r"(?m)^Archivos de terraform/claves en GitHub que no son \.pub: 0$"]
+            + [rf"(?m)^terraform/claves/{n}_reto4$" for n in HUELLAS],
+            "Las cuatro claves públicas Ed25519 están en la rama de GitHub, en /terraform, y Git excluye las privadas.",
+            grupo="claves"),
+    entrada("B1-clave-nodos", "B1", "Claves de los cuatro integrantes autorizadas en los cuatro nodos, con vockey de reserva",
+            [(n, ["ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100", "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"]) for n in NODOS],
+            [en_cada_nodo(re.escape(h)) for h in HUELLAS.values()]
+            + [en_cada_nodo("vockey"), en_cada_nodo("reto4-g5-codespace"), en_cada_nodo(r"600 /home/ubuntu/\.ssh/authorized_keys")],
+            "Las claves de Cristina, Enrique, Alexandra e Ibai están en los cuatro nodos. Se conservan vockey y la clave del Codespace.",
+            grupo="claves"),
+    *[entrada(f"B1-registro-{n}", "B1", f"Registro de cada nodo: acceso aceptado con la clave de {n.capitalize()}",
+              [(nodo, [f"grep -F '{h}' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'"]) for nodo in NODOS],
+              [en_cada_nodo(rf"Accepted publickey for ubuntu [^\n]*{re.escape(h)}")],
+              f"Cada nodo registra un acceso aceptado con la clave de {n.capitalize()}, que antes hace su propia prueba.",
+              grupo="claves")
+      for n, h in HUELLAS.items()],
+    # Solo manager-g5: acredita las pruebas de los integrantes en el manager, antes de que entren a los workers.
+    entrada("B1-registro-manager", "B1", "Registro de manager-g5: acceso aceptado con la clave de cada integrante",
+            [("manager-g5", ["grep -F 'Accepted publickey' /var/log/auth.log | grep -F " + " ".join(f"-e '{h}'" for h in HUELLAS.values())
+                             + " | sed -E 's/from [0-9.]+ port [0-9]+/from [IP oculta]/'"])],
+            [rf"Accepted publickey for ubuntu [^\n]*{re.escape(h)}" for h in HUELLAS.values()],
+            "manager-g5 registra un acceso aceptado con la clave de cada integrante: Cristina, Enrique, Alexandra e Ibai.",
+            grupo="claves"),
     entrada("B2-conexion", "B2", "Conexión con el nombre corto",
             [("manager-g5", ["hostname"]), ("worker3-g5", ["hostname", "hostname -I"])],
             ["ubuntu@manager-g5", "ubuntu@worker3-g5"],
@@ -188,7 +243,7 @@ CATALOGO = [
             [("manager-g5", ["docker --version", "for ip in 172.31.17.168 172.31.29.192 172.31.31.183; do ping -c 2 -W 2 $ip | tail -n 3; done"])],
             ["Docker version", r"172\.31\.31\.183 ping statistics", r" 0% packet loss"],
             "Docker funciona, y el ping por IP privada no pierde paquetes."),
-    entrada("C2-clúster", "C2", "Clúster por IP privada y MTU 1450",
+    entrada("C2-cluster", "C2", "Clúster por IP privada y MTU 1450",
             [("manager-g5", ['docker info --format "NodeAddr={{.Swarm.NodeAddr}}"', 'docker node inspect --format "{{.Description.Hostname}} {{.Status.Addr}}" manager-g5 worker1-g5 worker2-g5 worker3-g5', 'docker network inspect --format "{{.Name}} driver={{.Driver}} ingress={{.Ingress}} MTU={{index .Options \\"com.docker.network.driver.mtu\\"}}" red-g5'])],
             [r"NodeAddr=172\.31\.", r"red-g5 driver=overlay ingress=true MTU=1450"],
             "El clúster usa IP privadas, y la red ingress red-g5 tiene MTU 1450."),
@@ -247,6 +302,9 @@ def comprobar_catalogo():
         if e["id"] in identificadores:
             errores.append(f"{e['id']}: repetido")
         identificadores.add(e["id"])
+        # El identificador forma el título de la ventana: con acentos, import no la encuentra y se queda esperando.
+        if not e["id"].isascii():
+            errores.append(f"{e['id']}: el identificador debe ser ASCII")
         for _, comandos in e["pasos"]:
             errores += [f"{e['id']}: comando no permitido: {c}" for c in comandos if PROHIBIDO.search(c)]
     return errores
@@ -341,8 +399,9 @@ def sesion(args):
         texto, correcto = ejecutar_paso(host, comandos, sys.stdout)
         transcripcion += texto
         todo_correcto = todo_correcto and correcto
-    faltan = [r for r in e["esperado"] if not re.search(r, transcripcion)]
-    sobran = [r for r in e["prohibido"] if re.search(r, transcripcion)]
+    salida_real = ORDEN.sub(r"\1", transcripcion[len(cabecera):])
+    faltan = [r for r in e["esperado"] if not re.search(r, salida_real)]
+    sobran = [r for r in e["prohibido"] if re.search(r, salida_real)]
     if todo_correcto and not faltan and not sobran:
         estado, detalle = "CORRECTO", e["correcto"]
     else:
@@ -420,7 +479,7 @@ def capturar(e, args, salida):
             time.sleep(8 if e["web"] else 0.8)
             imagen = salida / f"{e['id']}.png"
             objetivo = ["root"] if e["web"] else [titulo]
-            subprocess.run(["import", "-window", *objetivo, str(imagen)], check=True, env=env)
+            subprocess.run(["import", "-window", *objetivo, str(imagen)], check=True, env=env, timeout=60)
             registro["captura"] = imagen.name
             registro["sha256"] = hashlib.sha256(imagen.read_bytes()).hexdigest()
             if e["web"]:
@@ -442,14 +501,14 @@ def escribir_indice(salida):
               "El resultado se calcula comprobando la salida real. Junto a cada imagen hay un `.txt` con la misma salida.", "",
               "| Evidencia | Criterio | Prueba | Resultado | Autor | Hora (UTC) |", "| --- | --- | --- | --- | --- | --- |"]
     for r in sorted(registros.values(), key=lambda x: x["id"]):
-        lineas.append(f"| [{r['id']}]({r['captura']}) | {r['criterio']} | {r['prueba']} | {r['resultado']}: {r['detalle']} | {r['autor']} | {r['inicio_utc'][:19].replace('T', ' ')} |")
+        lineas.append(f"| [{r['id']}]({r['captura']}) | {r['criterio']} | {r['prueba']} | {r['resultado']}: {r['detalle'].replace('|', chr(92) + '|')} | {r['autor']} | {r['inicio_utc'][:19].replace('T', ' ')} |")
     (salida / "INDICE.md").write_text("\n".join(lineas) + "\n")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--autor", help="Autor real de la comprobación: nunca otra persona")
-    parser.add_argument("--grupo", choices=["local", "laboratorio", "prueba"])
+    parser.add_argument("--grupo", choices=["local", "laboratorio", "prueba", "claves"])
     parser.add_argument("--solo", help="Expresión regular con los identificadores que se quieren capturar")
     parser.add_argument("--salida", default=str(SALIDA))
     parser.add_argument("--continuar", action="store_true", help="No detenerse si una comprobación no es correcta")

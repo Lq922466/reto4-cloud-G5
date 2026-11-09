@@ -33,7 +33,7 @@ cada ítem dentro de su bloque**, así que supone un reparto igual.
 | Lo que suponíamos | Lo que dicen los originales | Consecuencia |
 | --- | --- | --- |
 | Hacía falta un informe Word | Ninguno pide Word. F9 es `PROYECTO.md` | **El Word no es necesario.** Se puede generar si lo queréis, pero no puntúa |
-| Trello y seguimiento semanal por completar | Ninguno los menciona. `GESTION.md` pide reparto, responsables y una breve reflexión | Son opcionales |
+| Trello y seguimiento semanal por completar | Ninguno los menciona. `GESTION.md` pide reparto, responsables y una breve reflexión | Son normas internas del grupo, con seguimiento formal los viernes. No son requisitos del profesor |
 | No hacer demostraciones que detengan instancias | La exposición debe incluir **una demostración en directo de caída de un nodo** | Guion y presentación corregidos |
 | El puerto 8080 sobraba | La Guía pide abrir 80 y 8080 | Correcto: se mantiene |
 | Mis 29 criterios «completados» | Exigen además la captura según la norma | Pasan a 8 listos y 18 con captura por rehacer. F7 baja a parcial |
@@ -54,18 +54,18 @@ Conviene preguntarlas al profesor.
 
 ## Revisión de los 42 criterios
 
-**Quién:** *Claude* sin AWS · *Claude-lab*, solo lectura, con el laboratorio activo · *Claude-aut*, con tu autorización · *Tú* · *Grupo*.
+**Quién:** *Claude* sin AWS · *Claude-lab*, solo lectura, con el laboratorio activo · *Claude-aut*, con autorización de Cristina · *Cristina* · *Grupo*.
 
 ### A · Terraform
 
 | Criterio | Exige, en resumen | Situación | Qué falta | Quién |
 | --- | --- | --- | --- | --- |
 | A1 | Proyecto ordenado con variables | **Listo.** Incluye variables de disco, con los mismos valores | Confirmar con un plan que no hay cambios | Claude-lab |
-| A2 | Manager y workers definidos una vez, con etiquetas | **Demostrado.** `count` en los workers | Captura de la consola de EC2 | Tú |
-| A3 | Grupo de seguridad de mínimos | **Demostrado.** Coincide con la Guía. El 22 entre nodos es necesario para el salto | Captura de reglas en la consola | Tú |
+| A2 | Manager y workers definidos una vez, con etiquetas | **Demostrado.** `count` en los workers | Captura de la consola de EC2 | Cristina |
+| A3 | Grupo de seguridad de mínimos | **Demostrado.** Coincide con la Guía. El 22 entre nodos es necesario para el salto | Captura de reglas en la consola | Cristina |
 | A4 | Arranque con hostname, zona, Docker y claves | **Demostrado.** Ya está la captura conforme del script | Captura conforme del log en los nodos | Claude-lab |
 | A5 | Salidas con IP e ID | **Demostrado** | Captura conforme | Claude-lab |
-| A6 | Validación, plan, cambio y destrucción | **Parcial.** Falta la destrucción y la secuencia en capturas | Decidir con el profesor. Capturar la secuencia | Tú, Claude-aut |
+| A6 | Validación, plan, cambio y destrucción | **Parcial.** Falta la destrucción y la secuencia en capturas | Decidir con el profesor. Capturar la secuencia | Cristina, Claude-aut |
 
 ### B · SSH
 
@@ -83,7 +83,7 @@ Conviene preguntarlas al profesor.
 | --- | --- | --- | --- | --- |
 | C1 | Docker y ping por IP privada | **Demostrado** | Captura conforme | Claude-lab |
 | C2 | Clúster por IP privada y MTU 1450 | **Demostrado** | Captura conforme | Claude-lab |
-| C3 | 4 nodos, manager líder y 3 workers | **Parcial.** Hoy, tres managers con worker1-g5 de líder. El estado inicial solo consta en texto | Decidir si se restaura. Captura conforme | Tú, Claude-aut |
+| C3 | 4 nodos, manager líder y 3 workers | **Parcial.** Hoy, tres managers con worker1-g5 de líder. El estado inicial solo consta en texto | Decidir si se restaura. Captura conforme | Cristina, Claude-aut |
 | C4 | Red overlay propia | **Demostrado** | Captura conforme | Claude-lab |
 
 ### D · Web
@@ -113,16 +113,16 @@ La Guía pide capturas antes, durante y después, con un script consultando la w
 
 | Criterio | Exige, en resumen | Situación | Qué falta | Quién |
 | --- | --- | --- | --- | --- |
-| F1 | Privado, colaboradores y profesor | **Parcial** | Confirmar integrantes e invitar al profesor | Tú |
-| F2 | Commits repartidos y PR de los colaboradores | **Parcial.** Solo Innnx y Codex | Commits y PR reales de cada integrante | Grupo |
+| F1 | Privado, colaboradores y profesor | **Parcial** | Invitar al profesor. Los integrantes ya constan en `GESTION.md` | Cristina |
+| F2 | Commits repartidos y PR de los colaboradores | **Parcial.** Commits de Cristina y de Codex, y una PR de Enrique | Commits y PR reales de Alexandra e Ibai | Grupo |
 | F3 | README | **Listo** | — | — |
-| F4 | Estructura | **Listo** en la rama. `main` solo tiene `.devcontainer` y `terraform` | Integrar la PR antes de la entrega | Tú |
-| F5 | Devcontainer y capturas del Codespace | **Listo.** Captura conforme integrada en `PROYECTO.md` | Opcional: vista del Codespace en el navegador | Tú |
+| F4 | Estructura | **Listo** en la rama. `main` solo tiene `.devcontainer` y `terraform` | Integrar la PR antes de la entrega | Cristina |
+| F5 | Devcontainer y capturas del Codespace | **Listo.** Captura conforme integrada en `PROYECTO.md` | Opcional: vista del Codespace en el navegador | Cristina |
 | F6 | Terraform funcional | **Listo** | — | — |
 | F7 | Scripts comentados | **Listo.** Comentarios ampliados y `scripts/actualizar-ips.sh` | — | — |
 | F8 | Mapa de arquitectura | **Listo** | — | — |
 | F9 | `PROYECTO.md`, paso a paso | **Parcial.** Con los requisitos por fase y capturas conformes locales | Integrar las capturas restantes | Claude-lab |
-| F10 | Capturas según la norma y comentadas | **Parcial.** 11 de 50 conformes, con el [procedimiento](PROCEDIMIENTO-CAPTURAS.md) | Generar las demás y las de consola | Claude-lab, Tú |
+| F10 | Capturas según la norma y comentadas | **Parcial.** 11 de 50 conformes, con el [procedimiento](PROCEDIMIENTO-CAPTURAS.md) | Generar las demás y las de consola | Claude-lab, Cristina |
 | F11 | Reparto, responsables y reflexión | **Parcial.** Borrador sin esos datos | Datos reales del grupo | Grupo |
 | F12 | Sin credenciales, claves ni estado | **Listo.** Revisado todo el historial | Repetir antes de integrar | Claude |
 | F13 | Práctica individual previa | **Pendiente** | Documentación real | Grupo |
@@ -138,25 +138,25 @@ La Guía pide capturas antes, durante y después, con un script consultando la w
 ## Sobre el autor de las capturas
 
 La norma pide indicar el autor en cada captura. Muchas las tomaron Codex o Claude Code, y **no se deben presentar como si las hubiera hecho un
-alumno**. Hay dos opciones honestas: indicar el autor real, o que cada integrante rehaga las suyas ejecutando él mismo los comandos, lo que además
+alumno**. Hay dos opciones honestas: indicar el autor real, o que cada integrante rehaga las suyas ejecutando los comandos en su propia sesión, lo que además
 ayuda con F2 y con la defensa. Conviene preguntar al profesor si admite capturas tomadas con asistentes.
 
 ## Plan propuesto
 
 | # | Paso | Quién | Valor |
 | --- | --- | --- | --- |
-| 1 | Iniciar el laboratorio, renovar credenciales y actualizar la regla SSH | Tú, Claude-aut | Desbloquea casi todo lo técnico |
-| 2 | Preguntar al profesor: `vockey`, topología final, destrucción de A6 y autoría de las capturas | Tú | Evita repetir trabajo |
+| 1 | Iniciar el laboratorio, renovar credenciales y actualizar la regla SSH | Cristina, Claude-aut | Desbloquea casi todo lo técnico |
+| 2 | Preguntar al profesor: `vockey`, topología final, destrucción de A6 y autoría de las capturas | Cristina | Evita repetir trabajo |
 | 3 | **Hecho:** `~/.ssh/config`, `/config`, comentarios, script de IP, variables de disco y procedimiento de capturas | Claude | B2, F7, A1 y F5 |
 | 4 | Rehacer las capturas de solo lectura con prompt real y comentario, e integrarlas en `PROYECTO.md` | Claude-lab | F9, F10 y unos 12 criterios |
 | 5 | Corregir C3 y repetir E4 y E8 según el [plan](PLAN-C3-E4-E8.md), y E2, E3, E6 y E7 con capturas conformes | Claude-aut | 6 criterios. También sirve de ensayo para la caída en directo |
 | 6 | Instalar las claves públicas de cada integrante | Claude-aut | B1 |
 | 7 | Trabajo de cada integrante: PR, `GESTION.md`, práctica y clave | Grupo | F2, F11, F13 y B1 |
-| 8 | Capturas de consola y GitHub, e invitar al profesor | Tú | A2, A3, A6, F1, F5 y F10 |
+| 8 | Capturas de consola y GitHub, e invitar al profesor | Cristina | A2, A3, A6, F1, F5 y F10 |
 | 9 | Ensayar la defensa con la caída en directo | Grupo | 2 puntos |
-| 10 | Revisar secretos e integrar la PR en `main` | Tú, Claude-aut | F2 y F4 |
-| 11 | Destrucción de A6, cuando se haya aclarado | Tú, Claude-aut | A6 |
+| 10 | Revisar secretos e integrar la PR en `main` | Cristina, Claude-aut | F2 y F4 |
+| 11 | Destrucción de A6, cuando se haya aclarado | Cristina, Claude-aut | A6 |
 
-**Importante para los pasos 5 y 11:** repetir pruebas detiene instancias o reinicia tareas, y `terraform destroy` elimina el clúster. Ninguno se hará sin tu autorización.
+**Importante para los pasos 5 y 11:** repetir pruebas detiene instancias o reinicia tareas, y `terraform destroy` elimina el clúster. Ninguno se hará sin autorización de Cristina.
 
 **Fecha de entrega:** no aparece en ninguno de los dos documentos. Hay que confirmarla, porque de ella depende cuántos pasos da tiempo a hacer.

@@ -1,0 +1,285 @@
+Auditoría técnica de solo lectura. Autor: Claude Code, por encargo de Lq922466. Máquina: codespaces-8d43b2. 2026-11-06T09:16:22+00:00.
+Identificadores de cuenta y de sesión enmascarados.
+
+$ IP de salida del Codespace
+172.166.156.104
+
+$ Instancias: tipo, estado, controles, IP y grupo
+manager-g5	i-0e6ebf2af63facc60	t3.medium	running	172.31.28.10	54.197.30.8	sg-0c12ecd538a29f8d6
+worker1-g5	i-066a1ad3b7a8e0db9	t3.small	running	172.31.17.168	44.223.70.153	sg-0c12ecd538a29f8d6
+worker2-g5	i-0ed6d9c9957251a18	t3.small	running	172.31.29.192	3.91.64.124	sg-0c12ecd538a29f8d6
+worker3-g5	i-0446409b26cf0a662	t3.small	running	172.31.31.183	52.54.92.153	sg-0c12ecd538a29f8d6
+i-0446409b26cf0a662	ok	ok
+i-066a1ad3b7a8e0db9	ok	ok
+i-0e6ebf2af63facc60	ok	ok
+i-0ed6d9c9957251a18	ok	ok
+
+$ Grupo de seguridad: todas las reglas, de entrada y de salida
+entrada	icmp	-1	-1	grupo sg-0c12ecd538a29f8d6	ICMP entre nodos
+entrada	tcp	22	22	172.166.156.104/32	sin descripción
+entrada	tcp	22	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+entrada	tcp	80	80	0.0.0.0/0	HTTP
+entrada	tcp	2377	2377	grupo sg-0c12ecd538a29f8d6	Swarm 2377 TCP
+entrada	udp	4789	4789	grupo sg-0c12ecd538a29f8d6	Swarm 4789 UDP
+entrada	tcp	7946	7946	grupo sg-0c12ecd538a29f8d6	Swarm 7946 TCP
+entrada	udp	7946	7946	grupo sg-0c12ecd538a29f8d6	Swarm 7946 UDP
+entrada	tcp	8080	8080	0.0.0.0/0	Web 8080
+salida	-1	-1	-1	0.0.0.0/0	Salida general
+
+$ ssh manager-g5: arranque, endurecimiento, permisos y claves
+manager-g5
+2026-11-06T10:16:28+01:00
+status: done
+Europe/Madrid
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+sudo: correcto
+permitrootlogin no
+passwordauthentication no
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+172.31.28.10 172.17.0.1 172.18.0.1 
+
+$ ssh worker1-g5: arranque, endurecimiento, permisos y claves
+worker1-g5
+2026-11-06T10:16:31+01:00
+status: done
+Europe/Madrid
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+sudo: correcto
+permitrootlogin no
+passwordauthentication no
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+172.31.17.168 172.17.0.1 172.18.0.1 
+
+$ ssh worker2-g5: arranque, endurecimiento, permisos y claves
+worker2-g5
+2026-11-06T10:16:34+01:00
+status: done
+Europe/Madrid
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+sudo: correcto
+permitrootlogin no
+passwordauthentication no
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+172.31.29.192 172.18.0.1 172.17.0.1 
+
+$ ssh worker3-g5: arranque, endurecimiento, permisos y claves
+worker3-g5
+2026-11-06T10:16:38+01:00
+status: done
+Europe/Madrid
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+sudo: correcto
+permitrootlogin no
+passwordauthentication no
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+172.31.31.183 172.18.0.1 172.17.0.1 
+
+$ ssh manager-g5: Swarm
+ID                            HOSTNAME     STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+xf46ytyuxo4bvn8lbxixhfhtv *   manager-g5   Ready     Active         Leader           29.1.3
+m69w5hsyyyegwivfhoi8fbihd     worker1-g5   Ready     Active         Reachable        29.1.3
+7zff6zyro5ir31bz19ozwmt4q     worker2-g5   Ready     Active         Reachable        29.1.3
+ci4mgenau4xvzypqk3ljka8fi     worker3-g5   Ready     Active                          29.1.3
+
+NodeAddr=172.31.28.10 Managers=3 Nodes=4
+manager-g5 manager 172.31.28.10 active
+worker1-g5 manager 172.31.17.168 active
+worker2-g5 manager 172.31.29.192 active
+worker3-g5 worker 172.31.31.183 active
+
+$ ssh manager-g5: redes overlay
+NETWORK ID     NAME         DRIVER    SCOPE
+o3i22kpr3e9y   red-app-g5   overlay   swarm
+edrlfgm4rlaf   red-g5       overlay   swarm
+red-g5 driver=overlay ingress=true MTU=1450
+red-app-g5 driver=overlay ingress=false MTU=1450
+
+$ ssh manager-g5: servicio
+ID             NAME        MODE         REPLICAS   IMAGE                PORTS
+yzxg8z52dukm   reto4_web   replicated   4/4        innnx/reto4-f1:1.0   *:80->80/tcp
+
+ID             NAME          IMAGE                NODE         DESIRED STATE   CURRENT STATE            ERROR     PORTS
+g7n4ldkgzyra   reto4_web.1   innnx/reto4-f1:1.0   manager-g5   Running         Running 14 minutes ago             
+spg6w1gqo36z   reto4_web.2   innnx/reto4-f1:1.0   worker1-g5   Running         Running 14 minutes ago             
+5b8d62iqkzp4   reto4_web.3   innnx/reto4-f1:1.0   worker2-g5   Running         Running 14 minutes ago             
+ptucr7yqvbrv   reto4_web.4   innnx/reto4-f1:1.0   worker3-g5   Running         Running 14 minutes ago             
+
+imagen=innnx/reto4-f1:1.0@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca reinicio=any actualizacion_paralelismo=1 orden=start-first
+
+$ MTU real dentro de cada contenedor (interfaces eth0 y eth1)
+manager-g5 a82fd8f9acf6 eth0 MTU=1400
+manager-g5 a82fd8f9acf6 eth1 MTU=1500
+worker1-g5 086d98ef71bf eth0 MTU=1400
+worker1-g5 086d98ef71bf eth1 MTU=1500
+worker2-g5 2ecad652369a eth0 MTU=1400
+worker2-g5 2ecad652369a eth1 MTU=1500
+worker3-g5 001c62c32ed0 eth0 MTU=1400
+worker3-g5 001c62c32ed0 eth1 MTU=1500
+
+$ ping por IP privada desde manager-g5
+2 packets transmitted, 2 received, 0% packet loss, time 1059ms
+2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+
+$ Web por las cuatro IP públicas: puerto 80 y 8080
+44.223.70.153 80=HTTP 200 8080=HTTP 000 version=1.0 contenedor=2ecad652369a 
+52.54.92.153 80=HTTP 200 8080=HTTP 000 version=1.0 contenedor=a82fd8f9acf6 
+54.197.30.8 80=HTTP 200 8080=HTTP 000 version=1.0 contenedor=a82fd8f9acf6 
+3.91.64.124 80=HTTP 200 8080=HTTP 000 version=1.0 contenedor=2ecad652369a 
+
+$ Docker Hub: etiquetas (consulta anónima)
+1.0	sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca	active
+2.0	sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7	active
+
+$ Repositorio: visibilidad, PR y secretos
+PRIVATE
+1	OPEN	borrador	RETO 4 CLOUD G5 — implementación, evidencias y revisión de entrega
+Líneas añadidas revisadas: 14979. Archivos: 305.
+Imágenes no revisadas por este script: 119.
+Coincidencias: 0 []
+Archivos sensibles: []
+terraform/grupo.example.tfvars
+
+$ Regla SSH: sustitución autorizada por Lq922466 el 6 de noviembre. Antes:
+sgr-0190f708b23e891a7	tcp	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+sgr-0db92c580e5fed7c7	tcp	22	172.166.156.160/32	sin descripción
+
+$ Regla SSH. Después (10 reglas antes y después; solo cambia esta):
+sgr-0c3cd857bae17711d	tcp	22	172.166.156.104/32	sin descripción
+sgr-0190f708b23e891a7	tcp	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+
+$ Interfaces dentro de los contenedores, por red (manager-g5 y worker3-g5)
+manager-g5 eth0 MTU=1400 10.0.1.13/24
+manager-g5 eth1 MTU=1500 172.18.0.3/16
+manager-g5 eth2 MTU=1400 10.0.0.12/24
+worker3-g5 eth0 MTU=1400 10.0.0.13/24
+worker3-g5 eth1 MTU=1500 172.18.0.3/16
+worker3-g5 eth2 MTU=1400 10.0.1.15/24
+
+$ Estado de Terraform frente a AWS: ID, AMI, tipo, IP privada, subred, grupo, disco, volumen, etiquetas y clave
+Sin diferencias en los 4 nodos. Grupo de seguridad y cuenta coinciden.
+Estado: serial=8 lineage=767e1ca4-7442-8f40-0e26-45bb336cd593, recursos=5. No se ha movido ni modificado.
+
+$ terraform plan -no-color -compact-warnings -input=false -lock=false -detailed-exitcode -state=$ESTADO/terraform.tfstate -var-file=$ESTADO/reto4-local.auto.tfvars.json -var ssh_cidr=172.166.156.104/32
+
+Warnings:
+
+- Deprecated flag: -state
+
+To see the full warning notes, run Terraform without -compact-warnings.
+
+Note: Objects have changed outside of Terraform
+
+Terraform detected the following changes made outside of Terraform since the
+last "terraform apply" which may have affected this plan:
+
+  # aws_instance.manager has changed
+  ~ resource "aws_instance" "manager" {
+        id                                   = "i-0e6ebf2af63facc60"
+      ~ public_dns                           = "ec2-100-27-223-129.compute-1.amazonaws.com" -> "ec2-54-197-30-8.compute-1.amazonaws.com"
+      ~ public_ip                            = "100.27.223.129" -> "54.197.30.8"
+        tags                                 = {
+            "Name"     = "manager-g5"
+            "PruebaA6" = "reto4-g5"
+        }
+        # (38 unchanged attributes hidden)
+
+        # (8 unchanged blocks hidden)
+    }
+
+
+Unless you have made equivalent changes to your configuration, or ignored the
+relevant attributes using ignore_changes, the following plan may include
+actions to undo or respond to these changes.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Changes to Outputs:
+  ~ nodes = {
+      ~ manager-g5 = {
+            id         = "i-0e6ebf2af63facc60"
+          ~ public_ip  = "100.27.223.129" -> "54.197.30.8"
+            # (1 unchanged attribute hidden)
+        }
+      ~ worker1-g5 = {
+            id         = "i-066a1ad3b7a8e0db9"
+          ~ public_ip  = "34.230.4.20" -> "44.223.70.153"
+            # (1 unchanged attribute hidden)
+        }
+      ~ worker2-g5 = {
+            id         = "i-0ed6d9c9957251a18"
+          ~ public_ip  = "23.22.135.121" -> "3.91.64.124"
+            # (1 unchanged attribute hidden)
+        }
+      ~ worker3-g5 = {
+            id         = "i-0446409b26cf0a662"
+          ~ public_ip  = "98.81.203.125" -> "52.54.92.153"
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
+exit=2 (0 = sin cambios; 2 = hay cambios, aquí solo en las salidas: el plan no contiene ninguna línea Plan: ni acciones sobre recursos)
+
+$ Comprobación posterior, sin SSH. 2026-11-06T10:33:44+00:00
+IP de salida del Codespace: 172.166.151.115
+Regla SSH con CIDR: 172.166.156.104/32
+ssh manager-g5: ssh: connect to host 54.197.30.8 port 22: Connection timed out
+54.197.30.8 HTTP 200
+44.223.70.153 HTTP 200
+3.91.64.124 HTTP 200
+52.54.92.153 HTTP 200
+
+$ Segunda sustitución de la regla SSH, autorizada por Lq922466. 10:50 UTC. Antes:
+sgr-0c3cd857bae17711d	tcp	22	172.166.156.104/32	sin descripción
+sgr-0190f708b23e891a7	tcp	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+
+$ Regla nueva añadida, antes de retirar la antigua:
+sgr-0c3cd857bae17711d	tcp	22	172.166.156.104/32	sin descripción
+sgr-0190f708b23e891a7	tcp	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+sgr-03e8eb4ebee268011	tcp	22	172.166.151.115/32	sin descripción
+SSH con la regla nueva: manager-g5, worker1-g5, worker2-g5 y worker3-g5 respondieron con su hostname. Se retira la antigua.
+
+$ Después (10 reglas antes y después; solo cambia esta):
+sgr-0190f708b23e891a7	tcp	22	grupo sg-0c12ecd538a29f8d6	SSH entre nodos para ProxyJump
+sgr-03e8eb4ebee268011	tcp	22	172.166.151.115/32	sin descripción
+
+$ bash scripts/instalar-clave-publica.sh --comprobar terraform/claves/enrique_reto4.pub. 2026-11-06T11:04:43+00:00
+Clave: 256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+manager-g5	ausente	claves=2	vockey=1	permisos=600
+worker1-g5	ausente	claves=2	vockey=1	permisos=600
+worker2-g5	ausente	claves=2	vockey=1	permisos=600
+worker3-g5	ausente	claves=2	vockey=1	permisos=600
+exit=2 (2 = la clave no está instalada)
+
+$ Plan de Terraform con ssh_cidr=172.166.151.115/32, sin apply, sin -out y sin bloqueo. 10:51 UTC
+  # aws_instance.manager has changed
+Changes to Outputs:
+exit=2 (2 = hay cambios, aquí solo en las salidas)
+
+$ Estado de Terraform frente a AWS
+Instancias: el estado coincide con AWS en los 4 nodos
+Grupo de seguridad: coincide (sg-0c12ecd538a29f8d6 reto4-cloud-g5 vpc-019a65d51ce15ec5a)
+Cuenta: la del estado es la de las credenciales actuales
+Estado: serial=8 lineage=767e1ca4-7442-8f40-0e26-45bb336cd593 recursos=5
+Sin archivo de bloqueo
+81359976aecc3dae6922f138aa1a7aee4c1b85fa8c204704b70cbb91f52a4d25  terraform.tfstate
+250eee413966d506481ba7b3e83d2e265caf316311b6974f97f600e14994bb6c  terraform.tfstate.backup

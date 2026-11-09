@@ -1,5 +1,5 @@
 Host manager-g5
-    HostName 107.23.128.135
+    HostName 34.201.100.85
     HostKeyAlias manager-g5
 
 Host worker1-g5

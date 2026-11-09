@@ -51,6 +51,24 @@ variable "ssh_cidr" {
   description = "IP publica autorizada para SSH"
   type        = string
 
+  validation {
+    condition     = try(cidrnetmask(var.ssh_cidr) != "0.0.0.0", false)
+    error_message = "SSH requiere un CIDR IPv4 restringido; no se permite 0.0.0.0/0."
+  }
+}
+
+variable "ssh_additional_cidrs" {
+  description = "Accesos SSH adicionales autorizados: CIDR IPv4 => descripción. Conservar los accesos existentes al preparar el plan."
+  type        = map(string)
+  default     = {}
+
+  validation {
+    condition = alltrue([
+      for cidr in keys(var.ssh_additional_cidrs) :
+      try(cidrnetmask(cidr) != "0.0.0.0", false)
+    ])
+    error_message = "Cada acceso SSH adicional debe ser un CIDR IPv4 restringido; no se permite 0.0.0.0/0."
+  }
 }
 
 variable "key_name" {

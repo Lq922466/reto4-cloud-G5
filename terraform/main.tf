@@ -34,6 +34,19 @@ resource "aws_security_group" "cluster" {
     cidr_blocks = [var.ssh_cidr]
   }
 
+  # Mantener también los accesos autorizados del aula o integrantes, sin que un
+  # plan sustituya sus reglas por la única dirección del Codespace.
+  dynamic "ingress" {
+    for_each = var.ssh_additional_cidrs
+    content {
+      description = ingress.value
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = [ingress.key]
+    }
+  }
+
   # El salto SSH usa la IP privada del manager dentro del mismo grupo.
   ingress {
     description = "SSH entre nodos para ProxyJump"

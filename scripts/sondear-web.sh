@@ -15,8 +15,13 @@ while true; do
     timestamp=$(date -Is)
     # El límite de 0,9 s evita que una respuesta lenta retrase la siguiente muestra.
     if body=$(curl -fsS --max-time 0.9 -- "$1"); then
-        # Une en una línea la versión y el contenedor que han respondido.
-        printf '%s OK %s\n' "$timestamp" "${body//$'\n'/ }"
+        # HTTP 200 no basta: una página de error también puede responder con ese código.
+        # Durante una actualización son válidas ambas versiones, con una identidad completa.
+        if [[ "$body" =~ ^version=(1[.]0|2[.]0)$'\n'contenedor=[[:alnum:]][[:alnum:]_.-]*$ ]]; then
+            printf '%s OK %s\n' "$timestamp" "${body//$'\n'/ }"
+        else
+            printf '%s FALLO IDENTIDAD\n' "$timestamp"
+        fi
     else
         printf '%s FALLO HTTP\n' "$timestamp"
     fi

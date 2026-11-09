@@ -40,9 +40,29 @@ max_fallos_seguidos() {
     awk '/ FALLO/ { run++; if (run > worst) worst = run; next } / OK / { run = 0 } END { print worst + 0 }' "$1"
 }
 
+# Una última muestra OK no acredita una prueba si el proceso de sondeo ya murió.
+comprobar_procesos_sondas() {
+    local i
+    if ((${#ips[@]} == 0 || ${#ips[@]} != ${#probes[@]})); then
+        printf 'ERROR: no hay un proceso de sondeo por IP.\n' >&2
+        return 1
+    fi
+    for i in "${!ips[@]}"; do
+        if [[ ! "${probes[$i]}" =~ ^[1-9][0-9]*$ ]] || ! kill -0 "${probes[$i]}" 2>/dev/null; then
+            printf 'ERROR: la sonda de %s ha terminado antes de finalizar la prueba.\n' "${ips[$i]}" >&2
+            return 1
+        fi
+        if [[ ! -s "$logs/sonda-${ips[$i]}.txt" ]]; then
+            printf 'ERROR: la sonda de %s no ha registrado muestras.\n' "${ips[$i]}" >&2
+            return 1
+        fi
+    done
+}
+
 # Devuelve error si una misma IP acumula tres fallos consecutivos.
 vigilar_sondas() {
     local ip worst
+    comprobar_procesos_sondas || return 1
     for ip in "${ips[@]}"; do
         worst=$(max_fallos_seguidos "$logs/sonda-$ip.txt")
         if ((worst >= 3)); then
@@ -55,7 +75,9 @@ vigilar_sondas() {
 # Por defecto cualquier fallo es un error. Con "aislados" se registran los fallos y solo
 # es un error si hay tres seguidos en una IP o si su última muestra ha fallado.
 resumir_sondas() {
-    local mode=${1:-estricto} failures=0 blocking=0 file failed worst last
+    local mode=${1:-estricto} failures=0 blocking=0 file failed worst last procesos_ok=0
+    # Comprobar antes de detenerlas: parar_sondas vacía la lista de procesos.
+    comprobar_procesos_sondas || procesos_ok=$?
     parar_sondas
     printf '\nResumen de las sondas (una petición por segundo y por IP):\n'
     for ip in "${ips[@]}"; do
@@ -77,7 +99,9 @@ resumir_sondas() {
             grep ' FALLO' "$logs/sonda-$ip.txt" | sed "s|^|$ip |" || true
         done
     fi
-    if [[ "$mode" == aislados ]]; then
+    if ((procesos_ok != 0)); then
+        return 1
+    elif [[ "$mode" == aislados ]]; then
         ((blocking == 0))
     else
         ((failures == 0))

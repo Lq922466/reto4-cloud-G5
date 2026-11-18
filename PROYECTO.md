@@ -441,19 +441,19 @@ python3 scripts/revisar-secretos.py COMMIT_BASE HEAD
 
 **Explicación.** [`revisar-secretos.py`](scripts/revisar-secretos.py) revisa las líneas añadidas entre dos commits y busca patrones de credenciales de AWS, tokens de Docker Hub y de GitHub, claves privadas, tokens de Swarm y números de cuenta. También rechaza archivos sensibles por su nombre. Antes de revisar, comprueba con muestras que su propio detector funciona. Sale con error si encuentra algo, sin mostrar el secreto.
 
-**Comprobación.** La revisión del 9 de noviembre, hecha con Codex, dio este resultado:
+**Comprobación.** La revisión se repitió el 18 de noviembre, justo antes de integrar todo en `main`:
 
-- 20 997 líneas añadidas en 380 archivos respecto a `main`: **0 coincidencias** y ningún archivo sensible.
-- 405 versiones de archivos de texto en todo el historial accesible: **ningún secreto**.
-- Las credenciales locales vigentes no aparecen en ninguna versión del historial.
+- **Todo lo que integra la PR #1** (`revisar-secretos.py 6f3d838 HEAD`): 23 302 líneas añadidas en 382 archivos, **0 coincidencias** y ningún archivo sensible.
+- **Cada uno de los 51 commits de todas las ramas**, revisado frente a su commit anterior: la única coincidencia es el número de la cuenta pública de Canonical en `owners` de `main.tf`, que identifica las imágenes oficiales de Ubuntu y no es un secreto.
+- **Ramas de las PR #3, #4 y #5:** 0 coincidencias y ningún archivo sensible.
+- **Nombres de archivo de todo el historial:** el único que coincide con los patrones sensibles es la plantilla `grupo.example.tfvars`.
+- `git check-ignore` confirma que `terraform/terraform.tfvars` y `config/ssh.local` quedan fuera de Git.
 
-**Límites.** Los 118 archivos binarios del historial, casi todos imágenes, no se revisaron de nuevo visualmente en esa comprobación. Su resultado consta en el registro de sesión de Codex; en el repositorio está la [revisión anterior del historial](evidencias/auditoria/registro-repositorio.txt).
+**Límites.** El script no revisa el contenido de las 149 imágenes. Se revisaron a la vista las capturas añadidas o regeneradas en esta revisión; la revisión anterior de todo el historial está en el [registro del repositorio](evidencias/auditoria/registro-repositorio.txt).
 
 ![Sin credenciales, claves ni estado de Terraform](evidencias/capturas-conformes/F12-seguridad.png)
 
-*Figura 7. Solo se versiona la plantilla de variables, y la revisión no encuentra secretos. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026.*
-
-> **Evidencia pendiente:** repetir la captura `F12-seguridad` con la revisión de todo el historial actual, antes de integrar la PR #1.
+*Figura 7. Solo se versiona la plantilla de variables, y la revisión de todo lo integrado desde `6f3d838` no encuentra secretos. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 18 de noviembre de 2026. Máquina: codespaces-8d43b2.*
 
 ### 0.8. Capturas conformes a la norma de la Guía
 

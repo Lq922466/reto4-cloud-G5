@@ -1,0 +1,10 @@
+D3: capturas de pantalla de un navegador gráfico real.
+Autor: Claude Code. Máquina: codespaces-8d43b2.
+Navegador: Google Chrome for Testing 156.0.8078.4 , en un escritorio virtual Xvfb, con ventana y barra de direcciones reales. Sin sandbox: el Codespace no lo admite.
+Método: scripts/capturar-pantalla.sh captura la pantalla entera con ImageMagick (import -window root). La imagen no se retoca.
+
+Nodo	IP pública en EC2	Hora UTC	Archivo
+manager-g5	100.27.223.129	2026-11-05T09:37:36+00:00	evidencias/D3-navegador-manager-g5.png
+worker1-g5	34.230.4.20	2026-11-05T09:37:46+00:00	evidencias/D3-navegador-worker1-g5.png
+worker2-g5	23.22.135.121	2026-11-05T09:37:56+00:00	evidencias/D3-navegador-worker2-g5.png
+worker3-g5	98.81.203.125	2026-11-05T09:38:06+00:00	evidencias/D3-navegador-worker3-g5.png

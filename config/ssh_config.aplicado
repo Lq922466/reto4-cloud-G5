@@ -1,0 +1,22 @@
+Host manager-g5
+    HostName 34.201.100.85
+    HostKeyAlias manager-g5
+
+Host worker1-g5
+    HostName 172.31.17.168
+
+Host worker2-g5
+    HostName 172.31.29.192
+
+Host worker3-g5
+    HostName 172.31.31.183
+
+Host worker?-g5
+    ProxyJump manager-g5
+
+# Opciones comunes: usuario, clave propia y sin contraseñas ni preguntas.
+Host manager-g5 worker?-g5
+    User ubuntu
+    IdentityFile ~/.ssh/reto4_g5
+    IdentitiesOnly yes
+    BatchMode yes

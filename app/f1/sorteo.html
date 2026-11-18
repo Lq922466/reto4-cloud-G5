@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteo Podio - Gran Premio de Euskadi F1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==========================================================================
+         1. BARRA SUPERIOR (CONTADOR / INFORMACIÓN)
+         ========================================================================== -->
+    <div class="contador-bar">
+        <span>Sorteo Oficial de Pilotos - GP de Euskadi</span>
+    </div>
+
+    <!-- ==========================================================================
+         2. CABECERA Y NAVEGACIÓN PRINCIPAL
+         ========================================================================== -->
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="img/logo_f1_bilbao.PNG" alt="Logo Gran Premio de Euskadi F1" class="logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li class="dropdown"><a href="#">La carrera</a>
+                    <ul class="submenu">
+                        <li><a href="index.html#circuito">Circuito</a></li>
+                        <li><a href="index.html#horarios">Horarios</a></li>
+                        <li><a href="index.html#escuderias">Escuderias</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#">Bilbao</a>
+                    <ul class="submenu">
+                        <li><a href="#">Visitanos</a></li>
+                        <li><a href="#">Gastronomia</a></li>
+                        <li><a href="#">Alojamiento</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="entradas.html">Entradas</a>
+                    <ul class="submenu">
+                        <li><a href="entradas.html">Solo Carrera</a></li>
+                        <li><a href="acceso.html">Acceso Prensa</a></li>
+                    </ul>
+                </li>
+                <li><a href="sorteo.html">Sorteo Podio</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ==========================================================================
+         3. CONTENEDOR PRINCIPAL DEL FORMULARIO DE SORTEO
+         ========================================================================== -->
+    <div class="main-wrapper medium-wrapper">
+        <main class="bloque-principal">
+            <h1>Sorteo de los Tres Primeros Puestos</h1>
+            <p class="subtitle-form">Selecciona tus tres pilotos favoritos para el podio de la carrera sin repetir opciones:</p>
+
+            <form method="post" class="form-container" id="formSorteo">
+
+                <!-- Selección 1º Puesto -->
+                <div class="form-group">
+                    <label for="piloto1">1º Puesto (Ganador):</label>
+                    <select id="piloto1" required>
+                        <option value="">-- Elige piloto --</option>
+                        <option value="Verstappen">Max Verstappen</option>
+                        <option value="Hamilton">Lewis Hamilton</option>
+                        <option value="Leclerc">Charles Leclerc</option>
+                        <option value="Alonso">Fernando Alonso</option>
+                        <option value="Sainz">Carlos Sainz</option>
+                    </select>
+                </div>
+
+                <!-- Selección 2º Puesto -->
+                <div class="form-group">
+                    <label for="piloto2">2º Puesto (Segundo):</label>
+                    <select id="piloto2" required>
+                        <option value="">-- Elige piloto --</option>
+                        <option value="Verstappen">Max Verstappen</option>
+                        <option value="Hamilton">Lewis Hamilton</option>
+                        <option value="Leclerc">Charles Leclerc</option>
+                        <option value="Alonso">Fernando Alonso</option>
+                        <option value="Sainz">Carlos Sainz</option>
+                    </select>
+                </div>
+
+                <!-- Selección 3º Puesto -->
+                <div class="form-group">
+                    <label for="piloto3">3º Puesto (Tercero):</label>
+                    <select id="piloto3" required>
+                        <option value="">-- Elige piloto --</option>
+                        <option value="Verstappen">Max Verstappen</option>
+                        <option value="Hamilton">Lewis Hamilton</option>
+                        <option value="Leclerc">Charles Leclerc</option>
+                        <option value="Alonso">Fernando Alonso</option>
+                        <option value="Sainz">Carlos Sainz</option>
+                    </select>
+                </div>
+
+                <button type="button" id="btnComprobarSorteo" class="btn-submit">Comprobar Sorteo</button>
+            </form>
+
+            <!-- Caja dinámica donde JavaScript muestra el resultado del sorteo -->
+            <div id="resultadoSorteoContainer" class="sorteo-resultado-box"></div>
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+         5. PIE DE PÁGINA (FOOTER Y ENLACES SOCIALES)
+         ========================================================================== -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2026 Gran Premio de Euskadi F1. Todos los derechos reservados.</p>
+            <p>
+                <a href="#">Politica de Cookies</a> |
+                <a href="#">Privacidad</a> |
+                <a href="#">Aviso Legal</a>
+            </p>
+        </div>
+        <div class="redes-sociales">
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_twitter.png" alt="Twitter/X"></a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_instagram.png" alt="Instagram"></a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_facebook.png" alt="Facebook"></a>
+            <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_f1.png" alt="F1 Official"></a>
+        </div>
+    </footer>
+
+<script src="app.js" defer></script>
+
+</body>
+</html>

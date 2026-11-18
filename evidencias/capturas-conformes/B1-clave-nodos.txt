@@ -1,0 +1,53 @@
+# Evidencia B1-clave-nodos · Criterio B1 · RETO 4 CLOUD, Grupo 5
+# Prueba: Claves de los cuatro integrantes autorizadas en los cuatro nodos, con vockey de reserva
+# Autor: Claude Code, por encargo de Cristina (Lq922466) · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-09 10:56:04 CET] ubuntu@manager-g5:~$ ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+256 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4 (ED25519)
+[2026-11-09 10:56:04 CET] ubuntu@manager-g5:~$ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+[2026-11-09 10:56:04 CET] ubuntu@manager-g5:~$ exit
+exit
+[2026-11-09 10:56:06 CET] ubuntu@worker1-g5:~$ ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+256 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4 (ED25519)
+[2026-11-09 10:56:06 CET] ubuntu@worker1-g5:~$ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+[2026-11-09 10:56:07 CET] ubuntu@worker1-g5:~$ exit
+exit
+[2026-11-09 10:56:09 CET] ubuntu@worker2-g5:~$ ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+256 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4 (ED25519)
+[2026-11-09 10:56:09 CET] ubuntu@worker2-g5:~$ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+[2026-11-09 10:56:09 CET] ubuntu@worker2-g5:~$ exit
+exit
+[2026-11-09 10:56:12 CET] ubuntu@worker3-g5:~$ ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+256 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys EnriZx2-reto4 (ED25519)
+256 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs alexguerth-reto4 (ED25519)
+256 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8 ibai-reto4 (ED25519)
+256 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA cristina-reto4 (ED25519)
+[2026-11-09 10:56:12 CET] ubuntu@worker3-g5:~$ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+[2026-11-09 10:56:12 CET] ubuntu@worker3-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. Las claves de Cristina, Enrique, Alexandra e Ibai están en los cuatro nodos. Se conservan vockey y la clave del Codespace.

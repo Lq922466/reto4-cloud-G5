@@ -1,0 +1,39 @@
+A6: plan final para revisión. NO aplicado.
+Máquina: codespaces-8d43b2. Rama: cloud-g5-implementacion. Plan generado: 2026-11-05T08:51:17+00:00.
+Generado con la IP actual del Codespace en ssh_cidr y sin -target. Estado operativo sin cambios: mismo SHA-256 antes y después.
+
+$ aws ec2 describe-security-groups (regla SSH activa)
+{"puerto":22,"ip":[{"CidrIp":"172.166.156.160/32"}],"grupos":1}
+
+$ terraform plan -out (resumen)
+Plan: 0 to add, 1 to change, 0 to destroy.
+
+Terraform will perform the following actions:
+  # aws_instance.manager will be updated in-place
+  ~ resource "aws_instance" "manager" {
+        id                                   = "i-0e6ebf2af63facc60"
+      ~ tags                                 = {
+            "Name"     = "manager-g5"
+          + "PruebaA6" = "reto4-g5"
+        }
+      ~ tags_all                             = {
+          + "PruebaA6" = "reto4-g5"
+            # (1 unchanged element hidden)
+        }
+        # (39 unchanged attributes hidden)
+        # (8 unchanged blocks hidden)
+    }
+
+$ terraform show -json (comparación de atributos antes y después)
+aws_instance.manager update reemplazo= False
+    tags.PruebaA6 : <ausente> -> reto4-g5
+    tags_all.PruebaA6 : <ausente> -> reto4-g5
+aws_instance.workers[0] no-op reemplazo= False
+aws_instance.workers[1] no-op reemplazo= False
+aws_instance.workers[2] no-op reemplazo= False
+aws_security_group.cluster no-op reemplazo= False
+Salida nodes (solo actualiza el estado de Terraform):
+    manager-g5.public_ip : 13.222.125.248 -> 100.27.223.129
+    worker1-g5.public_ip : 54.227.41.215 -> 34.230.4.20
+    worker2-g5.public_ip : 34.228.8.66 -> 23.22.135.121
+    worker3-g5.public_ip : 3.90.111.123 -> 98.81.203.125

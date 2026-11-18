@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Prensa - Gran Premio de Euskadi F1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==========================================================================
+         1. BARRA SUPERIOR (INFORMACIÓN OFICIAL)
+         ========================================================================== -->
+    <div class="contador-bar">
+        <span>Area de Prensa y Consultas - GP de Euskadi 2026</span>
+    </div>
+
+    <!-- ==========================================================================
+         2. CABECERA Y NAVEGACIÓN PRINCIPAL
+         ========================================================================== -->
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="img/logo_f1_bilbao.PNG" alt="Logo Gran Premio de Euskadi F1" class="logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li class="dropdown"><a href="#">La carrera</a>
+                    <ul class="submenu">
+                        <li><a href="index.html#circuito">Circuito</a></li>
+                        <li><a href="index.html#horarios">Horarios</a></li>
+                        <li><a href="index.html#escuderias">Escuderias</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#">Bilbao</a>
+                    <ul class="submenu">
+                        <li><a href="#">Visitanos</a></li>
+                        <li><a href="#">Gastronomia</a></li>
+                        <li><a href="#">Alojamiento</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="entradas.html">Entradas</a>
+                    <ul class="submenu">
+                        <li><a href="entradas.html">Solo Carrera</a></li>
+                        <li><a href="acceso.html">Acceso Prensa</a></li>
+                    </ul>
+                </li>
+                <li><a href="sorteo.html">Sorteo Podio</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ==========================================================================
+         3. CONTENEDOR PRINCIPAL DE LOGIN / CONSULTA DE ACCESO
+         ========================================================================== -->
+    <div class="main-wrapper narrow-wrapper">
+        <main class="bloque-principal">
+            <h1>Acceso de Usuarios y Prensa</h1>
+            <p class="subtitle-form">Accede para validar acreditaciones de prensa o consultar el estado de tus pases:</p>
+
+            <p role="note">Vista de demostración. El acceso de usuarios requiere un servidor y está deshabilitado en esta versión.</p>
+            <form inert id="formAcceso" method="post" class="form-container">
+
+                <!-- Campo Usuario -->
+                <div class="form-group">
+                    <label for="usuario">Usuario / ID Periodista:</label>
+                    <input type="text" id="usuario" name="usuario" placeholder="Introduce tu usuario" required>
+                </div>
+
+                <!-- Campo Contraseña -->
+                <div class="form-group">
+                    <label for="password">Contrase&ntilde;a:</label>
+                    <input type="password" id="password" name="password" placeholder="Introduce tu contrase&ntilde;a" required>
+                </div>
+
+                <!-- Toggle para mostrar/ocultar contraseña con JS -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="verPassword">
+                    <label for="verPassword" class="label-normal">Mostrar contrase&ntilde;a</label>
+                </div>
+
+                <!-- Botón de Envío -->
+                <button type="submit" class="btn-submit">Consultar Entradas</button>
+            </form>
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+         5. PIE DE PÁGINA (FOOTER Y ENLACES SOCIALES)
+         ========================================================================== -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2026 Gran Premio de Euskadi F1. Todos los derechos reservados.</p>
+            <p>
+                <a href="#">Politica de Cookies</a> |
+                <a href="#">Privacidad</a> |
+                <a href="#">Aviso Legal</a>
+            </p>
+        </div>
+        <div class="redes-sociales">
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_twitter.png" alt="Twitter/X"></a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_instagram.png" alt="Instagram"></a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_facebook.png" alt="Facebook"></a>
+            <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_f1.png" alt="F1 Official"></a>
+        </div>
+    </footer>
+
+<script src="app.js" defer></script>
+
+</body>
+</html>

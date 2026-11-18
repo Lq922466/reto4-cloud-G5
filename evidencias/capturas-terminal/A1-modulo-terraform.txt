@@ -1,0 +1,12 @@
+$ hostname; date -Is; find terraform -maxdepth 2 -not -path '*/.terraform*' -type f | sort; terraform -chdir=terraform validate -no-color
+codespaces-8d43b2
+2026-11-05T09:52:08+00:00
+terraform/grupo.example.tfvars
+terraform/main.tf
+terraform/outputs.tf
+terraform/provider.tf
+terraform/scripts/bootstrap.sh.tftpl
+terraform/terraform.tfvars
+terraform/variables.tf
+Success! The configuration is valid.
+

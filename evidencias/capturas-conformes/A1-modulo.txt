@@ -1,0 +1,18 @@
+# Evidencia A1-modulo · Criterio A1, F6 · RETO 4 CLOUD, Grupo 5
+# Prueba: Módulo Terraform con variables y validación
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:22:39 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ ls terraform terraform/scripts
+terraform:
+grupo.example.tfvars  main.tf  outputs.tf  provider.tf	scripts  terraform.tfvars  variables.tf
+
+terraform/scripts:
+bootstrap.sh.tftpl
+[2026-11-05 12:22:39 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ grep '^variable' terraform/variables.tf | tr '\n' ' '; echo
+variable "aws_region" { variable "grupo" { variable "manager_type" { variable "worker_type" { variable "manager_disk_size" { variable "worker_disk_size" { variable "disk_type" { variable "worker_count" { variable "ssh_cidr" { variable "key_name" { variable "ubuntu_ami_name" { variable "ssh_public_keys" { 
+[2026-11-05 12:22:39 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ terraform -chdir=terraform validate -no-color
+Success! The configuration is valid.
+
+[2026-11-05 12:22:43 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. El módulo está organizado, usa variables y terraform validate es correcto.

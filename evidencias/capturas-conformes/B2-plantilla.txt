@@ -1,0 +1,22 @@
+# Evidencia B2-plantilla · Criterio B2 · RETO 4 CLOUD, Grupo 5
+# Prueba: Configuración SSH con nombre corto
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:23:14 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ cat ~/.ssh/config | cut -c1-110
+# Plantilla de ~/.ssh/config en la máquina de control.
+# Incluye la configuración generada, de modo que los cuatro alias siguen vigentes aunque cambien las IP.
+# Alias disponibles: manager-g5, worker1-g5, worker2-g5 y worker3-g5.
+# Ajustar la ruta si el repositorio está en otra carpeta. Permisos del archivo: 600.
+Include /workspaces/reto4-cloud-G5/config/ssh.local
+[2026-11-05 12:23:14 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ ls config
+README.md  ssh.local  ssh_config.aplicado  ssh_config.example  ssh_config.usuario.example  sshd_00-reto4.conf
+[2026-11-05 12:23:14 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ ssh -G manager-g5 2>/dev/null | grep -E '^(user|hostname|hostkeyalias) '
+user ubuntu
+hostname 100.27.223.129
+hostkeyalias manager-g5
+[2026-11-05 12:23:14 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ ssh -G worker1-g5 2>/dev/null | grep -E '^(hostname|proxyjump) '
+hostname 172.31.17.168
+proxyjump manager-g5
+[2026-11-05 12:23:14 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Los alias se resuelven solo con el nombre corto. La conexión real se comprueba en B2-conexion.

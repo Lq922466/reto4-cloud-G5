@@ -1,0 +1,5 @@
+# Plantilla de ~/.ssh/config en la máquina de control.
+# Incluye la configuración generada, de modo que los cuatro alias siguen vigentes aunque cambien las IP.
+# Alias disponibles: manager-g5, worker1-g5, worker2-g5 y worker3-g5.
+# Ajustar la ruta si el repositorio está en otra carpeta. Permisos del archivo: 600.
+Include /workspaces/reto4-cloud-G5/config/ssh.local

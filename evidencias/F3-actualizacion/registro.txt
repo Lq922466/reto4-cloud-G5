@@ -1,0 +1,156 @@
+Commit de partida: 5b5fc9c Añade sondas y navegador al despliegue y verifica la imagen de cada tarea
+codespaces-8d43b2
+2026-11-05T09:21:46+00:00
+
+$ [manager-g5] docker service update --image innnx/reto4-f1:2.0 reto4_web
+2026-11-05T09:22:22+00:00
+codespaces-8d43b2
+2026-11-05T09:22:27+00:00
+
+$ docker node ls; docker service ls; docker service ps
+manager-g5
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Leader
+worker2-g5 Ready Active Reachable
+worker3-g5 Ready Active 
+reto4_web réplicas=4/4 imagen=innnx/reto4-f1:2.0
+reto4_web.1 innnx/reto4-f1:2.0 worker2-g5 Running 14 seconds ago
+reto4_web.2 innnx/reto4-f1:2.0 worker3-g5 Running 32 seconds ago
+reto4_web.3 innnx/reto4-f1:2.0 worker2-g5 Running 26 seconds ago
+reto4_web.4 innnx/reto4-f1:2.0 manager-g5 Running 20 seconds ago
+
+$ IP públicas actuales en EC2
+34.230.4.20 HTTP 200
+98.81.203.125 HTTP 200
+100.27.223.129 HTTP 200
+23.22.135.121 HTTP 200
+
+12 peticiones, todas en versión 2.0. Respuestas por contenedor:
+      2 contenedor=0add56afbe60
+      4 contenedor=22c9f8b3cfe7
+      3 contenedor=4449e51e88fc
+      3 contenedor=5c402e7ae825
+
+$ probar-navegador.py http://34.230.4.20/ 2.0
+2026-11-05T09:22:35+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+estado-cloud.html: título «Estado del portal · Gran Premio de Euskadi», 0 imágenes
+Precio calculado: 80 €
+Estado de réplica: version=2.0 contenedor=4449e51e88fc
+Resultado http://34.230.4.20/ versión 2.0: 6 páginas, 0 errores
+
+$ probar-navegador.py http://98.81.203.125/ 2.0
+2026-11-05T09:22:44+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+estado-cloud.html: título «Estado del portal · Gran Premio de Euskadi», 0 imágenes
+Precio calculado: 80 €
+Estado de réplica: version=2.0 contenedor=22c9f8b3cfe7
+Resultado http://98.81.203.125/ versión 2.0: 6 páginas, 0 errores
+
+$ probar-navegador.py http://100.27.223.129/ 2.0
+2026-11-05T09:22:52+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+estado-cloud.html: título «Estado del portal · Gran Premio de Euskadi», 0 imágenes
+Precio calculado: 80 €
+Estado de réplica: version=2.0 contenedor=0add56afbe60
+Resultado http://100.27.223.129/ versión 2.0: 6 páginas, 0 errores
+
+$ probar-navegador.py http://23.22.135.121/ 2.0
+2026-11-05T09:23:01+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+estado-cloud.html: título «Estado del portal · Gran Premio de Euskadi», 0 imágenes
+Precio calculado: 80 €
+Estado de réplica: version=2.0 contenedor=22c9f8b3cfe7
+Resultado http://23.22.135.121/ versión 2.0: 6 páginas, 0 errores
+
+$ [manager-g5] docker service rollback reto4_web
+2026-11-05T09:23:39+00:00
+codespaces-8d43b2
+2026-11-05T09:23:44+00:00
+
+$ docker node ls; docker service ls; docker service ps
+manager-g5
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Leader
+worker2-g5 Ready Active Reachable
+worker3-g5 Ready Active 
+reto4_web réplicas=4/4 imagen=innnx/reto4-f1:1.0@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+reto4_web.1 innnx/reto4-f1:1.0 manager-g5 Running 25 seconds ago
+reto4_web.2 innnx/reto4-f1:1.0 worker2-g5 Running 14 seconds ago
+reto4_web.3 innnx/reto4-f1:1.0 worker2-g5 Running 20 seconds ago
+reto4_web.4 innnx/reto4-f1:1.0 worker1-g5 Running 31 seconds ago
+
+$ IP públicas actuales en EC2
+34.230.4.20 HTTP 200
+98.81.203.125 HTTP 200
+100.27.223.129 HTTP 200
+23.22.135.121 HTTP 200
+
+12 peticiones, todas en versión 1.0. Respuestas por contenedor:
+      2 contenedor=223aad67af29
+      3 contenedor=600224b00926
+      3 contenedor=6a47012a76e8
+      4 contenedor=fd3d084dfe42
+
+$ probar-navegador.py http://34.230.4.20/ 1.0
+2026-11-05T09:23:52+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://34.230.4.20/ versión 1.0: 5 páginas, 0 errores
+
+$ probar-navegador.py http://98.81.203.125/ 1.0
+2026-11-05T09:24:00+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://98.81.203.125/ versión 1.0: 5 páginas, 0 errores
+
+$ probar-navegador.py http://100.27.223.129/ 1.0
+2026-11-05T09:24:07+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://100.27.223.129/ versión 1.0: 5 páginas, 0 errores
+
+$ probar-navegador.py http://23.22.135.121/ 1.0
+2026-11-05T09:24:14+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://23.22.135.121/ versión 1.0: 5 páginas, 0 errores
+
+Resumen de las sondas (una petición por segundo y por IP):
+34.230.4.20 OK=155 FALLO=0 versión 1.0=77 versión 2.0=78
+98.81.203.125 OK=155 FALLO=0 versión 1.0=77 versión 2.0=78
+100.27.223.129 OK=155 FALLO=0 versión 1.0=77 versión 2.0=78
+23.22.135.121 OK=155 FALLO=0 versión 1.0=78 versión 2.0=77
+exit=0

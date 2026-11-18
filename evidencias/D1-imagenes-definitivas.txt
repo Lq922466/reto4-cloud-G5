@@ -1,0 +1,68 @@
+codespaces-8d43b2
+2026-11-05T08:44:15+00:00
+Commit de partida: e1f92f4 Mejora el contraste de los enlaces del bloque de despliegue y añade la prueba en navegador
+acceso.html: 20 referencias, 8 enlaces '#'
+contacto.html: 21 referencias, 8 enlaces '#'
+entradas.html: 20 referencias, 8 enlaces '#'
+index.html: 31 referencias, 8 enlaces '#'
+sorteo.html: 20 referencias, 8 enlaces '#'
+Sin referencia estática: img/f1_bilbao10.jpg, img/f1_bilbao6.jpg, img/f1_bilbao7.jpg, img/f1_bilbao8.jpg, img/f1_bilbao9.jpg, img/resumen_boxes.PNG
+Resultado: 5 páginas, 30 archivos, 0 errores
+
+$ [manager-g5] bash app/construir-f1.sh reto4-g5/f1-definitiva 1.0
+ ---> Removed intermediate container 6de42103484b
+ ---> 622d83436cb9
+Successfully built 622d83436cb9
+Successfully tagged reto4-g5/f1-definitiva:1.0
+
+$ [manager-g5] prueba de reto4-g5/f1-definitiva:1.0
+manager-g5
+2026-11-05T09:44:24+01:00
+healthcheck=healthy
+version=1.0
+contenedor=2b14ebd8864a
+200 index.html
+200 entradas.html
+200 sorteo.html
+200 contacto.html
+200 acceso.html
+200 app.js
+200 style.css
+200 img/logo_f1_bilbao.PNG
+        <p>Versión 1.0</p>
+404 estado-cloud.html
+664 root /usr/share/nginx/html/index.html
+775 root /usr/share/nginx/html/img
+32
+imagen=sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca tamaño=30090998
+
+$ [manager-g5] bash app/construir-f1.sh reto4-g5/f1-definitiva 2.0
+ ---> Removed intermediate container 243c60b168ec
+ ---> 1736eda0abd6
+Successfully built 1736eda0abd6
+Successfully tagged reto4-g5/f1-definitiva:2.0
+
+$ [manager-g5] prueba de reto4-g5/f1-definitiva:2.0
+manager-g5
+2026-11-05T09:44:35+01:00
+healthcheck=healthy
+version=2.0
+contenedor=0bf6b9f7b5a5
+200 index.html
+200 entradas.html
+200 sorteo.html
+200 contacto.html
+200 acceso.html
+200 app.js
+200 style.css
+200 img/logo_f1_bilbao.PNG
+        <p>Versión 2.0 · <a href="estado-cloud.html">Consultar estado de la réplica</a></p>
+200 estado-cloud.html
+664 root /usr/share/nginx/html/index.html
+775 root /usr/share/nginx/html/img
+33
+imagen=sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7 tamaño=30091486
+
+$ [manager-g5] docker ps -a --filter name=reto4-prueba
+$ [manager-g5] docker service ls
+reto4_web 4/4 reto4-g5/f1:1.0

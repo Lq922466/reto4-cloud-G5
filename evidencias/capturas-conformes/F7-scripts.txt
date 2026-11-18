@@ -1,0 +1,20 @@
+# Evidencia F7-scripts · Criterio F7 · RETO 4 CLOUD, Grupo 5
+# Prueba: Scripts comentados
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:22:46 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ ls scripts | tr '\n' ' '; echo
+actualizar-ips.sh capturar-pantalla.sh capturas-norma.py capturas-terminal.sh comprobar-descarga.sh comprobar-laboratorio.sh comprobar-ssh.sh comprobar-web.py configurar-red-swarm.sh desplegar-f1.sh formar-swarm.sh generar-config-ssh.sh lib-sondas.sh lib-ssh-config.sh preparar-imagenes.sh probar-actualizacion.sh probar-navegador.py probar-orquestacion.sh publicar-imagenes.sh revisar-secretos.py sondear-web.sh validar-entrega.py verificar-despliegue.sh verificar-e5.sh 
+[2026-11-05 12:22:46 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ sed -n 1,10p scripts/actualizar-ips.sh | cut -c1-120
+#!/usr/bin/env bash
+set -euo pipefail
+export AWS_PAGER=""
+# Qué hace: lee de EC2 las IP actuales de los cuatro nodos y regenera la configuración SSH.
+# Cuándo:   cada vez que se reinicia Learner Lab o se detiene y arranca una instancia, porque
+#           las IP públicas cambian. Las privadas no cambian y Swarm las sigue usando.
+# Efecto:   en AWS solo lee. Escribe config/ssh.local y config/ssh_config.aplicado.
+# Salida:   0 si todo va bien, 3 si AWS deniega la consulta (sesión del laboratorio terminada o
+#           credenciales antiguas), 1 si no están los cuatro nodos en ejecución.
+root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+[2026-11-05 12:22:46 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Los scripts están en /scripts y explican qué hacen.

@@ -1,0 +1,43 @@
+# Evidencia B4-endurecimiento · Criterio B4 · RETO 4 CLOUD, Grupo 5
+# Prueba: Sin root ni contraseña, y permisos
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 09:18:47 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ stat -c '%a %n' ~/.ssh ~/.ssh/reto4_g5 ~/.ssh/config
+700 /home/vscode/.ssh
+600 /home/vscode/.ssh/reto4_g5
+600 /home/vscode/.ssh/config
+[2026-11-06 09:18:47 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+[2026-11-06 10:18:48 CET] ubuntu@manager-g5:~$ sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '
+permitrootlogin no
+passwordauthentication no
+[2026-11-06 10:18:48 CET] ubuntu@manager-g5:~$ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+[2026-11-06 10:18:48 CET] ubuntu@manager-g5:~$ exit
+exit
+[2026-11-06 10:18:50 CET] ubuntu@worker1-g5:~$ sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '
+permitrootlogin no
+passwordauthentication no
+[2026-11-06 10:18:50 CET] ubuntu@worker1-g5:~$ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+[2026-11-06 10:18:50 CET] ubuntu@worker1-g5:~$ exit
+exit
+[2026-11-06 10:18:52 CET] ubuntu@worker2-g5:~$ sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '
+permitrootlogin no
+passwordauthentication no
+[2026-11-06 10:18:52 CET] ubuntu@worker2-g5:~$ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+[2026-11-06 10:18:52 CET] ubuntu@worker2-g5:~$ exit
+exit
+[2026-11-06 10:18:55 CET] ubuntu@worker3-g5:~$ sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '
+permitrootlogin no
+passwordauthentication no
+[2026-11-06 10:18:55 CET] ubuntu@worker3-g5:~$ stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+[2026-11-06 10:18:55 CET] ubuntu@worker3-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. Root y contraseña desactivados en los nodos, y permisos 700 y 600.

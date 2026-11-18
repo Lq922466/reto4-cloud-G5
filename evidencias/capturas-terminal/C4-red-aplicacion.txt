@@ -1,0 +1,7 @@
+$ ssh -F config/ssh.local manager-g5 'hostname; date -Is; docker network ls --filter driver=overlay; docker network inspect --format "{{.Name}} driver={{.Driver}} ingress={{.Ingress}} MTU={{index .Options \"com.docker.network.driver.mtu\"}}" red-app-g5'
+manager-g5
+2026-11-05T10:53:34+01:00
+NETWORK ID     NAME         DRIVER    SCOPE
+o3i22kpr3e9y   red-app-g5   overlay   swarm
+edrlfgm4rlaf   red-g5       overlay   swarm
+red-app-g5 driver=overlay ingress=false MTU=1450

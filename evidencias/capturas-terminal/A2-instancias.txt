@@ -1,0 +1,19 @@
+$ hostname; date -Is; aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,InstanceId,InstanceType,State.Name]' --output table; aws ec2 describe-instance-status --region us-east-1 --include-all-instances --instance-ids $(aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].InstanceId' --output text) --query 'InstanceStatuses[].[InstanceId,InstanceState.Name,SystemStatus.Status,InstanceStatus.Status]' --output table
+codespaces-8d43b2
+2026-11-05T09:54:52+00:00
+---------------------------------------------------------------
+|                      DescribeInstances                      |
++------------+-----------------------+------------+-----------+
+|  worker1-g5|  i-066a1ad3b7a8e0db9  |  t3.small  |  running  |
+|  worker3-g5|  i-0446409b26cf0a662  |  t3.small  |  running  |
+|  manager-g5|  i-0e6ebf2af63facc60  |  t3.medium |  running  |
+|  worker2-g5|  i-0ed6d9c9957251a18  |  t3.small  |  running  |
++------------+-----------------------+------------+-----------+
+------------------------------------------------
+|            DescribeInstanceStatus            |
++----------------------+----------+-----+------+
+|  i-0e6ebf2af63facc60 |  running |  ok |  ok  |
+|  i-0446409b26cf0a662 |  running |  ok |  ok  |
+|  i-0ed6d9c9957251a18 |  running |  ok |  ok  |
+|  i-066a1ad3b7a8e0db9 |  running |  ok |  ok  |
++----------------------+----------+-----+------+

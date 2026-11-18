@@ -1,0 +1,17 @@
+# Evidencia B1-registro-manager · Criterio B1 · RETO 4 CLOUD, Grupo 5
+# Prueba: Registro de manager-g5: acceso aceptado con la clave de cada integrante
+# Autor: Claude Code, por encargo de Cristina (Lq922466) · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-09 11:44:03 CET] ubuntu@manager-g5:~$ grep -F 'Accepted publickey' /var/log/auth.log | grep -F -e 'SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys' -e 'SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs' -e 'SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8' -e 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' | sed -E 's/from [0-9.]+ port [0-9]+/from [IP oculta]/'
+Nov  9 10:34:22 manager-g5 sshd[35058]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys
+Nov  9 10:36:44 manager-g5 sshd[35757]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs
+Nov  9 10:37:41 manager-g5 sshd[36053]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8
+Nov  9 11:23:50 manager-g5 sshd[51315]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:32:16 manager-g5 sshd[53604]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:36:09 manager-g5 sshd[54662]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:37:25 manager-g5 sshd[55060]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:38:18 manager-g5 sshd[55353]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+Nov  9 11:39:09 manager-g5 sshd[55623]: Accepted publickey for ubuntu from [IP oculta] ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+[2026-11-09 11:44:03 CET] ubuntu@manager-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. manager-g5 registra un acceso aceptado con la clave de cada integrante: Cristina, Enrique, Alexandra e Ibai.

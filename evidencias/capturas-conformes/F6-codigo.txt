@@ -1,0 +1,32 @@
+# Evidencia F6-codigo · Criterio F6 · RETO 4 CLOUD, Grupo 5
+# Prueba: Código Terraform: workers multiplicados con un único recurso
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:22:38 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ sed -n '/Instancias Workers/,/^}/p' terraform/main.tf
+# Instancias Workers
+resource "aws_instance" "workers" {
+  count = var.worker_count
+
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.worker_type
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.cluster.id]
+
+  associate_public_ip_address = true
+  user_data = templatefile("${path.module}/scripts/bootstrap.sh.tftpl", {
+    hostname    = "worker${count.index + 1}-${var.grupo}"
+    public_keys = var.ssh_public_keys
+  })
+
+  root_block_device {
+    volume_size = var.worker_disk_size
+    volume_type = var.disk_type
+  }
+
+  tags = {
+    Name = "worker${count.index + 1}-${var.grupo}"
+  }
+}
+[2026-11-05 12:22:38 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Los workers salen de un único recurso multiplicado con count.

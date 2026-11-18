@@ -1,0 +1,26 @@
+codespaces-8d43b2
+2026-11-05T08:44:44+00:00
+Prueba en Chromium contra contenedores temporales de manager-g5, por túnel SSH. No es el servicio de Swarm.
+
+$ probar-navegador.py http://127.0.0.1:18081/ 1.0
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://127.0.0.1:18081/ versión 1.0: 5 páginas, 0 errores
+exit=0
+
+$ probar-navegador.py http://127.0.0.1:18082/ 2.0
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+estado-cloud.html: título «Estado del portal · Gran Premio de Euskadi», 0 imágenes
+Precio calculado: 80 €
+Estado de réplica: version=2.0 contenedor=ed40dcac46e7
+Resultado http://127.0.0.1:18082/ versión 2.0: 6 páginas, 0 errores
+exit=0
+reto4_web 4/4 reto4-g5/f1:1.0

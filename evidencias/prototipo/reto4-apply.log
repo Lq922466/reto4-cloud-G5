@@ -1,0 +1,41 @@
+aws_security_group.cluster: Creating...
+aws_security_group.cluster: Creation complete after 3s [id=sg-0c12ecd538a29f8d6]
+aws_instance.workers[2]: Creating...
+aws_instance.workers[0]: Creating...
+aws_instance.manager: Creating...
+aws_instance.workers[1]: Creating...
+aws_instance.workers[2]: Still creating... [00m10s elapsed]
+aws_instance.workers[0]: Still creating... [00m10s elapsed]
+aws_instance.manager: Still creating... [00m10s elapsed]
+aws_instance.workers[1]: Still creating... [00m10s elapsed]
+aws_instance.workers[2]: Creation complete after 14s [id=i-0446409b26cf0a662]
+aws_instance.workers[0]: Creation complete after 14s [id=i-066a1ad3b7a8e0db9]
+aws_instance.manager: Creation complete after 15s [id=i-0e6ebf2af63facc60]
+aws_instance.workers[1]: Creation complete after 15s [id=i-0ed6d9c9957251a18]
+
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+nodes = {
+  "manager-g5" = {
+    "id" = "i-0e6ebf2af63facc60"
+    "private_ip" = "172.31.28.10"
+    "public_ip" = "13.222.125.248"
+  }
+  "worker1-g5" = {
+    "id" = "i-066a1ad3b7a8e0db9"
+    "private_ip" = "172.31.17.168"
+    "public_ip" = "54.227.41.215"
+  }
+  "worker2-g5" = {
+    "id" = "i-0ed6d9c9957251a18"
+    "private_ip" = "172.31.29.192"
+    "public_ip" = "34.228.8.66"
+  }
+  "worker3-g5" = {
+    "id" = "i-0446409b26cf0a662"
+    "private_ip" = "172.31.31.183"
+    "public_ip" = "3.90.111.123"
+  }
+}

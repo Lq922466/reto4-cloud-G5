@@ -1,0 +1,845 @@
+{
+ "F5-entorno": {
+  "id": "F5-entorno",
+  "criterio": "F5",
+  "prueba": "Codespace aprovisionado con AWS CLI y Terraform",
+  "resultado": "CORRECTO",
+  "detalle": "El devcontainer incluye AWS CLI y Terraform, y ambos funcionan en el Codespace.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:35+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "cat .devcontainer/devcontainer.json",
+     "aws --version",
+     "terraform version | head -n 1",
+     "gh --version | head -n 1"
+    ]
+   }
+  ],
+  "captura": "F5-entorno.png",
+  "sha256": "bc17cf27497a0a40fd98914644ef481fb9906a16b72008caf80297362ac269c6"
+ },
+ "F4-estructura": {
+  "id": "F4-estructura",
+  "criterio": "F4",
+  "prueba": "Estructura del repositorio",
+  "resultado": "CORRECTO",
+  "detalle": "Existen las carpetas pedidas en la rama de implementación.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:37+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "git branch --show-current",
+     "ls -d .devcontainer terraform app config scripts diagramas practica-individual",
+     "ls -p | tr '\\n' ' '; echo"
+    ]
+   }
+  ],
+  "captura": "F4-estructura.png",
+  "sha256": "e029a748656356d171c4cd9bc30c792eca06a987b6627abfc8af087ef4ea7286"
+ },
+ "F6-codigo": {
+  "id": "F6-codigo",
+  "criterio": "F6",
+  "prueba": "Código Terraform: workers multiplicados con un único recurso",
+  "resultado": "CORRECTO",
+  "detalle": "Los workers salen de un único recurso multiplicado con count.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:38+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "sed -n '/Instancias Workers/,/^}/p' terraform/main.tf"
+    ]
+   }
+  ],
+  "captura": "F6-codigo.png",
+  "sha256": "dd9f487ce4ff6d7c44964f5b52e3fd051179faee128e42be771867bbd003347e"
+ },
+ "A1-modulo": {
+  "id": "A1-modulo",
+  "criterio": "A1, F6",
+  "prueba": "Módulo Terraform con variables y validación",
+  "resultado": "CORRECTO",
+  "detalle": "El módulo está organizado, usa variables y terraform validate es correcto.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:39+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "ls terraform terraform/scripts",
+     "grep '^variable' terraform/variables.tf | tr '\\n' ' '; echo",
+     "terraform -chdir=terraform validate -no-color"
+    ]
+   }
+  ],
+  "captura": "A1-modulo.png",
+  "sha256": "f01af476ee3467b3cf71809f0d4222ddd246305ee59f03d9079c211d3dff5414"
+ },
+ "A4-script": {
+  "id": "A4-script",
+  "criterio": "A4",
+  "prueba": "Script de arranque: hostname, zona, claves y Docker",
+  "resultado": "CORRECTO",
+  "detalle": "El script configura hostname, zona horaria, claves públicas, SSH y Docker.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:45+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "grep -nE 'hostnamectl|timedatectl|authorized_keys|PermitRootLogin|PasswordAuthentication|docker.io' terraform/scripts/bootstrap.sh.tftpl | cut -c1-110"
+    ]
+   }
+  ],
+  "captura": "A4-script.png",
+  "sha256": "78dfa754b5b29d850d4ab611df009a04b0458230b6a9d5ab00d99f852f2f3c1a"
+ },
+ "F7-scripts": {
+  "id": "F7-scripts",
+  "criterio": "F7",
+  "prueba": "Scripts comentados",
+  "resultado": "CORRECTO",
+  "detalle": "Los scripts están en /scripts y explican qué hacen.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:22:46+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "ls scripts | tr '\\n' ' '; echo",
+     "sed -n 1,10p scripts/actualizar-ips.sh | cut -c1-120"
+    ]
+   }
+  ],
+  "captura": "F7-scripts.png",
+  "sha256": "3862c76dfa638832dcaaf96ee9fedeba2e2ca4e607123a38daab211f68feefce"
+ },
+ "F1-repositorio": {
+  "id": "F1-repositorio",
+  "criterio": "F1",
+  "prueba": "Repositorio privado y cuentas con acceso",
+  "resultado": "CORRECTO",
+  "detalle": "El repositorio es privado y tienen acceso los cuatro integrantes y el profesor (jc-csl). Falta la vista web de Settings.",
+  "autor": "Claude Code, por encargo de Cristina (Lq922466)",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-18T08:00:05+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "gh repo view --json visibility --jq .visibility | cat",
+     "gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_name] | @tsv' | cat"
+    ]
+   }
+  ],
+  "captura": "F1-repositorio.png",
+  "sha256": "1364ea7ee08bd1c38496b96459665841d3f3efe956a69c77be190b47ecb91ce0"
+ },
+ "F2-historial": {
+  "id": "F2-historial",
+  "criterio": "F2",
+  "prueba": "Historial de commits y PR",
+  "resultado": "CORRECTO",
+  "detalle": "Muestra los autores reales: aún faltan commits y PR de los demás integrantes.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:28:34+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "git log --format='%h %an %ad %s' --date=short -n 8 | cut -c1-110",
+     "git log --all --format='%an' | sort | uniq -c",
+     "gh pr list --state all | cat"
+    ]
+   }
+  ],
+  "captura": "F2-historial.png",
+  "sha256": "031735090386b53f2957c40db5261b214d875a89f923f2da982d889117827874"
+ },
+ "F12-seguridad": {
+  "id": "F12-seguridad",
+  "criterio": "F12",
+  "prueba": "Sin credenciales, claves ni estado de Terraform",
+  "resultado": "CORRECTO",
+  "detalle": "Solo se versiona la plantilla de variables, y la revisión no encuentra secretos.",
+  "autor": "Claude Code, por encargo de Cristina (Lq922466)",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-18T08:00:08+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "git ls-files | grep -Ei 'tfstate|tfplan|[.]pem$|[.]key$|ssh[.]local|[.]tfvars$'",
+     "git check-ignore terraform/terraform.tfvars config/ssh.local",
+     "python3 scripts/revisar-secretos.py 6f3d838 HEAD | tail -n 2"
+    ]
+   }
+  ],
+  "captura": "F12-seguridad.png",
+  "sha256": "ecda3946232c8e66cca70b815a4742a00664a8bc7d2481f0a6338ba74a918e00"
+ },
+ "D1-dockerhub": {
+  "id": "D1-dockerhub",
+  "criterio": "D1",
+  "prueba": "Etiquetas 1.0 y 2.0 en Docker Hub",
+  "resultado": "CORRECTO",
+  "detalle": "Docker Hub publica las dos etiquetas con los digests construidos.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:23:12+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "curl -s 'https://hub.docker.com/v2/repositories/innnx/reto4-f1/tags/?page_size=10' | jq -r '.results|sort_by(.name)[]|[.name,.digest,.tag_status]|@tsv'"
+    ]
+   }
+  ],
+  "captura": "D1-dockerhub.png",
+  "sha256": "c6956b22e7f274b6042aa615b6f32caf07fed5c6147c373ebdd277882b051e86"
+ },
+ "B2-plantilla": {
+  "id": "B2-plantilla",
+  "criterio": "B2",
+  "prueba": "Configuración SSH con nombre corto",
+  "resultado": "CORRECTO",
+  "detalle": "Los alias se resuelven solo con el nombre corto. La conexión real se comprueba en B2-conexion.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-05T12:23:14+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "cat ~/.ssh/config | cut -c1-110",
+     "ls config",
+     "ssh -G manager-g5 2>/dev/null | grep -E '^(user|hostname|hostkeyalias) '",
+     "ssh -G worker1-g5 2>/dev/null | grep -E '^(hostname|proxyjump) '"
+    ]
+   }
+  ],
+  "captura": "B2-plantilla.png",
+  "sha256": "c824738a3b94be5a31b23276da077f3dc1dea348d3ff1fe6533ef97483a24829"
+ },
+ "A2-instancias": {
+  "id": "A2-instancias",
+  "criterio": "A2",
+  "prueba": "Instancias, tipos, etiquetas y controles",
+  "resultado": "CORRECTO",
+  "detalle": "Un manager t3.medium y tres workers t3.small en ejecución y con los controles correctos.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:17:44+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,InstanceType,State.Name,PrivateIpAddress,PublicIpAddress]' --output table",
+     "aws ec2 describe-instance-status --region us-east-1 --include-all-instances --instance-ids $(aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].InstanceId' --output text) --query 'InstanceStatuses[].[InstanceId,InstanceState.Name,SystemStatus.Status,InstanceStatus.Status]' --output table"
+    ]
+   }
+  ],
+  "captura": "A2-instancias.png",
+  "sha256": "df1956501c91bc00e35bd4125d5c74f5c213dbcfab20c70eee88819e66250e9f"
+ },
+ "A3-reglas": {
+  "id": "A3-reglas",
+  "criterio": "A3",
+  "prueba": "Reglas de entrada del grupo de seguridad",
+  "resultado": "CORRECTO",
+  "detalle": "Entrada limitada a SSH /32, 80 y 8080 públicos, y puertos internos entre nodos.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:17:50+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "aws ec2 describe-security-groups --region us-east-1 --filters Name=group-name,Values=reto4-cloud-g5 --query 'SecurityGroups[].IpPermissions[].{Desde:FromPort,Hasta:ToPort,Protocolo:IpProtocol,CIDR:join(`,`,IpRanges[].CidrIp),Grupo:join(`,`,UserIdGroupPairs[].GroupId)}' --output table"
+    ]
+   }
+  ],
+  "captura": "A3-reglas.png",
+  "sha256": "3ce6341c0b5b339d083f174ebe9563446dea544b12135238ee2c148a94886f32"
+ },
+ "A5-salidas": {
+  "id": "A5-salidas",
+  "criterio": "A5",
+  "prueba": "Salidas de Terraform con IP pública, IP privada e ID",
+  "resultado": "CORRECTO",
+  "detalle": "La salida nodes muestra IP pública, IP privada e ID de cada nodo. Las IP públicas son las del último apply.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:17:53+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "terraform -chdir=terraform output -no-color -state=/workspaces/reto4-revision.Geeumo/terraform/terraform.tfstate nodes"
+    ]
+   }
+  ],
+  "captura": "A5-salidas.png",
+  "sha256": "bf6c2a98d2863b5db308d67f2c749a9bad2334a2f68da76ddf80b827a499e202"
+ },
+ "A4-arranque": {
+  "id": "A4-arranque",
+  "criterio": "A4",
+  "prueba": "Resultado del arranque en los cuatro nodos",
+  "resultado": "CORRECTO",
+  "detalle": "En los cuatro nodos terminó cloud-init, con zona Europe/Madrid y Docker.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:18:04+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "cloud-init status",
+     "timedatectl show -p Timezone --value",
+     "docker --version"
+    ]
+   },
+   {
+    "maquina": "worker1-g5",
+    "comandos": [
+     "cloud-init status",
+     "timedatectl show -p Timezone --value",
+     "docker --version"
+    ]
+   },
+   {
+    "maquina": "worker2-g5",
+    "comandos": [
+     "cloud-init status",
+     "timedatectl show -p Timezone --value",
+     "docker --version"
+    ]
+   },
+   {
+    "maquina": "worker3-g5",
+    "comandos": [
+     "cloud-init status",
+     "timedatectl show -p Timezone --value",
+     "docker --version"
+    ]
+   }
+  ],
+  "captura": "A4-arranque.png",
+  "sha256": "394ea12110e1d8cfbadcc235579bcdeb5f721fb118319bd22dc5fe2d985c2950"
+ },
+ "B1-claves": {
+  "id": "B1-claves",
+  "criterio": "B1",
+  "prueba": "Claves autorizadas en los cuatro nodos",
+  "resultado": "CORRECTO",
+  "detalle": "Muestra las claves reales. Solo consta la clave del Codespace y vockey: faltan las de cada integrante.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:18:16+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100"
+    ]
+   },
+   {
+    "maquina": "worker1-g5",
+    "comandos": [
+     "ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100"
+    ]
+   },
+   {
+    "maquina": "worker2-g5",
+    "comandos": [
+     "ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100"
+    ]
+   },
+   {
+    "maquina": "worker3-g5",
+    "comandos": [
+     "ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100"
+    ]
+   }
+  ],
+  "captura": "B1-claves.png",
+  "sha256": "1e4b4b38aa21901f2e389fd34adc0f246a4e5e7ce25469ee053802fab9b205ba"
+ },
+ "B2-conexion": {
+  "id": "B2-conexion",
+  "criterio": "B2",
+  "prueba": "Conexión con el nombre corto",
+  "resultado": "CORRECTO",
+  "detalle": "Se entra usando solo el nombre corto, también a un worker por salto.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:18:25+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "hostname"
+    ]
+   },
+   {
+    "maquina": "worker3-g5",
+    "comandos": [
+     "hostname",
+     "hostname -I"
+    ]
+   }
+  ],
+  "captura": "B2-conexion.png",
+  "sha256": "add605d92a02bd256b018193a9b526fb280ea980b29a70f71fc56f4558a632a6"
+ },
+ "B3-simultaneo": {
+  "id": "B3-simultaneo",
+  "criterio": "B3",
+  "prueba": "Órdenes simultáneas y control total",
+  "resultado": "CORRECTO",
+  "detalle": "La misma orden se ejecuta a la vez en los cuatro nodos, y sudo funciona en todos.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:18:30+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "bash scripts/comprobar-ssh.sh"
+    ]
+   },
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "sudo -n true && echo permisos de sudo: correcto"
+    ]
+   },
+   {
+    "maquina": "worker1-g5",
+    "comandos": [
+     "sudo -n true && echo permisos de sudo: correcto"
+    ]
+   },
+   {
+    "maquina": "worker2-g5",
+    "comandos": [
+     "sudo -n true && echo permisos de sudo: correcto"
+    ]
+   },
+   {
+    "maquina": "worker3-g5",
+    "comandos": [
+     "sudo -n true && echo permisos de sudo: correcto"
+    ]
+   }
+  ],
+  "captura": "B3-simultaneo.png",
+  "sha256": "a440f0eaf3d8a916b01d1411d4286f6867a3c9b9e2d65a8bdfb67985acae1024"
+ },
+ "B3-copia": {
+  "id": "B3-copia",
+  "criterio": "B3",
+  "prueba": "Copia de archivos con SHA-256 coincidente",
+  "resultado": "CORRECTO",
+  "detalle": "La copia por SCP tiene el mismo SHA-256 que el original. Solo se descarga: no se escribe en el nodo.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:18:41+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "d=$(mktemp -d); scp -q worker1-g5:/etc/hostname \"$d/copia\"; sha256sum \"$d/copia\""
+    ]
+   },
+   {
+    "maquina": "worker1-g5",
+    "comandos": [
+     "sha256sum /etc/hostname"
+    ]
+   }
+  ],
+  "captura": "B3-copia.png",
+  "sha256": "e168200455068a4af0fb3cdd0ff7de363beadb943c3dc39e7110b0c09adccaf3"
+ },
+ "B4-endurecimiento": {
+  "id": "B4-endurecimiento",
+  "criterio": "B4",
+  "prueba": "Sin root ni contraseña, y permisos",
+  "resultado": "CORRECTO",
+  "detalle": "Root y contraseña desactivados en los nodos, y permisos 700 y 600.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:18:47+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "stat -c '%a %n' ~/.ssh ~/.ssh/reto4_g5 ~/.ssh/config"
+    ]
+   },
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '",
+     "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"
+    ]
+   },
+   {
+    "maquina": "worker1-g5",
+    "comandos": [
+     "sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '",
+     "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"
+    ]
+   },
+   {
+    "maquina": "worker2-g5",
+    "comandos": [
+     "sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '",
+     "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"
+    ]
+   },
+   {
+    "maquina": "worker3-g5",
+    "comandos": [
+     "sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '",
+     "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"
+    ]
+   }
+  ],
+  "captura": "B4-endurecimiento.png",
+  "sha256": "4dbbaf041614f6710965beb633b259ee6a0f52e06ea630aba84a71fd3db249d9"
+ },
+ "B5-salto": {
+  "id": "B5-salto",
+  "criterio": "B5",
+  "prueba": "Acceso a los workers por IP privada con salto",
+  "resultado": "CORRECTO",
+  "detalle": "Los tres workers se alcanzan por IP privada, a través del manager.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:18:57+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "ssh -G worker1-g5 2>/dev/null | grep -E '^(hostname|proxyjump) '"
+    ]
+   },
+   {
+    "maquina": "worker1-g5",
+    "comandos": [
+     "hostname -I"
+    ]
+   },
+   {
+    "maquina": "worker2-g5",
+    "comandos": [
+     "hostname -I"
+    ]
+   },
+   {
+    "maquina": "worker3-g5",
+    "comandos": [
+     "hostname -I"
+    ]
+   }
+  ],
+  "captura": "B5-salto.png",
+  "sha256": "47139ed86ad032699cc2b583d6f42b58d6f1a66f559ff08d971e3be2f20ce14d"
+ },
+ "C1-ping": {
+  "id": "C1-ping",
+  "criterio": "C1",
+  "prueba": "Docker y ping por IP privada",
+  "resultado": "CORRECTO",
+  "detalle": "Docker funciona, y el ping por IP privada no pierde paquetes.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T09:19:05+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "docker --version",
+     "for ip in 172.31.17.168 172.31.29.192 172.31.31.183; do ping -c 2 -W 2 $ip | tail -n 3; done"
+    ]
+   }
+  ],
+  "captura": "C1-ping.png",
+  "sha256": "e3fe0d362d008079c5c6c3e94110f91007e4c658e7b31d557b1cb90e4a67947f"
+ },
+ "E1-balanceo": {
+  "id": "E1-balanceo",
+  "criterio": "E1",
+  "prueba": "Balanceo de carga",
+  "resultado": "CORRECTO",
+  "detalle": "Las peticiones por las cuatro IP reciben respuesta de contenedores distintos.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T10:31:05+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "for ip in $(aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].PublicIpAddress' --output text); do for i in 1 2 3 4; do printf '%s ' $ip; curl -s --max-time 5 http://$ip/identidad.txt | tr '\\n' ' '; echo; done; done"
+    ]
+   }
+  ],
+  "captura": "E1-balanceo.png",
+  "sha256": "cb2bc7613bb507aefbca562dda9f48fd1499529e7cf040e3c5ef1f0023f23d39"
+ },
+ "A6-sin-cambios": {
+  "id": "A6-sin-cambios",
+  "criterio": "A6",
+  "prueba": "Plan posterior al cambio, sin aplicar nada",
+  "resultado": "NO CORRECTO",
+  "detalle": "falta: No changes|Plan: 0 to add, 0 to change, 0 to destroy",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T10:52:35+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "terraform -chdir=terraform plan -no-color -compact-warnings -input=false -lock=false -state=/workspaces/reto4-revision.Geeumo/terraform/terraform.tfstate -var-file=/workspaces/reto4-revision.Geeumo/terraform/reto4-local.auto.tfvars.json -var ssh_cidr=$(curl -s https://checkip.amazonaws.com)/32 | grep -E '^No changes|^Plan:|^Changes to Outputs'"
+    ]
+   }
+  ],
+  "captura": "A6-sin-cambios.png",
+  "sha256": "e60942a3cc6fa4bda8ea3c984e5dd88a1327a7205bc7b184f95a7ac983a92ca0"
+ },
+ "C2-cluster": {
+  "id": "C2-cluster",
+  "criterio": "C2",
+  "prueba": "Clúster por IP privada y MTU 1450",
+  "resultado": "CORRECTO",
+  "detalle": "El clúster usa IP privadas, y la red ingress red-g5 tiene MTU 1450.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T11:00:52+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "docker info --format \"NodeAddr={{.Swarm.NodeAddr}}\"",
+     "docker node inspect --format \"{{.Description.Hostname}} {{.Status.Addr}}\" manager-g5 worker1-g5 worker2-g5 worker3-g5",
+     "docker network inspect --format \"{{.Name}} driver={{.Driver}} ingress={{.Ingress}} MTU={{index .Options \\\"com.docker.network.driver.mtu\\\"}}\" red-g5"
+    ]
+   }
+  ],
+  "captura": "C2-cluster.png",
+  "sha256": "7b4692fce0103ff2ce984bb2bac721be6fdd3cfa896b4070d8e8f04f56763c1f"
+ },
+ "C3-nodos": {
+  "id": "C3-nodos",
+  "criterio": "C3",
+  "prueba": "Cuatro nodos activos, manager líder y tres workers",
+  "resultado": "NO CORRECTO",
+  "detalle": "falta: worker1-g5\\s+Ready\\s+Active\\s+\\d; falta: worker2-g5\\s+Ready\\s+Active\\s+\\d",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T11:00:55+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "docker node ls"
+    ]
+   }
+  ],
+  "captura": "C3-nodos.png",
+  "sha256": "65fa4e040d01a47f475d34ab9b1826340a4f3d6095c307fbf2b7f0939a095459"
+ },
+ "C4-red": {
+  "id": "C4-red",
+  "criterio": "C4",
+  "prueba": "Red overlay propia para servicios",
+  "resultado": "CORRECTO",
+  "detalle": "Existe la red overlay propia red-app-g5, con MTU 1450.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T11:00:57+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "docker network ls --filter driver=overlay",
+     "docker network inspect --format \"{{.Name}} driver={{.Driver}} ingress={{.Ingress}} MTU={{index .Options \\\"com.docker.network.driver.mtu\\\"}}\" red-app-g5"
+    ]
+   }
+  ],
+  "captura": "C4-red.png",
+  "sha256": "b6af2c060fed599a7be5e1b73ba90191ae887ee0613b696e90651e06c2f330a0"
+ },
+ "D2-servicio": {
+  "id": "D2-servicio",
+  "criterio": "D2",
+  "prueba": "Servicio de cuatro réplicas",
+  "resultado": "CORRECTO",
+  "detalle": "El servicio tiene cuatro réplicas, la red del grupo y política de reinicio.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T11:01:00+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "cat app/stack.yml"
+    ]
+   },
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "docker service ls",
+     "docker service ps --filter desired-state=running reto4_web"
+    ]
+   }
+  ],
+  "captura": "D2-servicio.png",
+  "sha256": "6473eb4a1e48c2b3284e4d1fd332c91c8f4ba1c922fc5b0f44ae3d33113d2402"
+ },
+ "E5-estado": {
+  "id": "E5-estado",
+  "criterio": "E5",
+  "prueba": "Nodos y servicio tras el reinicio del laboratorio",
+  "resultado": "CORRECTO",
+  "detalle": "Tras reiniciar el laboratorio, las mismas instancias siguen en el clúster con 4/4.",
+  "autor": "Claude Code, por encargo de Lq922466",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-06T11:01:02+00:00",
+  "comandos": [
+   {
+    "maquina": "local",
+    "comandos": [
+     "aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,InstanceType,State.Name,PrivateIpAddress,PublicIpAddress]' --output table"
+    ]
+   },
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "docker node ls",
+     "docker service ls",
+     "docker service ps --filter desired-state=running reto4_web"
+    ]
+   }
+  ],
+  "captura": "E5-estado.png",
+  "sha256": "b6217e2ab133ac9291e780bbd456212c4cb2410a982c43800387d2625a0f60a2"
+ },
+ "B1-clave-nodos": {
+  "id": "B1-clave-nodos",
+  "criterio": "B1",
+  "prueba": "Claves de los cuatro integrantes autorizadas en los cuatro nodos, con vockey de reserva",
+  "resultado": "CORRECTO",
+  "detalle": "Las claves de Cristina, Enrique, Alexandra e Ibai están en los cuatro nodos. Se conservan vockey y la clave del Codespace.",
+  "autor": "Claude Code, por encargo de Cristina (Lq922466)",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-09T09:56:03+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100",
+     "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"
+    ]
+   },
+   {
+    "maquina": "worker1-g5",
+    "comandos": [
+     "ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100",
+     "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"
+    ]
+   },
+   {
+    "maquina": "worker2-g5",
+    "comandos": [
+     "ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100",
+     "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"
+    ]
+   },
+   {
+    "maquina": "worker3-g5",
+    "comandos": [
+     "ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100",
+     "stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys"
+    ]
+   }
+  ],
+  "captura": "B1-clave-nodos.png",
+  "sha256": "861eb013c10620c5b90d089eb03c5d19f2e673d6b6e031b8157d79d94d543671"
+ },
+ "B1-registro-manager": {
+  "id": "B1-registro-manager",
+  "criterio": "B1",
+  "prueba": "Registro de manager-g5: acceso aceptado con la clave de cada integrante",
+  "resultado": "CORRECTO",
+  "detalle": "manager-g5 registra un acceso aceptado con la clave de cada integrante: Cristina, Enrique, Alexandra e Ibai.",
+  "autor": "Claude Code, por encargo de Cristina (Lq922466)",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-09T10:44:02+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "grep -F 'Accepted publickey' /var/log/auth.log | grep -F -e 'SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys' -e 'SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs' -e 'SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8' -e 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' | sed -E 's/from [0-9.]+ port [0-9]+/from [IP oculta]/'"
+    ]
+   }
+  ],
+  "captura": "B1-registro-manager.png",
+  "sha256": "ba5677911dfd166b1ec091039b9636a705645f3f66b10a1494394f390899850b"
+ },
+ "B1-registro-cristina": {
+  "id": "B1-registro-cristina",
+  "criterio": "B1",
+  "prueba": "Registro de cada nodo: acceso aceptado con la clave de Cristina",
+  "resultado": "CORRECTO",
+  "detalle": "Cada nodo registra un acceso aceptado con la clave de Cristina, que antes hace su propia prueba.",
+  "autor": "Claude Code, por encargo de Cristina (Lq922466)",
+  "ejecutado_desde": "vscode@codespaces-8d43b2",
+  "inicio_utc": "2026-11-09T10:43:50+00:00",
+  "comandos": [
+   {
+    "maquina": "manager-g5",
+    "comandos": [
+     "grep -F 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'"
+    ]
+   },
+   {
+    "maquina": "worker1-g5",
+    "comandos": [
+     "grep -F 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'"
+    ]
+   },
+   {
+    "maquina": "worker2-g5",
+    "comandos": [
+     "grep -F 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'"
+    ]
+   },
+   {
+    "maquina": "worker3-g5",
+    "comandos": [
+     "grep -F 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'"
+    ]
+   }
+  ],
+  "captura": "B1-registro-cristina.png",
+  "sha256": "b2fc94c2d5d0488fd52aec5a322ba5ae57418c8ca542650407ff188683c4f8bc"
+ }
+}

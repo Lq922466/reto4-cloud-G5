@@ -3,6 +3,10 @@
 **Opcional.** Ni la Guía ni la Rúbrica piden un Word: F9 es [PROYECTO.md](../PROYECTO.md). Esta estructura solo sirve si el grupo quiere además un
 documento Word. Las capturas de terminal citadas deben rehacerse según la norma de la Guía.
 
+> **Estructura del 5 de noviembre, no actualizada.** Algunos datos han cambiado: las claves personales están instaladas desde el 9 de
+> noviembre, manager-g5 vuelve a ser el único manager y líder desde ese día, y el plan de Terraform del 10 de noviembre propone sustituir
+> las instancias por la imagen de Ubuntu nueva. Si se prepara el Word, sus datos deben tomarse de [PROYECTO.md](../PROYECTO.md).
+
 Las rutas son relativas a `evidencias/`, y `CT/` equivale a `capturas-terminal/`.
 
 ## Reglas para el Word

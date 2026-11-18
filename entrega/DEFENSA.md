@@ -9,7 +9,7 @@ Material para ensayar la exposición de 10 minutos y las preguntas del profesor.
 - **Hablad solo de lo que podáis explicar.** Adaptad el guion a lo que hizo cada uno y no os atribuyáis trabajo ajeno.
 - **Lo que exige la Guía.** En grupo, 10 minutos: arquitectura, código, reparto de tareas y **una demostración en directo de caída de un nodo**. Individualmente,
   2 o 3 preguntas a cualquier miembro sobre cualquier parte y una demostración técnica en vivo.
-- **Actualizadlo si cambia la topología.** El guion describe el estado actual, con tres managers. Si se restaura un manager y tres workers, cambian las diapositivas 3 y 6.
+- **Topología.** Desde el 18 de noviembre, el guion describe la topología de la Guía: un manager líder y tres workers, restaurada el 9 de noviembre tras E8. **La presentación aún no está actualizada:** sus diapositivas 3, 5 y 6 y sus notas describen tres managers y las claves individuales sin instalar. Corregidlas antes de ensayar y comprobad el clúster el mismo día.
 
 ## Reparto de los 10 minutos
 
@@ -20,7 +20,7 @@ marcadores: el grupo debe decidir qué parte presenta Cristina, Enrique, Alexand
 | --- | --- | --- | --- | --- |
 | 0:00–2:15 | Integrante A | 1–3 | Reto, resultado, reparto de tareas y arquitectura | [Diagrama](../diagramas/arquitectura.png), [gestión](../GESTION.md) |
 | 2:15–4:30 | Integrante B | 4–5 | Código de Terraform, seguridad y SSH | [Reglas](../evidencias/capturas-terminal/A3-grupo-seguridad.png), [A6](../evidencias/A6-apply.txt) |
-| 4:30–6:45 | Integrante C | 6–7 | Swarm, redes, web e imágenes. **Al empezar: apagar worker3-g5** | [Nodos](../evidencias/capturas-terminal/C3-nodos.png), [D3](../evidencias/D3-registro.txt) |
+| 4:30–6:45 | Integrante C | 6–7 | Swarm, redes, web e imágenes. **Al empezar: apagar worker3-g5** | [Nodos tras corregir C3](../PROYECTO.md#34-validación-de-los-nodos-y-de-sus-roles-c3), [D3](../evidencias/D3-registro.txt) |
 | 6:45–10:00 | Integrante D | 8–10 | Caída de un nodo en directo, pruebas, límites y cierre | [Estado final](../evidencias/capturas-terminal/estado-final.png), [E4 y E8](../evidencias/auditoria/E4-E8.md) |
 
 ## Guion
@@ -35,19 +35,19 @@ El reto consistía en publicar la web del evento en una infraestructura reproduc
 
 ### Diapositiva 3 · Arquitectura (Integrante A, 1:05)
 
-Este es el mapa. Desde Codespaces gestionamos la infraestructura con Terraform y accedemos por SSH con una regla limitada a una única IP. El navegador entra por el puerto 80 de cualquiera de las cuatro IP públicas, y la malla de enrutamiento de Swarm reparte la petición entre las réplicas. Un detalle importante: los nombres son los de la creación, pero los roles cambiaron. Para probar la elección de líder promovimos worker1 y worker2, así que hoy hay tres managers y solo worker3 es un worker puro.
+Este es el mapa. Desde Codespaces gestionamos la infraestructura con Terraform y accedemos por SSH con una regla limitada a una única IP. El navegador entra por el puerto 80 de cualquiera de las cuatro IP públicas, y la malla de enrutamiento de Swarm reparte la petición entre las réplicas. El clúster tiene un manager, que es el líder, y tres workers, como pide la Guía. Para probar la elección de líder promovimos temporalmente worker1 y worker2, y después los volvimos a bajar a workers.
 
 ### Diapositiva 4 · Terraform y código (Integrante B, 1:10)
 
-La infraestructura está en la carpeta terraform: variables, proveedor, recursos y salidas. En pantalla veis el código de los workers: es un único recurso, multiplicado con count, y los nombres se generan con el índice y el grupo. Cada nodo se configura al arrancar con una plantilla: nombre, zona horaria, claves públicas, SSH y Docker. Primero validamos y revisamos el plan, y después aplicamos: cinco recursos creados. Para probar un cambio controlado añadimos una etiqueta al manager. El plan dio cero altas, un cambio y cero destrucciones, y un plan posterior confirmó que no quedaban cambios.
+La infraestructura está en la carpeta terraform: variables, proveedor, recursos y salidas. En pantalla veis el código de los workers: es un único recurso, multiplicado con count, y los nombres se generan con el índice y el grupo. Cada nodo se configura al arrancar con una plantilla: nombre, zona horaria, claves públicas, SSH y Docker. Primero validamos y revisamos el plan, y después aplicamos: cinco recursos creados. Para probar un cambio controlado añadimos una etiqueta al manager. El plan dio cero altas, un cambio y cero destrucciones. Y aprendimos algo importante: como la imagen de Ubuntu se elige como «la más reciente», cuando Canonical publicó una nueva el plan pasó a proponer sustituir las cuatro instancias. Por eso nunca aplicamos un plan sin revisarlo.
 
 ### Diapositiva 5 · Seguridad y SSH (Integrante B, 1:05)
 
-El grupo de seguridad solo abre al exterior el puerto 80, el 8080 y el SSH, y este último limitado a una IP con máscara 32. Los puertos de Swarm y el ICMP solo se aceptan desde el propio grupo. En SSH usamos alias, y llegamos a los workers por su IP privada, saltando por el manager. El acceso de root y por contraseña están desactivados, y los permisos son 700 y 600. Nos queda algo por completar: las claves individuales de cada integrante. Además, en el repositorio no hay claves, credenciales ni estado de Terraform: lo comprobamos revisando todo el historial.
+El grupo de seguridad solo abre al exterior el puerto 80, el 8080 y el SSH, y este último limitado a una IP con máscara 32. Los puertos de Swarm y el ICMP solo se aceptan desde el propio grupo. En SSH usamos alias, y llegamos a los workers por su IP privada, saltando por el manager. El acceso de root y por contraseña están desactivados, y los permisos son 700 y 600. Cada integrante tiene su propia clave instalada en los cuatro nodos; nos queda que tres de nosotros entremos también en los workers. Además, en el repositorio no hay claves, credenciales ni estado de Terraform: lo comprobamos revisando todo el historial.
 
 ### Diapositiva 6 · Swarm y redes (Integrante C, 1:05)
 
-Comprobamos el ping por IP privada entre todos los nodos y formamos el clúster anunciando la dirección privada del manager. Creamos dos redes overlay: red-g5, que es la de ingress, y red-app-g5, para la aplicación. Ambas tienen MTU 1450, porque la red overlay encapsula el tráfico y añade cabeceras. Tener tres managers nos da cuórum: con tres, el clúster sigue gestionándose si cae uno, porque los otros dos siguen siendo mayoría.
+Comprobamos el ping por IP privada entre todos los nodos y formamos el clúster anunciando la dirección privada del manager. Creamos dos redes overlay: red-g5, que es la de ingress, y red-app-g5, para la aplicación. Ambas tienen MTU 1450, porque la red overlay encapsula el tráfico y añade cabeceras. En funcionamiento normal hay un solo manager. Para la prueba de alta disponibilidad de managers promovemos dos workers: con tres managers, si cae uno, los otros dos siguen siendo mayoría y eligen un líder nuevo.
 
 ### Diapositiva 7 · Web e imágenes (Integrante C, 1:10)
 
@@ -114,7 +114,7 @@ Requiere AWS activo, y solo debe hacerse el día de la exposición o en un ensay
 
 | # | Qué se muestra | Comando | Resultado esperado | Plan B |
 | --- | --- | --- | --- | --- |
-| 1 | Nodos y servicio | `ssh -F config/ssh.local manager-g5 'docker node ls; docker service ls'` | 4 nodos Ready/Active y 4/4 | [Estado final](../evidencias/capturas-terminal/estado-final.png) |
+| 1 | Nodos y servicio | `ssh -F config/ssh.local manager-g5 'docker node ls; docker service ls'` | 4 nodos Ready/Active, manager-g5 como único `Leader` y 4/4 | [Estado final](../evidencias/capturas-terminal/estado-final.png), del 5 de noviembre, cuando aún había tres managers |
 | 2 | Réplicas | `ssh -F config/ssh.local manager-g5 'docker service ps --filter desired-state=running reto4_web'` | Cuatro tareas | [Pila y servicio](../evidencias/capturas-terminal/D2-pila-servicio.png) |
 | 3 | Balanceo | `for i in 1 2 3 4 5 6; do curl -s http://IP/identidad.txt; done` | Varios contenedores | [Reparto](../evidencias/capturas-terminal/E1-reparto-peticiones.png) |
 | 4 | Web | Abrir `http://IP/` en las cuatro IP | La web en todas | [D3](../evidencias/D3-navegador-manager-g5.png) |
@@ -152,7 +152,7 @@ Es el archivo que relaciona el código con los recursos reales. Puede contener d
 Crea varias instancias a partir de un solo bloque, con el índice para nombrarlas: worker1, worker2 y worker3.
 
 **¿Qué hizo exactamente el cambio de A6?**
-Añadió la etiqueta `PruebaA6=reto4-g5` a manager-g5. El plan fue de 0 altas, 1 cambio y 0 destrucciones, y un plan posterior no propuso cambios.
+Añadió la etiqueta `PruebaA6=reto4-g5` a manager-g5. El plan fue de 0 altas, 1 cambio y 0 destrucciones, y el plan siguiente, ese mismo día, no propuso cambios. El 10 de noviembre el plan normal propone sustituir las instancias por la imagen de Ubuntu nueva: hay que fijar la imagen antes de volver a aplicar.
 
 **¿Por qué no habéis ejecutado `terraform destroy`?**
 Porque eliminaría el clúster, y cada requisito debe funcionar durante la corrección. Tenemos el plan de destrucción de los 5 recursos, pero A6 sigue parcial hasta ejecutarlo.
@@ -181,21 +181,18 @@ Con `sudo sshd -T`, que muestra la configuración efectiva: `permitrootlogin no`
 Para que solo el propietario acceda a `.ssh` y a sus claves. OpenSSH rechaza claves con permisos demasiado abiertos.
 
 **¿Qué pasa con `vockey`?**
-Sigue autorizada junto a la clave del Codespace. La Guía la deja como reserva y la Rúbrica pide sustituirla: [indicad lo que haya respondido el profesor].
+Sigue autorizada, junto a la clave del Codespace y las cuatro claves personales. La Guía la deja como reserva y la Rúbrica pide sustituirla: [indicad lo que haya respondido el profesor].
 
 ### Docker Swarm y redes
 
 **¿Qué diferencia hay entre un manager y un worker?**
 Los managers mantienen el estado del clúster y deciden dónde van las tareas. Los workers ejecutan tareas. Aquí los managers también ejecutan réplicas.
 
-**¿Por qué tres managers y no dos?**
+**¿Por qué para E8 se necesitan tres managers y no dos?**
 Raft necesita mayoría. Con tres se tolera perder uno; con dos, perder uno deja sin mayoría y no se puede gestionar el clúster.
 
-**¿Por qué se llaman worker1 y worker2 si son managers?**
-Es el nombre de creación. La Guía pide promover dos workers para probar la elección de un nuevo líder, y eso hicimos antes de E8.
-
-**¿Por qué el líder es ahora worker1?**
-Primero E8 cambió el líder a worker2. En la comprobación posterior al reinicio del laboratorio ya era worker1. El líder lo elige Raft y puede cambiar cuando se reinician los nodos.
+**¿Qué pasó con los roles después de E8?**
+worker1 y worker2 siguieron como managers, y Raft fue eligiendo líder con cada reinicio: worker2 tras E8, worker1 el 5 de noviembre, manager-g5 el 6 y de nuevo worker2 y worker1 el 9. Ese día los bajamos con `docker node demote`, primero el que no era líder, y manager-g5 quedó como único manager y líder.
 
 **¿Qué es la malla de enrutamiento?**
 Permite que cualquier nodo reciba la petición en el puerto publicado y la reenvíe a una réplica, aunque ese nodo no aloje ninguna.
@@ -207,7 +204,7 @@ Permite que cualquier nodo reciba la petición en el puerto publicado y la reenv
 La overlay encapsula con VXLAN y añade unos 50 bytes de cabeceras. Con 1450 el paquete encapsulado cabe en 1500 sin fragmentarse, lo que evita cuelgues o lentitud.
 
 **¿Habéis comprobado la MTU dentro de un contenedor?**
-No. Lo comprobado es la configuración de las redes, con `docker network inspect`.
+Sí, el 6 de noviembre: dentro de los contenedores la interfaz mide 1400, 50 bytes menos que la red. Lo que pide la Guía es la MTU de la red, que es 1450, comprobada con `docker network inspect`.
 
 ### Web e imágenes
 
@@ -252,10 +249,10 @@ No lo sabemos, porque no se midió.
 ### Gestión y uso de IA
 
 **¿Quién hizo cada parte?**
-Respondedlo cada uno con vuestra participación real. En el repositorio, a 9 de noviembre, constan commits de Cristina, con su identidad Innnx, de Codex y uno de Enrique, en la PR #2. La organización del equipo asigna el Producto 6, Cloud, a Cristina, pero la Guía pide que todos aporten commits y PR.
+Respondedlo cada uno con vuestra participación real. En `main`, a 18 de noviembre, constan commits de Cristina, con su identidad Innnx, de Codex y uno de Enrique, en la PR #2. Las PR #3, #4 y #5 son borradores preparados con Codex desde la cuenta de Cristina, pendientes de que cada uno los valide. La organización del equipo asigna el Producto 6, Cloud, a Cristina, pero la Guía pide que todos aporten commits y PR.
 
 **¿Habéis usado inteligencia artificial?**
-Sí. El historial muestra commits con Codex y con Claude Code, y los cambios sobre el servicio y AWS del 5 de noviembre se hicieron con autorización expresa. Cada integrante debe poder explicar lo que presenta.
+Sí. El historial muestra commits con Codex y con Claude Code, y los cambios sobre AWS, el servicio y GitHub se hicieron con autorización expresa de Cristina. Cada integrante debe poder explicar lo que presenta.
 
 **¿Qué mejoraríais con más tiempo?**
 Técnicamente: HTTPS, estado remoto de Terraform con bloqueo, IP elásticas o balanceador, y monitorización. La reflexión de organización debe aportarla el grupo.

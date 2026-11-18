@@ -1,7 +1,18 @@
 # Instrucciones para completar F2: Enrique, Alexandra e Ibai
 
-Preparadas por Claude Code por encargo de Cristina el 9 de noviembre de 2026. Explican **cómo** aportar el trabajo. El contenido de
-cada aportación lo escribe cada integrante con lo que haya hecho y comprobado de verdad.
+Preparadas por Claude Code por encargo de Cristina el 9 de noviembre de 2026 y actualizadas el 18 de noviembre, cuando todo el
+proyecto se integró en `main`. Explican **cómo** aportar el trabajo. El contenido de cada aportación lo escribe cada integrante con lo
+que haya hecho y comprobado de verdad.
+
+**Situación a 18 de noviembre.** `main` es la única rama de trabajo y de entrega. Cada integrante tiene ya una rama y una PR abierta
+hacia `main`, con dos commits que preparó Codex desde la cuenta de Cristina. Esos commits **no cuentan como trabajo propio**: sirven
+de borrador para que cada persona lo revise, lo corrija y lo confirme con sus propios commits.
+
+| Integrante | Rama | PR | Estado |
+| --- | --- | --- | --- |
+| Enrique | `enrique-correccion-revision` | [#3](https://github.com/Lq922466/reto4-cloud-G5/pull/3) | Abierta hacia `main`, con conflictos |
+| Alexandra | `alexandra-revision-evidencias` | [#4](https://github.com/Lq922466/reto4-cloud-G5/pull/4) | Abierta hacia `main`, con conflictos |
+| Ibai | `ibai-revision-individual` | [#5](https://github.com/Lq922466/reto4-cloud-G5/pull/5) | Abierta hacia `main`, con conflictos |
 
 ## Qué se pide
 
@@ -16,7 +27,7 @@ Por tanto, para cada integrante debe constar en GitHub:
 
 1. **Commits propios hechos desde Git Bash o WSL** con su identidad. Es lo que pide la Guía. Los commits hechos con «Edit this file»
    en la web de GitHub quedan registrados con el *committer* `GitHub`, como el de la PR #2, y no lo demuestran.
-2. **Una pull request propia** hacia `cloud-g5-implementacion`. También lo pide la Guía.
+2. **Una pull request** hacia `main` con tus commits. También lo pide la Guía.
 
 Además, se recomienda, aunque la Guía no fija un número:
 
@@ -26,10 +37,10 @@ Además, se recomienda, aunque la Guía no fija un número:
 
 ## Reglas comunes
 
-- **No empieces hasta que Cristina avise** de que ha subido sus cambios pendientes a `cloud-g5-implementacion`. Si no, partirías
-  de una versión antigua y tu PR tendría conflictos.
-- Trabaja solo en tu rama. No hagas push a `main` ni a `cloud-g5-implementacion`, no fusiones tu propia PR y no uses nunca
-  `--force`, `git reset --hard` ni `git push -f`.
+- Parte siempre de la versión actual de `main` (`git fetch origin --prune` antes de empezar). La rama `cloud-g5-implementacion` ya
+  no existe.
+- Trabaja solo en tu rama. No hagas push a `main`, no fusiones tu propia PR y no uses nunca `--force`, `git reset --hard` ni
+  `git push -f`.
 - Documenta solo lo que hayas hecho y visto tú. Si usas un asistente de IA, dilo en la descripción de la PR.
 - No subas nunca tu clave privada (`*_reto4`, sin `.pub`), tokens, contraseñas ni capturas en las que se vean.
 - Añade los archivos por su nombre (`git add RUTA`), no con `git add .`, y revisa `git status` antes de cada commit.
@@ -67,45 +78,30 @@ git stash push -u -m "trabajo local antes de F2"
 git fetch origin --prune
 ```
 
-## Paso 3. Crear o actualizar tu rama
+## Paso 3. Actualizar tu rama con `main`
 
-Cada integrante sigue solo su apartado.
-
-### Enrique: rama nueva
-
-La PR #2 ya está fusionada, así que hace falta una rama nueva. `--no-track` evita que la rama nueva quede asociada a
-`cloud-g5-implementacion`. Así, el primer `git push -u` la asocia a su propia rama remota:
+Cada integrante usa la rama de su PR, que ya existe en GitHub:
 
 ```bash
-git switch --no-track -c enrique-correccion-revision origin/cloud-g5-implementacion
+git switch NOMBRE_DE_TU_RAMA                 # enrique-correccion-revision, alexandra-revision-evidencias o ibai-revision-individual
+git log --oneline origin/main..HEAD          # muestra los dos commits del borrador: no los borres
+git merge origin/main                        # trae a tu rama la versión actual del proyecto
 ```
 
-### Alexandra: `alexandra-revision-evidencias`
+`git merge origin/main` se detendrá con conflictos en `GESTION.md` y en tu archivo `entrega/REVISION-NOMBRE.md`, porque `main` también
+ha cambiado esos archivos. Resuélvelos así:
 
-La rama existe pero se creó desde `main` y no tiene commits propios. Se adelanta hasta `cloud-g5-implementacion` sin borrar nada:
+1. `git status` muestra los archivos en conflicto.
+2. **`GESTION.md`:** quédate con la versión de `main` (`git checkout --theirs GESTION.md`) y, después, escribe a mano solo tu
+   subapartado 7.x con tu reflexión real.
+3. **Tu revisión:** abre el archivo, busca las marcas `<<<<<<<`, `=======` y `>>>>>>>`, y deja solo el texto que hayas comprobado tú.
+   Borra las marcas.
+4. `git add GESTION.md entrega/REVISION-NOMBRE.md`, `git commit` con tu identidad y `git push`. La PR se actualiza sola.
 
-```bash
-git log --oneline origin/cloud-g5-implementacion..origin/alexandra-revision-evidencias   # debe salir vacío
-git switch alexandra-revision-evidencias
-git log --oneline origin/cloud-g5-implementacion..HEAD                                   # debe salir vacío
-git merge --ff-only origin/cloud-g5-implementacion
-git push origin alexandra-revision-evidencias
-```
+**Si algo no cuadra, detente y avisa a Cristina.** No lo arregles con `reset` ni con `--force`: podría perderse trabajo.
 
-### Ibai: `ibai-revision-individual`
-
-Igual que Alexandra, con su rama:
-
-```bash
-git log --oneline origin/cloud-g5-implementacion..origin/ibai-revision-individual       # debe salir vacío
-git switch ibai-revision-individual
-git log --oneline origin/cloud-g5-implementacion..HEAD                                   # debe salir vacío
-git merge --ff-only origin/cloud-g5-implementacion
-git push origin ibai-revision-individual
-```
-
-**Si alguno de los `git log` muestra commits, o si `git merge --ff-only` falla, detente y avisa a Cristina.** No lo arregles con
-`reset` ni con `--force`: significaría que hay trabajo que no se debe perder.
+Si prefieres empezar de cero, crea una rama nueva desde `main` (`git switch --no-track -c NOMBRE-tarea origin/main`) y abre otra PR;
+avisa entonces a Cristina para que decida qué hacer con la PR antigua.
 
 Si en el paso 2 guardaste cambios con `git stash`, recupéralos ahora con `git stash pop` y revisa que sean los tuyos.
 
@@ -117,7 +113,7 @@ Haz **un commit por cada punto**, con su push, para que el historial refleje tra
 
 | # | Archivo | Qué hacer | Mensaje de commit orientativo |
 | --- | --- | --- | --- |
-| 1 | `entrega/REVISION-ENRIQUE.md` | En la fila de `CONTRASTE-GUIA-RUBRICA.md`, cambia `[CORRECTO` por `CORRECTO` | `Corrige un corchete suelto en mi revisión` |
+| 1 | `entrega/REVISION-ENRIQUE.md` | Revisa el borrador de tu PR, preparado con Codex. Deja solo lo que hayas comprobado tú y corrige lo demás | `Valida mi revisión de la documentación` |
 | 2 | `entrega/REVISION-ENRIQUE.md` | El README ha cambiado desde el 6 de noviembre. Vuelve a abrir sus enlaces y añade al final un apartado «Segunda comprobación (FECHA)» con lo que veas: qué enlaces abren y cuáles fallan | `Añade la segunda comprobación de los enlaces del README` |
 | 3 | `GESTION.md`, subapartado 7.3 | Sustituye `[POR COMPLETAR: qué ha aprendido Enrique]` por tu reflexión real. No toques los títulos ni otros subapartados. Si hiciste la web F1, dilo y explica cómo se puede comprobar | `Añade mi reflexión a GESTION.md` |
 | 4 | `practica-individual/EnriZx2/README.md` | Solo si tienes tu práctica previa de EC2: copia [PLANTILLA.md](../practica-individual/PLANTILLA.md) y complétala con tus capturas | `Añade mi práctica individual de EC2` |
@@ -126,7 +122,7 @@ Haz **un commit por cada punto**, con su push, para que el historial refleje tra
 
 | # | Archivo | Qué hacer | Mensaje de commit orientativo |
 | --- | --- | --- | --- |
-| 1 | `entrega/REVISION-ALEXANDRA.md` (nuevo) | Revisa [evidencias/INDICE.md](../evidencias/INDICE.md) y [capturas-conformes/INDICE.md](../evidencias/capturas-conformes/INDICE.md). Para cada captura, comprueba que el enlace abre y que se ven el prompt con el hostname, la fecha y hora, y el comentario con prueba, resultado y autor. Anótalo en una tabla con las columnas Evidencia, Comprobación y Resultado (`CORRECTO` o la incidencia que veas) | `Añade mi revisión de las evidencias` |
+| 1 | `entrega/REVISION-ALEXANDRA.md` (ya tiene un borrador preparado con Codex) | Revisa [evidencias/INDICE.md](../evidencias/INDICE.md) y [capturas-conformes/INDICE.md](../evidencias/capturas-conformes/INDICE.md). Para cada captura, comprueba que el enlace abre y que se ven el prompt con el hostname, la fecha y hora, y el comentario con prueba, resultado y autor. Anótalo en una tabla con las columnas Evidencia, Comprobación y Resultado (`CORRECTO` o la incidencia que veas) | `Añade mi revisión de las evidencias` |
 | 2 | `entrega/REVISION-ALEXANDRA.md` | Añade un apartado de incidencias y conclusión. Si no encuentras ninguna, dilo | `Completa las incidencias y la conclusión de mi revisión` |
 | 3 | `GESTION.md`, subapartado 7.4 | Sustituye `[POR COMPLETAR: qué ha aprendido Alexandra]` por tu reflexión real. No toques los títulos ni otros subapartados | `Añade mi reflexión a GESTION.md` |
 | 4 | `practica-individual/alexguerth/README.md` | Solo si tienes tu práctica previa de EC2, con la plantilla | `Añade mi práctica individual de EC2` |
@@ -136,11 +132,11 @@ Haz **un commit por cada punto**, con su push, para que el historial refleje tra
 | # | Archivo | Qué hacer | Mensaje de commit orientativo |
 | --- | --- | --- | --- |
 | 1 | `practica-individual/ibaiaretxabalaasir-collab/README.md` (nuevo) | Copia [PLANTILLA.md](../practica-individual/PLANTILLA.md) y complétala con tu práctica previa de EC2 y tus capturas reales. Si no la tienes, sáltate este punto y avisa: no se rellena con trabajo del grupo | `Añade mi práctica individual de EC2` |
-| 2 | `entrega/REVISION-IBAI.md` (nuevo) | Revisión de seguridad del repositorio (F12): comprueba que [.gitignore](../.gitignore) excluye claves privadas, `tfstate` y `tfvars`; que en `terraform/claves/` solo hay archivos `.pub`; y lee [config/sshd_00-reto4.conf](../config/sshd_00-reto4.conf). Anota lo que compruebas y su resultado | `Añade mi revisión de seguridad del repositorio` |
+| 2 | `entrega/REVISION-IBAI.md` (ya tiene un borrador preparado con Codex) | Revisión de seguridad del repositorio (F12): comprueba que [.gitignore](../.gitignore) excluye claves privadas, `tfstate` y `tfvars`; que en `terraform/claves/` solo hay archivos `.pub`; y lee [config/sshd_00-reto4.conf](../config/sshd_00-reto4.conf). Anota lo que compruebas y su resultado | `Añade mi revisión de seguridad del repositorio` |
 | 3 | `GESTION.md`, subapartado 7.5 | Sustituye `[POR COMPLETAR: qué ha aprendido Ibai]` por tu reflexión real. No toques los títulos ni otros subapartados | `Añade mi reflexión a GESTION.md` |
 
-Para el punto 2, en WSL o en un Git Bash con Python se puede ejecutar además `python3 scripts/revisar-secretos.py origin/main HEAD` y
-anotar las dos últimas líneas de su salida. Lo esperado es `Coincidencias: 0 []` y `Archivos sensibles: []`.
+Para el punto 2, en WSL o en un Git Bash con Python se puede ejecutar además `python3 scripts/revisar-secretos.py 6f3d838 HEAD`, que
+revisa todo lo integrado desde las Fases 0 y 1, y anotar las dos últimas líneas de su salida. Lo esperado es `Coincidencias: 0 []` y `Archivos sensibles: []`.
 
 **Para los tres:** la reflexión común del subapartado 7.1 se acuerda en grupo y la escribe una sola persona, para evitar conflictos.
 No editéis los índices de evidencias (`INDICE.md`): los actualiza Cristina después de revisar cada PR.
@@ -177,7 +173,8 @@ Haz la captura de la ventana entera, sin que se vea ningún token ni clave priva
 
 En GitHub, en *Compare & pull request* o en *Pull requests → New pull request*:
 
-- **base:** `cloud-g5-implementacion` (no `main`). **compare:** tu rama.
+- Si usas la PR que ya existe (#3, #4 o #5), no abras otra: añade en ella un comentario con estos datos.
+- **base:** `main`. **compare:** tu rama.
 - **Título:** qué aporta, por ejemplo «Revisión de evidencias de Alexandra».
 - **Descripción:**
 

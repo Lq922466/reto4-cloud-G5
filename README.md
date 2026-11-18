@@ -9,7 +9,7 @@ Web del Gran Premio de Euskadi desplegada en AWS con Terraform y Docker Swarm. R
 | Qué está completado y qué falta | [Checklist final](entrega/CHECKLIST-FINAL.md) |
 | El contraste con la Guía y la Rúbrica | [CONTRASTE-GUIA-RUBRICA.md](entrega/CONTRASTE-GUIA-RUBRICA.md) |
 | Cómo obtener capturas según la norma | [PROCEDIMIENTO-CAPTURAS.md](entrega/PROCEDIMIENTO-CAPTURAS.md) |
-| El plan pendiente para C3, E4 y E8 | [PLAN-C3-E4-E8.md](entrega/PLAN-C3-E4-E8.md) |
+| El plan para repetir E4 y E8 (la corrección de C3 ya se hizo) | [PLAN-C3-E4-E8.md](entrega/PLAN-C3-E4-E8.md) |
 | Las evidencias de cada criterio | [Índice de evidencias](evidencias/INDICE.md) |
 | La defensa: guion, demostraciones y preguntas | [DEFENSA.md](entrega/DEFENSA.md) y [presentación](entrega/presentacion-cloud-g5.pptx) |
 | La organización del grupo | [GESTION.md](GESTION.md) |
@@ -19,12 +19,18 @@ Web del Gran Premio de Euskadi desplegada en AWS con Terraform y Docker Swarm. R
 
 **Imágenes publicadas:** [`innnx/reto4-f1:1.0` y `innnx/reto4-f1:2.0`](https://hub.docker.com/r/innnx/reto4-f1/tags).
 
-**Rama:** el trabajo está en `cloud-g5-implementacion`, con la PR #1 en borrador hacia `main`. Mientras no se integre, `main` solo
-contiene las Fases 0 y 1, y los enlaces de este documento solo funcionan desde `cloud-g5-implementacion`.
+**Rama:** `main` es la única rama de trabajo y de entrega. El 18 de noviembre de 2026 se integró en ella todo el proyecto con la
+PR #1, y se eliminó la rama de trabajo anterior, `cloud-g5-implementacion`.
 
-**Última comprobación técnica registrada:** 5 de noviembre de 2026, 09:56 UTC, con cuatro nodos Ready/Active, `reto4_web` en 4/4
-y HTTP 200 en las cuatro IP. Es un dato histórico, no el estado actual. Para saber si el portal responde ahora, hay que comprobarlo
-como se indica en [Acceso al portal web](#acceso-al-portal-web).
+**Último estado técnico registrado.** Es un dato histórico, no el estado actual: desde entonces no se ha accedido a AWS ni al clúster.
+
+- **9 de noviembre:** cuatro nodos Ready/Active, manager-g5 como único manager y líder, `reto4_web` en 4/4 con
+  `innnx/reto4-f1:1.0` y HTTP 200 en las cuatro IP públicas.
+- **10 de noviembre:** el estado de Terraform se sincronizó con AWS (`refresh-only`, sin cambios en los recursos). El `plan` normal
+  propone sustituir las cuatro instancias porque Canonical publicó una imagen de Ubuntu nueva. **No ejecutar `terraform apply`**
+  hasta fijar la imagen ([incidencia I1.4](PROYECTO.md#115-incidencias-reales-y-soluciones)).
+
+Para saber si el portal responde ahora, hay que comprobarlo como se indica en [Acceso al portal web](#acceso-al-portal-web).
 
 ## Equipo
 
@@ -37,7 +43,9 @@ como se indica en [Acceso al portal web](#acceso-al-portal-web).
 
 [GESTION.md](GESTION.md) recoge la organización acordada, el seguimiento semanal y el uso de asistentes de IA. También separa la
 responsabilidad asignada a cada persona del trabajo que consta realmente. Hasta ahora, la única aportación integrada de Enrique,
-Alexandra e Ibai es la [revisión de la documentación](entrega/REVISION-ENRIQUE.md) de Enrique, en la PR #2.
+Alexandra e Ibai es la [revisión de la documentación](entrega/REVISION-ENRIQUE.md) de Enrique, en la PR #2. Las PR #3, #4 y #5 están
+abiertas hacia `main`: son borradores preparados con Codex desde la cuenta de Cristina, pendientes de que cada integrante los valide.
+El profesor tiene acceso al repositorio con la cuenta `jc-csl`.
 
 ## Arquitectura
 
@@ -109,6 +117,9 @@ terraform -chdir=terraform init                                # Local: descarga
 terraform -chdir=terraform validate                            # Solo lectura.
 terraform -chdir=terraform plan -out=reto4.tfplan              # Solo lectura en AWS. Revisar antes de aplicar.
 ```
+
+**Antes de aplicar**, el plan no debe contener `forces replacement` ni `to destroy`. Si los contiene, no se aplica: el 10 de
+noviembre el plan proponía sustituir las cuatro instancias por una imagen de Ubuntu nueva.
 
 **Modifica AWS:**
 
@@ -182,6 +193,7 @@ bash scripts/probar-orquestacion.sh config/ssh.local CUENTA/REPOSITORIO DIRECTOR
 ## Seguridad
 
 - No se versionan claves privadas, credenciales, estado ni planes de Terraform: [`.gitignore`](.gitignore).
-- Antes de integrar cambios, ejecutar `python3 scripts/revisar-secretos.py COMMIT_BASE HEAD`. Solo lectura.
+- Antes de integrar cambios, ejecutar `python3 scripts/revisar-secretos.py COMMIT_BASE HEAD`; por ejemplo, con `origin/main` como
+  base para una rama nueva, o con `6f3d838` para revisar todo lo integrado desde las Fases 0 y 1. Solo lectura.
 - `python3 scripts/validar-entrega.py` comprueba enlaces, evidencias y estados de los documentos de entrega. Solo lectura.
 - Las capturas de AWS no deben mostrar el identificador de la cuenta.

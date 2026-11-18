@@ -40,16 +40,16 @@ La Rúbrica añade que cada requisito puntúa solo si funciona durante la correc
 Requiere `xterm` e `imagemagick`. Si no hay `DISPLAY`, el script arranca Xvfb.
 
 ```bash
-python3 -I scripts/capturas-norma.py --listar              # Las 56 capturas del catálogo.
+python3 -I scripts/capturas-norma.py --listar              # Las 57 capturas del catálogo.
 python3 -I scripts/capturas-norma.py --comprobar           # Revisa que solo haya comandos de lectura.
 ```
 
 | Grupo | Nº | Necesita | Comando |
 | --- | --- | --- | --- |
-| Local | 11 | Nada de AWS. **Ya generadas** | `--autor "…" --grupo local` |
-| Laboratorio | 22 | Laboratorio activo, credenciales y SSH | `--autor "…" --grupo laboratorio` |
+| Local | 11 | Nada de AWS. **Ya generadas**; `F1-repositorio` y `F12-seguridad` se repitieron el 18 de noviembre | `--autor "…" --grupo local` |
+| Laboratorio | 22 | Laboratorio activo, credenciales y SSH. 15 se generaron el 6 de noviembre y hay que repetirlas el día de la corrección | `--autor "…" --grupo laboratorio` |
 | Pruebas | 17 | Además, `SONDA` con el registro del script, y que se esté ejecutando la prueba autorizada | `--autor "…" --solo '^E4-antes$'` |
-| Claves | 6 | Claves subidas a GitHub e instaladas, y prueba de cada integrante. [Procedimiento](PROCEDIMIENTO-CLAVES.md) | `--autor "…" --grupo claves` |
+| Claves | 7 | Claves en `terraform/claves/` e instaladas (hecho el 9 de noviembre) y prueba de cada integrante. Ya están `B1-clave-nodos`, `B1-registro-cristina` y `B1-registro-manager`. [Procedimiento](PROCEDIMIENTO-CLAVES.md) | `--autor "…" --grupo claves` |
 
 Las capturas D3 son 4 de las 22 del laboratorio. Requieren `CHROME` con la ruta de un navegador gráfico. Se pueden excluir con `--solo`.
 
@@ -61,7 +61,7 @@ bash scripts/actualizar-ips.sh             # Regenera los alias con las IP actua
 python3 -I scripts/capturas-norma.py --autor "AUTOR REAL" --grupo laboratorio --continuar
 ```
 
-`--continuar` no oculta nada: cada captura indica su resultado. Sin esa opción, el script se detiene en el primer `NO CORRECTO`. **Por ejemplo, `C3-nodos` dará `NO CORRECTO` mientras haya tres managers**, y debe quedar así hasta corregirlo. También `A6-sin-cambios`, mientras las salidas de Terraform conserven IP públicas antiguas. Ver el [plan de C3, E4 y E8](PLAN-C3-E4-E8.md).
+`--continuar` no oculta nada: cada captura indica su resultado. Sin esa opción, el script se detiene en el primer `NO CORRECTO`. Por ejemplo, la `C3-nodos` del 6 de noviembre dio `NO CORRECTO` porque había tres managers; la topología se corrigió el 9 de noviembre y la captura debe repetirse. `A6-sin-cambios` seguirá en `NO CORRECTO` mientras el plan normal proponga sustituir las instancias por la imagen de Ubuntu nueva (incidencia I1.4 de `PROYECTO.md`). Ver el [plan de C3, E4 y E8](PLAN-C3-E4-E8.md).
 
 ## Capturas que no se pueden automatizar
 
@@ -74,7 +74,7 @@ Requieren una sesión iniciada de una persona. Una consola web no tiene prompt: 
 | Reglas de entrada | A3 | EC2 → Security Groups → `reto4-cloud-g5` → Inbound rules |
 | Instancia detenida durante E4 y E8 | E4, E8 | EC2 → Instances, durante la prueba |
 | Colaboradores, con el profesor | F1 | GitHub → Settings → Collaborators |
-| PR | F2 | GitHub → Pull requests → PR #1 |
+| PR | F2 | GitHub → Pull requests, con las PR #1 a #5, y el historial de `main` |
 
 **Comentario en `PROYECTO.md`:** `Figura N. Prueba. Resultado. Autor. Fecha y hora. Máquina o servicio.`
 
@@ -82,4 +82,4 @@ Requieren una sesión iniciada de una persona. Una consola web no tiene prompt: 
 
 1. Revisar cada resultado en [`INDICE.md`](../evidencias/capturas-conformes/INDICE.md) y mirar las imágenes.
 2. Integrarlas en `PROYECTO.md` con su comentario. El texto de `INDICE.md` se puede reutilizar.
-3. Ejecutar `python3 scripts/revisar-secretos.py origin/main HEAD` y `python3 scripts/validar-entrega.py`.
+3. Ejecutar `python3 scripts/revisar-secretos.py 6f3d838 HEAD` (o `origin/main HEAD` desde una rama nueva) y `python3 scripts/validar-entrega.py`.

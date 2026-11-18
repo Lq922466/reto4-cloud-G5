@@ -3,6 +3,12 @@
 Revisión del 5 de noviembre de 2026 de los 42 criterios contra los documentos originales del profesor. Los originales se conservan fuera del
 repositorio y no están en ningún commit. Este documento los resume con palabras propias.
 
+> **Documento histórico.** Describe la situación del 5 de noviembre y no se ha actualizado criterio a criterio. Desde entonces han cambiado,
+> entre otras cosas, la topología (manager-g5 vuelve a ser el único manager y líder desde el 9 de noviembre), las claves (las cuatro
+> claves personales están en GitHub e instaladas en los cuatro nodos), las capturas (hay 32 capturas conformes) y el repositorio (todo
+> está en `main` desde el 18 de noviembre, y el profesor tiene acceso). El estado vigente de cada criterio está en
+> [REVISION.md](../REVISION.md) y en [PROYECTO.md](../PROYECTO.md). Los textos de la Guía y la Rúbrica que cita siguen siendo válidos.
+
 ## Conclusión
 
 **El trabajo técnico está muy avanzado, pero la entrega todavía no cumple la Rúbrica.** Hay cuatro motivos principales:

@@ -1,12 +1,14 @@
 # Plan para corregir C3 y completar E4 y E8
 
-**Plan sin ejecutar.** Cambia roles de Swarm y detiene instancias, así que **cada bloque requiere autorización expresa de Cristina**. Los comandos de este documento no se han lanzado.
+**Estado a 18 de noviembre de 2026.** El **bloque 1 (C3) se ejecutó el 9 de noviembre**: Codex bajó worker2-g5 y worker1-g5 con `docker node demote`, con autorización de Cristina, y manager-g5 quedó como único manager y líder, con 100 muestras de sonda correctas. Consta en el registro de sesión de Codex, no en el repositorio, y el clúster no se ha vuelto a comprobar desde el reinicio del laboratorio del 10 de noviembre. **Los bloques 2, 3 y 4 (E4, E8 y vuelta a C3) siguen sin ejecutar.** Cambian roles de Swarm y detienen instancias, así que **cada bloque requiere autorización expresa de Cristina**.
+
+**No ejecutar `terraform apply` durante este plan:** el `plan` normal del 10 de noviembre propone sustituir las cuatro instancias por una imagen de Ubuntu nueva (incidencia I1.4 de [PROYECTO.md](../PROYECTO.md#115-incidencias-reales-y-soluciones)).
 
 ## Objetivo
 
 | Criterio | Qué pide la Rúbrica | Situación actual | Resultado buscado |
 | --- | --- | --- | --- |
-| C3 | 4 nodos activos, manager líder, 3 workers unidos | Tres managers, con `worker1-g5` de líder | `manager-g5` líder y tres workers, con captura conforme |
+| C3 | 4 nodos activos, manager líder, 3 workers unidos | Corregido el 9 de noviembre: `manager-g5` único manager y líder. La captura versionada es del 6 de noviembre y da NO CORRECTO | Comprobarlo con el laboratorio activo y repetir la captura conforme `C3-nodos` |
 | E4 | Alta disponibilidad (caída worker). Evidencia: nodo caído; script OK | Registro en texto, con el portal provisional | Repetida con la web definitiva y capturas antes, durante y después |
 | E8 | Alta disp. managers (nuevo líder). Evidencia: listado desde otro | Registro en texto, sin estado durante la parada | Repetida con captura desde otro manager durante la parada |
 
@@ -17,7 +19,7 @@
 | Bloque | Acción sobre el sistema | Autorización necesaria | Duración orientativa |
 | --- | --- | --- | --- |
 | 0. Preparación | Regla SSH con la IP actual | **Sí:** cambia el grupo de seguridad | 5 min |
-| 1. C3 | `docker node demote` de dos nodos | **Sí:** cambia roles de Swarm | 5 min |
+| 1. C3 | `docker node demote` de dos nodos. **Hecho el 9 de noviembre**; ahora solo se comprueba y se captura | Solo para repetir el `demote` si hiciera falta | 5 min |
 | 2. E4 | Detener y arrancar `worker3-g5`, y actualización `--force` | **Sí:** prueba disruptiva | 10 min |
 | 3. E8 | Promover dos nodos, detener y arrancar `manager-g5` | **Sí:** roles y prueba disruptiva | 15 min |
 | 4. C3 final | `docker node demote` de dos nodos y `--force` | **Sí:** cambia roles de Swarm | 5 min |
@@ -40,7 +42,7 @@ Puede autorizarse por bloques. Si algo falla, el proceso se detiene y se consult
 | **Reparto desigual** tras reincorporar un nodo | Un nodo queda sin tareas | Actualización `--force`, ya usada en E6 | Revisar y consultar |
 | **`demote` del líder devuelve un error de tiempo** mientras cambia el líder | Salida confusa | Comprobar con `docker node ls` antes de repetir nada | Consultar si el estado no es el esperado |
 
-**No afecta a:** instancias, discos, IP privadas, redes ni imagen del servicio. Terraform solo verá cambios en sus salidas de IP pública. No se ejecuta `terraform destroy`.
+**No afecta a:** instancias, discos, IP privadas, redes ni imagen del servicio. No se ejecuta `terraform apply` ni `terraform destroy`.
 
 ## Bloque 0: preparación
 
@@ -62,6 +64,8 @@ CAPTURA="python3 -I scripts/capturas-norma.py --autor \"$AUTOR\""
 **Se detiene si:** hay menos de 4 nodos listos, el servicio no está en 4/4, o quedan menos de 60 minutos de laboratorio.
 
 ## Bloque 1: corregir C3
+
+**Ejecutado el 9 de noviembre.** Antes de E4 basta con comprobar `docker node ls` y tomar la captura `C3-nodos`. Los comandos se conservan por si el clúster hubiera vuelto a otra topología.
 
 ```bash
 # Primero el manager que NO es líder. Se comprueba antes quién es: aquí se supone worker1-g5.
@@ -157,7 +161,7 @@ bash scripts/verificar-despliegue.sh config/ssh.local innnx/reto4-f1 1.0
 
 ## Después
 
-1. Actualizar [diagramas/arquitectura.md](../diagramas/arquitectura.md), la presentación y el guion, que describen tres managers.
+1. Comprobar que [diagramas/arquitectura.md](../diagramas/arquitectura.md), el [guion](DEFENSA.md) y la presentación siguen reflejando un manager líder y tres workers. El diagrama y el guion se actualizaron el 18 de noviembre; la presentación, no.
 2. Rehacer las capturas de solo lectura con las IP finales.
 3. Integrar las capturas en `PROYECTO.md`, y actualizar `REVISION.md` y la checklist.
 4. **E2, E3, E6 y E7** se pueden repetir en esa misma sesión con el mismo método: el catálogo de `capturas-norma.py` ya incluye sus instantáneas.

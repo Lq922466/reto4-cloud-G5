@@ -1,392 +1,279 @@
-# RETO 4 CLOUD · Grupo 5: informe técnico
+# RETO 4 CLOUD · Grupo 5
 
-Informe técnico de las Fases 0–5 del despliegue en AWS de la web del Gran Premio de Euskadi, con GitHub Codespaces, Terraform y
-Docker Swarm. Explica qué se hizo, con qué comandos, por qué y con qué evidencias, de modo que el proyecto se pueda reproducir.
+**Web del Gran Premio de Euskadi en un clúster Docker Swarm creado con Terraform sobre AWS**
 
-- **Repositorio:** `Lq922466/reto4-cloud-G5`, privado. El trabajo está en la rama `cloud-g5-implementacion`.
-- **Imágenes:** [`innnx/reto4-f1`](https://hub.docker.com/r/innnx/reto4-f1/tags), etiquetas 1.0 y 2.0.
-- **Estado por criterio:** [REVISION.md](REVISION.md). **Evidencias por criterio:** [evidencias/INDICE.md](evidencias/INDICE.md).
-- **Referencias del profesor:** la Guía del Reto 4 y la Rúbrica de 42 criterios. Sus requisitos se citan en cada fase, y el
-  contraste completo está en [CONTRASTE-GUIA-RUBRICA.md](entrega/CONTRASTE-GUIA-RUBRICA.md).
+Informe técnico de las Fases 0 a 5 (`PROYECTO.md`)
 
-## Cómo leer este informe
+| | |
+| --- | --- |
+| **Ciclo y reto** | 2.º ASIR · Reto 4 CLOUD (Producto 6 del grupo, Cloud) |
+| **Grupo** | 5. Todos los recursos llevan el sufijo `g5` |
+| **Integrantes** | Cristina (Lq922466), Enrique (EnriZx2), Alexandra (alexguerth) e Ibai (ibaiaretxabalaasir-collab) |
+| **Responsable del producto Cloud** | Cristina |
+| **Repositorio** | `Lq922466/reto4-cloud-G5`, privado. Rama única de trabajo y de entrega: `main` |
+| **Imágenes de la web** | [`innnx/reto4-f1`](https://hub.docker.com/r/innnx/reto4-f1/tags), etiquetas `1.0` y `2.0` |
+| **Nube** | AWS Academy Learner Lab, región `us-east-1`, VPC por defecto |
+| **Revisión del informe** | 18 de noviembre de 2026 |
+| **Último estado técnico registrado** | Terraform: 10 de noviembre. Swarm, SSH y web: 9 de noviembre. Desde entonces no se ha accedido a AWS ni al clúster |
 
-- **Estructura.** Cada fase empieza con su **objetivo general** y lo que pide la Guía. Después se divide en apartados numerados, cada
-  uno con su **procedimiento**, la **explicación técnica** necesaria y sus **evidencias**. Al final de cada fase hay un único
-  **resultado y conclusión**.
-- **Fechas.** Todos los resultados llevan su fecha. Los del 4, 5 y 6 de noviembre son **históricos**: describen el estado de ese
-  momento, no el actual. El último estado comprobado está en [Estado del proyecto a 9 de noviembre](#estado-del-proyecto-a-9-de-noviembre-de-2026).
-- **Origen de cada comando.** *Literal* procede de un script o de un registro. *Deducido* significa que el registro guarda la salida,
-  pero no la línea exacta. *Procedimiento* indica los pasos para reproducirlo, sin un registro propio de esa ejecución.
-- **Web definitiva y portal provisional.** Son imágenes distintas, aunque ambas responden `version=1.0`. El portal provisional
-  ([`app/sitio`](app/sitio)) se usó el 4 de noviembre, y la web definitiva ([`app/f1`](app/f1)), desde el 5. Cada prueba indica cuál.
-- **Sondas.** Toman una muestra por segundo y por IP. Demuestran que hubo respuesta en cada muestra, pero no acreditan disponibilidad
-  continua entre muestras.
-- **Capturas.** La Guía exige ver el prompt con el hostname y la fecha y hora, y un comentario con la prueba, el resultado y el autor.
-  Las de [capturas-conformes/](evidencias/capturas-conformes/INDICE.md) cumplen esa norma y se generaron con el
-  [procedimiento de capturas](entrega/PROCEDIMIENTO-CAPTURAS.md). Las «evidencias anteriores» son reales, pero **no muestran el
-  prompt**. Las capturas que faltan se indican como **pendientes**.
-- **Equipo y autoría.**
-  - El grupo lo forman Cristina, Enrique, Alexandra e Ibai. Este reto es el Producto 6, Cloud, asignado a Cristina en la
-    organización del equipo. Cristina figura en Git como Innnx, en GitHub como Lq922466 y en Docker Hub como innnx, y es la autora de
-    los commits iniciales de las Fases 0 y 1.
-  - El trabajo del 4 de noviembre se hizo con el asistente Codex, y el del 5, 6 y 9 de noviembre, con Claude Code, por encargo de
-    Cristina y con su autorización expresa para cada operación que cambiaba AWS o el servicio.
-  - Dentro de las capturas generadas por Claude Code, el comentario dice literalmente «por encargo de Lq922466», que es la cuenta de
-    Cristina. En los pies de figura se indica «Cristina (Lq922466)».
-  - La responsabilidad asignada a cada persona y el trabajo que consta realmente están en [GESTION.md](GESTION.md).
-- **Regla de la Rúbrica.** Cada requisito puntúa solo si funciona durante la corrección y está respaldado por la captura
-  correspondiente y por sus archivos en el repositorio.
+La versión anterior de este informe se conserva como [copia histórica](entrega/historico/PROYECTO-2026-11-09.md).
 
-## Estado del proyecto a 9 de noviembre de 2026
+## Introducción
 
-Comprobación de solo lectura de las 08:33 UTC ([registro](evidencias/auditoria/registro-2026-11-09.txt)). Después, entre las 09:22 y
-las 09:27 UTC, se hicieron los cambios para B1 autorizados por Cristina ([registro](evidencias/auditoria/registro-2026-11-09-b1.txt)).
+El objetivo del reto es publicar en la nube la web desarrollada para el Gran Premio de Euskadi de Fórmula 1, de forma que soporte picos de tráfico y siga disponible aunque falle un servidor. Para conseguirlo, el grupo ha seguido las seis fases de la Guía del profesor:
 
-| Aspecto | Estado comprobado | Fuente |
+| Fase | Qué se construye | Criterios de la Rúbrica |
 | --- | --- | --- |
-| Instancias EC2 | Las cuatro en `running`, con controles `ok/ok`, los mismos ID e IP privadas, y IP públicas nuevas | Registro del 9 de noviembre |
-| Web | HTTP 200 y `version=1.0` en las cuatro IP públicas. Cada IP reparte 12 peticiones entre los mismos cuatro contenedores | Registro del 9 de noviembre |
-| Puerto 8080 | Abierto en el grupo de seguridad, pero los nodos rechazan la conexión: ningún servicio lo publica | Registro del 9 de noviembre |
-| SSH desde el Codespace | **Recuperado a las 09:22 UTC.** Con autorización, la regla pasó de `172.166.151.115/32` a `172.166.151.114/32`, y los cuatro nodos responden | Registro de B1 |
-| SSH de los integrantes | Regla temporal `88.14.93.201/32`, abierta a las 09:26 UTC con autorización. **Cristina entró con su clave en los cuatro nodos**, entre las 10:36 y las 10:39 UTC. **Enrique, Alexandra e Ibai entraron en manager-g5**, entre las 09:34 y las 09:37 UTC, pero **no en los workers**. Todo según sus capturas y el registro de cada nodo | Registro de B1 |
-| Docker Swarm | Comprobado a las 09:26 UTC, solo con lectura: cuatro nodos Ready/Active, `reto4_web` en 4/4 con `innnx/reto4-f1:1.0`, y redes con MTU 1450. **El líder es worker2-g5**, y manager-g5 y worker1-g5 son managers `Reachable`. El 6 de noviembre el líder era manager-g5. No se ha cambiado nada en Swarm | Registro de B1 |
-| Claves individuales (B1) | Las de Enrique, Alexandra e Ibai están **instaladas en los cuatro nodos** desde las 09:24 UTC, y la de Cristina desde las 09:54 UTC. Sin duplicados, y conservando `vockey` y la clave del Codespace. Aún no están en GitHub | [Procedimiento](entrega/PROCEDIMIENTO-CLAVES.md), [B1-clave-nodos](evidencias/capturas-conformes/B1-clave-nodos.png) |
-| Colaboración | PR #2 de Enrique, fusionada el 6 de noviembre. PR #1 de Cristina, en borrador hacia `main` | GitHub |
-| Pendientes principales | Acceso de Enrique, Alexandra e Ibai a los tres workers y retirada de la regla temporal (B1), destrucción de A6, topología de C3, E4 y E8 con la web definitiva, práctica individual y exposición | [Lo que no se ha demostrado](#lo-que-no-se-ha-demostrado) |
+| 0 | Repositorio privado en GitHub y Codespace como máquina de control | F1–F5, F7, F12 |
+| 1 | Cuatro servidores Ubuntu 22.04 en AWS, definidos como código con Terraform | A1–A6, F6, F13 |
+| 2 | Administración por SSH con claves propias, nombres cortos y salto a los workers | B1–B5 |
+| 3 | Clúster Docker Swarm por IP privada, con redes overlay de MTU 1450 | C1–C4 |
+| 4 | Imagen propia de la web en Docker Hub (1.0 y 2.0) y servicio de cuatro réplicas | D1–D3 |
+| 5 | Pruebas de balanceo, escalado, autorreparación, alta disponibilidad, mantenimiento y actualización | E1–E8 |
+| Entregables | Mapa de arquitectura, este informe con sus capturas y reparto de tareas | F8, F9, F10, F11 |
+| Exposición | Presentación de 10 minutos con caída de un nodo en directo, preguntas y demostración individual | G1–G3 |
 
-**Último estado completo registrado (histórico).** El 6 de noviembre, entre las 10:51 y las 11:01 UTC: cuatro nodos Ready/Active,
-`reto4_web` en 4/4 con `innnx/reto4-f1:1.0`, una réplica por nodo y HTTP 200 en las cuatro IP.
-[Registro](evidencias/auditoria/registro-2026-11-06.txt). La captura de la Figura 1 es anterior, del 5 de noviembre.
+Este documento es el informe principal que pide la Guía y que evalúan los criterios **F9** («informe extenso Fases 0-5 paso a paso») y **F10** («capturas de evidencias con normativa y comentadas»). Explica qué se hizo, cómo, por qué, con qué herramientas y cómo se comprobó cada resultado, de forma que el procedimiento se pueda repetir y defender.
 
-![Estado final: nodos, servicio y HTTP](evidencias/capturas-terminal/estado-final.png)
+**Autoría del trabajo.** Cristina es la responsable del producto Cloud y la autora de los commits iniciales de las Fases 0 y 1. La mayor parte de la implementación posterior se hizo con dos asistentes de IA, por encargo de Cristina y con su autorización expresa para cada operación que cambiaba AWS, el clúster o GitHub: **Codex** y **Claude Code**. Enrique, Alexandra e Ibai aportaron sus claves públicas y sus pruebas de acceso SSH, y Enrique, además, una Pull Request. El reparto de tareas y la reflexión del grupo están en [GESTION.md](GESTION.md).
 
-*Figura 1. Estado de nodos, servicio y HTTP. 5 de noviembre de 2026, 09:56 UTC. Captura: Claude Code. Máquinas: codespaces-8d43b2 y
-manager-g5. Es un dato histórico.*
+## Índice
 
-**Situación entre sesiones.** El 5 de noviembre, a las 11:13 UTC, AWS denegaba las lecturas de EC2 y las cuatro IP no respondían,
-probablemente porque había terminado la sesión de Learner Lab. El 6 de noviembre, con el laboratorio activo y las credenciales
-renovadas, todo volvió a responder y se actualizó la regla SSH con autorización. A las 10:27 UTC la IP del Codespace había vuelto a
-cambiar, y a las 10:50 UTC se sustituyó de nuevo la regla, también con autorización. El 9 de noviembre ha vuelto a cambiar.
-[Detalle de la auditoría](evidencias/auditoria/INFORME.md).
+<!-- INDICE:INICIO -->
+- [Introducción](#introducción)
+- [Cómo leer el informe](#cómo-leer-el-informe)
+- [Arquitectura general y herramientas](#arquitectura-general-y-herramientas)
+- [Fase 0 — GitHub y Codespaces](#fase-0--github-y-codespaces)
+  - [0.1. Repositorio privado en GitHub](#01-repositorio-privado-en-github)
+  - [0.2. Codespace y devcontainer](#02-codespace-y-devcontainer)
+  - [0.3. Control de versiones desde el Codespace](#03-control-de-versiones-desde-el-codespace)
+  - [0.4. Colaboradores](#04-colaboradores)
+  - [0.5. Ramas y Pull Requests de los integrantes](#05-ramas-y-pull-requests-de-los-integrantes)
+  - [0.6. Estructura del repositorio, README y scripts](#06-estructura-del-repositorio-readme-y-scripts)
+  - [0.7. Seguridad del repositorio](#07-seguridad-del-repositorio)
+  - [0.8. Capturas conformes a la norma de la Guía](#08-capturas-conformes-a-la-norma-de-la-guía)
+  - [0.9. Incidencias reales y soluciones](#09-incidencias-reales-y-soluciones)
+  - [0.10. Posibles incidencias y soluciones](#010-posibles-incidencias-y-soluciones)
+  - [0.11. Resultado y conclusión de la Fase 0](#011-resultado-y-conclusión-de-la-fase-0)
+- [Fase 1 — AWS y Terraform](#fase-1--aws-y-terraform)
+  - [1.1. Learner Lab, consola de AWS y región](#11-learner-lab-consola-de-aws-y-región)
+  - [1.2. Credenciales temporales en el Codespace](#12-credenciales-temporales-en-el-codespace)
+  - [1.3. Comprobación del laboratorio tras cada reinicio](#13-comprobación-del-laboratorio-tras-cada-reinicio)
+  - [1.4. Organización del módulo Terraform](#14-organización-del-módulo-terraform)
+  - [1.5. Variables](#15-variables)
+  - [1.6. Imagen Ubuntu y red por defecto](#16-imagen-ubuntu-y-red-por-defecto)
+  - [1.7. Grupo de seguridad (A3)](#17-grupo-de-seguridad-a3)
+  - [1.8. Manager y workers con count (A2)](#18-manager-y-workers-con-count-a2)
+  - [1.9. Script de arranque (A4)](#19-script-de-arranque-a4)
+  - [1.10. Salidas (A5)](#110-salidas-a5)
+  - [1.11. Creación de la infraestructura: init, validate, plan y apply](#111-creación-de-la-infraestructura-init-validate-plan-y-apply)
+  - [1.12. Cambio controlado (A6)](#112-cambio-controlado-a6)
+  - [1.13. Sincronización del estado con refresh-only](#113-sincronización-del-estado-con-refresh-only)
+  - [1.14. Destrucción (pendiente)](#114-destrucción-pendiente)
+  - [1.15. Incidencias reales y soluciones](#115-incidencias-reales-y-soluciones)
+  - [1.16. Posibles incidencias y soluciones](#116-posibles-incidencias-y-soluciones)
+  - [1.17. Resultado y conclusión de la Fase 1](#117-resultado-y-conclusión-de-la-fase-1)
+- [Fase 2 — Acceso SSH](#fase-2--acceso-ssh)
+  - [2.1. Claves SSH del proyecto (B1)](#21-claves-ssh-del-proyecto-b1)
+  - [2.2. Instalación de las claves de los integrantes (B1)](#22-instalación-de-las-claves-de-los-integrantes-b1)
+  - [2.3. Archivo config y nombres cortos (B2)](#23-archivo-config-y-nombres-cortos-b2)
+  - [2.4. Acceso a los workers por IP privada con salto (B5)](#24-acceso-a-los-workers-por-ip-privada-con-salto-b5)
+  - [2.5. Sin root ni contraseña, y permisos (B4)](#25-sin-root-ni-contraseña-y-permisos-b4)
+  - [2.6. Órdenes simultáneas y control total (B3)](#26-órdenes-simultáneas-y-control-total-b3)
+  - [2.7. Copia de archivos con SCP (B3)](#27-copia-de-archivos-con-scp-b3)
+  - [2.8. Acceso de cada integrante desde su equipo (B1)](#28-acceso-de-cada-integrante-desde-su-equipo-b1)
+  - [2.9. Incidencias reales y soluciones](#29-incidencias-reales-y-soluciones)
+  - [2.10. Posibles incidencias y soluciones](#210-posibles-incidencias-y-soluciones)
+  - [2.11. Resultado y conclusión de la Fase 2](#211-resultado-y-conclusión-de-la-fase-2)
+- [Fase 3 — Docker Swarm](#fase-3--docker-swarm)
+  - [3.1. Docker y conectividad por IP privada (C1)](#31-docker-y-conectividad-por-ip-privada-c1)
+  - [3.2. Inicialización del clúster por IP privada (C2)](#32-inicialización-del-clúster-por-ip-privada-c2)
+  - [3.3. Redes overlay red-g5 y red-app-g5 con MTU 1450 (C2 y C4)](#33-redes-overlay-red-g5-y-red-app-g5-con-mtu-1450-c2-y-c4)
+  - [3.4. Validación de los nodos y de sus roles (C3)](#34-validación-de-los-nodos-y-de-sus-roles-c3)
+  - [3.5. Incidencias reales y soluciones](#35-incidencias-reales-y-soluciones)
+  - [3.6. Posibles incidencias y soluciones](#36-posibles-incidencias-y-soluciones)
+  - [3.7. Resultado y conclusión de la Fase 3](#37-resultado-y-conclusión-de-la-fase-3)
+- [Fase 4 — Despliegue web](#fase-4--despliegue-web)
+  - [4.1. La web del Gran Premio de Euskadi](#41-la-web-del-gran-premio-de-euskadi)
+  - [4.2. Dockerfile, Nginx e identidad del contenedor (D1)](#42-dockerfile-nginx-e-identidad-del-contenedor-d1)
+  - [4.3. Versiones 1.0 y 2.0 y construcción en un nodo (D1)](#43-versiones-10-y-20-y-construcción-en-un-nodo-d1)
+  - [4.4. Publicación en Docker Hub (D1)](#44-publicación-en-docker-hub-d1)
+  - [4.5. Descarga anónima desde los workers (D1)](#45-descarga-anónima-desde-los-workers-d1)
+  - [4.6. Despliegue con stack.yml (D2)](#46-despliegue-con-stackyml-d2)
+  - [4.7. Acceso por la IP pública de los cuatro nodos (D3)](#47-acceso-por-la-ip-pública-de-los-cuatro-nodos-d3)
+  - [4.8. Incidencias reales y soluciones](#48-incidencias-reales-y-soluciones)
+  - [4.9. Posibles incidencias y soluciones](#49-posibles-incidencias-y-soluciones)
+  - [4.10. Resultado y conclusión de la Fase 4](#410-resultado-y-conclusión-de-la-fase-4)
+- [Fase 5 — Pruebas de orquestación](#fase-5--pruebas-de-orquestación)
+  - [5.1. Método común: scripts y sondas](#51-método-común-scripts-y-sondas)
+  - [5.2. E1: balanceo de carga](#52-e1-balanceo-de-carga)
+  - [5.3. E2: escalado a 8, 12 y 2 réplicas](#53-e2-escalado-a-8-12-y-2-réplicas)
+  - [5.4. E3: autorreparación](#54-e3-autorreparación)
+  - [5.5. E4: caída de un worker](#55-e4-caída-de-un-worker)
+  - [5.6. E5: reincorporación, reequilibrio y reinicio del laboratorio](#56-e5-reincorporación-reequilibrio-y-reinicio-del-laboratorio)
+  - [5.7. E6: mantenimiento con modo drain](#57-e6-mantenimiento-con-modo-drain)
+  - [5.8. E7: actualización de 1.0 a 2.0 sin corte y rollback](#58-e7-actualización-de-10-a-20-sin-corte-y-rollback)
+  - [5.9. E8: elección de un nuevo líder](#59-e8-elección-de-un-nuevo-líder)
+  - [5.10. Incidencias reales y soluciones](#510-incidencias-reales-y-soluciones)
+  - [5.11. Posibles incidencias y soluciones](#511-posibles-incidencias-y-soluciones)
+  - [5.12. Resultado y conclusión de la Fase 5](#512-resultado-y-conclusión-de-la-fase-5)
+- [Conclusión general](#conclusión-general)
+- [Referencias y páginas web utilizadas](#referencias-y-páginas-web-utilizadas)
+<!-- INDICE:FIN -->
 
-## Arquitectura
+## Cómo leer el informe
 
-![Arquitectura del grupo 5](diagramas/arquitectura.png)
+**Estructura de cada fase.** Todas las fases siguen el mismo orden:
 
-*Figura 2. Arquitectura, a partir de [diagramas/arquitectura.md](diagramas/arquitectura.md).*
+1. **Objetivo:** qué se pretende conseguir.
+2. **Contenidos:** qué se hace y qué requisitos de la Guía y criterios de la Rúbrica cubre, con su estado.
+3. **Apartados numerados:** procedimiento paso a paso, explicación técnica, comandos, herramientas, archivos, comprobación y captura.
+4. **Incidencias reales y soluciones:** problemas que ocurrieron de verdad, cómo se diagnosticaron y cómo se resolvieron.
+5. **Posibles incidencias y soluciones:** problemas que podrían aparecer al repetir el procedimiento o durante la defensa.
+6. **Resultado y conclusión:** un único resumen de la fase.
 
-Todo se despliega en `us-east-1`, en la VPC por defecto. El clúster se construye con las IP privadas, que no cambian, porque las
-públicas cambian en cada sesión del laboratorio.
+<a id="incidencias-y-soluciones"></a>Las incidencias técnicas reales están en el apartado correspondiente de cada fase: [Fase 0](#09-incidencias-reales-y-soluciones), [Fase 1](#115-incidencias-reales-y-soluciones), [Fase 2](#29-incidencias-reales-y-soluciones), [Fase 3](#35-incidencias-reales-y-soluciones), [Fase 4](#48-incidencias-reales-y-soluciones) y [Fase 5](#510-incidencias-reales-y-soluciones).
 
-| Nodo | ID de instancia | Tipo y disco | IP privada | Rol que pide la Guía | Rol en Swarm el 6 de noviembre |
+**Estados.** Se usan tres valores en todo el informe:
+
+- **Cumplido:** hecho, comprobado y con evidencia en el repositorio. Si falta alguna captura concreta que pide la Rúbrica, se indica
+  junto al estado.
+- **Parcial:** una parte del requisito está sin hacer.
+- **Pendiente:** todavía no se ha hecho.
+
+[REVISION.md](REVISION.md) usa la misma clasificación con un grado más: allí «Cumplido» se divide en **Listo** y **Demostrado, falta
+captura conforme**. Los estados de los dos documentos coinciden criterio a criterio.
+
+**Puntuación.** La Rúbrica tiene 42 criterios en siete bloques: A, Terraform (2 puntos); B, SSH (1); C, Swarm (1); D, web (0,5);
+E, orquestación (1,5); F, repositorio y entorno (2); y G, exposición y defensa (2). Un ítem completo puntúa entero, uno parcial la
+mitad y uno no conseguido, 0.
+
+**Tipos de evidencia.**
+
+- **Capturas conformes** ([`evidencias/capturas-conformes/`](evidencias/capturas-conformes/INDICE.md)). Cumplen la norma de la Guía: muestran el prompt con el hostname y la fecha y hora, y un comentario con la prueba, el resultado y el autor. Las genera [`capturas-norma.py`](scripts/capturas-norma.py) a partir de la salida real (apartado [0.8](#08-capturas-conformes-a-la-norma-de-la-guía)). Si el resultado no es el esperado, la captura dice **NO CORRECTO**, y se conserva así.
+- **Capturas de los integrantes** ([`evidencias/capturas-integrantes/`](evidencias/capturas-integrantes/INDICE.md)). Las hizo cada persona desde su propio equipo.
+- **Capturas anteriores** ([`evidencias/capturas-terminal/`](evidencias/capturas-terminal/INDICE.md) y carpetas de cada prueba). Son reales, pero no muestran el prompt ni el comentario que exige la norma.
+- **Registros de texto** (`registro.txt`, `sonda-*.txt` y [`evidencias/auditoria/`](evidencias/auditoria/INFORME.md)). Guardan la salida completa de los scripts.
+- **Registros no versionados.** Algunas comprobaciones del 9 y del 10 de noviembre solo constan en los registros de sesión de Codex y de Claude Code, y en una carpeta privada del Codespace que no se sube a Git porque contiene el estado de Terraform. Se indica en cada caso, junto con la evidencia que falta versionar.
+
+Cuando falta una captura, el informe lo indica con **Evidencia pendiente** y explica qué debe mostrar.
+
+**Fechas e IP.** Cada resultado indica su fecha. Learner Lab asigna IP públicas nuevas en cada sesión, así que las IP que aparecen en capturas y registros son las de ese día.
+
+**Web definitiva y portal provisional.** La web del grupo ([`app/f1`](app/f1)) se desplegó el 5 de noviembre. Antes, las primeras pruebas se hicieron con un portal provisional ([`app/sitio`](app/sitio)). Ambas imágenes responden `version=1.0`, así que cada prueba indica con cuál se hizo.
+
+**Sondas.** Durante las pruebas, un script consulta la web una vez por segundo y por IP. Una muestra correcta demuestra que hubo respuesta en ese instante, pero no lo que ocurre entre dos muestras. Por eso el informe habla de «muestras correctas» y no de «disponibilidad continua».
+
+**Comandos.** Se copian de los scripts del repositorio o de los registros. Las palabras en mayúsculas, como `IP_PUBLICA` o `ESTADO`, son valores que hay que sustituir.
+
+**Regla de la Rúbrica.** Cada requisito puntúa solo si funciona durante la corrección y está respaldado por su captura y sus archivos en el repositorio. Por eso las comprobaciones deben repetirse con el laboratorio activo antes de la corrección.
+
+## Arquitectura general y herramientas
+
+### Arquitectura
+
+Todo se despliega en la región `us-east-1` de AWS, en la VPC por defecto. El clúster se construye con las **IP privadas**, que no cambian, porque las públicas cambian en cada sesión del laboratorio. El Codespace actúa como máquina de control: desde él se ejecutan Git, la AWS CLI, Terraform y SSH.
+
+```mermaid
+flowchart LR
+    CS["Codespace: máquina de control<br/>Git · AWS CLI · Terraform · SSH"]
+    GH["GitHub<br/>Lq922466/reto4-cloud-G5"]
+    HUB["Docker Hub<br/>innnx/reto4-f1 1.0 y 2.0"]
+    NAV["Navegador"]
+    subgraph AWS["AWS us-east-1 · VPC por defecto · grupo de seguridad reto4-cloud-g5"]
+        subgraph SW["Docker Swarm por IP privada · red-g5 ingress y red-app-g5 · MTU 1450"]
+            M["manager-g5 · t3.medium · 20 GB<br/>Manager líder · 172.31.28.10"]
+            W1["worker1-g5 · t3.small · 10 GB<br/>Worker · 172.31.17.168"]
+            W2["worker2-g5 · t3.small · 10 GB<br/>Worker · 172.31.29.192"]
+            W3["worker3-g5 · t3.small · 10 GB<br/>Worker · 172.31.31.183"]
+        end
+    end
+    CS -->|"git push y Pull Requests"| GH
+    CS -->|"Terraform y AWS CLI"| AWS
+    CS -->|"SSH por la regla /32"| M
+    M -->|"salto SSH por IP privada"| W1 & W2 & W3
+    HUB -->|"docker pull"| SW
+    NAV -->|"HTTP 80 por cualquiera de las 4 IP públicas"| SW
+```
+
+| Nodo | ID de instancia | Tipo y disco | IP privada | Rol que pide la Guía | Rol comprobado el 9 de noviembre |
 | --- | --- | --- | --- | --- | --- |
 | manager-g5 | `i-0e6ebf2af63facc60` | t3.medium, 20 GB gp3 | 172.31.28.10 | Manager líder | Manager líder |
-| worker1-g5 | `i-066a1ad3b7a8e0db9` | t3.small, 10 GB gp3 | 172.31.17.168 | Worker | **Manager** |
-| worker2-g5 | `i-0ed6d9c9957251a18` | t3.small, 10 GB gp3 | 172.31.29.192 | Worker | **Manager** |
+| worker1-g5 | `i-066a1ad3b7a8e0db9` | t3.small, 10 GB gp3 | 172.31.17.168 | Worker | Worker |
+| worker2-g5 | `i-0ed6d9c9957251a18` | t3.small, 10 GB gp3 | 172.31.29.192 | Worker | Worker |
 | worker3-g5 | `i-0446409b26cf0a662` | t3.small, 10 GB gp3 | 172.31.31.183 | Worker | Worker |
 
-Los nombres no cambian, pero los roles sí: worker1-g5 y worker2-g5 se promovieron a managers para la prueba E8. La Guía pide un
-manager líder y tres workers, así que hay que decidir y documentar el estado final, como se explica en el apartado 3.5. El 5 de
-noviembre, el líder era worker1-g5, y no consta cuándo volvió a serlo manager-g5. El 9 de noviembre, tras reiniciarse el laboratorio, el
-líder era worker2-g5. Con tres managers, el liderazgo puede cambiar al reiniciar los nodos.
+Los roles son los comprobados el 9 de noviembre, después de devolver el clúster a la topología de la Guía (apartado [3.4](#34-validación-de-los-nodos-y-de-sus-roles-c3)). Entre la prueba E8 y esa corrección, worker1-g5 y worker2-g5 fueron managers. El laboratorio se reinició el 10 de noviembre y los roles no se han vuelto a comprobar.
 
-## AWS Academy Learner Lab: acceso y renovación de la sesión
+El mapa de arquitectura del repositorio (criterio F8) está en [`diagramas/`](diagramas/arquitectura.md):
 
-**Objetivo general.** Disponer de una sesión válida de AWS desde el Codespace y recuperar el control del clúster cada vez que se
-reinicia el laboratorio. Learner Lab entrega credenciales temporales y detiene los recursos al terminar cada sesión, así que este
-procedimiento se repite al empezar cada día de trabajo y antes de cualquier prueba o exposición.
+![Mapa de arquitectura del grupo 5](diagramas/arquitectura.png)
 
-**Qué pide la Guía.** «Todo el despliegue se realizará en la región us-east-1 (Learner Lab), usando la red por defecto de AWS. El
-clúster se construye usando las IPs privadas, ya que las públicas cambian en cada sesión.»
+*Figura 1. Mapa de arquitectura de [`diagramas/arquitectura.md`](diagramas/arquitectura.md): Codespace, GitHub, AWS, Swarm, redes, servicio y Docker Hub, con un manager líder y tres workers. Actualizado el 18 de noviembre de 2026 a partir de su código Mermaid; la versión anterior mostraba los roles temporales posteriores a E8.*
 
-### L.1. Entrar en Learner Lab e iniciar el laboratorio
+### Flujo de trabajo
 
-**Procedimiento.**
+1. Desde el Codespace, **Terraform** crea en AWS el grupo de seguridad y las cuatro instancias. Cada instancia ejecuta en su primer arranque un script que le pone nombre y zona horaria, instala las claves públicas, endurece SSH e instala Docker.
+2. Con **SSH**, usando alias cortos y el manager como salto, se administra cada nodo.
+3. Se forma el clúster **Docker Swarm** por IP privada y se crean las redes overlay del grupo.
+4. La web se empaqueta con **Docker** en una imagen propia, se publica en **Docker Hub** y se despliega como un servicio de cuatro réplicas.
+5. Con scripts y **sondas** que consultan la web cada segundo, se prueban las capacidades de orquestación de Swarm.
+6. Todo el código, la configuración y las evidencias se guardan en **GitHub**.
 
-1. Entrar en AWS Academy con la cuenta del alumno y abrir el curso que contiene el Learner Lab.
-2. Abrir el módulo del laboratorio, *Launch AWS Academy Learner Lab*.
-3. Pulsar **Start Lab** y esperar a que el indicador junto a **AWS** pase de rojo o amarillo a **verde**.
+### Herramientas utilizadas
 
-**Explicación técnica.** Learner Lab es una cuenta de AWS temporal y restringida. Mientras el indicador está en verde, la sesión está
-activa, y el panel muestra el tiempo que le queda. Al agotarse ese tiempo, o con **End Lab**, el laboratorio se detiene. Las
-instancias EC2 conservan su ID, su disco y su IP privada, pero al volver a arrancar reciben una **IP pública nueva**.
+| Herramienta | Versión o detalle | Para qué se usó | Fases |
+| --- | --- | --- | --- |
+| GitHub y GitHub CLI (`gh`) | `gh` 2.103.3 | Repositorio, colaboradores, ramas y Pull Requests | 0 |
+| GitHub Codespaces y `devcontainer` | Ubuntu 22.04 | Máquina de control reproducible | 0–5 |
+| Git | — | Control de versiones | 0 |
+| AWS Academy Learner Lab y consola de AWS | Cuenta temporal del alumno | Acceso a AWS, credenciales y consulta de EC2 | 1 |
+| AWS CLI | 2.39.3 | Consultas de EC2 y cambios autorizados en el grupo de seguridad | 1–5 |
+| Terraform y proveedor `hashicorp/aws` | Terraform 1.17.1, proveedor 5.100.0 | Infraestructura como código | 1 |
+| cloud-init | De Ubuntu 22.04 | Ejecuta el script de arranque en cada instancia | 1 |
+| OpenSSH: `ssh`, `scp`, `ssh-keygen` | — | Acceso remoto, salto, copia de archivos y huellas | 2–5 |
+| Docker Engine y Docker Swarm | 29.1.3 (`docker.io`) | Contenedores y orquestación | 3–5 |
+| Docker Hub | Repositorio público `innnx/reto4-f1` | Registro de las imágenes | 4 |
+| Nginx | Imagen `nginx:alpine` | Servidor web dentro de cada contenedor | 4 |
+| `curl` y `jq` | — | Sondas HTTP y lectura de JSON | 1–5 |
+| Chrome for Testing, Playwright y Xvfb | — | Pruebas de la web en un navegador real y capturas | 4–5 |
+| `xterm` e ImageMagick | — | Capturas de terminal conformes a la norma | 0–5 |
+| Python 3 | — | Scripts de capturas, revisión de secretos y comprobación de la web | 0–5 |
+| Codex y Claude Code | Asistentes de IA | Ejecución y documentación por encargo de Cristina | 1–5 |
 
-Así ocurrió en la prueba E5, con End Lab y Start Lab, y vuelve a verse el 9 de noviembre. Nada más iniciar el laboratorio, las cuatro
-instancias ya estaban en `running`, con los controles de estado aún en `initializing`. No se había ejecutado ningún `start-instances`
-desde el Codespace. Los ID coinciden con los del apply inicial, y las IP públicas son distintas de las del 6 de noviembre.
+## Fase 0 — GitHub y Codespaces
 
-**Evidencias.** [Registro del 9 de noviembre](evidencias/auditoria/registro-2026-11-09.txt) y [verificación de E5](evidencias/E5-verificacion-final.txt).
-**Captura pendiente:** panel de Learner Lab con el indicador en verde, sin mostrar credenciales.
+**Objetivo.** Disponer de un repositorio privado y colaborativo en GitHub y de una máquina de control reproducible en GitHub Codespaces, con AWS CLI y Terraform, desde la que se gestiona todo el proyecto.
 
-### L.2. Acceder a AWS Console
+**Contenidos.**
 
-**Procedimiento.** Con el indicador en verde, pulsar **AWS**. Se abre la consola de AWS en otra pestaña, ya autenticada. Comprobar
-arriba a la derecha que la región es **N. Virginia (us-east-1)**, y abrir *EC2 → Instances*.
+| Requisito de la Guía | Criterio | Apartado | Estado |
+| --- | --- | --- | --- |
+| Crear el repositorio del proyecto, que actúa como carpeta master, y que sea privado | F1 | 0.1 | Cumplido |
+| Codespace aprovisionado con un `devcontainer` que incluya AWS CLI y Terraform | F5 | 0.2 | Cumplido |
+| `git add`, `commit` y `push` desde el Codespace | F2 | 0.3 | Cumplido |
+| Invitar al resto de miembros y al profesor | F1 | 0.4 | Cumplido. Falta la vista web de Settings |
+| Los demás miembros trabajan desde WSL o Git Bash e integran su código con Pull Requests | F2 | 0.5 | Parcial |
+| Estructura de carpetas, README y scripts comentados | F3, F4, F7 | 0.6 | Cumplido |
+| Sin credenciales, claves privadas ni estado de Terraform | F12 | 0.7 | Cumplido, con los límites indicados |
+| Capturas con prompt, fecha y comentario | F10 | 0.8 | Parcial |
 
-**Explicación técnica.** La consola y la AWS CLI usan la misma cuenta y la misma sesión. La consola sirve para ver las instancias,
-sus controles de estado y las reglas del grupo de seguridad. El Codespace hace lo mismo por línea de comandos. En las capturas de la
-consola no debe verse el identificador de la cuenta.
+### 0.1. Repositorio privado en GitHub
 
-**Evidencias.** **Pendiente:** capturas de la consola de EC2 con las instancias y con las reglas del grupo de seguridad. Las capturas
-actuales de A2 y A3 son de terminal.
-
-### L.3. Obtener las credenciales temporales
-
-**Procedimiento.** En el panel de Learner Lab, abrir **AWS Details** y, junto a **AWS CLI**, pulsar **Show**. Aparece un bloque de
-cuatro líneas que se copia completo: la cabecera `[default]` y tres líneas `campo=valor`, una por cada credencial de la tabla
-siguiente. Nunca se escriben las credenciales reales en el repositorio ni en una captura, y este informe no reproduce el bloque
-ni con valores ocultos, para que la [revisión de secretos](scripts/revisar-secretos.py) no tenga que distinguir un ejemplo de una fuga.
-
-**Explicación técnica.** Son tres valores que van siempre juntos, en este orden:
-
-| Credencial | Para qué sirve |
-| --- | --- |
-| Identificador de la clave de acceso, `aws_access_key_id` | Identifica la clave. Las claves temporales empiezan por `ASIA`. Las permanentes, por `AKIA`, pero Learner Lab no las da |
-| Clave secreta de acceso | Es la parte secreta. La CLI la usa para **firmar** cada petición, y nunca se envía a AWS. Quien la tenga puede actuar en la cuenta |
-| Token de sesión | Demuestra que la clave pertenece a una sesión temporal todavía válida. Sin el token, AWS rechaza una clave temporal |
-
-Estas credenciales dan control sobre todos los recursos del laboratorio. Por eso la Guía prohíbe mostrarlas, y
-[`.gitignore`](.gitignore) excluye `.aws/` y `credentials`.
-
-### L.4. Actualizar `~/.aws/credentials` en el Codespace
+**Qué se hizo y para qué.** Cristina creó el repositorio `reto4-cloud-G5` con su cuenta Lq922466. Es la «carpeta master» de la Guía: la copia de referencia del código, la configuración, la documentación y las evidencias. El primer commit es del 3 de noviembre de 2026.
 
 **Procedimiento.**
 
-```bash
-# Procedimiento.
-umask 077                          # Los archivos nuevos solo los podrá leer el propio usuario.
-nano ~/.aws/credentials            # Sustituir todo el contenido por el bloque [default] copiado y guardar.
-chmod 600 ~/.aws/credentials       # Lectura y escritura solo para el propietario.
-```
+1. En [github.com](https://github.com), pulsar **New repository**.
+2. Escribir el nombre `reto4-cloud-G5`, marcar **Private** y crear el repositorio con un README inicial.
 
-**Explicación técnica.** La AWS CLI, Terraform y los scripts del proyecto leen las credenciales de ese archivo, con el perfil
-`[default]`. Hay que **sustituir** el bloque entero, porque las tres líneas se renuevan juntas: mezclar una clave nueva con un token
-antiguo también falla. No conviene usar `aws configure` para esto, porque no pide el token de sesión.
-
-Se comprobó que no hay variables de entorno `AWS_ACCESS_KEY_ID` ni `AWS_SESSION_TOKEN` que tengan prioridad sobre el archivo. Si las
-hubiera, la CLI las usaría aunque el archivo estuviera actualizado.
-
-### L.5. Configurar la región us-east-1
-
-**Procedimiento.**
-
-```bash
-# Procedimiento.
-aws configure set region us-east-1
-aws configure set output json
-cat ~/.aws/config
-```
-
-El archivo `~/.aws/config` del Codespace contiene exactamente esto:
-
-```ini
-[default]
-region = us-east-1
-output = json
-```
-
-**Explicación técnica.** La región decide en qué centro de datos se crean y se consultan los recursos. Si la CLI apuntara a otra
-región, `describe-instances` devolvería una lista vacía aunque las instancias existan. Terraform no depende de este archivo: el
-proveedor usa `var.aws_region`, que vale `us-east-1` por defecto, como se ve en el apartado 1.2. Los scripts indican además
-`--region us-east-1` en cada llamada.
-
-### L.6. Comprobar la conexión con `aws sts get-caller-identity`
-
-**Procedimiento.**
-
-```bash
-# Procedimiento. Solo comprueba que las credenciales son válidas, sin mostrar la cuenta.
-aws sts get-caller-identity > /dev/null && echo "AWS acepta las credenciales"
-```
-
-**Explicación técnica.** STS (*Security Token Service*) es el servicio que emite las credenciales temporales.
-`get-caller-identity` responde **quién** firma la petición: la cuenta, el usuario y el ARN del rol asumido. No necesita permisos
-especiales, así que es la forma más sencilla de saber si las credenciales siguen siendo válidas. Su salida contiene el identificador
-de la cuenta, de 12 dígitos, y por eso se redirige a `/dev/null` y no se captura. El 9 de noviembre, tras renovar las credenciales,
-esta orden respondió correctamente.
-
-### L.7. Por qué caducan las credenciales y qué hacer ante RequestExpired
-
-**Explicación técnica.** Las credenciales de Learner Lab pertenecen a una sesión de STS ligada a la sesión del laboratorio. Cuando la
-sesión termina, o cuando se inicia una nueva, AWS deja de aceptarlas, aunque el archivo siga igual. En este proyecto se han registrado
-tres errores de este tipo:
-
-| Fecha | Error | Situación |
-| --- | --- | --- |
-| 4 de noviembre, 20:51 UTC, en E5 | `UnauthorizedOperation`, por denegación explícita de la política `voc-cancel-cred` | Credenciales de la sesión anterior tras reiniciar el laboratorio. [Registro](evidencias/E5-verificacion-posterior.txt) |
-| 5 de noviembre, 11:13 UTC | `UnauthorizedOperation` en `DescribeInstances` y `DescribeSecurityGroups` | Sesión del laboratorio terminada. [Registro](evidencias/auditoria/registro-acceso-en-vivo.txt) |
-| 9 de noviembre, 07:44 UTC | `RequestExpired: Request has expired` | Credenciales de una sesión ya caducada. [Registro](evidencias/auditoria/registro-2026-11-09.txt) |
-
-**Procedimiento ante `RequestExpired` u otra denegación de este tipo.**
-
-1. Comprobar en el panel de Learner Lab que el indicador está en verde. Si no lo está, pulsar **Start Lab**.
-2. Copiar de nuevo el bloque de **AWS Details → AWS CLI** y sustituir `~/.aws/credentials`, como en L.4.
-3. Repetir `aws sts get-caller-identity`. No hay que cambiar nada en Terraform ni en los scripts.
-
-Los scripts del proyecto detectan esta situación. `comprobar-laboratorio.sh` y `actualizar-ips.sh` terminan con el código 3 y
-avisan de que hay que renovar las credenciales. Antes de mostrar el error, ocultan los identificadores de cuenta.
-
-### L.8. Comprobar las cuatro instancias EC2
-
-**Procedimiento.**
-
-```bash
-# Procedimiento. Solo lectura: nombre, ID, estado, IP pública e IP privada.
-aws ec2 describe-instances --region us-east-1 \
-  --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' \
-  --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,InstanceId,State.Name,PublicIpAddress,PrivateIpAddress]' \
-  --output text | sort
-
-# Controles de estado del sistema y de la instancia.
-aws ec2 describe-instance-status --region us-east-1 --include-all-instances \
-  --instance-ids i-0e6ebf2af63facc60 i-066a1ad3b7a8e0db9 i-0ed6d9c9957251a18 i-0446409b26cf0a662 \
-  --query 'InstanceStatuses[].[InstanceId,InstanceState.Name,SystemStatus.Status,InstanceStatus.Status]' --output text
-```
-
-**Explicación técnica.**
-
-- **El filtro** por la etiqueta `Name` selecciona solo los cuatro nodos del grupo. `worker?-g5` admite un carácter cualquiera.
-- **`--query`** usa JMESPath para quedarse con los campos útiles. Así la salida no incluye el propietario ni otros datos de la cuenta.
-- **`running`** solo indica que la máquina está encendida. Hasta que los dos controles de estado pasan de `initializing` a `ok`, el
-  sistema operativo puede no estar listo para SSH.
-
-El 9 de noviembre, a las 08:05 UTC, tres nodos seguían en `initializing`. A las 08:33 UTC los cuatro estaban en `ok/ok`.
-
-**Evidencias.** [Registro del 9 de noviembre](evidencias/auditoria/registro-2026-11-09.txt) y la captura conforme
-[A2-instancias](evidencias/capturas-conformes/A2-instancias.png), del 6 de noviembre, en la Fase 1.
-
-### L.9. Verificar las IP públicas
-
-**Procedimiento.** Las IP públicas vigentes son las que devuelve EC2, con la orden de L.8. Terraform no sirve para esto:
-`terraform output nodes` muestra las IP guardadas en el estado tras el último `apply`, y el estado no se actualiza solo cuando el
-laboratorio se reinicia.
-
-**Explicación técnica.** Esto se comprobó el 6 de noviembre. Un `terraform plan` no proponía cambios en los recursos, pero sí en las
-salidas, porque las IP del estado eran las del último apply. Se explica en el apartado 1.9 y en la Figura 15.
-
-Por eso los scripts que necesitan las IP actuales, `actualizar-ips.sh`, `comprobar-laboratorio.sh` y las sondas, las leen de EC2.
-Solo `generar-config-ssh.sh` usa la salida de Terraform, y está pensado para ejecutarse justo después de crear la infraestructura.
-
-### L.10. Comprobar la regla SSH /32 del grupo de seguridad
-
-**Procedimiento.**
-
-```bash
-# Procedimiento. IP pública con la que sale el Codespace.
-curl -s https://checkip.amazonaws.com
-
-# Origen permitido en el puerto 22 del grupo reto4-cloud-g5.
-aws ec2 describe-security-groups --region us-east-1 --filters Name=group-name,Values=reto4-cloud-g5 \
-  --query 'SecurityGroups[0].IpPermissions[?FromPort==`22`].IpRanges[].CidrIp' --output text
-```
-
-**Explicación técnica.** La Guía pide abrir el puerto 22 solo «desde aula/alumno». Por eso la regla admite una única dirección, con
-la máscara `/32`. El SSH entre nodos, que necesita el salto, usa otra regla que solo admite el propio grupo de seguridad.
-
-El Codespace es una máquina en la nube y su IP de salida **no es fija**. El 6 de noviembre cambió dos veces. El 9 de noviembre la regla
-admitía `172.166.151.115/32` y el Codespace salía por `172.166.151.114`, así que la conexión SSH se agotaba sin respuesta:
-`Connection timed out`. Un fallo así no se debe a las claves, sino a que el grupo de seguridad descarta los paquetes. A las 09:22 UTC,
-con autorización de Cristina, se sustituyó la regla siguiendo el orden que se describe a continuación.
-
-Para corregirlo se **añade** la regla nueva, se comprueba el SSH en los cuatro nodos y solo entonces se **retira** la antigua. Así nunca
-se pierde el acceso a medias. Es un cambio en AWS y requiere autorización. **Nunca se abre a `0.0.0.0/0`.** Como la regla está en
-`main.tf`, después hay que usar `-var ssh_cidr=IP/32` en los planes de Terraform, o el plan propondrá volver a la IP anterior.
-
-**Evidencias.** [Sustituciones autorizadas del 6 de noviembre](evidencias/auditoria/registro-2026-11-06.txt) y
-[registro del 9 de noviembre](evidencias/auditoria/registro-2026-11-09.txt), con la propuesta sin aplicar, y
-[sustitución del 9 de noviembre](evidencias/auditoria/registro-2026-11-09-b1.txt), con las reglas antes y después.
-
-### L.11. Recuperar el acceso al reiniciar el laboratorio: `comprobar-laboratorio.sh` y `actualizar-ips.sh`
-
-**Procedimiento.**
-
-```bash
-# Literal: scripts del repositorio.
-bash scripts/comprobar-laboratorio.sh   # Solo lectura: EC2, IP, regla SSH, web y Swarm.
-# Si propone cambiar la regla SSH, ejecutar sus comandos solo con autorización (L.10).
-bash scripts/actualizar-ips.sh          # En AWS solo lee. Regenera config/ssh.local y config/ssh_config.aplicado.
-ssh manager-g5 hostname                 # Comprobar el acceso con el alias.
-```
-
-**Explicación técnica.**
-
-[`comprobar-laboratorio.sh`](scripts/comprobar-laboratorio.sh) hace cuatro comprobaciones y no cambia nada:
-
-1. Compara cada instancia con su ID e IP privada esperados, e indica si sus controles están en `ok/ok`.
-2. Compara el origen de la regla SSH con la IP del Codespace. Si no coinciden, **muestra** los comandos `authorize` y `revoke`
-   exactos, sin ejecutarlos.
-3. Pide `/` e `identidad.txt` a cada IP pública.
-4. Si hay SSH, consulta en el manager `docker node ls`, `docker service ls` y la MTU de las redes.
-
-Termina con 0 si todo está correcto, con 2 si falta corregir algo y con 3 si AWS deniega la consulta.
-
-[`actualizar-ips.sh`](scripts/actualizar-ips.sh) lee de EC2 la IP pública del manager y las IP privadas de los workers, y regenera
-la configuración SSH. Los alias de la Fase 2 siguen funcionando aunque las IP hayan cambiado. Escribe en un archivo temporal y lo
-mueve al final, para no dejar nunca una configuración a medias.
-
-**Evidencias.** [Registro del 9 de noviembre](evidencias/auditoria/registro-2026-11-09.txt), que contiene una ejecución completa con
-código 2.
-
-### Resultado y conclusión de la sección Learner Lab
-
-El procedimiento permite recuperar el control tras cada reinicio:
-
-1. Iniciar el laboratorio.
-2. Renovar las tres credenciales.
-3. Comprobar la sesión con STS.
-4. Revisar las instancias y sus IP en EC2.
-5. Ajustar, con autorización, la regla SSH `/32`.
-6. Regenerar los alias.
-
-Los ID, los discos y las IP privadas se conservan entre sesiones, y por eso Swarm sigue funcionando. Cambian las IP públicas de los
-nodos y la del Codespace.
-
-El 9 de noviembre se completaron los seis pasos. El paso 5 se hizo a las 09:22 UTC, con autorización, y desde entonces el Codespace
-vuelve a tener SSH y acceso a Swarm.
-
-**Pendiente:** capturas de Learner Lab y de la consola de EC2.
-
-## Fase 0: Codespaces y repositorio
-
-**Objetivo general.** Crear un repositorio colaborativo en GitHub y una máquina de control reproducible en GitHub Codespaces, con
-AWS CLI y Terraform, desde la que se gestiona todo el proyecto. Los demás miembros trabajan desde sus propios terminales e integran
-sus cambios mediante Pull Requests. Criterios de la Rúbrica: F1–F5 y F12.
-
-| Qué pide la Guía | Situación a 9 de noviembre |
-| --- | --- |
-| Crear el repositorio del proyecto en GitHub | **Cumple** |
-| Codespace aprovisionado con un `devcontainer` que incluya AWS CLI y Terraform | **Cumple** |
-| `git add`, `commit` y `push` desde el Codespace | **Cumple** |
-| Invitar al resto de miembros a colaborar | **Parcial:** tres cuentas con permiso de escritura. Falta confirmar el profesor |
-| Los demás miembros clonan y trabajan desde otros terminales Linux, como WSL o Git Bash | **No consta.** El único commit de otra cuenta se hizo desde la web de GitHub |
-| Los demás miembros integran su código mediante Pull Requests | **Parcial:** una PR de Enrique, fusionada |
-
-### 0.1. Repositorio en GitHub
-
-**Procedimiento.** Cristina creó el repositorio `reto4-cloud-G5` como **privado**, con su cuenta Lq922466. El primer commit, `f5c14e9 Initial
-commit`, es del 3 de noviembre de 2026.
-
-**Explicación técnica.** El repositorio es la «carpeta master» de la que habla la Guía: la copia de referencia del código, la
-documentación y las evidencias. Es privado porque la Guía lo exige, y porque contiene datos de la infraestructura, como los ID de
-instancia y las IP. La Rúbrica (F1) pide además que todos los integrantes sean colaboradores y que el profesor esté invitado.
-
-**Evidencias.** Figura 5, en el apartado 0.4.
+**Explicación.** El repositorio es **privado** porque lo exige la Guía y porque contiene datos de la infraestructura, como los identificadores de las instancias y del grupo de seguridad. La Rúbrica (F1) pide además que todos los integrantes sean colaboradores y que el profesor esté invitado (apartado [0.4](#04-colaboradores)).
 
 ### 0.2. Codespace y `devcontainer`
 
-**Procedimiento.** El archivo [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json) se añadió el 3 de noviembre, en el
-commit `2f5e6ea Fase 0: configuracion de Codespaces`. Para crear el Codespace:
+**Qué se hizo y para qué.** El Codespace es la **máquina de control** del proyecto. Para que cualquier miembro obtenga el mismo entorno sin instalar nada a mano, se describe en [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json), añadido el 3 de noviembre en el commit `2f5e6ea`.
 
-1. En GitHub, abrir el repositorio, pulsar **Code → Codespaces → Create codespace on `cloud-g5-implementacion`**.
-2. Esperar a que se construya el contenedor. Si se modifica el `devcontainer`, usar *Rebuild Container*.
-3. Comprobar las herramientas:
-
-```bash
-# Literal: comprobación del entorno del 5 de noviembre. Salida resumida.
-aws --version; terraform version | head -n 1; gh --version | head -n 1
-# aws-cli/2.39.3 · Terraform v1.17.1 · gh version 2.103.3
-```
+**Herramientas y archivos:** GitHub Codespaces y `.devcontainer/devcontainer.json`.
 
 ```json
 {
@@ -399,243 +286,394 @@ aws --version; terraform version | head -n 1; gh --version | head -n 1
 }
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
 - **`image`** es la imagen base del contenedor: Ubuntu 22.04, la misma versión que se usa en las instancias EC2.
-- **`features`** son paquetes de instalación reutilizables. Cada una instala una herramienta al construir el contenedor: AWS CLI y
-  Terraform.
+- **`features`** son paquetes de instalación reutilizables. Cada una instala una herramienta al construir el contenedor: AWS CLI y Terraform.
 
-Así, cualquier miembro que abra un Codespace obtiene el mismo entorno, sin instalar nada a mano. Ese entorno es la **máquina de
-control**: desde él se ejecutan Terraform, la AWS CLI, SSH y Git.
+**Procedimiento.**
 
-Docker no puede ejecutarse dentro de este Codespace por falta de permisos del contenedor. Por eso las imágenes se construyen en un
-nodo, como se explica en la Fase 4.
+1. En GitHub, abrir el repositorio y pulsar **Code → Codespaces → Create codespace on `main`**.
+2. Esperar a que se construya el contenedor. Si se modifica el `devcontainer`, usar **Rebuild Container**.
+3. Comprobar las herramientas desde el terminal:
 
-**Evidencias.**
+```bash
+aws --version
+terraform version | head -n 1
+gh --version | head -n 1
+```
+
+**Comprobación.** El 5 de noviembre, el Codespace respondió `aws-cli/2.39.3`, `Terraform v1.17.1` y `gh version 2.103.3`.
 
 ![Codespace aprovisionado con AWS CLI y Terraform](evidencias/capturas-conformes/F5-entorno.png)
 
-*Figura 3. Codespace aprovisionado con AWS CLI y Terraform. Resultado: El devcontainer incluye AWS CLI y Terraform, y ambos funcionan
-en el Codespace. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+*Figura 2. El `devcontainer` incluye AWS CLI y Terraform, y ambos funcionan en el Codespace. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026. Máquina: codespaces-8d43b2.*
 
-Evidencias anteriores: [entorno](evidencias/capturas-terminal/F5-entorno.png). **Pendiente, aunque no es imprescindible:** una vista
-del Codespace en el navegador.
+> **Evidencia pendiente (complementaria):** vista del Codespace en el navegador, desde **GitHub → Codespaces**, con el nombre del Codespace y su estado *Active*.
 
 ### 0.3. Control de versiones desde el Codespace
 
-**Procedimiento.** Cada cambio se registra y se sube desde el Codespace:
+**Qué se hizo y para qué.** Cada cambio se registra y se sube a GitHub desde el Codespace, para que el trabajo no dependa de una sola máquina.
+
+**Procedimiento.**
 
 ```bash
-# Procedimiento: el ciclo de cada cambio.
-git status                    # Qué archivos han cambiado.
-git diff                      # Qué ha cambiado en cada uno.
-git add RUTA                  # Prepara solo los archivos revisados.
-git commit -m "Mensaje"       # Guarda el cambio en el historial local.
-git push                      # Lo sube a GitHub.
+git status                  # Qué archivos han cambiado.
+git diff                    # Qué ha cambiado en cada uno.
+git add RUTA                # Prepara solo los archivos revisados.
+git commit -m "Mensaje"     # Guarda el cambio en el historial local.
+git push                    # Lo sube a GitHub.
 ```
 
-**Explicación técnica.**
+**Explicación.** Se añaden rutas concretas, en lugar de `git add .`, para no subir por error un archivo con secretos. Antes de subir cambios se ejecuta la revisión de secretos del apartado [0.7](#07-seguridad-del-repositorio).
 
-- **`git add`** pasa los cambios al índice, que es lo que se incluirá en el commit. Se añaden rutas concretas, en lugar de `git add .`,
-  para no subir por error un archivo con secretos.
-- **`git commit`** crea una versión con autor, fecha y mensaje.
-- **`git push`** sincroniza la rama con GitHub, de modo que el trabajo no depende del Codespace.
-
-**Evidencias.** El historial de la rama `cloud-g5-implementacion` hasta el commit `a267503`, la fusión de la PR #2, tiene 35 commits:
-
-- 23 de Cristina, con su identidad Innnx: los 3 de `main`, 19 hechos con Claude Code y la fusión de la PR #2;
-- 11 de Codex;
-- 1 de Enrique.
-
-El 9 de noviembre, a las 11:30 UTC, se añadió el commit `56e5a46` con la
-[segunda revisión](entrega/segunda-revision-2026-11-09/README.md). Lleva la identidad Innnx, pero su contenido lo preparó Codex,
-como indica la propia revisión.
-
-![Estructura del repositorio](evidencias/capturas-conformes/F4-estructura.png)
-
-*Figura 4. Estructura del repositorio. Resultado: Existen las carpetas pedidas en la rama de implementación. Autor: Claude Code, por
-encargo de Cristina (Lq922466). 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
-
-Evidencias anteriores: [estructura](evidencias/capturas-terminal/F4-estructura.png).
+**Comprobación.** Antes de esta revisión, la rama de trabajo `cloud-g5-implementacion` tenía 44 commits: 32 con la identidad de Cristina (Innnx), incluidos el commit inicial y la fusión de la PR #2; 11 firmados por Codex; y 1 de Enrique (EnriZx2). Los commits con la identidad de Cristina incluyen trabajo preparado con Claude Code o con Codex, como indica su mensaje cuando lo declara. A ellos se suman el commit de esta revisión, con Claude Code, y la fusión de la PR #1, que llevó todo ese historial a `main` el 18 de noviembre (apartado [0.5](#05-ramas-y-pull-requests-de-los-integrantes)).
 
 ### 0.4. Colaboradores
 
-**Procedimiento.** El administrador invita a cada miembro desde **Settings → Collaborators → Add people**, y cada miembro acepta la
-invitación. Las cuentas con acceso se consultan con:
+**Procedimiento.**
+
+1. El administrador abre **Settings → Collaborators → Add people** e invita a cada cuenta.
+2. Cada miembro acepta la invitación desde su correo o desde GitHub.
+3. Desde el Codespace se comprueba quién tiene acceso:
 
 ```bash
-# Literal: captura del 5 de noviembre.
 gh repo view --json visibility --jq .visibility
 gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_name] | @tsv'
 ```
 
-**Explicación técnica.** El permiso de escritura (*write*) permite crear ramas y Pull Requests, pero no cambiar la configuración del
-repositorio, que queda en manos del administrador.
+**Explicación.** El permiso de escritura (*write*) permite crear ramas y Pull Requests, pero no cambiar la configuración del repositorio, que queda en manos del administrador.
 
-El 5 de noviembre tenían acceso las cuentas de Cristina (Lq922466), como administración, y las de Enrique (EnriZx2), Alexandra
-(alexguerth) e Ibai (ibaiaretxabalaasir-collab), con escritura. La organización del equipo está en [GESTION.md](GESTION.md). La invitación al profesor **no está
-confirmada**: la consulta de invitaciones no estaba disponible con el token del Codespace.
-
-**Evidencias.**
+**Comprobación.** El 5 de noviembre, el repositorio era privado y tenían acceso Cristina (Lq922466), como administradora, y Enrique (EnriZx2), Alexandra (alexguerth) e Ibai (ibaiaretxabalaasir-collab), con escritura. En la consulta del 18 de noviembre aparece además la cuenta del profesor, **jc-csl**, con permiso de escritura: el profesor aceptó la invitación. Cristina confirmó que esa cuenta es la del profesor.
 
 ![Repositorio privado y cuentas con acceso](evidencias/capturas-conformes/F1-repositorio.png)
 
-*Figura 5. Repositorio privado y cuentas con acceso. Resultado: El repositorio es privado. Solo muestra las cuentas con acceso: falta
-confirmar integrantes y profesor. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+*Figura 3. Repositorio privado, con acceso de los cuatro integrantes y del profesor (jc-csl). Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 18 de noviembre de 2026. Máquina: codespaces-8d43b2.*
 
-Evidencias anteriores: [colaboradores](evidencias/capturas-terminal/F1-colaboradores.png). **Pendiente:** captura de
-*Settings → Collaborators* con el profesor invitado.
+> **Evidencia pendiente:** la Rúbrica indica como evidencia de F1 la página **Settings → Collaborators**. Falta su captura desde el navegador, con la cuenta del profesor visible.
 
-### 0.5. Ramas y Pull Requests
+### 0.5. Ramas y Pull Requests de los integrantes
 
-**Procedimiento.** `main` contiene las Fases 0 y 1 iniciales. El resto del trabajo se hace en `cloud-g5-implementacion`, que se
-integrará en `main` mediante la PR #1. Un miembro que trabaja desde WSL o Git Bash sigue este flujo:
+**Qué se hizo y para qué.** Hasta el 18 de noviembre, `main` solo contenía las Fases 0 y 1 iniciales, y el resto del trabajo estaba en la rama `cloud-g5-implementacion`. Ese día se integró todo en `main` con la PR #1 y se eliminó la rama antigua: desde entonces, **`main` es la única rama de trabajo y de entrega**. Cada integrante debe trabajar en su propia rama, desde su terminal Linux, y proponer sus cambios con una Pull Request (PR) hacia `main`. Una **rama** aísla el trabajo de cada persona; una **Pull Request** propone integrarlo en otra rama y permite revisarlo antes de fusionarlo. Así el historial muestra quién hizo cada cambio, que es lo que evalúa F2.
+
+**Procedimiento para cada integrante, desde WSL o Git Bash.** Las instrucciones completas están en [INSTRUCCIONES-F2-INTEGRANTES.md](entrega/INSTRUCCIONES-F2-INTEGRANTES.md).
 
 ```bash
-# Procedimiento para cada integrante, desde su propio terminal.
 git clone https://github.com/Lq922466/reto4-cloud-G5.git
 cd reto4-cloud-G5
-git switch -c nombre-de-la-tarea origin/cloud-g5-implementacion   # Rama propia a partir de la de trabajo.
+git switch -c NOMBRE-DE-LA-TAREA origin/main
 # ... cambios ...
-git add RUTA && git commit -m "Mensaje" && git push -u origin nombre-de-la-tarea
-gh pr create --base cloud-g5-implementacion --title "Título" --body "Qué cambia y cómo se ha comprobado"
+git add RUTA && git commit -m "Mensaje" && git push -u origin NOMBRE-DE-LA-TAREA
+gh pr create --base main --title "Título" --body "Qué cambia y cómo se ha comprobado"
 ```
 
-**Explicación técnica.** Una **rama** aísla el trabajo de cada persona. Una **Pull Request** propone integrarlo en otra rama, y
-permite revisarlo y comentarlo antes de fusionarlo. Así el historial muestra quién hizo cada cambio, que es lo que evalúa F2.
+**Integración en `main`.** La PR #1 se fusionó con un *merge commit*, que conserva intactos los commits, sus identificadores y sus autores, incluida la fusión de la PR #2 de Enrique. Antes de fusionarla se comprobaron los enlaces, las pruebas y la ausencia de secretos (apartado [0.7](#07-seguridad-del-repositorio)), y se cambió el destino de las PR #3, #4 y #5 a `main` para que no se cerraran al eliminar su rama de destino.
 
-| Rama o PR | Estado real en GitHub, a 9 de noviembre |
+**Comprobación.** Estado de las PR en GitHub a 18 de noviembre:
+
+| PR | Rama → destino | Quién la abrió | Estado | Observaciones |
+| --- | --- | --- | --- | --- |
+| #1 | `cloud-g5-implementacion` → `main` | Cristina | Fusionada el 18 de noviembre | Integra todo el proyecto en `main`. La rama de origen se eliminó después, sin trabajo pendiente |
+| #2 | `enrique-revision-documentacion` → `cloud-g5-implementacion` | Enrique | Fusionada el 6 de noviembre | Commit de Enrique hecho desde la web de GitHub (el confirmador es GitHub), no desde un terminal. Su contenido está en `main` |
+| #3 | `enrique-correccion-revision` → `main` | Cuenta de Cristina | Abierta, con conflictos | Borrador de revisión preparado con Codex, pendiente de validación por Enrique |
+| #4 | `alexandra-revision-evidencias` → `main` | Cuenta de Cristina | Abierta, con conflictos | Borrador preparado con Codex, pendiente de validación por Alexandra |
+| #5 | `ibai-revision-individual` → `main` | Cuenta de Cristina | Abierta, con conflictos | Borrador preparado con Codex, pendiente de validación por Ibai |
+
+Las PR #3, #4 y #5 tienen commits con la identidad de Cristina, así que **no cuentan como commits de Enrique, Alexandra o Ibai**. Siguen abiertas, sin modificar su contenido, para que cada persona las valide o las corrija. Tienen conflictos con `main` en su revisión personal y en `GESTION.md`, que debe resolver quien las valide. Para F2 faltan commits y PR hechos por Alexandra e Ibai desde sus cuentas y sus terminales, y un commit de Enrique desde un terminal.
+
+![Historial de commits y Pull Requests](evidencias/capturas-conformes/F2-historial.png)
+
+*Figura 4. Historial de commits y PR con los autores reales. Es del 5 de noviembre, anterior a las PR #2 a #5 y a la integración en `main`. Captura conforme. Claude Code, por encargo de Cristina (Lq922466).*
+
+> **Evidencia pendiente:** captura actualizada del historial de `main` (`git log --format='%h %an/%cn %s'`) y de la lista de Pull Requests en GitHub, con commits y PR de cada integrante desde su propia cuenta.
+
+### 0.6. Estructura del repositorio, README y scripts
+
+**Qué se hizo y para qué.** El repositorio sigue la estructura de entregables de la Guía (F4), tiene un [README.md](README.md) con el resumen, las instrucciones rápidas y los enlaces (F3), y todos los scripts explican al principio qué hacen, cuándo se usan y qué efecto tienen (F7).
+
+| Carpeta o archivo | Contenido |
 | --- | --- |
-| `main` | Tres commits de Cristina, con su identidad Innnx, del 3 y 4 de noviembre: commit inicial, Fase 0 y Fase 1 |
-| `cloud-g5-implementacion` y PR #1 | PR de Cristina hacia `main`, en **borrador** desde el 4 de noviembre a las 20:27 UTC |
-| `enrique-revision-documentacion` y PR #2 | PR de Enrique hacia `cloud-g5-implementacion`, creada el 6 de noviembre a las 09:42 UTC y **fusionada** por Cristina a las 11:06 UTC. Añade su [revisión de la documentación](entrega/REVISION-ENRIQUE.md) |
-| `alexandra-revision-evidencias` | Creada por Alexandra el 6 de noviembre. Apunta al mismo commit que `main`: **no tiene commits propios** |
-| `ibai-revision-individual` | Creada por Ibai el 9 de noviembre a las 10:54 UTC. Apunta al mismo commit que `main`: **no tiene commits propios** |
+| [`.devcontainer/`](.devcontainer/devcontainer.json) | Entorno del Codespace con AWS CLI y Terraform |
+| [`terraform/`](terraform/) | Código de la infraestructura, script de arranque y claves públicas de los integrantes |
+| [`app/`](app/) | Web en sus dos versiones, `Dockerfile`, pila `stack.yml` y script de despliegue en Swarm |
+| [`config/`](config/README.md) | Plantillas SSH, configuración SSH aplicada y configuración de `sshd` |
+| [`scripts/`](scripts/) | Scripts comentados: actualización de IP, comprobaciones, despliegue, pruebas, capturas y seguridad |
+| [`diagramas/`](diagramas/arquitectura.md) | Mapa de la arquitectura |
+| [`practica-individual/`](practica-individual/README.md) | Práctica previa de cada integrante. **Sin contenido** (F13) |
+| [`evidencias/`](evidencias/INDICE.md) | Capturas y registros, ordenados por criterio |
+| [`entrega/`](entrega/) | Documentos de apoyo: defensa, checklist, procedimientos y revisiones |
+| [`tests/`](tests/) | Pruebas automáticas de los scripts, con AWS, SSH y Terraform simulados |
+| `README.md`, `PROYECTO.md`, `GESTION.md` | Resumen, este informe y reparto de tareas |
 
-El commit de Enrique tiene como confirmador a GitHub, así que se hizo desde la interfaz web, no desde un terminal. No constan
-commits ni PR de Alexandra ni de Ibai. Las ramas de ambas personas parten de `main`, que no contiene el trabajo de
-`cloud-g5-implementacion`: las [instrucciones de F2](entrega/INSTRUCCIONES-F2-INTEGRANTES.md) explican cómo adelantarlas sin perder
-nada y cómo aportar commits y PR desde WSL o Git Bash.
+**Comprobación.** Las carpetas existen en `main` desde la integración del 18 de noviembre, y la cabecera de cada script describe su uso.
 
-**Evidencias.**
+![Estructura del repositorio](evidencias/capturas-conformes/F4-estructura.png)
 
-![Historial de commits y PR](evidencias/capturas-conformes/F2-historial.png)
+*Figura 5. Existen las carpetas pedidas por la Guía. Se tomó el 5 de noviembre en la rama de implementación, cuyo árbol es el que se integró en `main`. Captura conforme. Claude Code, por encargo de Cristina (Lq922466).*
 
-*Figura 6. Historial de commits y PR. Resultado: Muestra los autores reales: aún faltan commits y PR de los demás integrantes. Autor:
-Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:23 UTC. Máquina: codespaces-8d43b2. Es anterior a la PR #2.*
+![Scripts comentados](evidencias/capturas-conformes/F7-scripts.png)
 
-Evidencias anteriores: [historial](evidencias/capturas-terminal/F2-historial.png). **Pendiente:** captura actualizada del historial
-con la PR #2, y vista web de las PR.
+*Figura 6. Los scripts están en `/scripts` y su cabecera explica qué hacen. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026.*
 
-### 0.6. Seguridad del repositorio
-
-**Procedimiento.** [`.gitignore`](.gitignore) excluye lo que nunca debe versionarse, y antes de integrar cambios se revisan las líneas
-añadidas:
+Las pruebas automáticas de [`tests/`](tests/) comprueban, sin recursos reales, que los scripts no dan falsos positivos y que Terraform rechaza un SSH abierto a todo Internet. El 18 de noviembre, antes de integrar en `main`, se ejecutaron las 29 pruebas, todas correctas:
 
 ```bash
-# Literal: script del repositorio.
-python3 scripts/revisar-secretos.py COMMIT_BASE HEAD
+python3 -m unittest discover -s tests      # Ran 29 tests ... OK
 ```
 
-**Explicación técnica.**
+### 0.7. Seguridad del repositorio
+
+**Qué se hizo y para qué.** El criterio F12 exige que no se publiquen credenciales, claves privadas ni el estado de Terraform. Se consigue con dos medidas: exclusiones en [`.gitignore`](.gitignore) y una revisión automática antes de integrar cambios.
 
 | Excluido por `.gitignore` | Por qué |
 | --- | --- |
-| `*.tfstate`, `*.tfstate.*`, `*.tfplan`, `*.tfvars` y `**/.terraform/` | El estado y los planes contienen los datos reales de la infraestructura, y las variables locales contienen la IP y las claves del grupo. Se permite `*.example.tfvars`, que es una plantilla |
-| `*.pem`, `*.key`, `id_rsa*`, `id_ed25519*` y `*_reto4` | Claves privadas. En `terraform/claves/` solo se admiten archivos `.pub` |
+| `*.tfstate`, `*.tfstate.*`, `*.tfplan`, `*.tfvars`, `*.auto.tfvars.json` y `**/.terraform/` | El estado y los planes contienen los datos reales de la infraestructura, y las variables locales, la IP autorizada y las claves. Se permite `*.example.tfvars`, que es una plantilla |
+| `*.pem`, `*.key`, `*.ppk`, `id_rsa*`, `id_ed25519*`, `*_reto4`, `.ssh/` | Claves privadas. En `terraform/claves/` solo se admiten archivos `.pub` |
 | `.aws/`, `credentials`, `.env` | Credenciales |
 | `config/ssh.local` | Configuración SSH generada con las IP del momento |
-| `*.docx` | Los documentos originales del profesor |
+| `*.docx` | Documentos originales del profesor y documentos de trabajo |
 
-[`revisar-secretos.py`](scripts/revisar-secretos.py) busca en las líneas añadidas patrones de credenciales de AWS, tokens de Docker
-Hub y de GitHub, claves privadas, tokens de Swarm y números de cuenta. Además rechaza archivos sensibles por su nombre. Antes de
-revisar, comprueba que su propio detector funciona con muestras.
+**Procedimiento.**
 
-**Evidencias.** [Revisión de todo el historial](evidencias/auditoria/registro-repositorio.txt), sin credenciales, claves privadas ni
-estado.
+```bash
+python3 scripts/revisar-secretos.py COMMIT_BASE HEAD
+```
+
+**Explicación.** [`revisar-secretos.py`](scripts/revisar-secretos.py) revisa las líneas añadidas entre dos commits y busca patrones de credenciales de AWS, tokens de Docker Hub y de GitHub, claves privadas, tokens de Swarm y números de cuenta. También rechaza archivos sensibles por su nombre. Antes de revisar, comprueba con muestras que su propio detector funciona. Sale con error si encuentra algo, sin mostrar el secreto.
+
+**Comprobación.** La revisión del 9 de noviembre, hecha con Codex, dio este resultado:
+
+- 20 997 líneas añadidas en 380 archivos respecto a `main`: **0 coincidencias** y ningún archivo sensible.
+- 405 versiones de archivos de texto en todo el historial accesible: **ningún secreto**.
+- Las credenciales locales vigentes no aparecen en ninguna versión del historial.
+
+**Límites.** Los 118 archivos binarios del historial, casi todos imágenes, no se revisaron de nuevo visualmente en esa comprobación. Su resultado consta en el registro de sesión de Codex; en el repositorio está la [revisión anterior del historial](evidencias/auditoria/registro-repositorio.txt).
 
 ![Sin credenciales, claves ni estado de Terraform](evidencias/capturas-conformes/F12-seguridad.png)
 
-*Figura 7. Sin credenciales, claves ni estado de Terraform. Resultado: Solo se versiona la plantilla de variables, y la revisión no
-encuentra secretos. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:23 UTC. Máquina: codespaces-8d43b2.*
+*Figura 7. Solo se versiona la plantilla de variables, y la revisión no encuentra secretos. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026.*
 
-Evidencias anteriores: [archivos sensibles](evidencias/capturas-terminal/F12-archivos-sensibles.png).
+> **Evidencia pendiente:** repetir la captura `F12-seguridad` con la revisión de todo el historial actual, antes de integrar la PR #1.
 
-### Resultado y conclusión de la Fase 0
+### 0.8. Capturas conformes a la norma de la Guía
 
-El entorno de trabajo está operativo y es reproducible:
+**Qué se hizo y para qué.** La Guía exige que cada captura muestre el prompt con el hostname y la fecha y hora, y un comentario con la prueba, el resultado y el autor, sin credenciales ni claves privadas. Para cumplirlo de forma repetible se creó [`capturas-norma.py`](scripts/capturas-norma.py).
 
-- El Codespace se crea a partir del `devcontainer`, con AWS CLI y Terraform.
-- El repositorio es privado, y sus exclusiones impiden versionar estado, planes, variables, claves y credenciales.
+**Procedimiento.**
 
-La parte colaborativa sigue **incompleta**:
+```bash
+python3 -I scripts/capturas-norma.py --listar                                   # Catálogo de capturas.
+python3 -I scripts/capturas-norma.py --autor "Nombre (cuenta)" --solo '^C3-nodos$'
+```
 
-- Hay una única PR de otro integrante, la de Enrique, hecha desde la web.
-- No constan commits de Alexandra ni de Ibai, ni trabajo desde WSL o Git Bash.
-- No se ha confirmado que el profesor esté invitado.
-- `main` solo contendrá el proyecto completo cuando se integre la PR #1.
+**Explicación.** El script:
 
-F3, F4 y F5 se consideran listos. F1 y F2 dependen del grupo.
+- abre una sesión real en un terminal `xterm`, en el Codespace o por SSH en cada nodo, con un prompt como `[2026-11-05 10:53:32 CET] ubuntu@manager-g5:~$`;
+- escribe en la cabecera la prueba, el criterio y el autor real, que es obligatorio indicar;
+- calcula el resultado comprobando la salida real, y escribe **CORRECTO** o **NO CORRECTO**;
+- rechaza cualquier orden que pueda modificar algo: las operaciones de las pruebas las ejecuta aparte quien esté autorizado, y el script solo toma las instantáneas;
+- guarda junto a cada imagen un `.txt` con la misma salida.
 
-## Fase 1: Infraestructura con Terraform
+**Comprobación.** Hay 32 capturas conformes, de los días 5, 6, 9 y 18 de noviembre, listadas en su [índice](evidencias/capturas-conformes/INDICE.md). El 18 de noviembre solo se repitieron dos capturas locales, sin AWS ni SSH: `F1-repositorio` y `F12-seguridad`. Dos capturas dan **NO CORRECTO** y se conservan como resultado real de ese día: `A6-sin-cambios` y `C3-nodos`.
 
-**Objetivo general.** Definir como código, con Terraform, la infraestructura de la Guía: un manager y tres workers Ubuntu 22.04 en
-`us-east-1`, con un único grupo de seguridad de mínimos, un script de arranque y unas salidas con las direcciones e ID de cada nodo.
-Después, comprobar el ciclo completo: validación, plan, cambio y destrucción. Criterios de la Rúbrica: A1–A6 y F6. La Guía asigna
-1,5 puntos a esta fase, y la Rúbrica, 2 puntos al bloque A.
+### 0.9. Incidencias reales y soluciones
 
-| Qué pide la Guía | Situación a 9 de noviembre |
+**I0.1. La generación de capturas se quedaba bloqueada** · Estado: **resuelta**
+
+- *Síntomas:* `capturas-norma.py` no terminaba al llegar a la captura de C2.
+- *Causa:* la herramienta `import` de ImageMagick busca la ventana por su título, y no encontraba un título con acento.
+- *Diagnóstico:* se repitió la captura aislada y se comprobó que `import` esperaba indefinidamente esa ventana.
+- *Solución aplicada:* el identificador pasó a `C2-cluster`, el catálogo solo admite identificadores ASCII, e `import` tiene un tiempo límite.
+- *Comprobación:* se generaron todas las capturas del catálogo sin bloqueos.
+
+**I0.2. El verificador de capturas dio por correcta una salida vacía** · Estado: **resuelta**
+
+- *Síntomas:* la primera captura de A6 salió como CORRECTO aunque la orden no había mostrado nada.
+- *Causa:* el verificador buscaba el texto esperado en toda la pantalla y lo encontraba en la propia orden escrita.
+- *Diagnóstico:* revisión manual del `.txt` de la captura.
+- *Solución aplicada:* se retiró esa captura y el verificador dejó de evaluar la línea de la orden.
+- *Comprobación:* se reevaluaron las demás capturas con la regla nueva y ninguna cambió de resultado.
+
+**I0.3. Las ramas de Alexandra e Ibai partían de un `main` sin el trabajo del proyecto** · Estado: **parcialmente resuelta**
+
+- *Síntomas:* las ramas `alexandra-revision-evidencias` e `ibai-revision-individual` existían en GitHub pero no tenían commits propios y apuntaban a `main`, que no contiene el trabajo de `cloud-g5-implementacion`.
+- *Causa:* se crearon desde la rama por defecto del repositorio.
+- *Diagnóstico:* `git merge-base` y `git log` de cada rama frente a `cloud-g5-implementacion`.
+- *Solución aplicada:* el 9 de noviembre las tres ramas de revisión se rehicieron a partir del commit `a81b3d5` de `cloud-g5-implementacion`, que desde el 18 de noviembre está en `main`. Las [instrucciones de F2](entrega/INSTRUCCIONES-F2-INTEGRANTES.md) explican cómo actualizarlas con `git merge origin/main`.
+- *Pendiente:* los commits de esas ramas tienen la identidad de Cristina; faltan commits hechos por cada integrante.
+
+**I0.4. Tres PR abiertas apuntaban a la rama que se iba a eliminar** · Estado: **resuelta**
+
+- *Síntomas:* las PR #3, #4 y #5 tenían como destino `cloud-g5-implementacion`, la rama que había que eliminar tras integrar la PR #1.
+- *Causa:* se abrieron cuando esa rama era la de trabajo.
+- *Diagnóstico:* `gh pr list` y la API de GitHub mostraban su rama de destino. Al eliminar la rama de destino de una PR, GitHub puede cerrarla.
+- *Solución aplicada:* antes de eliminar la rama, se cambió su destino a `main` con `gh pr edit NÚMERO --base main`, sin tocar sus commits.
+- *Comprobación:* las tres siguen abiertas, con destino `main` y con los mismos commits.
+
+**I0.5. La revisión de secretos se habría quedado sin nada que revisar tras la fusión** · Estado: **resuelta**
+
+- *Síntomas:* la captura `F12-seguridad` revisaba el rango `origin/main..HEAD`. Tras fusionar la PR #1 ese rango queda vacío, y la captura habría dado CORRECTO sin revisar ninguna línea.
+- *Causa:* el rango dependía de que `main` estuviera por detrás de la rama de trabajo.
+- *Diagnóstico:* revisión del catálogo de `capturas-norma.py` antes de integrar. Al revisar todo el árbol desde cero, la única coincidencia es el número público de la cuenta de Canonical en `main.tf`, que no es un secreto.
+- *Solución aplicada:* la captura usa una base fija, `6f3d838`, el último commit de `main` antes de la integración. Así revisa todo lo que trajo la PR #1 y lo que se añada después.
+- *Comprobación:* la captura regenerada revisa las líneas añadidas desde esa base, con 0 coincidencias (apartado [0.7](#07-seguridad-del-repositorio)).
+
+### 0.10. Posibles incidencias y soluciones
+
+| Síntoma o error | Causa probable | Diagnóstico | Solución |
+| --- | --- | --- | --- |
+| `aws: command not found` o `terraform: command not found` en el Codespace | El contenedor no se construyó con el `devcontainer` actual | `cat .devcontainer/devcontainer.json` | **Rebuild Container** |
+| `! [rejected] ... (non-fast-forward)` al hacer `git push` | La rama remota tiene commits que no están en local | `git fetch` y `git status` | `git pull --rebase` y repetir el `push` |
+| `Permission denied` o error 403 al hacer `push` desde WSL | La invitación no está aceptada o la sesión de GitHub no es la correcta | `gh auth status` | Aceptar la invitación y ejecutar `gh auth login` |
+| Conflictos al abrir una PR | La rama parte de un commit antiguo | `git merge-base RAMA origin/main` | Actualizar la rama con `git merge origin/main` y resolver los conflictos antes de pedir la revisión |
+| Una PR se cierra sola | Se eliminó su rama de destino | `gh pr view NÚMERO --json baseRefName,state` | Cambiar antes el destino con `gh pr edit NÚMERO --base main`; si ya se cerró, reabrirla desde GitHub, porque la rama de origen se conserva |
+| Se ha subido un secreto | `git add .` sin revisar | `revisar-secretos.py` | Revocar o renovar la credencial de inmediato y retirarla del historial |
+| Se elimina el Codespace | El estado de Terraform solo está en este Codespace, fuera de Git | Comprobar que existe la copia privada del estado | Conservar una copia privada del estado; sin él, Terraform no puede modificar ni destruir la infraestructura |
+
+### 0.11. Resultado y conclusión de la Fase 0
+
+El entorno de trabajo está operativo y es reproducible. El Codespace se crea a partir del `devcontainer` con AWS CLI y Terraform, el repositorio es privado, tiene la estructura de la Guía, y sus exclusiones y la revisión automática impiden publicar estado, variables, claves y credenciales. Desde el 18 de noviembre todo el proyecto está en `main`, la única rama de trabajo y de entrega, y el profesor tiene acceso al repositorio.
+
+La parte colaborativa sigue incompleta. Solo hay una PR fusionada de otro integrante, la de Enrique, hecha desde la web; las PR #3 a #5 se abrieron desde la cuenta de Cristina con borradores preparados con Codex; y no constan commits de Alexandra ni de Ibai desde sus cuentas, ni trabajo desde WSL o Git Bash.
+
+- **Cumplidos:** F3, F4, F5, F7 y F12. F1, con la captura de Settings pendiente.
+- **Parciales:** F2 (commits y PR de los integrantes) y F10 (capturas pendientes en varias fases).
+
+## Fase 1 — AWS y Terraform
+
+**Objetivo.** Acceder a AWS desde el Codespace y definir como código, con Terraform, la infraestructura de la Guía: un manager y tres workers Ubuntu 22.04 en `us-east-1`, con un único grupo de seguridad de mínimos, un script de arranque y unas salidas con las direcciones y el ID de cada nodo. Después, recorrer el ciclo completo de Terraform: validación, plan, cambio y destrucción.
+
+**Contenidos.**
+
+| Requisito de la Guía | Criterio | Apartado | Estado |
+| --- | --- | --- | --- |
+| Región `us-east-1` de Learner Lab y red por defecto | — | 1.1–1.3 | Cumplido |
+| Partir de la práctica individual de EC2 Ubuntu 22.04 | F13 | 1.4 | Pendiente: la carpeta no tiene contenido |
+| Proyecto organizado con variables de grupo, tamaños e imagen | A1, F6 | 1.4, 1.5 | Cumplido |
+| Imagen Ubuntu y red por defecto | A1 | 1.6 | Cumplido |
+| Grupo de seguridad único: 22 desde aula o alumno, 80 y 8080 públicos, puertos internos solo entre nodos | A3 | 1.7 | Cumplido. Falta la captura de la consola de EC2 |
+| Tres workers multiplicando el recurso; etiquetas | A2 | 1.8 | Cumplido. Falta la captura de la consola de EC2 |
+| Script de arranque: hostname, zona horaria, claves y Docker | A4 | 1.9 | Cumplido |
+| Salidas con IP pública, IP privada e ID | A5 | 1.10 | Cumplido |
+| Validación, plan, cambio y destrucción, en secuencia de capturas | A6 | 1.11–1.14 | Parcial |
+
+### 1.1. Learner Lab, consola de AWS y región
+
+**Qué se hizo y para qué.** AWS Academy Learner Lab proporciona una cuenta de AWS temporal y restringida. Todo el proyecto se despliega en ella, en la región `us-east-1`.
+
+**Herramientas:** [AWS Academy](https://awsacademy.instructure.com/), consola de AWS y AWS CLI.
+
+**Procedimiento.**
+
+1. Entrar en AWS Academy, abrir el curso y el módulo **Launch AWS Academy Learner Lab**.
+2. Pulsar **Start Lab** y esperar a que el indicador junto a **AWS** se ponga en **verde**.
+3. Pulsar **AWS** para abrir la consola, comprobar arriba a la derecha que la región es **N. Virginia (us-east-1)** y abrir **EC2 → Instances**.
+4. En el Codespace, fijar la región de la AWS CLI:
+
+```bash
+aws configure set region us-east-1
+aws configure set output json
+cat ~/.aws/config          # [default] · region = us-east-1 · output = json
+```
+
+**Explicación.** Mientras el indicador está en verde, la sesión está activa. Al terminar la sesión, Learner Lab detiene las instancias. Al volver a arrancar, cada instancia **conserva su ID, su disco y su IP privada, pero recibe una IP pública nueva**. Por eso el clúster se construye con las IP privadas. Si la CLI apuntara a otra región, `describe-instances` devolvería una lista vacía aunque las instancias existan. Terraform no depende de este archivo: usa la variable `aws_region`, que vale `us-east-1`.
+
+**Comprobación.** Tras cada inicio del laboratorio, la orden del apartado [1.3](#13-comprobación-del-laboratorio-tras-cada-reinicio) muestra las cuatro instancias con los mismos ID e IP privadas.
+
+> **Evidencia pendiente:** captura del panel de Learner Lab con el indicador en verde, y de **EC2 → Instances** en la consola, sin mostrar el identificador de la cuenta ni las credenciales.
+
+### 1.2. Credenciales temporales en el Codespace
+
+**Qué se hizo y para qué.** La AWS CLI y Terraform necesitan las credenciales de la sesión del laboratorio. Son temporales y se renuevan en cada sesión.
+
+**Procedimiento.**
+
+1. En el panel de Learner Lab, abrir **AWS Details** y, junto a **AWS CLI**, pulsar **Show**.
+2. Copiar el bloque completo, que empieza por `[default]` y contiene tres valores.
+3. Sustituir con él todo el contenido de `~/.aws/credentials` en el Codespace:
+
+```bash
+umask 077                          # Los archivos nuevos solo los podrá leer el propio usuario.
+nano ~/.aws/credentials            # Pegar el bloque [default] completo y guardar.
+chmod 600 ~/.aws/credentials       # Lectura y escritura solo para el propietario.
+aws sts get-caller-identity > /dev/null && echo "AWS acepta las credenciales"
+```
+
+**Explicación.**
+
+| Valor | Para qué sirve |
 | --- | --- |
-| Partir de la práctica individual de EC2 Ubuntu 22.04 y ampliarla a 4 nodos | **Cumple** en los cuatro nodos. Falta documentar la práctica (F13) |
-| Definir como variables el número de grupo, tamaños e imagen | **Cumple:** `grupo`, tipos, discos y patrón de la imagen |
-| Los 3 workers, multiplicando el recurso en el mismo archivo | **Cumple:** `count` |
-| Script de arranque: hostname, zona horaria Europe/Madrid, claves públicas y Docker | **Cumple** |
-| Salidas: IP pública, IP privada e ID de cada nodo | **Cumple** |
-| Security Group único: 22 desde aula o alumno, 80 y 8080 desde Internet; 2377, 7946, 4789 e ICMP solo entre nodos | **Cumple.** Además, el 22 entre nodos, necesario para el salto |
-| Pruebas clave de la Rúbrica (A6): validación, plan, cambio y destrucción | **Parcial:** falta la destrucción y la secuencia en capturas |
+| Identificador de la clave de acceso | Identifica la clave. Las temporales empiezan por `ASIA` |
+| Clave secreta de acceso | Firma cada petición. Nunca se envía a AWS, y quien la tenga puede actuar en la cuenta |
+| Token de sesión | Demuestra que la clave pertenece a una sesión temporal todavía válida |
 
-### 1.1. Organización del módulo
+Los tres valores se renuevan juntos, así que hay que sustituir el bloque entero. No se usa `aws configure`, porque no pide el token de sesión. `aws sts get-caller-identity` pregunta a AWS quién firma la petición; no necesita permisos especiales, así que es la forma más sencilla de saber si las credenciales siguen siendo válidas. Su salida se envía a `/dev/null` porque contiene el número de la cuenta.
 
-**Procedimiento.** El módulo está en [`terraform/`](terraform/):
+Las credenciales nunca se escriben en el repositorio ni aparecen en una captura: `.gitignore` excluye `.aws/` y `credentials`, y la Guía prohíbe mostrarlas.
+
+**Comprobación.** El 9 y el 10 de noviembre, tras renovar las credenciales, `sts get-caller-identity` respondió correctamente. No se toma captura de esta orden porque mostraría la cuenta.
+
+### 1.3. Comprobación del laboratorio tras cada reinicio
+
+**Qué se hizo y para qué.** Cada vez que se inicia el laboratorio hay que saber, sin cambiar nada, si las instancias están listas, cuáles son sus IP públicas nuevas, si la regla SSH admite la IP actual del Codespace, si la web responde y cómo está el clúster. Para ello se creó [`comprobar-laboratorio.sh`](scripts/comprobar-laboratorio.sh).
+
+**Procedimiento.**
+
+```bash
+bash scripts/comprobar-laboratorio.sh      # Solo lectura. Termina con 0, 2 o 3.
+```
+
+**Explicación.** El script hace cuatro comprobaciones:
+
+1. **EC2:** compara cada instancia con su ID e IP privada esperados y muestra sus controles de estado. `running` solo indica que la máquina está encendida; hasta que los dos controles pasan de `initializing` a `ok`, el sistema puede no aceptar SSH.
+2. **Regla SSH:** compara la IP pública del Codespace (`curl -s https://checkip.amazonaws.com`) con los orígenes del puerto 22. Si falta, **muestra** la orden `aws ec2 authorize-security-group-ingress` exacta, pero no la ejecuta ni retira otros accesos autorizados. Rechaza un SSH abierto a `0.0.0.0/0`.
+3. **Web:** pide `/` e `/identidad.txt` a cada IP pública. No basta con HTTP 200: la respuesta debe identificar la versión y el contenedor.
+4. **Swarm:** si hay SSH, consulta en el manager los nodos, el servicio, las réplicas y la MTU de las redes, y rechaza que haya más de un manager.
+
+Termina con **0** si todo es correcto, con **2** si falta corregir algo y con **3** si AWS deniega la consulta, por ejemplo con credenciales caducadas. Antes de mostrar un error de AWS, oculta el identificador de la cuenta.
+
+**Comprobación.** El 9 de noviembre por la mañana el script terminó con código 2: la web respondía, pero no había SSH porque la IP del Codespace había cambiado ([registro](evidencias/auditoria/registro-2026-11-09.txt)). Ese mismo día, después de corregir la regla SSH y la topología del clúster, Codex lo ejecutó de nuevo y terminó con código 0: cuatro instancias `running` con controles `ok/ok`, el origen SSH del Codespace permitido, HTTP 200 con identidad en las cuatro IP y manager-g5 como único líder. Esta segunda ejecución consta en el registro de sesión de Codex.
+
+> **Evidencia pendiente:** captura conforme de `comprobar-laboratorio.sh` terminando con código 0, hecha el día de la corrección.
+
+### 1.4. Organización del módulo Terraform
+
+**Qué se hizo y para qué.** El módulo de [`terraform/`](terraform/) separa proveedor, variables, recursos y salidas (A1, F6).
 
 | Archivo | Contenido |
 | --- | --- |
 | [`provider.tf`](terraform/provider.tf) | Proveedor `hashicorp/aws`, versión `~> 5.0`, y región tomada de una variable |
-| [`variables.tf`](terraform/variables.tf) | Variables del grupo, tamaños, discos, imagen, regla SSH y claves públicas |
+| [`variables.tf`](terraform/variables.tf) | Grupo, tamaños, discos, imagen, accesos SSH y claves públicas, con validaciones |
 | [`main.tf`](terraform/main.tf) | Imagen, VPC por defecto, grupo de seguridad, manager y workers |
 | [`outputs.tf`](terraform/outputs.tf) | Salida `nodes` con IP pública, IP privada e ID |
 | [`scripts/bootstrap.sh.tftpl`](terraform/scripts/bootstrap.sh.tftpl) | Script de arranque de cada nodo |
-| [`grupo.example.tfvars`](terraform/grupo.example.tfvars) | Plantilla de las variables que debe rellenar el grupo |
+| [`grupo.example.tfvars`](terraform/grupo.example.tfvars) | Plantilla de las variables que rellena el grupo |
 | `.terraform.lock.hcl` | Versión exacta del proveedor, para que todos usen la misma |
-| `claves/` | Claves públicas de los integrantes. Se explica en el apartado 2.1 |
+| [`claves/`](terraform/claves/) | Claves públicas de los cuatro integrantes (apartado [2.1](#21-claves-ssh-del-proyecto-b1)) |
 
-**Explicación técnica.** Separar proveedor, variables, recursos y salidas es la organización habitual de un módulo de Terraform.
-Terraform lee todos los `.tf` de la carpeta como un único conjunto, así que el reparto en archivos solo sirve para leerlo mejor. El
-archivo de bloqueo garantiza que `terraform init` descargue la misma versión del proveedor en cualquier máquina.
+**Procedimiento.**
 
-La Guía pide partir de la práctica individual de EC2. Ese trabajo previo debe documentarse en
-[`practica-individual/`](practica-individual/README.md), que **todavía no tiene contenido** (F13).
+```bash
+terraform -chdir=terraform init            # Descarga el proveedor de AWS.
+terraform -chdir=terraform fmt -check      # Comprueba el formato.
+terraform -chdir=terraform validate        # Comprueba sintaxis y tipos, sin contactar con AWS.
+```
 
-**Evidencias.**
+**Explicación.** Terraform lee todos los `.tf` de la carpeta como un único conjunto; el reparto en archivos solo sirve para leerlo mejor. El archivo de bloqueo garantiza que `init` descargue la misma versión del proveedor en cualquier máquina.
+
+**Práctica individual (F13).** La Guía pide partir de la práctica individual de EC2 con Ubuntu 22.04. El módulo de este reto es su ampliación a cuatro nodos, pero la documentación de esa práctica previa todavía no está en [`practica-individual/`](practica-individual/README.md).
+
+**Comprobación.** `fmt` y `validate` fueron correctos el 5 y el 9 de noviembre.
 
 ![Módulo Terraform con variables y validación](evidencias/capturas-conformes/A1-modulo.png)
 
-*Figura 8. Módulo Terraform con variables y validación. Resultado: El módulo está organizado, usa variables y terraform validate es
-correcto. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+*Figura 8. El módulo está organizado, usa variables y `terraform validate` es correcto. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026.*
 
-Evidencias anteriores: [módulo y validación](evidencias/capturas-terminal/A1-modulo-terraform.png).
+> **Evidencia pendiente:** la práctica individual previa de cada integrante en `practica-individual/` (F13).
 
-### 1.2. Variables
+### 1.5. Variables
 
-**Procedimiento.** Las variables con valor por defecto reproducen la arquitectura de la Guía. Las dos que dependen del grupo,
-`ssh_cidr` y `ssh_public_keys`, no tienen valor por defecto. Se indican en un archivo local que no se versiona, a partir de la
-plantilla:
-
-```bash
-# Procedimiento.
-cp terraform/grupo.example.tfvars terraform/terraform.tfvars
-# Editar: ssh_cidr = "IP_PROPIA/32" y ssh_public_keys = ["ssh-ed25519 AAAA... comentario", ...]
-```
+**Qué se hizo y para qué.** Con variables, el mismo código sirve para otro grupo o para otros tamaños sin tocar `main.tf`, que es lo que pide A1.
 
 | Variable | Valor por defecto | Uso |
 | --- | --- | --- |
@@ -646,89 +684,102 @@ cp terraform/grupo.example.tfvars terraform/terraform.tfvars
 | `disk_type` | `gp3` | Tipo de disco |
 | `worker_count` | 3 | Número de workers |
 | `ubuntu_ami_name` | `ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*` | Patrón de la imagen Ubuntu 22.04 |
-| `key_name` | `vockey` | Par de claves de AWS que se asocia a cada instancia |
-| `ssh_cidr` | Sin valor | IP autorizada para SSH, con `/32` |
-| `ssh_public_keys` | Sin valor | Claves públicas que el script de arranque instala |
+| `key_name` | `vockey` | Par de claves de AWS asociado a cada instancia |
+| `ssh_cidr` | Sin valor | IP de la máquina de control para SSH |
+| `ssh_additional_cidrs` | `{}` | Otros accesos SSH autorizados, con su descripción |
+| `ssh_public_keys` | Sin valor | Claves públicas que instala el script de arranque |
 
-**Explicación técnica.** Con variables, el mismo código sirve para otro grupo o para otros tamaños sin tocar `main.tf`, que es lo que
-pide A1.
+**Procedimiento.** Las variables que dependen del grupo se escriben en un archivo local que no se versiona, a partir de la plantilla:
 
-`ssh_public_keys` tiene un bloque `validation`. Si una entrada no es una clave pública OpenSSH de una sola línea, Terraform se detiene
-antes de crear nada. Así se evita, por ejemplo, pegar una clave privada o una clave con saltos de línea de Windows.
+```bash
+cp terraform/grupo.example.tfvars terraform/terraform.tfvars
+# Editar: ssh_cidr = "IP_PROPIA/32", ssh_additional_cidrs = { "IP/32" = "Descripción" } y ssh_public_keys = ["ssh-ed25519 AAAA... comentario"]
+```
 
-Las variables de disco se añadieron el 5 de noviembre con los mismos valores que ya tenían los discos. Por eso no cambian la
-infraestructura.
+**Explicación.** Las variables sensibles tienen bloques `validation`, así que Terraform se detiene antes de crear nada si:
 
-### 1.3. Imagen y red
+- `ssh_cidr` o algún acceso de `ssh_additional_cidrs` es `0.0.0.0/0` o no es un CIDR IPv4 válido;
+- alguna entrada de `ssh_public_keys` no es una clave pública OpenSSH de una sola línea, por ejemplo una clave privada o una clave con saltos de línea de Windows.
 
-**Procedimiento.**
+**Comprobación.** Las pruebas de [`tests/test_terraform_variables.py`](tests/test_terraform_variables.py) comprueban que se aceptan varios orígenes restringidos y que se rechazan los abiertos a todo Internet o mal escritos. Pasaron el 10 y el 18 de noviembre.
+
+### 1.6. Imagen Ubuntu y red por defecto
+
+**Procedimiento.** Extracto de [`main.tf`](terraform/main.tf):
 
 ```hcl
-# Extracto resumido de terraform/main.tf: cada bloque, en menos líneas. El identificador real de owners está en la línea 5.
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["<cuenta oficial de Canonical>"]
+  owners      = ["<cuenta oficial de Canonical>"]   # El número real está en main.tf.
   filter { name = "name"  values = [var.ubuntu_ami_name] }
   filter { name = "state" values = ["available"] }
 }
 data "aws_vpc" "default" { default = true }
 ```
 
-**Explicación técnica.** Un bloque `data` **consulta** algo que ya existe en AWS, sin crearlo.
+**Explicación.** Un bloque `data` **consulta** algo que ya existe en AWS, sin crearlo.
 
-- **`aws_ami`** busca la imagen Ubuntu 22.04 más reciente. El propietario es la cuenta pública de AWS de Canonical, cuyo número de
-  12 cifras figura en [`terraform/main.tf`](terraform/main.tf#L5). Así solo se aceptan imágenes oficiales. El informe no copia ese
-  número porque la revisión de secretos trata cualquier número de 12 cifras como un posible ID de cuenta.
+- **`aws_ami`** busca la imagen Ubuntu 22.04 más reciente publicada por la cuenta de Canonical, para aceptar solo imágenes oficiales. El informe no copia ese número de 12 cifras porque la revisión de secretos trata cualquier número así como un posible ID de cuenta.
 - **`aws_vpc`** obtiene la VPC por defecto, que es la red que indica la Guía.
 
-### 1.4. Grupo de seguridad
+`most_recent = true` tiene una consecuencia importante: cuando Canonical publica una imagen nueva, Terraform la elige, y como la imagen no se puede cambiar en una instancia que ya existe, el plan propone **sustituir** las instancias. Ocurrió el 10 de noviembre (incidencia [I1.4](#115-incidencias-reales-y-soluciones)).
 
-**Procedimiento.** `aws_security_group.cluster` define, con el nombre `reto4-cloud-g5`, todas las reglas de entrada y una salida
-general.
+### 1.7. Grupo de seguridad (A3)
+
+**Qué se hizo y para qué.** Un único grupo de seguridad, `reto4-cloud-g5` (`sg-0c12ecd538a29f8d6`), aplica la política de mínimos de la Guía: solo se abre a Internet lo imprescindible, y los puertos de Swarm quedan limitados a los propios nodos.
 
 | Puerto | Protocolo | Origen | Uso |
 | --- | --- | --- | --- |
-| 22 | TCP | `var.ssh_cidr`, una única IP `/32` | SSH desde la máquina de control |
+| 22 | TCP | `var.ssh_cidr`, una IP `/32` | SSH desde el Codespace |
+| 22 | TCP | `var.ssh_additional_cidrs`, IP `/32` con descripción | Accesos SSH autorizados de los integrantes |
 | 22 | TCP | El propio grupo (`self = true`) | Salto SSH desde el manager hacia los workers |
 | 80 | TCP | `0.0.0.0/0` | Web |
-| 8080 | TCP | `0.0.0.0/0` | Lo exige la Guía. Ningún servicio lo publica |
-| 2377 | TCP | El propio grupo | Gestión de Swarm: alta de nodos y órdenes entre managers |
+| 8080 | TCP | `0.0.0.0/0` | Lo pide la Guía. Ningún servicio lo publica |
+| 2377 | TCP | El propio grupo | Gestión de Swarm |
 | 7946 | TCP y UDP | El propio grupo | Comunicación entre nodos de Swarm |
 | 4789 | UDP | El propio grupo | Tráfico VXLAN de las redes overlay |
-| ICMP | ICMP | El propio grupo | Comprobaciones con `ping` entre nodos |
+| ICMP | ICMP | El propio grupo | `ping` entre nodos |
+| Salida | Todos | `0.0.0.0/0` | Actualizaciones y descarga de imágenes |
 
-**Explicación técnica.**
+**Explicación.**
 
-- **`self = true`** significa que solo se admite tráfico de instancias que tengan este mismo grupo. Así los puertos internos de Swarm
-  quedan cerrados a Internet sin tener que escribir las IP de los nodos. Es la «política de mínimos» de A3.
-- **La regla del 22 sin descripción** se debe a que coincide con la regla que ya existía en AWS. Cambiar su descripción obligaría a
-  sustituirla.
-- **Las reglas son *inline***, dentro del propio recurso. Si se añade a mano una regla temporal, por ejemplo para la prueba de un
-  integrante, el siguiente plan de Terraform propondrá retirarla.
+- **`self = true`** admite solo tráfico de instancias que tienen este mismo grupo. Así los puertos internos de Swarm quedan cerrados a Internet sin escribir las IP de los nodos.
+- **`/32`** es una máscara que admite una única dirección IP.
+- **Reglas *inline*.** Las reglas se declaran dentro del propio recurso. Si se añade una regla a mano en AWS, el siguiente plan propone retirarla. Por eso los accesos SSH adicionales se declaran en `ssh_additional_cidrs` (incidencia [I1.5](#115-incidencias-reales-y-soluciones)).
 
-**Evidencias.**
+**Diferencia con la Guía.** La Guía abre el puerto 22 «desde aula/alumno» y limita a los nodos solo 2377, 7946, 4789 e ICMP. En este proyecto, el «alumno» que administra es el Codespace, con su IP `/32`, y los integrantes entran con reglas `/32` temporales. Además, el 22 se abre al propio grupo, porque el salto SSH del manager a los workers (B5) entra por la red privada. Ninguna de estas reglas abre SSH a Internet.
+
+**Procedimiento de comprobación.**
+
+```bash
+aws ec2 describe-security-groups --region us-east-1 --filters Name=group-name,Values=reto4-cloud-g5 \
+  --query 'SecurityGroups[].IpPermissions[].{Desde:FromPort,Hasta:ToPort,Protocolo:IpProtocol,CIDR:join(`,`,IpRanges[].CidrIp),Grupo:join(`,`,UserIdGroupPairs[].GroupId)}' \
+  --output table
+```
+
+**Comprobación.** El 9 de noviembre, Codex leyó las reglas reales de AWS: once reglas, todas de mínimos. El SSH externo admite solo la IP del Codespace (`172.166.151.114/32`) y una regla temporal, `88.14.93.201/32`, con la descripción «Enrique, Alexandra e Ibai, temporal para B1». Esa regla **se mantiene a propósito**, porque Enrique, Alexandra e Ibai todavía tienen que entrar en los workers (apartado [2.8](#28-acceso-de-cada-integrante-desde-su-equipo-b1)); se retirará con autorización cuando terminen. El resto coincide con la tabla. Esta lectura consta en el registro de sesión de Codex.
 
 ![Reglas de entrada del grupo de seguridad](evidencias/capturas-conformes/A3-reglas.png)
 
-*Figura 9. Reglas de entrada del grupo de seguridad. Resultado: Entrada limitada a SSH /32, 80 y 8080 públicos, y puertos internos
-entre nodos. La IP permitida es la vigente a esa hora. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:17 UTC. Máquina:
-codespaces-8d43b2.*
+*Figura 9. Entrada limitada a SSH `/32`, 80 y 8080 públicos y puertos internos solo entre nodos. La IP SSH es la vigente ese día, antes de la regla temporal. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026.*
 
-Evidencias anteriores: [reglas](evidencias/capturas-terminal/A3-grupo-seguridad.png). **Pendiente:** captura de las reglas en la
-consola de EC2.
+> **Evidencia pendiente:** captura de las reglas de entrada en la consola de EC2 (la Rúbrica pide «reglas EC2») y captura conforme actualizada después de retirar la regla temporal.
 
-### 1.5. Instancias: un manager y tres workers con `count`
+### 1.8. Manager y workers con `count` (A2)
 
-**Procedimiento.**
+**Procedimiento.** Extracto de [`main.tf`](terraform/main.tf):
 
 ```hcl
-# Literal y abreviado: terraform/main.tf.
 resource "aws_instance" "manager" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = var.manager_type
-  key_name      = var.key_name
-  user_data     = templatefile("${path.module}/scripts/bootstrap.sh.tftpl",
-                    { hostname = "manager-${var.grupo}", public_keys = var.ssh_public_keys })
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.manager_type
+  key_name                    = var.key_name
+  vpc_security_group_ids      = [aws_security_group.cluster.id]
+  associate_public_ip_address = true
+  user_data = templatefile("${path.module}/scripts/bootstrap.sh.tftpl", {
+    hostname    = "manager-${var.grupo}"
+    public_keys = var.ssh_public_keys
+  })
   root_block_device { volume_size = var.manager_disk_size  volume_type = var.disk_type }
   tags = { Name = "manager-${var.grupo}", PruebaA6 = "reto4-${var.grupo}" }
 }
@@ -742,87 +793,75 @@ resource "aws_instance" "workers" {
 }
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
-- **`count`** crea varias instancias a partir de un solo bloque. `count.index` vale 0, 1 y 2, de ahí `worker1-g5`, `worker2-g5` y
-  `worker3-g5`. Así se cumple el requisito de no copiar el código tres veces.
-- **`templatefile`** rellena el script de arranque con el nombre del nodo y las claves públicas, y lo pasa como `user_data`. EC2 lo
-  ejecuta una vez, con cloud-init, en el primer arranque.
-- **`key_name = "vockey"`** asocia el par de claves del laboratorio. AWS añade su clave pública a `authorized_keys`, y queda como
-  acceso de reserva.
-- **`associate_public_ip_address`** da a cada nodo una IP pública, necesaria para la web y para entrar al manager.
-- **La etiqueta `Name`** es la que muestran la consola y los filtros de los scripts. `PruebaA6` es el cambio controlado del apartado
-  1.9.
-
-**Evidencias.**
+- **`count`** crea varias instancias a partir de un solo bloque. `count.index` vale 0, 1 y 2, de ahí `worker1-g5`, `worker2-g5` y `worker3-g5`. Así se cumple el requisito de no copiar el código tres veces.
+- **`templatefile`** rellena el script de arranque con el nombre del nodo y las claves públicas, y lo entrega como `user_data`. EC2 lo ejecuta una vez, con cloud-init, en el primer arranque.
+- **`key_name = "vockey"`** asocia el par de claves del laboratorio, que queda como acceso de reserva.
+- **La etiqueta `Name`** es la que muestran la consola y los filtros de los scripts. `PruebaA6` es el cambio controlado del apartado [1.12](#112-cambio-controlado-a6).
 
 ![Código Terraform: workers multiplicados con un único recurso](evidencias/capturas-conformes/F6-codigo.png)
 
-*Figura 10. Código Terraform: workers multiplicados con un único recurso. Resultado: Los workers salen de un único recurso
-multiplicado con count. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+*Figura 10. Los tres workers salen de un único recurso multiplicado con `count`. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026.*
+
+**Comprobación.**
+
+```bash
+aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' \
+  --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,InstanceType,State.Name,PrivateIpAddress,PublicIpAddress]' \
+  --output table
+```
 
 ![Instancias, tipos, etiquetas y controles](evidencias/capturas-conformes/A2-instancias.png)
 
-*Figura 11. Instancias, tipos, etiquetas y controles. Resultado: Un manager t3.medium y tres workers t3.small en ejecución y con los
-controles correctos. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:17 UTC. Máquina: codespaces-8d43b2.*
+*Figura 11. Un manager t3.medium y tres workers t3.small en ejecución, con los controles de estado correctos. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026.*
 
-Evidencias anteriores: [código](evidencias/capturas-terminal/F6-codigo-instancias.png) e
-[instancias](evidencias/capturas-terminal/A2-instancias.png). **Pendiente:** captura de la consola de EC2 (A2).
+> **Evidencia pendiente:** captura de **EC2 → Instances** en la consola con las cuatro instancias, sus tipos y sus etiquetas (la Rúbrica pide «consola EC2»).
 
-### 1.6. Script de arranque
+### 1.9. Script de arranque (A4)
 
-**Procedimiento.** [`bootstrap.sh.tftpl`](terraform/scripts/bootstrap.sh.tftpl) se ejecuta como root en el primer arranque:
+**Procedimiento.** [`bootstrap.sh.tftpl`](terraform/scripts/bootstrap.sh.tftpl) se ejecuta como root en el primer arranque. Extracto:
 
 ```bash
-# Literal y abreviado.
-hostnamectl set-hostname '${hostname}'                       # manager-g5, worker1-g5…
+set -euo pipefail
+hostnamectl set-hostname '${hostname}'                        # manager-g5, worker1-g5…
 timedatectl set-timezone Europe/Madrid
-install -d -m 0700 -o ubuntu -g ubuntu /home/ubuntu/.ssh      # Carpeta con permisos 700.
-# Añade cada clave de ssh_public_keys a authorized_keys (600) si no estaba ya.
+install -d -m 0700 -o ubuntu -g ubuntu /home/ubuntu/.ssh       # Carpeta con permisos 700.
+# Añade cada clave de ssh_public_keys a authorized_keys (600) si no estaba ya, con grep -Fxq.
 cat > /etc/ssh/sshd_config.d/00-reto4.conf <<'SSH'
 PermitRootLogin no
 PasswordAuthentication no
 KbdInteractiveAuthentication no
 SSH
-sshd -t && systemctl reload ssh                               # Valida y aplica la configuración.
+sshd -t && systemctl reload ssh                                # Valida y aplica la configuración.
 apt-get install -y docker.io && systemctl enable --now docker
-usermod -aG docker ubuntu                                     # ubuntu usa Docker sin sudo.
+usermod -aG docker ubuntu                                      # ubuntu usa Docker sin sudo.
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
-- **`set -euo pipefail`** detiene el script ante cualquier error, en lugar de seguir con un nodo a medio configurar.
-- **Las claves se añaden con `grep -Fxq`**, que compara la línea exacta. Así repetirlo no las duplica, y no se toca la clave
-  `vockey` que añade AWS.
-- **`sshd -t`** comprueba la sintaxis antes de recargar. Un error en la configuración de SSH podría dejar el nodo inaccesible.
-- **`docker.io`** es el paquete de Docker de Ubuntu. El grupo `docker` permite a `ubuntu` usarlo sin `sudo`.
+- **`set -euo pipefail`** detiene el script ante cualquier error, en lugar de dejar un nodo a medio configurar.
+- **`grep -Fxq`** compara la línea exacta: repetir el script no duplica claves, y no se toca la clave `vockey` que añade AWS.
+- **`sshd -t`** comprueba la sintaxis antes de recargar SSH, porque un error podría dejar el nodo inaccesible.
+- **`systemctl enable --now docker`** arranca Docker y lo deja activado para los siguientes arranques, algo necesario porque Learner Lab detiene y arranca las instancias.
 
-**Evidencias.**
+![Script de arranque](evidencias/capturas-conformes/A4-script.png)
 
-![Script de arranque: hostname, zona, claves y Docker](evidencias/capturas-conformes/A4-script.png)
+*Figura 12. El script configura hostname, zona horaria, claves públicas, SSH y Docker. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026.*
 
-*Figura 12. Script de arranque: hostname, zona, claves y Docker. Resultado: El script configura hostname, zona horaria, claves
-públicas, SSH y Docker. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:22 UTC. Máquina: codespaces-8d43b2.*
+**Comprobación.** En cada nodo: `cloud-init status`, `timedatectl show -p Timezone --value` y `docker --version`.
 
 ![Resultado del arranque en los cuatro nodos](evidencias/capturas-conformes/A4-arranque.png)
 
-*Figura 13. Resultado del arranque en los cuatro nodos. Resultado: En los cuatro nodos terminó cloud-init, con zona Europe/Madrid y
-Docker. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:18 UTC. Máquinas: codespaces-8d43b2 y los cuatro nodos.*
+*Figura 13. En los cuatro nodos terminó cloud-init, con la zona Europe/Madrid y Docker instalado. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquinas: codespaces-8d43b2 y los cuatro nodos.*
 
-Evidencias anteriores: [arranque](evidencias/capturas-terminal/A4-arranque.png) y
-[registro de arranque del manager](evidencias/prototipo/manager-g5.txt).
+El registro completo del primer arranque del manager está en [`evidencias/prototipo/manager-g5.txt`](evidencias/prototipo/manager-g5.txt).
 
-### 1.7. Salidas
+### 1.10. Salidas (A5)
 
-**Procedimiento.**
-
-```bash
-# Procedimiento.
-terraform -chdir=terraform output -json nodes
-```
+**Procedimiento.** [`outputs.tf`](terraform/outputs.tf):
 
 ```hcl
-# Literal: terraform/outputs.tf.
 output "nodes" {
   value = {
     for node in concat([aws_instance.manager], aws_instance.workers) :
@@ -831,321 +870,276 @@ output "nodes" {
 }
 ```
 
-**Explicación técnica.** La expresión `for` recorre el manager y los tres workers y crea un mapa por nombre. La salida en JSON la leen
-[`generar-config-ssh.sh`](scripts/generar-config-ssh.sh), que necesita la IP pública del manager y las privadas de los workers, y
-[`formar-swarm.sh`](scripts/formar-swarm.sh), que anuncia Swarm por la IP privada del manager.
+```bash
+terraform -chdir=terraform output -state=ESTADO/terraform.tfstate -json nodes
+```
 
-Las IP públicas de la salida son las del último `apply`. Tras reiniciar el laboratorio, las vigentes son las de EC2, como se explica
-en L.9.
+**Explicación.** La expresión `for` recorre el manager y los tres workers y crea un mapa por nombre. La leen [`generar-config-ssh.sh`](scripts/generar-config-ssh.sh), para crear los alias SSH, y [`formar-swarm.sh`](scripts/formar-swarm.sh), que anuncia Swarm por la IP privada del manager. `ESTADO` es la carpeta privada del Codespace donde se guarda el estado de Terraform, fuera del repositorio.
 
-**Evidencias.**
+Las salidas reflejan el **estado** guardado, no AWS en tiempo real. Tras reiniciar el laboratorio, las IP públicas de la salida quedan antiguas hasta que se sincroniza el estado (apartado [1.13](#113-sincronización-del-estado-con-refresh-only)).
 
-![Salidas de Terraform con IP pública, IP privada e ID](evidencias/capturas-conformes/A5-salidas.png)
+![Salidas de Terraform](evidencias/capturas-conformes/A5-salidas.png)
 
-*Figura 14. Salidas de Terraform con IP pública, IP privada e ID. Resultado: La salida nodes muestra IP pública, IP privada e ID de
-cada nodo. Las IP públicas son las del último apply. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:17 UTC. Máquina:
-codespaces-8d43b2.*
+*Figura 14. La salida `nodes` muestra la IP pública, la IP privada y el ID de cada nodo. Las IP públicas son las del último `apply` de ese momento. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026.*
 
-Evidencias anteriores: [salida `nodes`](evidencias/capturas-terminal/A5-salida-nodes.png).
+### 1.11. Creación de la infraestructura: `init`, `validate`, `plan` y `apply`
 
-### 1.8. Ciclo de trabajo: `init`, `validate`, `plan` y `apply`
+**Procedimiento.** Ciclo seguido el 4 de noviembre, deducido de los planes y registros conservados:
+
+```bash
+terraform init
+terraform validate
+terraform plan -out=reto4-review-cidr.tfplan      # Plan: 5 to add, 0 to change, 0 to destroy.
+terraform apply reto4-review-cidr.tfplan          # Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+```
+
+**Explicación.**
+
+| Orden | Qué hace | Por qué se usa así |
+| --- | --- | --- |
+| `terraform init` | Descarga el proveedor y prepara `.terraform` | Una vez, o al cambiar de proveedor |
+| `terraform validate` | Comprueba sintaxis y tipos sin contactar con AWS | Detecta errores antes del plan |
+| `terraform plan -out=ARCHIVO` | Compara código, estado y AWS, y guarda las acciones previstas | Se revisa antes de aplicar |
+| `terraform apply ARCHIVO` | Aplica exactamente el plan revisado | Impide que se ejecute algo distinto de lo revisado |
+
+El **estado** (`terraform.tfstate`) es el registro con el que Terraform relaciona el código con los recursos reales. No se versiona: está en una carpeta privada del Codespace. Sin él, Terraform no podría modificar ni destruir esta infraestructura.
+
+**Comprobación.** El apply creó cinco recursos: el grupo de seguridad y las cuatro instancias. [Plan inicial](evidencias/prototipo/reto4-plan.log), [plan con la IP SSH](evidencias/prototipo/reto4-plan-cidr.log) y [apply](evidencias/prototipo/reto4-apply.log).
+
+> **Evidencia pendiente (A6):** la secuencia en capturas conformes de validación, plan, cambio y destrucción. Hoy esa secuencia solo consta en registros de texto.
+
+### 1.12. Cambio controlado (A6)
+
+**Qué se hizo y para qué.** Para demostrar el ciclo de cambio sin riesgo, se añadió a manager-g5 la etiqueta `PruebaA6=reto4-g5`. Una etiqueta se cambia **en el sitio** (`~ update in-place`): no detiene ni sustituye la instancia.
 
 **Procedimiento.**
 
 ```bash
-# Deducido de los registros y de los planes conservados del 4 de noviembre.
-terraform init
-terraform validate
-terraform plan -out=reto4-review-cidr.tfplan
-terraform apply reto4-review-cidr.tfplan
-# Plan: 5 to add, 0 to change, 0 to destroy.
-# Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+terraform -chdir=terraform plan -input=false -state=ESTADO/terraform.tfstate \
+  -var-file=ESTADO/reto4-local.auto.tfvars.json -var ssh_cidr=IP_ACTUAL/32 -out=a6-apply.tfplan
+terraform -chdir=terraform apply -input=false -state=ESTADO/terraform.tfstate a6-apply.tfplan
 ```
 
-**Explicación técnica.**
+**Comprobación.** El 5 de noviembre, el plan final contenía solo la etiqueta (`Plan: 0 to add, 1 to change, 0 to destroy`) y el apply terminó con `Apply complete! Resources: 0 added, 1 changed, 0 destroyed`. Los ID y los discos no cambiaron, y un nuevo plan indicó `No changes`. Planes [previo](evidencias/A6-plan-previo.txt), [descartado](evidencias/A6-plan-actual.txt) y [final](evidencias/A6-plan-final.txt), y [apply](evidencias/A6-apply.txt).
 
-| Orden | Qué hace | Por qué se usa así |
-| --- | --- | --- |
-| `terraform init` | Descarga el proveedor de AWS y prepara la carpeta `.terraform` | Se ejecuta una vez, o al cambiar de proveedor |
-| `terraform validate` | Comprueba sintaxis y tipos, sin contactar con AWS | Detecta errores antes de gastar tiempo en un plan |
-| `terraform plan -out=ARCHIVO` | Compara el código con el estado y con AWS, y guarda las acciones previstas | Se revisa el plan antes de aplicarlo |
-| `terraform apply ARCHIVO` | Aplica exactamente el plan revisado | Aplicar un archivo de plan impide que se ejecute algo distinto de lo revisado |
+El 6 de noviembre, tras un reinicio del laboratorio, la captura conforme del plan posterior dio **NO CORRECTO**: Terraform no proponía cambios en los recursos, pero sí en las salidas (`Changes to Outputs`), porque el estado guardaba las IP públicas anteriores.
 
-El apply del 4 de noviembre creó los cinco recursos: el grupo `sg-0c12ecd538a29f8d6` y las instancias `i-0e6ebf2af63facc60`,
-`i-066a1ad3b7a8e0db9`, `i-0ed6d9c9957251a18` e `i-0446409b26cf0a662`.
+![Plan posterior al cambio](evidencias/capturas-conformes/A6-sin-cambios.png)
 
-El **estado** (`terraform.tfstate`) es el registro con el que Terraform relaciona el código con los recursos reales. No se versiona y se
-guarda en una carpeta privada del Codespace, fuera del repositorio. Sin él, Terraform no podría modificar ni destruir esta
-infraestructura.
+*Figura 15. Plan posterior al cambio. NO CORRECTO: propone cambios en las salidas, no en los recursos, y la comprobación exige que no proponga ninguno. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026.*
 
-**Evidencias.** [Plan inicial](evidencias/prototipo/reto4-plan.log), [plan con CIDR](evidencias/prototipo/reto4-plan-cidr.log) y
-[apply inicial](evidencias/prototipo/reto4-apply.log). **Pendiente:** la secuencia en capturas conformes, que pide A6.
+### 1.13. Sincronización del estado con `refresh-only`
 
-### 1.9. Cambio controlado (A6)
+**Qué se hizo y para qué.** Para que el estado y las salidas vuelvan a coincidir con AWS sin tocar ningún recurso se usa el modo **refresh-only**: Terraform lee los recursos reales y actualiza solo el estado.
 
-**Procedimiento.** Se añadió la etiqueta `PruebaA6=reto4-g5` a manager-g5. Se regeneró el plan con la IP vigente y se revisó justo
-antes de aplicarlo, con autorización:
+**Procedimiento.** `ESTADO` es la carpeta privada con el estado, y `COPIA`, una carpeta privada de respaldo, ambas fuera de Git.
 
 ```bash
-# Literal, con rutas abreviadas. ESTADO es la carpeta privada con el estado de Terraform.
-terraform -chdir=terraform plan -input=false -state=$ESTADO/terraform.tfstate \
-  -var-file=$ESTADO/reto4-local.auto.tfvars.json -var ssh_cidr=IP_ACTUAL/32 -out=a6-apply.tfplan
-terraform -chdir=terraform apply -input=false -state=$ESTADO/terraform.tfstate a6-apply.tfplan
-# Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+# 1. Copia de seguridad del estado y de sus huellas SHA-256.
+cp -p ESTADO/terraform.tfstate COPIA/ && (cd ESTADO && sha256sum terraform.tfstate) > COPIA/SHA256SUMS
+
+# 2. Plan refresh-only guardado en un archivo, y revisión de que no hay acciones sobre recursos.
+terraform -chdir=terraform plan -refresh-only -input=false -lock-timeout=30s \
+  -state=ESTADO/terraform.tfstate -var-file=ESTADO/reto4-local.auto.tfvars.json -out=COPIA/refresh-only.tfplan
+terraform -chdir=terraform show -json COPIA/refresh-only.tfplan     # resource_changes debe estar vacío.
+
+# 3. Aplicar exactamente ese plan y comprobar las salidas.
+terraform -chdir=terraform apply -input=false -lock-timeout=30s -state=ESTADO/terraform.tfstate COPIA/refresh-only.tfplan
+terraform -chdir=terraform output -state=ESTADO/terraform.tfstate -json nodes
 ```
 
-**Explicación técnica.** Una etiqueta se cambia **en el sitio** (`~ update in-place`): no detiene ni sustituye la instancia. Por eso es
-un cambio seguro para demostrar el ciclo.
+**Explicación.** Aplicar el archivo de plan, en lugar de un `apply -refresh-only` interactivo, garantiza que se aplica exactamente lo revisado. Un plan refresh-only nunca crea, cambia ni destruye recursos; solo recoge lo que ha cambiado fuera de Terraform.
 
-El plan definitivo se preparó en varios pasos:
+**Comprobación.**
 
-1. El primer plan, del 4 de noviembre, ya proponía solo la etiqueta, pero no se aplicó.
-2. El del 5 de noviembre a las 08:40 UTC proponía dos cambios. La regla SSH activa no tenía descripción y el código sí la declaraba,
-   así que Terraform quería modificar también el grupo de seguridad. Se descartó, se alineó el código con la regla real, sin tocarla,
-   y se usó la IP vigente en `ssh_cidr`.
-3. El plan final, de las 08:51 UTC, contenía solo la etiqueta: `Plan: 0 to add, 1 to change, 0 to destroy`.
+- **9 de noviembre, solo lectura.** Codex ejecutó `plan -refresh-only` sobre una copia del estado: cero acciones sobre recursos. Lo desactualizado eran la IP y el DNS públicos de las cuatro instancias y las reglas SSH guardadas. No se aplicó.
+- **10 de noviembre, con autorización de Cristina.** Claude Code hizo la copia de seguridad, revisó que el plan no tenía acciones sobre recursos y lo aplicó: `Apply complete! Resources: 0 added, 0 changed, 0 destroyed`. Las salidas pasaron a coincidir con AWS en ID, IP privada e IP pública de los cuatro nodos.
 
-Tras el cambio, los ID y los discos eran los mismos, y un nuevo plan indicó `No changes`. El 6 de noviembre, con IP públicas nuevas,
-el plan ya no proponía cambios en los recursos, pero sí en las salidas.
+El registro de esta ejecución y la copia de seguridad están en una carpeta privada del Codespace, fuera de Git, porque contienen el estado de Terraform.
 
-**La captura da `NO CORRECTO`, y es el resultado real.** La comprobación exige `No changes` o `Plan: 0 to add, 0 to change, 0 to
-destroy`, y Terraform indica `Changes to Outputs`. Para que resultara correcta habría que guardar las salidas nuevas en el estado con
-un `apply`, que no está autorizado. [Registro del plan](evidencias/auditoria/registro-2026-11-06.txt).
+> **Evidencia pendiente:** versionar un extracto del registro del `apply -refresh-only`, sin datos de la cuenta, y una captura conforme de `terraform output nodes` coincidiendo con EC2.
 
-**Evidencias.**
+Después de sincronizar el estado, el `plan` normal de solo lectura **no** dio `No changes`: proponía sustituir las cuatro instancias por una imagen Ubuntu nueva (incidencia [I1.4](#115-incidencias-reales-y-soluciones)). Por eso A6 no queda cerrado.
 
-![Plan posterior al cambio, sin aplicar nada](evidencias/capturas-conformes/A6-sin-cambios.png)
-
-*Figura 15. Plan posterior al cambio, sin aplicar nada. Resultado: NO CORRECTO. El plan propone cambios en las salidas, no en los
-recursos, y la comprobación exige que no proponga ninguno. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 10:52 UTC.
-Máquina: codespaces-8d43b2.*
-
-Planes [previo](evidencias/A6-plan-previo.txt), [descartado](evidencias/A6-plan-actual.txt) y [final](evidencias/A6-plan-final.txt),
-[apply del cambio](evidencias/A6-apply.txt) y [plan posterior anterior](evidencias/capturas-terminal/A6-sin-cambios.png).
-
-### 1.10. Destrucción (pendiente)
+### 1.14. Destrucción (pendiente)
 
 **Procedimiento.** No se ha ejecutado. Con autorización, sería:
 
 ```bash
-# Procedimiento, sin ejecutar.
-terraform -chdir=terraform plan -destroy -state=$ESTADO/terraform.tfstate -var-file=... -out=destroy.tfplan
-terraform -chdir=terraform apply -state=$ESTADO/terraform.tfstate destroy.tfplan
+terraform -chdir=terraform plan -destroy -state=ESTADO/terraform.tfstate -var-file=ESTADO/reto4-local.auto.tfvars.json -out=destroy.tfplan
+terraform -chdir=terraform apply -state=ESTADO/terraform.tfstate destroy.tfplan
 ```
 
-**Explicación técnica.** `plan -destroy` muestra qué se eliminaría. El 5 de noviembre se generó solo como información, sin aplicarlo, y
-listaba los cinco recursos: `Plan: 0 to add, 0 to change, 5 to destroy`.
+**Explicación.** `plan -destroy` muestra qué se eliminaría; el 5 de noviembre se generó solo como información, sin aplicarlo, y listaba los cinco recursos: `Plan: 0 to add, 0 to change, 5 to destroy` ([registro](evidencias/A6-plan-actual.txt)). Aplicarlo borra las instancias, sus discos y el clúster, y obliga a repetir las Fases 1 a 4. Como la Rúbrica exige que todo funcione durante la corrección, la destrucción se deja para el final, con autorización separada y tras confirmarlo con el profesor.
 
-Aplicarlo borra el clúster, las réplicas y los discos, y obliga a repetir las Fases 1 a 4. Por eso se deja para el final, con
-autorización separada, y tras confirmar con el profesor si debe hacerse antes de la corrección, que exige que todo funcione.
+> **Evidencia pendiente:** la destrucción real y su captura, cuando se decida.
 
-**Evidencias.** [Plan de destrucción informativo](evidencias/A6-plan-actual.txt). **Pendiente:** la destrucción real y su captura.
+### 1.15. Incidencias reales y soluciones
 
-### Resultado y conclusión de la Fase 1
+**I1.1. Credenciales de AWS caducadas o revocadas** · Estado: **resuelta** (se repite en cada sesión)
 
-Terraform creó la infraestructura de la Guía con un único módulo:
+- *Síntomas:* las consultas fallaban con `UnauthorizedOperation` por la política `voc-cancel-cred` (4 de noviembre, durante E5), con `UnauthorizedOperation` en `DescribeInstances` (5 de noviembre) y con `RequestExpired: Request has expired` (9 de noviembre).
+- *Causa:* las credenciales pertenecían a una sesión de Learner Lab ya terminada o sustituida.
+- *Diagnóstico:* `comprobar-laboratorio.sh` terminó con código 3, y `aws sts get-caller-identity` fallaba. El indicador del laboratorio no estaba en verde o la sesión era nueva.
+- *Solución aplicada:* iniciar el laboratorio y sustituir el bloque completo de `~/.aws/credentials` (apartado [1.2](#12-credenciales-temporales-en-el-codespace)).
+- *Comprobación:* `sts get-caller-identity` respondió y AWS volvió a aceptar las consultas. [Registro del 4 de noviembre](evidencias/E5-verificacion-posterior.txt), [del 5](evidencias/auditoria/registro-acceso-en-vivo.txt) y [del 9](evidencias/auditoria/registro-2026-11-09.txt).
 
-- Variables para el grupo, los tamaños, los discos y la imagen.
-- Workers multiplicados con `count`.
-- Un grupo de seguridad que solo abre a Internet los puertos 80 y 8080, y el 22 a una IP `/32`.
-- Un script de arranque que deja cada nodo con su nombre, la zona Europe/Madrid, las claves, SSH endurecido y Docker.
-- Unas salidas con IP e ID.
+**I1.2. El plan del cambio controlado incluía un segundo cambio** · Estado: **resuelta**
 
-Del ciclo de A6 se han demostrado la validación, el plan, el apply inicial y un cambio controlado. **Falta la destrucción**, y la
-secuencia completa en capturas conformes.
+- *Síntomas:* el plan de A6 del 5 de noviembre proponía cambiar la etiqueta y también el grupo de seguridad.
+- *Causa:* la regla SSH real no tenía descripción, y el código sí la declaraba.
+- *Diagnóstico:* lectura del plan: la diferencia estaba en la descripción de la regla del puerto 22.
+- *Solución aplicada:* se descartó ese plan, se alineó el código con la regla real, sin tocar AWS, y se usó la IP vigente en `ssh_cidr`.
+- *Comprobación:* el plan final contenía solo la etiqueta. [Plan descartado](evidencias/A6-plan-actual.txt) y [final](evidencias/A6-plan-final.txt).
 
-A1 y F6 se consideran listos. A2–A5 están demostrados y A6 es parcial. Las capturas de la consola de EC2 están pendientes.
+**I1.3. Estado y salidas desactualizados tras reiniciar el laboratorio** · Estado: **resuelta**; falta versionar la evidencia
 
-## Fase 2: Acceso SSH
+- *Síntomas:* la captura del plan posterior al cambio dio NO CORRECTO por `Changes to Outputs`, y `terraform output` mostraba IP públicas que ya no existían.
+- *Causa:* el estado guarda las IP del último `apply`, y Learner Lab asigna IP nuevas en cada sesión. Además, las reglas SSH sustituidas a mano no constaban en el estado.
+- *Diagnóstico:* `plan -refresh-only` de solo lectura del 9 de noviembre: cero acciones sobre recursos y diferencias solo en IP, DNS y reglas SSH.
+- *Solución aplicada:* `apply -refresh-only` del 10 de noviembre, autorizado por Cristina, con copia de seguridad previa (apartado [1.13](#113-sincronización-del-estado-con-refresh-only)).
+- *Comprobación:* las salidas coinciden con EC2. El registro está fuera de Git; la captura conforme versionada sigue siendo la del 6 de noviembre.
 
-**Objetivo general.** Administrar los cuatro servidores por SSH con claves públicas propias, sin contraseñas ni acceso de root:
+**I1.4. El plan normal propone sustituir las cuatro instancias** · Estado: **pendiente**
 
-- entrar con un nombre corto;
-- llegar a los workers por su IP privada a través del manager;
-- ejecutar órdenes en todos a la vez, con `sudo`;
-- copiar archivos de forma verificable.
+- *Síntomas:* el 10 de noviembre, el `plan` normal de solo lectura dio `Plan: 4 to add, 0 to change, 4 to destroy`, con `ami ... # forces replacement` en las cuatro instancias.
+- *Causa:* `data "aws_ami"` usa `most_recent = true`. Canonical publicó el 9 de noviembre una imagen Ubuntu 22.04 nueva (`...-server-20261109`), y las instancias usan la del 21 de octubre (`ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20261021`). Cambiar la imagen obliga a recrear la instancia.
+- *Diagnóstico:* `terraform show -json` del plan: el único atributo que fuerza la sustitución es `ami`. El grupo de seguridad y el `user_data` no cambian.
+- *Solución propuesta, no aplicada:* fijar la imagen de las instancias actuales, por ejemplo con `ubuntu_ami_name = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20261021"` en las variables privadas, o añadir `lifecycle { ignore_changes = [ami] }` a las instancias; después, repetir el plan de solo lectura hasta obtener `No changes`. Requiere autorización.
+- *Precaución:* se borró el archivo de ese plan para que nadie pueda aplicarlo por error. **No debe ejecutarse un `terraform apply` normal** hasta corregirlo: destruiría y recrearía los cuatro nodos y el clúster.
 
-Criterios de la Rúbrica: B1–B5. La Guía asigna 1 punto a esta fase.
+**I1.5. Las reglas SSH añadidas a mano quedaban fuera de Terraform** · Estado: **resuelta**
 
-| Qué pide la Guía | Situación a 9 de noviembre |
-| --- | --- |
-| Cada alumno usa sus propias claves SSH; `vockey` queda como reserva | **Parcial:** las tres claves de los integrantes están instaladas desde el 9 de noviembre, pero falta que cada uno entre con la suya. La Rúbrica pide además `vockey` sustituida |
-| Archivo `config` en el cliente para entrar con el nombre corto | **Cumple:** comprobado el 6 de noviembre |
-| Deshabilitar el acceso root y por contraseña | **Cumple:** comprobado el 6 de noviembre |
-| Workers accesibles por IP privada, con el manager como salto | **Cumple:** comprobado el 6 de noviembre |
+- *Síntomas:* la regla temporal de los integrantes y las sustituciones de la regla del Codespace no estaban en el código, así que un plan habría propuesto retirarlas.
+- *Causa:* las reglas del grupo de seguridad son *inline*: Terraform considera sobrante cualquier regla que no declare.
+- *Diagnóstico:* el `plan -refresh-only` del 9 de noviembre mostraba las reglas reales distintas de las guardadas.
+- *Solución aplicada:* la variable `ssh_additional_cidrs` (commit `9dab86d`) declara los accesos SSH adicionales con su descripción, sin retirar los existentes, y rechaza `0.0.0.0/0`.
+- *Comprobación:* el plan normal del 10 de noviembre no proponía ningún cambio en el grupo de seguridad.
 
-**9 de noviembre.** A las 08:37 UTC no había SSH desde el Codespace: la regla admitía `172.166.151.115/32` y el Codespace salía por
-`172.166.151.114` ([registro](evidencias/auditoria/registro-2026-11-09.txt)). Con autorización de Cristina se hizo lo siguiente, comprobando
-cada paso:
+**I1.6. Interrupción del primer plan refresh-only** · Estado: **resuelta**
 
-1. Se sustituyó la regla del Codespace.
-2. Se regeneraron los alias.
-3. Se instalaron las tres claves.
-4. Se abrió la regla temporal de los integrantes.
+- *Síntomas:* el 10 de noviembre, el primer `plan -refresh-only` terminó con código 137 antes de acabar.
+- *Causa:* se reinició la sesión del editor y el proceso de Terraform se detuvo.
+- *Diagnóstico:* se comprobó con `sha256sum -c` que el estado era idéntico a la copia de seguridad y que no quedaba ningún bloqueo (`.terraform.tfstate.lock.info`) ni proceso de Terraform.
+- *Solución aplicada:* se repitió el plan.
+- *Comprobación:* el segundo plan terminó correctamente y su revisión mostró cero acciones sobre recursos.
 
-[Registro completo](evidencias/auditoria/registro-2026-11-09-b1.txt).
+### 1.16. Posibles incidencias y soluciones
 
-### 2.1. Claves SSH: cuáles hay y cuáles faltan (B1)
+| Síntoma o error | Causa probable | Diagnóstico | Solución |
+| --- | --- | --- | --- |
+| `RequestExpired`, `ExpiredToken` o `UnauthorizedOperation` | Credenciales de una sesión terminada | `aws sts get-caller-identity` | Iniciar el laboratorio y sustituir `~/.aws/credentials` |
+| `describe-instances` devuelve una lista vacía | Región distinta de `us-east-1` | `aws configure get region` | `aws configure set region us-east-1` |
+| La CLI ignora el archivo de credenciales | Variables `AWS_*` en el entorno con prioridad | `env \| grep '^AWS_'` | `unset` de esas variables |
+| `Error acquiring the state lock` | Otro Terraform en marcha o una ejecución interrumpida | `ps aux \| grep terraform` | Esperar; usar `terraform force-unlock ID` solo si no hay ningún proceso activo |
+| Error de validación de `ssh_cidr` o `ssh_public_keys` | CIDR abierto o mal escrito, o clave con saltos de línea | Mensaje de `validation` | Corregir el archivo de variables privado |
+| El plan muestra `forces replacement` o `to destroy` | Cambio de imagen u otro atributo inmutable | `terraform show -json PLAN` | No aplicar. Fijar el atributo y repetir el plan |
+| Terraform quiere crear todo de nuevo | Falta el estado o se usa otra ruta | `terraform state list -state=RUTA` | Usar la ruta privada del estado, o restaurar su copia |
+| cloud-init no termina, o falta Docker o el hostname | Error del script de arranque o sin salida a Internet | `cloud-init status --long` y `/var/log/cloud-init-output.log` | Corregir el script y recrear la instancia con autorización |
+| Learner Lab rechaza crear una instancia | Tipo o número de instancias no permitido en el laboratorio | Mensaje de error de AWS | Usar los tipos de la Guía, t3.medium y t3.small |
 
-**Procedimiento.** Las claves autorizadas en cada nodo se consultan sin mostrar su contenido:
+### 1.17. Resultado y conclusión de la Fase 1
+
+Terraform creó la infraestructura de la Guía con un único módulo: variables para el grupo, los tamaños, los discos y la imagen; workers multiplicados con `count`; un grupo de seguridad que solo abre a Internet los puertos 80 y 8080, y el 22 a direcciones `/32`; un script de arranque que deja cada nodo con su nombre, la zona Europe/Madrid, las claves, SSH endurecido y Docker; y unas salidas con IP e ID. El estado se sincronizó con AWS el 10 de noviembre y las salidas vuelven a coincidir con EC2.
+
+Del ciclo de A6 están demostrados la validación, el plan, el apply inicial y un cambio controlado. **No está cerrado** por tres motivos: el plan normal propone sustituir las instancias por la imagen nueva (I1.4), falta la destrucción, y la secuencia no está en capturas conformes.
+
+- **Cumplidos:** A1, A4, A5 y F6. A2 y A3 cumplidos, con la captura de la consola de EC2 pendiente.
+- **Parcial:** A6.
+- **Pendiente:** F13.
+
+## Fase 2 — Acceso SSH
+
+**Objetivo.** Administrar los cuatro servidores por SSH con claves públicas propias, sin contraseñas ni acceso de root: entrar con un nombre corto, llegar a los workers por su IP privada a través del manager, ejecutar órdenes en todos a la vez con `sudo` y copiar archivos de forma verificable.
+
+**Contenidos.**
+
+| Requisito de la Guía y la Rúbrica | Criterio | Apartado | Estado |
+| --- | --- | --- | --- |
+| Cada alumno usa sus propias claves; `vockey` queda de reserva (Guía) o sustituida (Rúbrica) | B1 | 2.1, 2.2, 2.8 | Parcial |
+| Archivo `config` en el cliente para entrar con el nombre corto | B2 | 2.3 | Cumplido |
+| Workers accesibles por IP privada con el manager como salto | B5 | 2.4 | Cumplido |
+| Sin acceso root ni por contraseña; permisos locales | B4 | 2.5 | Cumplido |
+| Control total, órdenes simultáneas y copia de ficheros | B3 | 2.6, 2.7 | Cumplido |
+
+### 2.1. Claves SSH del proyecto (B1)
+
+**Qué se hizo y para qué.** Cada integrante generó su propio par de claves Ed25519, protegido con frase de paso. La clave **privada** no sale de su equipo; la **pública** se guarda en [`terraform/claves/`](terraform/claves/), versionada desde el 9 de noviembre. El Codespace usa además su propia clave, `~/.ssh/reto4_g5`.
+
+**Procedimiento en el equipo de cada integrante.**
 
 ```bash
-# Literal: captura B1-claves, en cada nodo.
-ssh-keygen -lf ~/.ssh/authorized_keys | cut -c1-100
+ssh-keygen -t ed25519 -C "NOMBRE-reto4" -f ~/.ssh/NOMBRE_reto4     # Pide una frase de paso.
+ssh-keygen -lf ~/.ssh/NOMBRE_reto4.pub                              # Huella para comprobarla después.
 ```
 
-**Explicación técnica.** `ssh-keygen -lf` muestra la **huella** de cada clave: un resumen SHA-256 que la identifica sin revelarla.
-Para comprobar que dos claves son la misma, se comparan sus huellas.
+**Explicación.** `ssh-keygen -lf` muestra la **huella** de una clave: un resumen SHA-256 que la identifica sin revelarla. Para saber si dos claves son la misma se comparan sus huellas.
 
-| Clave | Tipo | Huella | Cómo llega al nodo | Estado |
-| --- | --- | --- | --- | --- |
-| `vockey` | RSA 2048 | `SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c` | La añade AWS por `key_name` | Instalada en los 4 nodos |
-| `reto4-g5-codespace` | Ed25519 | `SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y` | `ssh_public_keys` y el script de arranque | Instalada en los 4 nodos |
-| Enrique, `EnriZx2-reto4` | Ed25519 | `SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys` | Desde [`terraform/claves/`](terraform/claves/), con `instalar-clave-publica.sh` | **Instalada en los 4 nodos** el 9 de noviembre |
-| Alexandra, `alexguerth-reto4` | Ed25519 | `SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs` | Desde `terraform/claves/`, con `instalar-clave-publica.sh` | **Instalada en los 4 nodos** el 9 de noviembre |
-| Ibai, `ibai-reto4` | Ed25519 | `SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8` | Desde `terraform/claves/`, con `instalar-clave-publica.sh` | **Instalada en los 4 nodos** el 9 de noviembre |
-| Cristina, `cristina-reto4` | Ed25519 | `SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA` | Desde [`terraform/claves/`](terraform/claves/), con `instalar-clave-publica.sh` | **Instalada en los 4 nodos** el 9 de noviembre, a las 09:54 UTC, con autorización de Cristina |
+| Clave | Tipo | Huella | Cómo llega a los nodos |
+| --- | --- | --- | --- |
+| `vockey` | RSA 2048 | `SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c` | AWS, por `key_name` |
+| `reto4-g5-codespace` | Ed25519 | `SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y` | `ssh_public_keys` y script de arranque |
+| Cristina, `cristina-reto4` | Ed25519 | `SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA` | `instalar-clave-publica.sh` |
+| Enrique, `EnriZx2-reto4` | Ed25519 | `SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys` | `instalar-clave-publica.sh` |
+| Alexandra, `alexguerth-reto4` | Ed25519 | `SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs` | `instalar-clave-publica.sh` |
+| Ibai, `ibai-reto4` | Ed25519 | `SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8` | `instalar-clave-publica.sh` |
 
-Las tres claves de los integrantes se verificaron el 9 de noviembre:
+**Diferencia entre la Guía y la Rúbrica.** La Guía dice que «la clave vockey queda como acceso de reserva», y la Rúbrica pide «vockey sustituida». El proyecto conserva `vockey`, como indica la Guía, porque retirarla elimina el acceso de emergencia. Hay que confirmarlo con el profesor antes de cambiarlo.
 
-- son claves Ed25519 válidas, de una línea, y no se repiten entre sí ni con `vockey` o la clave del Codespace;
-- no consta una incidencia de saltos de línea en las claves de Enrique, Alexandra o Ibai. Solo está acreditada la de Cristina: se retiró su salto de línea de Windows sin cambiar la huella, según el [registro](evidencias/auditoria/registro-2026-11-09-b1.txt);
-- no hay claves privadas en el repositorio ni en su historial.
+**Comprobación.** El 9 de noviembre se comprobó que las cuatro claves públicas son Ed25519 válidas, de una línea, distintas entre sí y de `vockey` y la del Codespace, y que no hay claves privadas en el repositorio ni en su historial.
 
-A 9 de noviembre, los tres archivos **todavía no están en GitHub**: están en el Codespace, pendientes de commit.
+> **Evidencia pendiente:** captura `B1-repositorio` con las cuatro `.pub` en `main` y las privadas excluidas por `.gitignore`.
 
-**Diferencia entre la Guía y la Rúbrica.** La Guía dice que «la clave vockey queda como acceso de reserva». La Rúbrica pide «vockey
-sustituida». Este proyecto conserva `vockey`, como dice la Guía, y hay que confirmarlo con el profesor.
+### 2.2. Instalación de las claves de los integrantes (B1)
 
-**Evidencias.**
+**Qué se hizo y para qué.** Las claves de los integrantes se añadieron a `authorized_keys` de los cuatro nodos sin recrear las instancias y sin perder el acceso existente. Para ello se usa [`instalar-clave-publica.sh`](scripts/instalar-clave-publica.sh): primero se comprueba, solo con lectura, y después se instala con autorización.
 
-![Claves autorizadas en los cuatro nodos](evidencias/capturas-conformes/B1-claves.png)
-
-*Figura 16. Claves autorizadas en los cuatro nodos. Resultado: Muestra las claves reales. Solo consta la clave del Codespace y vockey:
-faltan las de cada integrante. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:18 UTC. Máquinas: codespaces-8d43b2 y los
-cuatro nodos.*
-
-Evidencias anteriores: [claves](evidencias/capturas-terminal/B1-claves-autorizadas.png). [Procedimiento de las claves de los
-integrantes](entrega/PROCEDIMIENTO-CLAVES.md).
-
-### 2.2. Instalación de las claves de los integrantes (9 de noviembre)
-
-**Procedimiento.** Primero se comprueba, solo con lectura, y después se instala con autorización:
+**Procedimiento.**
 
 ```bash
-# Literal: 9 de noviembre, 09:23–09:25 UTC, con autorización de Cristina. Requiere antes el acceso SSH del Codespace (L.10).
-for n in enrique alexandra ibai; do
+for n in cristina enrique alexandra ibai; do
     bash scripts/instalar-clave-publica.sh --comprobar "terraform/claves/${n}_reto4.pub"; echo "salida=$?"
 done
 # Solo con autorización expresa:
-for n in enrique alexandra ibai; do
+for n in cristina enrique alexandra ibai; do
     bash scripts/instalar-clave-publica.sh --instalar "terraform/claves/${n}_reto4.pub" || break
 done
 ```
 
-**Explicación técnica.** [`instalar-clave-publica.sh`](scripts/instalar-clave-publica.sh) está pensado para no perder el acceso:
+**Explicación.** El script está pensado para no perder nunca el acceso:
 
-- **Valida la clave.** Solo acepta una clave pública Ed25519 en una línea, con comentario. Así rechaza claves privadas y archivos con
-  saltos de línea de Windows.
-- **Comprueba antes de cambiar nada.** Revisa los cuatro nodos y se detiene si alguno no responde.
-- **Conserva lo que ya hay.** En cada nodo guarda una copia, `authorized_keys.antes-FECHA`, y **añade** la clave al final. No borra
-  `vockey` ni la clave del Codespace.
-- **Se verifica a sí mismo.** Después compara que el principio del archivo sigue siendo idéntico a la copia, y que `ssh-keygen` lo lee
-  bien. Si no, restaura la copia.
-- **Se puede repetir.** Si la clave ya estaba, no la duplica.
+- **Valida la clave:** solo acepta una clave pública Ed25519 en una línea, con comentario.
+- **Comprueba antes de cambiar nada:** revisa los cuatro nodos y se detiene si alguno no responde.
+- **Conserva lo que hay:** guarda una copia, `authorized_keys.antes-FECHA`, y **añade** la clave al final, sin borrar `vockey` ni la clave del Codespace.
+- **Se verifica a sí mismo:** comprueba que el principio del archivo sigue idéntico a la copia y que `ssh-keygen` lo lee bien; si no, restaura la copia.
+- **Se puede repetir:** si la clave ya está, no la duplica.
 
-Resultado real del 9 de noviembre:
+**Diferencia con la Guía.** La Guía pone las claves públicas en el script de arranque. Terraform no lee `terraform/claves/`: el script de arranque instala las claves de `ssh_public_keys`, que al crear los nodos solo contenía la del Codespace. Las de los integrantes llegaron después y se instalaron con este script, sin recrear las instancias. Si se recrearan los nodos, habría que añadirlas a esa variable.
 
-- **Antes de instalar:** `--comprobar` dio, con las tres claves, `ausente`, `claves=2`, `vockey=1` y `permisos=600` en los cuatro nodos,
-  con código 2.
-- **Instalación:** cada `--instalar` terminó con código 0, y `claves=` pasó a 3, 4 y 5.
-- **Después:** cada nodo tiene 5 claves, sin huellas ni material repetidos. Siguen `vockey` y `reto4-g5-codespace` con la misma huella,
-  y los permisos son 700 y 600. `--comprobar` da `presente` con las tres claves, con código 0.
-- **Copias previas:** en cada nodo queda una copia de seguridad, `~/.ssh/authorized_keys.antes-20261109-*`.
-- **Clave de Cristina:** a las 09:54 UTC, con su autorización, se comprobó que su huella era `SHA256:CCR0qvMq…` y se instaló.
-  `--comprobar` da `presente` en los cuatro nodos, con código 0. Cada nodo tiene 6 claves, sin duplicados, con permisos 700 y 600, y
-  conserva todas las anteriores.
+**Comprobación.** El 9 de noviembre, con autorización de Cristina, `--comprobar` dio `ausente` antes de instalar y `presente` después, con código 0 en los cuatro nodos. Cada nodo quedó con seis claves, sin duplicados, con permisos 700 y 600 y con `vockey` y la clave del Codespace intactas. Esa tarde, Codex volvió a comprobar las cuatro claves en los cuatro nodos. [Registro de la instalación](evidencias/auditoria/registro-2026-11-09-b1.txt).
 
-Terraform no lee `terraform/claves/`. Las claves de los nodos salen de `ssh_public_keys`. Si se recrearan los nodos, las claves de los
-integrantes no se instalarían solas hasta añadirlas a esa variable.
+![Claves de los cuatro integrantes en los cuatro nodos](evidencias/capturas-conformes/B1-clave-nodos.png)
 
-**Evidencias.** [Registro de la instalación](evidencias/auditoria/registro-2026-11-09-b1.txt).
+*Figura 16. CORRECTO: las claves de Cristina, Enrique, Alexandra e Ibai están en los cuatro nodos, y se conservan `vockey` y la clave del Codespace. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 9 de noviembre de 2026. Máquinas: codespaces-8d43b2 y los cuatro nodos.*
 
-![Claves de los tres integrantes en los cuatro nodos](evidencias/capturas-conformes/B1-clave-nodos.png)
+### 2.3. Archivo `config` y nombres cortos (B2)
 
-*Figura 17. Claves de los cuatro integrantes autorizadas en los cuatro nodos, con vockey de reserva. Resultado: CORRECTO. Las claves de
-Cristina, Enrique, Alexandra e Ibai están en los cuatro nodos. Se conservan vockey y la clave del Codespace. Autor: Claude Code, por
-encargo de Cristina (Lq922466). 2026-11-09, 09:56 UTC. Máquinas: codespaces-8d43b2 y los cuatro nodos.*
-
-**Pendiente:** la captura `B1-repositorio`, que requiere subir las claves a GitHub (apartado 2.10).
-
-### 2.3. Permisos de `authorized_keys` y del cliente (B4)
+**Qué se hizo y para qué.** Para entrar con `ssh manager-g5` en lugar de escribir usuario, IP y clave, el cliente SSH usa un archivo de configuración. Como la IP pública del manager cambia en cada sesión, ese archivo se **genera** con [`actualizar-ips.sh`](scripts/actualizar-ips.sh) a partir de la [plantilla](config/ssh_config.example).
 
 **Procedimiento.**
 
 ```bash
-# Literal: captura B4-endurecimiento.
-stat -c '%a %n' ~/.ssh ~/.ssh/reto4_g5 ~/.ssh/config         # En el Codespace.
-stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys               # En cada nodo.
-```
-
-**Explicación técnica.** `sshd` aplica *StrictModes*: si la carpeta `~/.ssh` o `authorized_keys` pueden escribirlas otros usuarios,
-rechaza las claves, porque alguien podría añadir la suya. Por eso se usan estos permisos:
-
-| Archivo | Permiso | Significado |
-| --- | --- | --- |
-| `~/.ssh` | `700` | Solo el propietario puede leerla, escribirla o entrar en ella |
-| `authorized_keys`, la clave privada y `config` | `600` | Solo el propietario puede leerlos y escribirlos |
-
-El cliente SSH también rechaza una clave privada que puedan leer otros usuarios. En los nodos, estos permisos los fija el script de
-arranque.
-
-### 2.4. Sin root ni contraseña (B4)
-
-**Procedimiento.**
-
-```bash
-# Literal: captura B4-endurecimiento, en cada nodo.
-sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '
-```
-
-**Explicación técnica.** El script de arranque crea
-[`/etc/ssh/sshd_config.d/00-reto4.conf`](config/sshd_00-reto4.conf):
-
-- **`PermitRootLogin no`** impide entrar como root. Se entra como `ubuntu` y se usa `sudo`, que deja registro de cada orden.
-- **`PasswordAuthentication no`** y **`KbdInteractiveAuthentication no`** impiden las contraseñas, incluido el método interactivo.
-  Solo quedan las claves, que no se pueden adivinar por fuerza bruta.
-
-`sshd -T` muestra la configuración **efectiva**, después de combinar todos los archivos. Por eso es más fiable que leer el archivo.
-
-**Evidencias.**
-
-![Sin root ni contraseña, y permisos](evidencias/capturas-conformes/B4-endurecimiento.png)
-
-*Figura 18. Sin root ni contraseña, y permisos. Resultado: Root y contraseña desactivados en los nodos, y permisos 700 y 600. Autor:
-Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:18 UTC. Máquinas: codespaces-8d43b2 y los cuatro nodos.*
-
-Evidencias anteriores: [endurecimiento](evidencias/capturas-terminal/B4-endurecimiento.png).
-
-### 2.5. Archivo `config` y nombre corto (B2)
-
-**Procedimiento.** [`actualizar-ips.sh`](scripts/actualizar-ips.sh) genera `config/ssh.local`, que no se versiona, a partir de la
-[plantilla](config/ssh_config.example). La última configuración aplicada se guarda en
-[`config/ssh_config.aplicado`](config/ssh_config.aplicado), y la carpeta se describe en [`config/`](config/README.md).
-`~/.ssh/config` solo la incluye:
-
-```bash
-# Literal: scripts y plantilla del repositorio.
-bash scripts/actualizar-ips.sh
-install -m 600 config/ssh_config.usuario.example ~/.ssh/config    # Contiene: Include .../config/ssh.local
+bash scripts/actualizar-ips.sh                                       # Lee de EC2 las IP y regenera config/ssh.local.
+install -m 600 config/ssh_config.usuario.example ~/.ssh/config       # Una sola vez: contiene «Include .../config/ssh.local».
 ssh -G manager-g5 2>/dev/null | grep -E '^(user|hostname|hostkeyalias) '   # Cómo resuelve SSH el alias.
 ssh manager-g5
 ```
 
+Extracto de la configuración generada ([`config/ssh_config.aplicado`](config/ssh_config.aplicado)):
+
 ```text
-# config/ssh_config.aplicado, del 6 de noviembre. La IP pública del manager cambia en cada sesión.
 Host manager-g5
-    HostName 54.197.30.8
+    HostName IP_PUBLICA_DEL_MANAGER
     HostKeyAlias manager-g5
 Host worker1-g5
     HostName 172.31.17.168
@@ -1159,342 +1153,254 @@ Host manager-g5 worker?-g5
     BatchMode yes
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
 | Directiva | Para qué sirve |
 | --- | --- |
-| `Host` | Nombre corto que se escribe en `ssh`. `worker?-g5` se aplica a los tres workers |
-| `HostName` | Dirección real: la IP pública del manager, o la IP privada de cada worker |
-| `HostKeyAlias manager-g5` | Guarda la huella del servidor con su nombre, no con la IP. Así no hay que volver a aceptarla cuando cambia la IP pública |
+| `Host` | Nombre corto. `worker?-g5` se aplica a los tres workers |
+| `HostName` | Dirección real: la IP pública del manager o la IP privada de cada worker |
+| `HostKeyAlias` | Guarda la huella del servidor con su nombre y no con la IP, así que no hay que volver a aceptarla cuando cambia la IP |
 | `User ubuntu` | Usuario remoto, que no es root |
-| `IdentityFile` e `IdentitiesOnly yes` | Usa solo esa clave, sin probar otras del agente |
-| `BatchMode yes` | Nunca pide contraseña. Si la clave no sirve, falla en lugar de quedarse esperando |
+| `IdentityFile` e `IdentitiesOnly yes` | Usa solo esa clave, sin probar otras |
+| `BatchMode yes` | Nunca pide contraseña: si la clave no sirve, falla en lugar de quedarse esperando |
+| `ProxyJump` | Llega a los workers a través del manager (apartado [2.4](#24-acceso-a-los-workers-por-ip-privada-con-salto-b5)) |
 
-Con `Include`, el `~/.ssh/config` no cambia aunque cambien las IP. Solo se regenera `ssh.local`.
-
-**Evidencias.**
+Con `Include`, el `~/.ssh/config` no cambia aunque cambien las IP: solo se regenera `config/ssh.local`. El script escribe en un archivo temporal y lo mueve al final, para no dejar nunca una configuración a medias.
 
 ![Configuración SSH con nombre corto](evidencias/capturas-conformes/B2-plantilla.png)
 
-*Figura 19. Configuración SSH con nombre corto. Resultado: Los alias se resuelven solo con el nombre corto. La conexión real se
-comprueba en B2-conexion. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:23 UTC. Máquina: codespaces-8d43b2.*
+*Figura 17. Los alias se resuelven solo con el nombre corto. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026.*
+
+**Comprobación.** `ssh manager-g5` y `ssh worker3-g5` entran sin escribir IP, usuario ni clave.
 
 ![Conexión con el nombre corto](evidencias/capturas-conformes/B2-conexion.png)
 
-*Figura 20. Conexión con el nombre corto. Resultado: Se entra usando solo el nombre corto, también a un worker por salto. Autor: Claude
-Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:18 UTC. Máquinas: codespaces-8d43b2, manager-g5 y worker3-g5.*
+*Figura 18. Se entra usando solo el nombre corto, también en un worker por salto. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquinas: codespaces-8d43b2, manager-g5 y worker3-g5.*
 
-Evidencias anteriores: [alias](evidencias/capturas-terminal/B2-alias.png).
-
-### 2.6. Acceso a los workers por IP privada con salto (B5)
+### 2.4. Acceso a los workers por IP privada con salto (B5)
 
 **Procedimiento.**
 
 ```bash
-# Literal: captura B5-salto.
 ssh -G worker1-g5 2>/dev/null | grep -E '^(hostname|proxyjump) '   # hostname 172.31.17.168 · proxyjump manager-g5
-hostname -I                     # Dentro de worker1-g5, worker2-g5 y worker3-g5, entrando con ssh workerN-g5.
+ssh worker1-g5 hostname -I                                         # Repetir con worker2-g5 y worker3-g5.
 ```
 
-**Explicación técnica.** Con **`ProxyJump`**, el cliente abre primero una conexión SSH con el manager y, a través de ella, otra con la
-IP privada del worker. La autenticación en el worker la hace el propio cliente, con su clave, así que la clave privada **nunca** se
-copia al manager.
+**Explicación.** Con **`ProxyJump`**, el cliente abre primero una conexión SSH con el manager y, a través de ella, otra con la IP privada del worker. La autenticación en el worker la hace el propio cliente, con su clave, así que la clave privada **nunca** se copia al manager. El grupo de seguridad lo permite con la regla del puerto 22 limitada al propio grupo: los workers no necesitan aceptar SSH desde Internet.
 
-El grupo de seguridad lo permite con la regla del puerto 22 limitada al propio grupo (`self = true`). Los workers no necesitan
-aceptar SSH desde Internet.
-
-**Evidencias.**
+**Comprobación.** Los tres workers responden con su IP privada `172.31.x.x`. Codex volvió a comprobar el 9 de noviembre que la configuración efectiva de los tres workers usa `proxyjump manager-g5`.
 
 ![Acceso a los workers por IP privada con salto](evidencias/capturas-conformes/B5-salto.png)
 
-*Figura 21. Acceso a los workers por IP privada con salto. Resultado: Los tres workers se alcanzan por IP privada, a través del
-manager. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:18 UTC. Máquinas: codespaces-8d43b2 y los tres workers.*
+*Figura 19. Los tres workers se alcanzan por IP privada a través del manager. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquinas: codespaces-8d43b2 y los tres workers.*
 
-Evidencias anteriores: [salto](evidencias/capturas-terminal/B5-salto.png) y [registro inicial](evidencias/prototipo/fase2-3.txt).
-
-### 2.7. Control total y órdenes simultáneas (B3)
+### 2.5. Sin root ni contraseña, y permisos (B4)
 
 **Procedimiento.**
 
 ```bash
-# Literal: captura B3-simultaneo.
-bash scripts/comprobar-ssh.sh                          # hostname, fecha y versión de Docker en los cuatro nodos a la vez.
-sudo -n true && echo permisos de sudo: correcto     # Dentro de cada uno de los cuatro nodos.
+sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '   # En cada nodo.
+stat -c '%a %n' ~/.ssh ~/.ssh/authorized_keys                          # En cada nodo.
+stat -c '%a %n' ~/.ssh ~/.ssh/reto4_g5 ~/.ssh/config                   # En el Codespace.
 ```
 
-**Explicación técnica.** [`comprobar-ssh.sh`](scripts/comprobar-ssh.sh) lanza cada conexión en segundo plano con `&` y guarda su PID.
-Después espera a todas con `wait`, así que las órdenes se ejecutan **a la vez** y el script falla si falla cualquier nodo.
+**Explicación.** El script de arranque crea [`/etc/ssh/sshd_config.d/00-reto4.conf`](config/sshd_00-reto4.conf):
 
-`sudo -n true` comprueba que `ubuntu` tiene control total sin contraseña. `-n` hace que `sudo` falle en lugar de pedirla.
+- **`PermitRootLogin no`** impide entrar como root. Se entra como `ubuntu` y se usa `sudo`, que deja registro de cada orden.
+- **`PasswordAuthentication no`** y **`KbdInteractiveAuthentication no`** impiden las contraseñas, también por el método interactivo. Solo quedan las claves, que no se pueden adivinar por fuerza bruta.
 
-**Evidencias.**
+`sshd -T` muestra la configuración **efectiva**, después de combinar todos los archivos, así que es más fiable que leer uno solo.
+
+En cuanto a los permisos, `sshd` aplica *StrictModes*: si otros usuarios pueden escribir en `~/.ssh` o en `authorized_keys`, rechaza las claves, porque alguien podría añadir la suya. Por eso la carpeta tiene **700** (solo el propietario) y los archivos, **600** (lectura y escritura solo para el propietario). El cliente SSH también rechaza una clave privada que puedan leer otros.
+
+**Comprobación.** Root y contraseña desactivados en los cuatro nodos y permisos 700 y 600. Codex lo comprobó de nuevo el 9 de noviembre.
+
+![Sin root ni contraseña, y permisos](evidencias/capturas-conformes/B4-endurecimiento.png)
+
+*Figura 20. Root y contraseña desactivados en los nodos, y permisos 700 y 600. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquinas: codespaces-8d43b2 y los cuatro nodos.*
+
+### 2.6. Órdenes simultáneas y control total (B3)
+
+**Procedimiento.**
+
+```bash
+bash scripts/comprobar-ssh.sh                     # hostname, fecha y versión de Docker en los cuatro nodos a la vez.
+sudo -n true && echo "permisos de sudo: correcto"  # Dentro de cada nodo.
+```
+
+**Explicación.** [`comprobar-ssh.sh`](scripts/comprobar-ssh.sh) lanza cada conexión en segundo plano con `&`, guarda su PID y espera a todas con `wait`: las órdenes se ejecutan **a la vez** y el script falla si falla cualquier nodo. `sudo -n true` comprueba que `ubuntu` tiene control total sin contraseña; `-n` hace que `sudo` falle en lugar de pedirla.
 
 ![Órdenes simultáneas y control total](evidencias/capturas-conformes/B3-simultaneo.png)
 
-*Figura 22. Órdenes simultáneas y control total. Resultado: La misma orden se ejecuta a la vez en los cuatro nodos, y sudo funciona en
-todos. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:18 UTC. Máquinas: codespaces-8d43b2 y los cuatro nodos.*
+*Figura 21. La misma orden se ejecuta a la vez en los cuatro nodos, y `sudo` funciona en todos. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026.*
 
-Evidencias anteriores: [simultaneidad y sudo](evidencias/capturas-terminal/B3-simultaneo-sudo.png).
-
-### 2.8. Copia de archivos con SCP (B3)
+### 2.7. Copia de archivos con SCP (B3)
 
 **Procedimiento.**
 
 ```bash
-# Literal: captura B3-copia.
 d=$(mktemp -d); scp -q worker1-g5:/etc/hostname "$d/copia"; sha256sum "$d/copia"   # En el Codespace.
 sha256sum /etc/hostname                                                            # En worker1-g5.
 ```
 
-**Explicación técnica.** `scp` copia archivos por el mismo canal cifrado de SSH y usa los mismos alias, incluido el salto. Que el
-SHA-256 coincida en los dos extremos demuestra que la copia es idéntica. La captura solo **descarga**, para no escribir en el nodo.
-La subida se comprobó el 4 de noviembre, también con SHA-256 coincidente.
-
-**Evidencias.**
+**Explicación.** `scp` copia archivos por el mismo canal cifrado de SSH y usa los mismos alias, incluido el salto. Si el SHA-256 coincide en los dos extremos, la copia es idéntica. La captura solo descarga, para no escribir en el nodo; la subida se comprobó el 4 de noviembre, también con SHA-256 coincidente ([registro](evidencias/prototipo/fase2-3.txt)).
 
 ![Copia de archivos con SHA-256 coincidente](evidencias/capturas-conformes/B3-copia.png)
 
-*Figura 23. Copia de archivos con SHA-256 coincidente. Resultado: La copia por SCP tiene el mismo SHA-256 que el original. Solo se
-descarga: no se escribe en el nodo. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 09:18 UTC. Máquinas: codespaces-8d43b2 y
-worker1-g5.*
+*Figura 22. La copia por SCP tiene el mismo SHA-256 que el original. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquinas: codespaces-8d43b2 y worker1-g5.*
 
-Evidencias anteriores: [copia](evidencias/capturas-terminal/B3-copia-scp.png).
+### 2.8. Acceso de cada integrante desde su equipo (B1)
 
-### 2.9. Prueba de cada integrante desde su ordenador (B1)
-
-**Procedimiento.** Está detallado en el [procedimiento de claves](entrega/PROCEDIMIENTO-CLAVES.md). En resumen:
-
-1. Cada integrante obtiene su IP pública con `curl -s https://checkip.amazonaws.com`.
-2. Con autorización, se abre para esa IP una regla temporal `/32` en el puerto 22.
-3. El integrante configura su `~/.ssh/config` como en 2.5, pero con su propia clave en `IdentityFile`.
-4. Entra en los cuatro nodos, con prompt y comentario.
-5. Al terminar, se retira la regla.
-
-**Explicación técnica.** Cada integrante usa **solo su clave privada**, que no sale de su equipo. El servidor registra en
-`/var/log/auth.log` la huella de la clave aceptada, lo que permite demostrar desde el nodo quién entró. Mientras exista una regla
-temporal, un plan de Terraform propondrá retirarla, porque las reglas están en `main.tf`. Las capturas de A3 y A6 se hacen sin reglas
-temporales.
-
-La regla temporal `88.14.93.201/32` está abierta desde el 9 de noviembre a las 09:26 UTC, y la guía para Linux, WSL, Git Bash y
-Windows está en el [procedimiento de claves](entrega/PROCEDIMIENTO-CLAVES.md#33-preparar-el-ordenador-de-cada-integrante).
-
-**Resultado del 9 de noviembre.**
-
-| Integrante | manager-g5 | worker1-g5 | worker2-g5 | worker3-g5 |
-| --- | --- | --- | --- | --- |
-| Cristina | **Demostrado** | **Demostrado** | **Demostrado** | **Demostrado** |
-| Enrique | **Demostrado** | Pendiente | Pendiente | Pendiente |
-| Alexandra | **Demostrado** | Pendiente | Pendiente | Pendiente |
-| Ibai | **Demostrado** | Pendiente | Pendiente | Pendiente |
-
-«Demostrado» significa que hay captura del integrante y que el nodo registra un acceso aceptado con la huella de su clave. «Pendiente»
-significa que el nodo no registra ningún acceso con esa clave. Comprobado a las 10:42 UTC.
-
-**Enrique, Alexandra e Ibai: manager-g5.** Se conectaron desde PowerShell, cada uno con su clave:
-
-```text
-ssh -i "$env:USERPROFILE\.ssh\NOMBRE_reto4" ubuntu@107.23.128.135
-```
-
-SSH pidió la frase de paso de cada clave, y después cada integrante ejecutó `whoami`, `hostname` y `date -Is`. El servidor lo confirma de
-forma independiente: `/var/log/auth.log` de manager-g5 registra un acceso aceptado con cada huella, desde la IP autorizada.
-
-| Integrante | Acceso aceptado en manager-g5 (Madrid) | Huella registrada | `date -Is` en su captura |
-| --- | --- | --- | --- |
-| Enrique | 10:34:22 | `SHA256:qDmJbNSoN432FHt3g+C6whK0IMM7wxroJOtKo1rZJys` | 10:35:26 |
-| Alexandra | 10:36:44 | `SHA256:FJm/tkGxAxFBJKam0EQ1C5jpXbQ7konNpo8SRFHl1rs` | 10:37:03 |
-| Ibai | 10:37:41 | `SHA256:zYEmGi4uoe3ljIm8NsFkKSXTcRw3hrm57WiWtjqSyp8` | 10:37:45 |
-
-**Cristina: los cuatro nodos.** Usó un archivo `config` con un alias por nodo, su clave en `IdentityFile`, `IdentitiesOnly yes` y
-`ProxyJump manager-g5` en los workers. Comprobó que existía con `Test-Path`, y que el alias resolvía su clave con `ssh -G manager-g5`.
-Después entró con `ssh manager-g5`, `ssh worker1-g5`, `ssh worker2-g5` y `ssh worker3-g5`.
-
-En cada worker, SSH pidió dos veces la frase de paso: una para el salto y otra para el worker. También mostró la huella del servidor, y las
-tres coinciden con las leídas en los propios nodos.
-
-| Nodo | Acceso aceptado (Madrid) | Origen registrado | `date -Is` en su captura |
-| --- | --- | --- | --- |
-| manager-g5 | 11:36:09 | IP autorizada | 11:36:24 |
-| worker1-g5 | 11:37:36 | IP privada del manager, por el salto | 11:37:38 |
-| worker2-g5 | 11:38:23 | IP privada del manager, por el salto | 11:38:31 |
-| worker3-g5 | 11:39:16 | IP privada del manager, por el salto | 11:39:31 |
-
-Todos los accesos se aceptaron con la huella `SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA`. manager-g5 registra además los
-saltos hacia cada worker, y dos accesos anteriores, a las 11:23:50 y a las 11:32:16, sin captura. No hay ningún fallo de autenticación
-en los cuatro nodos.
-
-**Límites:**
-
-- **Workers.** Enrique, Alexandra e Ibai solo entraron en manager-g5.
-- **Norma de capturas.** Las capturas de los integrantes muestran el prompt con el hostname y la fecha por `date -Is`, pero no el comentario
-  con la prueba, el resultado y el autor. El nombre de cada integrante solo figura en el documento en el que se entregaron.
-- **Equipos.** Las cuatro claves están en el mismo perfil de Windows, `C:\Users\Alumno`, y las capturas no permiten saber si se usó un
-  solo equipo o varios equipos del aula con el mismo usuario. Todas las claves están protegidas con frase de paso.
-
-**Evidencias.**
-
-![Acceso de Enrique a manager-g5 con su clave](evidencias/capturas-integrantes/B1-acceso-enrique.png)
-
-*Figura 24. Acceso de Enrique a manager-g5 con su clave `enrique_reto4`, desde PowerShell, con la huella del servidor comprobada. Captura
-de Enrique, entregada por Cristina. 9 de noviembre de 2026, 10:35 en Madrid. No incluye el comentario que exige la norma.*
-
-![Acceso de Alexandra a manager-g5 con su clave](evidencias/capturas-integrantes/B1-acceso-alexandra.png)
-
-*Figura 25. Acceso de Alexandra a manager-g5 con su clave `alexandra_reto4`, desde PowerShell. Captura de Alexandra, entregada por
-Cristina. 9 de noviembre de 2026, 10:37 en Madrid. No incluye el comentario que exige la norma.*
-
-![Acceso de Ibai a manager-g5 con su clave](evidencias/capturas-integrantes/B1-acceso-ibai.png)
-
-*Figura 26. Acceso de Ibai a manager-g5 con su clave `ibai_reto4`, desde PowerShell. Captura de Ibai, entregada por Cristina. 9 de
-noviembre de 2026, 10:37 en Madrid. No incluye el comentario que exige la norma.*
-
-![Alias de Cristina resuelto con su clave](evidencias/capturas-integrantes/B1-cristina-config-alias.png)
-
-*Figura 27. `ssh -G manager-g5` en el equipo de Cristina: el alias resuelve la IP del manager y su clave `cristina_reto4`. Captura de
-Cristina. 9 de noviembre de 2026. También comprobó con `Test-Path` que el archivo existía ([captura](evidencias/capturas-integrantes/B1-cristina-config-ruta.png)).*
-
-![Acceso de Cristina a manager-g5 con su clave](evidencias/capturas-integrantes/B1-acceso-cristina-manager.png)
-
-*Figura 28. Acceso de Cristina a manager-g5 con el alias y su clave `cristina_reto4`. Captura de Cristina. 9 de noviembre de 2026, 11:36
-en Madrid. No incluye el comentario que exige la norma.*
-
-![Acceso de Cristina a worker1-g5 por salto](evidencias/capturas-integrantes/B1-acceso-cristina-worker1.png)
-
-*Figura 29. Acceso de Cristina a worker1-g5 por salto, con la huella del servidor `SHA256:2j/3XgX7…`. Captura de Cristina. 9 de
-noviembre de 2026, 11:37 en Madrid. No incluye el comentario que exige la norma.*
-
-![Acceso de Cristina a worker2-g5 por salto](evidencias/capturas-integrantes/B1-acceso-cristina-worker2.png)
-
-*Figura 30. Acceso de Cristina a worker2-g5 por salto, con la huella del servidor `SHA256:j6Yx2EXL…`. Captura de Cristina. 9 de
-noviembre de 2026, 11:38 en Madrid. No incluye el comentario que exige la norma.*
-
-![Acceso de Cristina a worker3-g5 por salto](evidencias/capturas-integrantes/B1-acceso-cristina-worker3.png)
-
-*Figura 31. Acceso de Cristina a worker3-g5 por salto, con la huella del servidor `SHA256:TI7cmQM8…`. Captura de Cristina. 9 de
-noviembre de 2026, 11:39 en Madrid. No incluye el comentario que exige la norma.*
-
-![Registro de manager-g5 con el acceso de cada integrante](evidencias/capturas-conformes/B1-registro-manager.png)
-
-*Figura 32. Registro de manager-g5: acceso aceptado con la clave de cada integrante. Resultado: CORRECTO. manager-g5 registra un
-acceso aceptado con la clave de cada integrante: Cristina, Enrique, Alexandra e Ibai. Autor: Claude Code, por encargo de Cristina
-(Lq922466). 2026-11-09, 10:44 UTC. Máquina: manager-g5.*
-
-![Registro de los cuatro nodos con la clave de Cristina](evidencias/capturas-conformes/B1-registro-cristina.png)
-
-*Figura 33. Registro de cada nodo: acceso aceptado con la clave de Cristina. Resultado: CORRECTO. Cada nodo registra un acceso aceptado
-con la clave de Cristina, que antes hace su propia prueba. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-09, 10:44 UTC.
-Máquinas: los cuatro nodos.*
-
-[Índice de las capturas de los integrantes](evidencias/capturas-integrantes/INDICE.md) y [registro](evidencias/auditoria/registro-2026-11-09-b1.txt).
-
-**Pendiente:** el acceso de Enrique, Alexandra e Ibai a los tres workers, por salto, y sus capturas con comentario. Para el salto hay que
-usar el archivo `config` del [procedimiento](entrega/PROCEDIMIENTO-CLAVES.md#33-preparar-el-ordenador-de-cada-integrante), como hizo
-Cristina, porque la opción `-i` de la línea de órdenes no se aplica a la conexión con el manager que hace de salto.
-
-### 2.10. Capturas que acreditan B1–B5
-
-| Criterio | Captura | Quién | Estado a 9 de noviembre |
-| --- | --- | --- | --- |
-| B1 | `B1-claves`: claves autorizadas en los cuatro nodos | Claude Code | Conforme del 6 de noviembre. Muestra que **faltan** las de los integrantes |
-| B1 | `B1-repositorio`: las tres `.pub` en la rama de GitHub y las privadas excluidas | Claude Code | **Pendiente:** requiere commit y push autorizados |
-| B1 | `B1-clave-nodos`: las tres huellas en los cuatro nodos, junto a `vockey` y con permisos 600 | Claude Code | **Conforme del 9 de noviembre:** CORRECTO |
-| B1 | `B1-acceso-cristina-manager`, `-worker1`, `-worker2` y `-worker3` | **Cristina** | **Hechas el 9 de noviembre:** los cuatro nodos, sin el comentario de la norma |
-| B1 | `B1-acceso-enrique`, `-alexandra` y `-ibai`: entrada en los cuatro nodos con su clave | **Cada integrante** | **Parcial:** entrada en manager-g5 el 9 de noviembre, sin el comentario de la norma. Faltan los tres workers |
-| B1 | `B1-registro-manager`: acceso aceptado en manager-g5 con la huella de cada integrante | Claude Code | **Conforme del 9 de noviembre, con los cuatro integrantes:** CORRECTO |
-| B1 | `B1-registro-cristina`: acceso aceptado con su huella en los cuatro nodos | Claude Code | **Conforme del 9 de noviembre:** CORRECTO |
-| B1 | `B1-registro-enrique`, `-alexandra` y `-ibai`: acceso aceptado con esa huella en los cuatro nodos | Claude Code | **Pendiente:** requiere el acceso a los workers |
-| B2 | `B2-plantilla` y `B2-conexion` | Claude Code | Conformes del 5 y 6 de noviembre |
-| B3 | `B3-simultaneo` y `B3-copia` | Claude Code | Conformes del 6 de noviembre |
-| B4 | `B4-endurecimiento` | Claude Code | Conforme del 6 de noviembre |
-| B5 | `B5-salto` | Claude Code | Conforme del 6 de noviembre |
-
-Las de Claude Code se generan con [`capturas-norma.py`](scripts/capturas-norma.py), que solo admite órdenes de lectura y calcula el
-resultado a partir de la salida real. Las capturas de B2–B5 son del 6 de noviembre. Como la Rúbrica exige que funcione durante la
-corrección, conviene repetirlas con el laboratorio activo antes de entregar:
-
-```bash
-python3 -I scripts/capturas-norma.py --autor "Claude Code, por encargo de Lq922466" --solo '^B[2-5]-'
-```
-
-### Resultado y conclusión de la Fase 2
-
-El acceso SSH se demostró el 6 de noviembre con la clave del Codespace:
-
-- **B2:** nombres cortos.
-- **B5:** workers por IP privada con salto.
-- **B3:** órdenes simultáneas con `sudo` y copia SCP verificada.
-- **B4:** root y contraseña desactivados, y permisos 700 y 600.
-
-Todo tiene capturas conformes.
-
-**B1 sigue siendo parcial**, aunque ha avanzado:
-
-- Desde el 9 de noviembre, las claves de los cuatro integrantes están instaladas en los cuatro nodos, con captura conforme.
-- Cristina entró con su clave en los cuatro nodos, por salto en los workers, confirmado por el registro de cada nodo.
-- La regla temporal para su IP está abierta.
-- Enrique, Alexandra e Ibai entraron en manager-g5 con su propia clave, confirmado por el registro del servidor.
-- **Falta** que Enrique, Alexandra e Ibai entren también en los tres workers y lo capturen con comentario, subir las claves a GitHub y retirar después la regla
-  temporal.
-- La política de `vockey` difiere entre la Guía y la Rúbrica.
-
-El SSH desde el Codespace se recuperó el 9 de noviembre a las 09:22 UTC, con la regla de su IP actual.
-
-## Fase 3: Docker Swarm y redes
-
-**Objetivo general.** Formar un clúster Docker Swarm con los cuatro nodos, comunicados por sus IP privadas. Crear una red ingress
-overlay propia con MTU 1450 y una red overlay para el servicio. Comprobar que los cuatro nodos están activos, con el manager como
-líder. Criterios de la Rúbrica: C1–C4. La Guía asigna 0,8 puntos a esta fase.
-
-| Qué pide la Guía | Situación a 9 de noviembre |
-| --- | --- |
-| Iniciar Swarm en el manager usando su IP privada, nunca la pública | **Cumple** |
-| Red ingress overlay personalizada con MTU 1450 (`red-g5`) | **Cumple** |
-| Los 4 nodos activos y el manager como líder | **No coincide.** El 6 de noviembre, los cuatro estaban activos y `manager-g5` era el líder, pero había tres managers en lugar de tres workers. [Plan de corrección](entrega/PLAN-C3-E4-E8.md) |
-
-### 3.1. Docker en los cuatro nodos (C1)
-
-**Procedimiento.** Docker lo instala el script de arranque (apartado 1.6) con `apt-get install -y docker.io` y
-`systemctl enable --now docker`. Se comprueba en cada nodo:
-
-```bash
-# Literal: captura C1-ping y scripts/comprobar-ssh.sh.
-docker --version
-```
-
-**Explicación técnica.** `enable --now` arranca el servicio y lo deja activado para los siguientes arranques, algo necesario porque
-Learner Lab detiene y arranca las instancias en cada sesión. Los cuatro nodos usan el motor Docker 29.1.3, como muestra la columna
-*ENGINE VERSION* de `docker node ls` en la Figura 37. Todos los nodos de un clúster deben tener la misma versión.
-
-### 3.2. Conectividad por IP privada (C1)
+**Qué se hizo y para qué.** Para demostrar que cada integrante entra con su propia clave, cada uno debe conectarse desde su equipo a los cuatro nodos. El procedimiento completo, para Linux, WSL, Git Bash y Windows, está en [PROCEDIMIENTO-CLAVES.md](entrega/PROCEDIMIENTO-CLAVES.md).
 
 **Procedimiento.**
 
+1. El integrante obtiene su IP pública con `curl -s https://checkip.amazonaws.com`.
+2. Con autorización, se añade una regla temporal `/32` en el puerto 22 para esa IP, declarada en `ssh_additional_cidrs`.
+3. El integrante configura su `~/.ssh/config` como en el apartado [2.3](#23-archivo-config-y-nombres-cortos-b2), con su propia clave en `IdentityFile` y `ProxyJump manager-g5` en los workers.
+4. Entra en `manager-g5`, `worker1-g5`, `worker2-g5` y `worker3-g5`, ejecuta `whoami`, `hostname` y `date -Is`, y hace la captura con el comentario de la norma.
+5. Al terminar todos, se retira la regla temporal.
+
+**Explicación.** El servidor registra en `/var/log/auth.log` la huella de la clave aceptada en cada conexión. Así se puede demostrar **desde el nodo** quién entró, de forma independiente de la captura del integrante.
+
+**Comprobación.** La regla temporal `88.14.93.201/32` está abierta desde el 9 de noviembre. Ese día:
+
+| Integrante | manager-g5 | worker1-g5 | worker2-g5 | worker3-g5 |
+| --- | --- | --- | --- | --- |
+| Cristina | Demostrado | Demostrado | Demostrado | Demostrado |
+| Enrique | Demostrado | Pendiente | Pendiente | Pendiente |
+| Alexandra | Demostrado | Pendiente | Pendiente | Pendiente |
+| Ibai | Demostrado | Pendiente | Pendiente | Pendiente |
+
+«Demostrado» significa que hay captura del integrante y que el nodo registra un acceso aceptado con la huella de su clave. Enrique, Alexandra e Ibai se conectaron desde PowerShell con `ssh -i`, y SSH les pidió la frase de paso de su clave. Cristina usó un archivo `config` con un alias por nodo y entró en los workers por salto; en cada worker aceptó la huella del servidor, que coincide con la leída en el propio nodo. No hay ningún fallo de autenticación en los registros de los cuatro nodos.
+
+![Acceso de Enrique a manager-g5](evidencias/capturas-integrantes/B1-acceso-enrique.png)
+
+*Figura 23. Enrique entra en manager-g5 con su clave `enrique_reto4` desde PowerShell. Captura de Enrique. 9 de noviembre de 2026. No incluye el comentario que exige la norma.*
+
+![Acceso de Alexandra a manager-g5](evidencias/capturas-integrantes/B1-acceso-alexandra.png)
+
+*Figura 24. Alexandra entra en manager-g5 con su clave `alexandra_reto4`. Captura de Alexandra. 9 de noviembre de 2026. No incluye el comentario que exige la norma.*
+
+![Acceso de Ibai a manager-g5](evidencias/capturas-integrantes/B1-acceso-ibai.png)
+
+*Figura 25. Ibai entra en manager-g5 con su clave `ibai_reto4`. Captura de Ibai. 9 de noviembre de 2026. No incluye el comentario que exige la norma.*
+
+![Alias de Cristina resuelto con su clave](evidencias/capturas-integrantes/B1-cristina-config-alias.png)
+
+*Figura 26. En el equipo de Cristina, `ssh -G manager-g5` resuelve la IP del manager y su clave `cristina_reto4`. Captura de Cristina. 9 de noviembre de 2026.*
+
+![Acceso de Cristina a worker1-g5 por salto](evidencias/capturas-integrantes/B1-acceso-cristina-worker1.png)
+
+*Figura 27. Cristina entra en worker1-g5 por salto, con su clave, tras comprobar la huella del servidor. Captura de Cristina. 9 de noviembre de 2026. No incluye el comentario que exige la norma. También hay capturas de [manager-g5](evidencias/capturas-integrantes/B1-acceso-cristina-manager.png), [worker2-g5](evidencias/capturas-integrantes/B1-acceso-cristina-worker2.png) y [worker3-g5](evidencias/capturas-integrantes/B1-acceso-cristina-worker3.png).*
+
+El registro de cada nodo lo confirma:
+
+![Registro de manager-g5 con el acceso de cada integrante](evidencias/capturas-conformes/B1-registro-manager.png)
+
+*Figura 28. CORRECTO: manager-g5 registra un acceso aceptado con la clave de cada integrante: Cristina, Enrique, Alexandra e Ibai. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 9 de noviembre de 2026.*
+
+![Registro de los cuatro nodos con la clave de Cristina](evidencias/capturas-conformes/B1-registro-cristina.png)
+
+*Figura 29. CORRECTO: cada uno de los cuatro nodos registra un acceso aceptado con la clave de Cristina. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 9 de noviembre de 2026.*
+
+**Límites.** Las capturas de los integrantes muestran el prompt y la fecha por `date -Is`, pero no el comentario con la prueba, el resultado y el autor. Además, los cuatro usaron el mismo perfil de Windows, `C:\Users\Alumno`, y las capturas no permiten saber si fue un solo equipo o varios equipos del aula.
+
+> **Evidencia pendiente:** acceso de Enrique, Alexandra e Ibai a los tres workers por salto, con capturas que incluyan el comentario de la norma; capturas `B1-registro-enrique`, `B1-registro-alexandra` y `B1-registro-ibai` con el registro de los cuatro nodos; y, al terminar, retirada autorizada de la regla temporal.
+
+### 2.9. Incidencias reales y soluciones
+
+**I2.1. Pérdida del SSH al cambiar la IP pública del Codespace** · Estado: **resuelta** (se repitió tres veces)
+
+- *Síntomas:* `ssh: connect to host IP_DEL_MANAGER port 22: Connection timed out`, mientras la web seguía respondiendo por HTTP. Ocurrió dos veces el 6 de noviembre y una el 9.
+- *Causa:* el Codespace es una máquina en la nube y su IP de salida no es fija. El grupo de seguridad solo admitía la IP anterior y descartaba los paquetes. No era un problema de claves.
+- *Diagnóstico:* la sección 2 de `comprobar-laboratorio.sh` comparó `curl -s https://checkip.amazonaws.com` con el origen de la regla. El 9 de noviembre, la regla admitía `172.166.151.115/32` y el Codespace salía por `172.166.151.114`.
+- *Solución aplicada:* con autorización, primero se **añade** la regla nueva, después se comprueba el SSH en los cuatro nodos y solo entonces se **retira** la antigua, para no perder nunca el acceso a medias. Después se regeneran los alias y se usa la IP nueva en `ssh_cidr`.
+
 ```bash
-# Literal: captura C1-ping, desde manager-g5. El 4 de noviembre se repitió entre todos los pares.
+aws ec2 authorize-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --protocol tcp --port 22 --cidr IP_NUEVA/32
+bash scripts/comprobar-ssh.sh
+aws ec2 revoke-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --protocol tcp --port 22 --cidr IP_ANTIGUA/32
+bash scripts/actualizar-ips.sh
+```
+
+- *Comprobación:* los cuatro nodos respondieron por SSH después de cada sustitución. [Registro del 6 de noviembre](evidencias/auditoria/registro-2026-11-06.txt) y [del 9](evidencias/auditoria/registro-2026-11-09-b1.txt).
+
+**I2.2. Los alias apuntaban a la IP pública anterior del manager** · Estado: **resuelta** con un procedimiento
+
+- *Síntomas:* tras cada reinicio del laboratorio, `ssh manager-g5` intentaba conectar con una IP que ya no era del manager.
+- *Causa:* Learner Lab asigna IP públicas nuevas a las instancias en cada sesión.
+- *Diagnóstico:* `ssh -G manager-g5 | grep hostname` frente a la IP que muestra EC2.
+- *Solución aplicada:* `actualizar-ips.sh` lee las IP de EC2 y regenera `config/ssh.local`. `HostKeyAlias` evita tener que aceptar de nuevo la huella del manager.
+- *Comprobación:* tras cada reinicio, `comprobar-ssh.sh` responde en los cuatro nodos.
+
+**I2.3. La clave pública de Cristina tenía un salto de línea de Windows** · Estado: **resuelta**
+
+- *Síntomas:* el archivo `cristina_reto4.pub` entregado terminaba con un salto de línea de Windows (`CRLF`). Con ese carácter `\r`, la clave no cumple el formato de una sola línea limpia que exigen `instalar-clave-publica.sh` y la validación de `ssh_public_keys`.
+- *Causa:* el archivo se había guardado en Windows.
+- *Diagnóstico:* comprobación de solo lectura del archivo antes de instalarlo.
+- *Solución aplicada:* se retiró el `\r` sin modificar la clave.
+- *Comprobación:* la huella siguió siendo `SHA256:CCR0qvMq…`, `--comprobar` aceptó la clave y se instaló en los cuatro nodos. En las claves de Enrique, Alexandra e Ibai no ocurrió.
+
+### 2.10. Posibles incidencias y soluciones
+
+| Síntoma o error | Causa probable | Diagnóstico | Solución |
+| --- | --- | --- | --- |
+| `Connection timed out` | La regla SSH no admite la IP actual | `curl -s https://checkip.amazonaws.com` y `comprobar-laboratorio.sh` | Añadir la IP nueva, comprobar y retirar la antigua, con autorización |
+| `Permission denied (publickey)` | Clave equivocada o no instalada en el nodo | `ssh -v manager-g5` y `ssh -G manager-g5 \| grep identityfile` | Corregir `IdentityFile`; comprobar con `instalar-clave-publica.sh --comprobar` |
+| `UNPROTECTED PRIVATE KEY FILE` | La clave privada la pueden leer otros usuarios | `ls -l ~/.ssh` | `chmod 600` en Linux; en Windows, quitar permisos heredados a otros usuarios |
+| `REMOTE HOST IDENTIFICATION HAS CHANGED` | El nodo se ha recreado o la IP es de otra máquina | Comparar la huella con `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` en el nodo | Si es legítimo, `ssh-keygen -R manager-g5` y aceptar la nueva |
+| Se entra en el manager con `-i`, pero no en los workers | La opción `-i` no se aplica a la conexión de salto | `ssh -G worker1-g5` | Usar un `config` con `IdentityFile` en todos los alias |
+| `sudo: a password is required` | El usuario no tiene `sudo` sin contraseña | `sudo -n true` | Usar el usuario `ubuntu` |
+| Se pierde el acceso tras tocar `sshd` o `authorized_keys` | Error de sintaxis o archivo sobrescrito | `sudo sshd -t` antes de recargar | Mantener otra sesión abierta, restaurar la copia `authorized_keys.antes-*` o entrar con `vockey` |
+
+### 2.11. Resultado y conclusión de la Fase 2
+
+El acceso SSH cumple la Guía con la clave del Codespace: nombres cortos (B2), workers por IP privada con salto (B5), órdenes simultáneas con `sudo` y copia SCP verificada (B3), y root y contraseña desactivados con permisos 700 y 600 (B4), todo con capturas conformes. Las claves de los cuatro integrantes están instaladas en los cuatro nodos, y Cristina entró con la suya en todos.
+
+**B1 sigue parcial:** Enrique, Alexandra e Ibai solo han entrado en manager-g5, sus capturas no tienen el comentario de la norma, falta la captura del repositorio con las claves y hay que aclarar con el profesor la política de `vockey`. La regla temporal `88.14.93.201/32` se mantiene hasta que terminen sus pruebas.
+
+- **Cumplidos:** B2, B3, B4 y B5.
+- **Parcial:** B1.
+
+## Fase 3 — Docker Swarm
+
+**Objetivo.** Formar un clúster Docker Swarm con los cuatro nodos comunicados por sus IP privadas, crear una red ingress overlay propia con MTU 1450 y una red overlay para el servicio, y comprobar que los cuatro nodos están activos con el manager como líder.
+
+**Contenidos.**
+
+| Requisito de la Guía y la Rúbrica | Criterio | Apartado | Estado |
+| --- | --- | --- | --- |
+| Docker en los cuatro nodos y conectividad por IP privada | C1 | 3.1 | Cumplido |
+| Iniciar Swarm en el manager con su IP privada | C2 | 3.2 | Cumplido |
+| Red ingress overlay personalizada `red-g5` con MTU 1450 | C2 | 3.3 | Cumplido |
+| Red overlay propia para los servicios | C4 | 3.3 | Cumplido |
+| Cuatro nodos activos, el manager como líder y tres workers | C3 | 3.4 | Cumplido el 9 de noviembre, sin comprobar tras el reinicio del 10. Falta la captura conforme |
+
+### 3.1. Docker y conectividad por IP privada (C1)
+
+**Qué se hizo y para qué.** Antes de formar el clúster hay que comprobar que Docker funciona en los cuatro nodos y que los nodos se ven por la red privada de la VPC.
+
+**Procedimiento.** Docker lo instala el script de arranque (apartado [1.9](#19-script-de-arranque-a4)). Desde manager-g5:
+
+```bash
+docker --version
 for ip in 172.31.17.168 172.31.29.192 172.31.31.183; do ping -c 2 -W 2 $ip | tail -n 3; done
 ```
 
-**Explicación técnica.** Antes de formar el clúster hay que comprobar que los nodos se ven por la red privada de la VPC. El ICMP solo
-se admite desde el propio grupo de seguridad, así que este `ping` también demuestra que esa regla funciona. El 4 de noviembre, los 16
-`ping` entre los cuatro nodos dieron 0 % de pérdida.
+**Explicación.** El ICMP solo se admite desde el propio grupo de seguridad, así que este `ping` también demuestra que esa regla funciona. Los cuatro nodos usan el motor Docker 29.1.3; en un clúster, todos los nodos deben tener la misma versión.
 
-**Evidencias.**
+**Comprobación.** El 4 de noviembre se hicieron los 16 `ping` entre todos los pares de nodos, con 0 % de pérdida ([registro](evidencias/prototipo/fase2-3.txt)). La captura conforme lo repite desde el manager.
 
 ![Docker y ping por IP privada](evidencias/capturas-conformes/C1-ping.png)
 
-*Figura 34. Docker y ping por IP privada. Resultado: Docker funciona, y el ping por IP privada no pierde paquetes. Autor: Claude Code,
-por encargo de Cristina (Lq922466). 2026-11-06, 09:19 UTC. Máquina: manager-g5.*
+*Figura 30. Docker funciona y el `ping` por IP privada no pierde paquetes. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquina: manager-g5.*
 
-Evidencias anteriores: [Docker y ping](evidencias/capturas-terminal/C1-docker-ping.png) y [ping entre todos los pares y formación del
-clúster](evidencias/prototipo/fase2-3.txt).
+### 3.2. Inicialización del clúster por IP privada (C2)
 
-### 3.3. Inicialización del clúster por IP privada (C2)
-
-**Procedimiento.** [`formar-swarm.sh`](scripts/formar-swarm.sh) se ejecuta desde el Codespace y modifica el clúster. Sus órdenes
-principales son:
+**Procedimiento.** [`formar-swarm.sh`](scripts/formar-swarm.sh) se ejecuta una vez desde el Codespace y modifica el clúster. Sus órdenes principales son:
 
 ```bash
-# Literal: scripts/formar-swarm.sh.
 manager_ip=$(terraform -chdir=terraform output -json nodes | jq -er '."manager-g5".private_ip')
 ssh manager-g5 docker swarm init --advertise-addr "$manager_ip"
 token=$(ssh manager-g5 docker swarm join-token -q worker)
@@ -1502,14 +1408,11 @@ printf '%s\n' "$token" | ssh workerN-g5 "read -r token && docker swarm join --to
 ssh manager-g5 docker node ls
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
-- **`--advertise-addr`** fija la dirección que el manager anuncia al resto. Se usa la **IP privada**, 172.31.28.10, porque la pública
-  cambia en cada sesión: si se anunciara la pública, el clúster se rompería al reiniciar el laboratorio.
-- **El token de unión** (`SWMTKN-…`) es una credencial: quien lo tenga puede unir nodos. El script lo valida, lo pasa por la entrada
-  estándar en lugar de escribirlo en la línea de órdenes, para que no aparezca en la lista de procesos, y lo borra al terminar.
-- **Se puede repetir sin romper nada.** Antes de cada paso, el script consulta el estado de cada nodo con `docker info` y no repite lo
-  que ya está hecho.
+- **`--advertise-addr`** fija la dirección que el manager anuncia al resto. Se usa la **IP privada**, 172.31.28.10: si se anunciara la pública, el clúster se rompería al reiniciar el laboratorio.
+- **El token de unión** (`SWMTKN-…`) es una credencial: quien lo tenga puede unir nodos. El script comprueba su formato, lo pasa por la entrada estándar, para que no aparezca en la lista de procesos, y lo borra de la memoria con `unset` al terminar.
+- **Se puede repetir sin romper nada:** antes de cada paso consulta el estado del nodo con `docker info` y no repite lo que ya está hecho.
 
 | Puerto | Uso en Swarm |
 | --- | --- |
@@ -1517,76 +1420,52 @@ ssh manager-g5 docker node ls
 | 7946/TCP y UDP | Descubrimiento y estado de los nodos |
 | 4789/UDP | Datos de las redes overlay, encapsulados en VXLAN |
 
-El 4 de noviembre, los tres workers respondieron `This node joined a swarm as a worker`.
-
-**Evidencias.**
+**Comprobación.** El 4 de noviembre, los tres workers respondieron `This node joined a swarm as a worker`. `docker info` muestra `NodeAddr=172.31.28.10`, y cada nodo está registrado con su IP privada.
 
 ![Clúster por IP privada y MTU 1450](evidencias/capturas-conformes/C2-cluster.png)
 
-*Figura 35. Clúster por IP privada y MTU 1450. Resultado: El clúster usa IP privadas, y la red ingress red-g5 tiene MTU 1450. Autor:
-Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 11:00 UTC. Máquina: manager-g5.*
+*Figura 31. El clúster usa IP privadas, y la red ingress `red-g5` tiene MTU 1450. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquina: manager-g5.*
 
-La captura muestra `NodeAddr=172.31.28.10`, y que cada nodo está registrado con su IP privada `172.31.x.x`. Evidencias anteriores:
-[red-g5](evidencias/capturas-terminal/C2-red-ingress.png).
+### 3.3. Redes overlay `red-g5` y `red-app-g5` con MTU 1450 (C2 y C4)
 
-### 3.4. Redes overlay y MTU 1450 (C2 y C4)
-
-**Procedimiento.** [`configurar-red-swarm.sh`](scripts/configurar-red-swarm.sh) se ejecuta en el manager y modifica las redes:
+**Procedimiento.** [`configurar-red-swarm.sh`](scripts/configurar-red-swarm.sh) se ejecuta en el manager antes de publicar el primer servicio:
 
 ```bash
-# Literal: scripts/configurar-red-swarm.sh.
 printf 'y\n' | docker network rm ingress
 docker network create --driver overlay --ingress --opt com.docker.network.driver.mtu=1450 red-g5
 docker network create --driver overlay --opt com.docker.network.driver.mtu=1450 red-app-g5
 docker network inspect --format '{{.Name}} {{.Driver}} {{.Ingress}} {{index .Options "com.docker.network.driver.mtu"}}' red-g5 red-app-g5
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
-- **Red overlay.** Es una red virtual que se extiende por todos los nodos. Los contenedores se comunican como si estuvieran en la misma
-  red, aunque estén en máquinas distintas. Los paquetes viajan encapsulados en VXLAN por el puerto 4789.
-- **Red ingress.** Es la overlay especial del *routing mesh*: recibe el tráfico de un puerto publicado en **cualquier** nodo y lo
-  reparte entre las réplicas, estén donde estén. Docker crea una por defecto, `ingress`. Se sustituye por `red-g5`, porque la Guía pide
-  una personalizada. Solo puede haber una red ingress, y no se puede cambiar mientras haya servicios publicados, así que se hace antes
-  de desplegar.
-- **`red-app-g5`** es la red overlay propia a la que se conecta el servicio web (C4).
-- **MTU 1450.** La red física de AWS usa una MTU de 1500 bytes, y la encapsulación overlay añade 50. Con 1450, el paquete
-  encapsulado cabe en 1500 sin fragmentarse. La Guía lo explica así: la fragmentación «puede provocar cuelgues o lentitud en las
-  conexiones de la web».
+- **Red overlay:** red virtual que se extiende por todos los nodos. Los contenedores se comunican como si estuvieran en la misma red, aunque estén en máquinas distintas. Los paquetes viajan encapsulados en VXLAN por el puerto 4789.
+- **Red ingress:** overlay especial del *routing mesh*. Recibe el tráfico de un puerto publicado en **cualquier** nodo y lo reparte entre las réplicas, estén donde estén. Docker crea una por defecto, `ingress`, que se sustituye por `red-g5` porque la Guía pide una personalizada. Solo puede haber una, y no se puede cambiar mientras haya servicios publicados.
+- **`red-app-g5`:** red overlay propia a la que se conecta el servicio web (C4).
+- **MTU 1450:** la red de AWS usa paquetes de 1500 bytes y la encapsulación añade 50. Con 1450, el paquete encapsulado cabe sin fragmentarse; como explica la Guía, la fragmentación «puede provocar cuelgues o lentitud en las conexiones de la web».
 
-**Incidencia.** La primera vez, Docker pidió confirmación para retirar `ingress`. Como nadie respondió, no la retiró, y la creación de
-`red-g5` falló con `AlreadyExists`. Se corrigió el script para responder automáticamente con `printf 'y\n'`.
-[Registro](evidencias/prototipo/fase2-3.txt).
-
-**Observación sobre la MTU.** Las dos redes declaran MTU 1450, pero dentro de los contenedores sus interfaces miden 1400. Se midió el
-6 de noviembre en manager-g5 y worker3-g5. La diferencia de 50 bytes coincide con la cabecera VXLAN, aunque no se ha confirmado que
-esa sea la causa. Falta aclarar si la Guía se refiere al valor de la red o al de la interfaz.
-[Registro](evidencias/auditoria/registro-2026-11-06.txt).
+**Comprobación.**
 
 ```text
 red-g5 driver=overlay ingress=true MTU=1450
 red-app-g5 driver=overlay ingress=false MTU=1450
 ```
 
-**Evidencias.**
+**Observación.** Las dos redes declaran MTU 1450, pero dentro de los contenedores sus interfaces miden 1400 (medido el 6 de noviembre en manager-g5 y worker3-g5). La diferencia de 50 bytes coincide con la cabecera VXLAN, pero no se ha confirmado que esa sea la causa. Conviene aclarar con el profesor si la Guía se refiere al valor de la red, que es el que se ha configurado.
 
 ![Red overlay propia para servicios](evidencias/capturas-conformes/C4-red.png)
 
-*Figura 36. Red overlay propia para servicios. Resultado: Existe la red overlay propia red-app-g5, con MTU 1450. Autor: Claude Code,
-por encargo de Cristina (Lq922466). 2026-11-06, 11:00 UTC. Máquina: manager-g5.*
+*Figura 32. Existe la red overlay propia `red-app-g5`, con MTU 1450. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquina: manager-g5.*
 
-Evidencias anteriores: [red-app-g5](evidencias/capturas-terminal/C4-red-aplicacion.png).
+### 3.4. Validación de los nodos y de sus roles (C3)
 
-### 3.5. Validación de los nodos (C3)
+**Qué se hizo y para qué.** La Guía pide que los cuatro nodos estén activos, con el manager como líder y tres workers. La prueba E8 (apartado [5.9](#59-e8-elección-de-un-nuevo-líder)) obliga a promover temporalmente dos workers a managers, así que después hay que devolver el clúster a su topología.
 
-**Procedimiento.**
+**Procedimiento de comprobación.**
 
 ```bash
-# Literal: captura C3-nodos, en manager-g5.
 docker node ls
 ```
-
-**Explicación técnica.**
 
 | Columna | Qué indica |
 | --- | --- |
@@ -1594,71 +1473,113 @@ docker node ls
 | `AVAILABILITY` | `Active` si admite tareas, y `Drain` si se están retirando |
 | `MANAGER STATUS` | `Leader` para el manager que dirige el clúster, `Reachable` para los demás managers, y vacío para los workers |
 
-Los managers deciden por mayoría (cuórum, mediante Raft). Con tres managers, el clúster soporta la caída de uno. Por eso E8 exige
-promover dos workers.
+**Explicación.** Los managers deciden por mayoría con el algoritmo **Raft**. Con un solo manager no hay tolerancia a su caída: si se detiene, los contenedores siguen sirviendo la web, pero nadie puede gestionar el clúster hasta que vuelva. Con tres managers, la mayoría es dos y el clúster soporta la caída de uno. Por eso la Guía pide la topología de un manager para el funcionamiento normal y la promoción de dos workers solo para la prueba E8.
 
-Tras formar el clúster, el 4 de noviembre, había un manager líder y tres workers. Para E8, a las 21:07 de Madrid de ese día, se
-promovieron worker1-g5 y worker2-g5 con `docker node promote worker1-g5 worker2-g5`. Así se cumple la Guía en E8, pero C3 deja de
-cumplirse: el 6 de noviembre había tres managers.
+**Historia de los roles.**
 
-Para volver a la topología de la Guía, el [plan de corrección](entrega/PLAN-C3-E4-E8.md) propone `docker node demote` de dos nodos,
-uno detrás de otro, y comprobar que `manager-g5` queda como líder. Modifica Swarm, así que **requiere autorización** y no se ha
-ejecutado.
+1. Tras formar el clúster, el 4 de noviembre, había un manager líder y tres workers.
+2. Ese mismo día, para E8, se promovieron worker1-g5 y worker2-g5 (`docker node promote worker1-g5 worker2-g5`).
+3. Con tres managers, el líder cambió con la prueba y con los reinicios del laboratorio. El 6 de noviembre, la captura conforme de C3 dio **NO CORRECTO** porque worker1-g5 y worker2-g5 seguían siendo managers.
+4. El **9 de noviembre**, con autorización de Cristina, Codex devolvió el clúster a la topología de la Guía.
 
-**Evidencias.**
+**Procedimiento de la corrección.** Se bajan los dos managers de uno en uno, **primero el que no es líder**, para no dejar nunca el clúster sin mayoría:
 
-![Cuatro nodos activos, manager líder y tres workers](evidencias/capturas-conformes/C3-nodos.png)
+```bash
+docker node ls                     # Antes: tres managers. Identificar el líder; ese día era worker1-g5.
+docker node demote worker2-g5      # 1. El manager que no es líder. Quedan dos managers alcanzables.
+docker node ls                     # Comprobar: dos managers Reachable y cuatro nodos Ready/Active.
+docker node demote worker1-g5      # 2. El líder. El liderazgo pasa a manager-g5.
+docker node ls                     # Comprobar sin repetir nada, aunque la orden anterior dé un error.
+```
 
-*Figura 37. Cuatro nodos activos, manager líder y tres workers. Resultado: NO CORRECTO. Los cuatro están activos y manager-g5 es el
-líder, pero worker1-g5 y worker2-g5 siguen siendo managers tras E8. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 11:00
-UTC. Máquina: manager-g5.*
+Mientras tanto, una sonda consultó la web cada segundo en las cuatro IP públicas.
 
-Evidencias anteriores: [nodos](evidencias/capturas-terminal/C3-nodos.png), [topología inicial](evidencias/prototipo/fase2-3.txt) y
-[promoción previa a E8](evidencias/prototipo/E8-quorum-previo.txt).
+**Comprobación.** Salida de `docker node ls` tras la corrección, del registro de sesión de Codex:
 
-### Resultado y conclusión de la Fase 3
+```text
+ID                            HOSTNAME     STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+xf46ytyuxo4bvn8lbxixhfhtv *   manager-g5   Ready     Active         Leader           29.1.3
+m69w5hsyyyegwivfhoi8fbihd     worker1-g5   Ready     Active                          29.1.3
+7zff6zyro5ir31bz19ozwmt4q     worker2-g5   Ready     Active                          29.1.3
+ci4mgenau4xvzypqk3ljka8fi     worker3-g5   Ready     Active                          29.1.3
+```
 
-El clúster se formó por IP privada y lo componen los cuatro nodos.
+manager-g5 es el único manager y el líder, y los tres workers están `Ready/Active`. El servicio siguió en 4/4, con una réplica por nodo, y la sonda registró **100 muestras correctas y ningún fallo** (25 por IP). A continuación, `comprobar-laboratorio.sh` y `verificar-despliegue.sh` confirmaron el mismo estado y HTTP 200 en las cuatro IP.
 
-- **Red ingress:** `red-g5`, personalizada, con MTU 1450.
-- **Red del servicio:** `red-app-g5`, overlay, también con MTU 1450.
-- **C1, C2 y C4:** demostrados, con capturas conformes del 6 de noviembre.
-- **C3: no se cumple en el estado actual.** Tras E8 hay tres managers, y la Guía pide tres workers. Corregirlo requiere autorización.
-- **9 de noviembre, a las 09:26 UTC:** cuatro nodos Ready/Active y `reto4_web` en 4/4. El líder es worker2-g5, y siguen los tres
-  managers. No se ha cambiado nada en Swarm.
+![Listado de nodos del 6 de noviembre](evidencias/capturas-conformes/C3-nodos.png)
 
-## Fase 4: Web e imágenes
+*Figura 33. Listado de nodos del 6 de noviembre, **anterior a la corrección**. NO CORRECTO: los cuatro nodos están activos y manager-g5 es el líder, pero worker1-g5 y worker2-g5 siguen siendo managers tras E8. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). Máquina: manager-g5.*
 
-**Objetivo general.** Empaquetar la web del Gran Premio de Euskadi en una imagen propia, publicar las versiones 1.0 y 2.0 en Docker
-Hub y desplegarla en Swarm como un servicio de cuatro réplicas. El servicio publica el puerto 80, se conecta a la red del grupo y se
-puede visitar desde la IP pública de cualquiera de los cuatro nodos. Criterios de la Rúbrica: D1–D3. La Guía asigna 0,7 puntos a esta
-fase.
+> **Evidencia pendiente:** nueva captura conforme `C3-nodos` con manager-g5 como único `Leader` y tres workers `Ready/Active`, con `capturas-norma.py --solo '^C3-nodos$'`. La corrección se verificó el 9 de noviembre, pero ese registro no está versionado y el laboratorio se ha reiniciado después.
 
-| Qué pide la Guía | Situación a 9 de noviembre |
-| --- | --- |
-| Subir la imagen a Docker Hub en dos versiones, 1.0 y 2.0 | **Cumple** |
-| 4 réplicas en el puerto 80, conectadas a la red del grupo | **Cumple**, según el último estado de Swarm registrado, del 6 de noviembre |
-| La web carga desde la IP pública de cualquiera de los 4 nodos | **Cumple:** comprobado de nuevo el 9 de noviembre por HTTP. Debe seguir funcionando durante la corrección |
+### 3.5. Incidencias reales y soluciones
+
+**I3.1. Docker pedía confirmación al retirar la red `ingress`** · Estado: **resuelta**
+
+- *Síntomas:* la primera ejecución de `configurar-red-swarm.sh` falló al crear `red-g5` con el error `AlreadyExists`.
+- *Causa:* `docker network rm ingress` pide confirmación. Como nadie respondió, no retiró la red, y no puede haber dos redes ingress.
+- *Diagnóstico:* `docker network ls` seguía mostrando `ingress`.
+- *Solución aplicada:* el script responde automáticamente con `printf 'y\n' | docker network rm ingress`.
+- *Comprobación:* `red-g5` se creó con `ingress=true` y MTU 1450. [Registro](evidencias/prototipo/fase2-3.txt).
+
+**I3.2. Tres managers y líder cambiante tras la prueba E8** · Estado: **resuelta** el 9 de noviembre; falta la captura conforme
+
+- *Síntomas:* `docker node ls` mostraba tres managers en lugar de uno, y el líder iba cambiando: worker1-g5 el 5 de noviembre, manager-g5 el 6, worker2-g5 la mañana del 9 y de nuevo worker1-g5 ese mediodía.
+- *Causa:* worker1-g5 y worker2-g5 se promovieron para E8 y no se bajaron después. Con varios managers, Raft elige un líder nuevo cada vez que el anterior se reinicia.
+- *Diagnóstico:* `docker node ls` y la captura `C3-nodos` (NO CORRECTO). `comprobar-laboratorio.sh` rechaza desde el 9 de noviembre más de un manager.
+- *Solución aplicada:* dos `docker node demote`, primero el manager no líder y después el líder (apartado [3.4](#34-validación-de-los-nodos-y-de-sus-roles-c3)).
+- *Comprobación:* manager-g5 único líder, tres workers `Ready/Active`, servicio 4/4 y 100 muestras correctas.
+
+**I3.3. La comprobación automática falló durante el cambio de líder** · Estado: **resuelta**
+
+- *Síntomas:* tras `docker node demote worker1-g5`, Docker respondió `Manager worker1-g5 demoted in the swarm`, pero el script que comprobaba el resultado terminó con `AssertionError`.
+- *Causa:* el script comprobó el estado mientras el liderazgo todavía pasaba de worker1-g5 a manager-g5.
+- *Diagnóstico:* se volvió a consultar `docker node inspect` y `docker node ls` **sin repetir** el `demote`.
+- *Solución aplicada:* ninguna orden adicional: la topología ya era la correcta.
+- *Comprobación:* manager-g5 `Leader` y los tres workers sin rol de manager. Lección: después de bajar al líder hay que esperar unos segundos y consultar, nunca repetir la orden.
+
+### 3.6. Posibles incidencias y soluciones
+
+| Síntoma o error | Causa probable | Diagnóstico | Solución |
+| --- | --- | --- | --- |
+| `docker swarm join` se queda esperando | Puerto 2377 bloqueado o IP equivocada | `nc -zv 172.31.28.10 2377` desde el worker | Revisar la regla `self` del grupo de seguridad y usar la IP privada |
+| Un nodo aparece `Down` tras reiniciar | Docker no arrancó o el nodo sigue arrancando | `systemctl status docker` en el nodo | `sudo systemctl enable --now docker` y esperar |
+| `This node is not a swarm manager` | La orden se lanza en un worker | `docker info \| grep -i 'is manager'` | Ejecutar las órdenes de gestión en manager-g5 |
+| No se puede retirar o crear la red ingress | Hay servicios publicados que la usan | `docker service ls` | Retirar la pila antes de cambiar la red |
+| Clúster sin mayoría con dos managers | Se perdió uno de dos managers | `docker node ls` devuelve un error de cuórum | Evitar números pares de managers; en último caso, `docker swarm init --force-new-cluster` en el manager que queda |
+| La web se queda colgada con páginas grandes | MTU demasiado alta en la overlay | `docker network inspect red-g5` | Recrear la red con MTU 1450 |
+| El token de unión se ha expuesto | Copiado en un registro o una captura | Revisar el registro | `docker swarm join-token --rotate worker` |
+
+### 3.7. Resultado y conclusión de la Fase 3
+
+El clúster se formó por IP privada con los cuatro nodos. La red ingress es `red-g5`, personalizada y con MTU 1450, y el servicio usa la red overlay `red-app-g5`, también con MTU 1450. Tras la prueba E8, el clúster volvió el 9 de noviembre a la topología de la Guía: manager-g5 como único manager y líder, y tres workers activos, sin interrumpir la web.
+
+- **Cumplidos:** C1, C2 y C4, con capturas conformes.
+- **C3:** cumplido técnicamente desde el 9 de noviembre; la captura conforme versionada es anterior y da NO CORRECTO, así que hay que repetirla.
+
+## Fase 4 — Despliegue web
+
+**Objetivo.** Empaquetar la web del Gran Premio de Euskadi en una imagen propia, publicarla en Docker Hub en las versiones 1.0 y 2.0, y desplegarla en Swarm como un servicio de cuatro réplicas en el puerto 80, conectado a la red del grupo y accesible desde la IP pública de cualquiera de los cuatro nodos.
+
+**Contenidos.**
+
+| Requisito de la Guía y la Rúbrica | Criterio | Apartado | Estado |
+| --- | --- | --- | --- |
+| Imagen propia que identifica el contenedor, en versiones 1.0 y 2.0, publicada en Docker Hub | D1 | 4.1–4.5 | Cumplido |
+| Servicio de 4 réplicas en el puerto 80, en la red del grupo, con políticas de reinicio | D2 | 4.6 | Cumplido |
+| La web carga desde la IP pública de los cuatro nodos | D3 | 4.7 | Cumplido. Faltan capturas conformes |
 
 ### 4.1. La web del Gran Premio de Euskadi
 
-**Procedimiento.** La web definitiva está en [`app/f1`](app/f1): `index.html`, `entradas.html`, `sorteo.html`, `acceso.html` y
-`contacto.html`, con su hoja de estilos, su JavaScript y sus imágenes. Antes de tenerla, las pruebas del 4 de noviembre se hicieron con
-un portal provisional, en [`app/sitio`](app/sitio), que tiene una carpeta por versión.
+**Qué se hizo y para qué.** La web definitiva está en [`app/f1`](app/f1): `index.html`, `entradas.html`, `sorteo.html`, `acceso.html` y `contacto.html`, con su hoja de estilos, su JavaScript y sus imágenes. Llegó como un ZIP del grupo, y sus autores no constan en Git. Las primeras pruebas, del 4 de noviembre, se hicieron con un portal provisional ([`app/sitio`](app/sitio)), con una carpeta por versión.
 
-**Explicación técnica.** Es una web estática: el servidor solo entrega archivos, y no hay base de datos ni código en el servidor. Por
-eso cualquier réplica puede responder a cualquier petición, que es lo que permite balancear la carga.
+**Explicación.** Es una web **estática**: el servidor solo entrega archivos, sin base de datos ni código en el servidor. Por eso cualquier réplica puede responder cualquier petición, que es lo que permite repartir la carga. Los formularios son de demostración y no envían datos.
 
-Según [REVISION.md](REVISION.md), el contenido de `app/f1` llegó como un ZIP del grupo, y sus autores no constan en Git. Antes de
-versionarlo se retiró una credencial de demostración del JavaScript. Los formularios son de demostración y no envían datos, y los
-enlaces `#` de Bilbao y de los avisos legales no tienen destino.
+### 4.2. Dockerfile, Nginx e identidad del contenedor (D1)
 
-### 4.2. Dockerfile y Nginx
-
-**Procedimiento.**
+**Procedimiento.** [`app/Dockerfile`](app/Dockerfile):
 
 ```dockerfile
-# Literal: app/Dockerfile.
 FROM nginx:alpine
 ARG WEB_VERSION
 COPY sitio/ /usr/share/nginx/html/
@@ -1669,138 +1590,97 @@ RUN chmod 0755 /docker-entrypoint.d/40-identidad.sh
 HEALTHCHECK --interval=5s --timeout=2s --retries=3 CMD wget -q -O /dev/null http://127.0.0.1/identidad.txt || exit 1
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
 | Línea | Para qué sirve |
 | --- | --- |
-| `FROM nginx:alpine` | Parte de Nginx sobre Alpine Linux, una imagen pequeña. Nginx sirve los archivos por el puerto 80 |
+| `FROM nginx:alpine` | Nginx sobre Alpine Linux, una imagen pequeña. Nginx sirve los archivos por el puerto 80 |
 | `ARG WEB_VERSION` | Recibe la versión, 1.0 o 2.0, al construir |
 | `COPY sitio/ …` | Copia la web a la carpeta que publica Nginx |
 | `RUN test -s … && printf …` | Falla si no hay `index.html`, y guarda la versión dentro de la imagen |
-| `COPY 40-identidad.sh /docker-entrypoint.d/` | La imagen oficial de Nginx ejecuta los scripts de esa carpeta al arrancar |
+| `COPY 40-identidad.sh /docker-entrypoint.d/` | La imagen oficial de Nginx ejecuta al arrancar los scripts de esa carpeta |
 | `HEALTHCHECK` | Cada 5 segundos comprueba que Nginx responde. Swarm sustituye las réplicas que no están sanas |
 
-[`40-identidad.sh`](app/40-identidad.sh) genera, al arrancar cada contenedor, `/identidad.txt` con la versión de la imagen y el nombre
-del contenedor. El nombre es distinto en cada réplica, y por eso no puede ir dentro de la imagen. Con él se ve qué réplica responde a
-cada petición, que es lo que pide D1 («imagen propia que identifica el contenedor») y lo que se usa en E1.
+[`40-identidad.sh`](app/40-identidad.sh) genera al arrancar cada contenedor el archivo `/identidad.txt`, con la versión de la imagen y el nombre del contenedor, por ejemplo `version=1.0` y `contenedor=0ec98a04e2fe`. El nombre es distinto en cada réplica, así que no puede ir dentro de la imagen. Con él se sabe qué réplica responde a cada petición: es lo que pide D1 («imagen propia que identifica el contenedor») y lo que usan las sondas y la prueba E1.
 
-### 4.3. Versiones 1.0 y 2.0
+### 4.3. Versiones 1.0 y 2.0 y construcción en un nodo (D1)
 
 **Procedimiento.**
 
 ```bash
-# Literal: app/construir-f1.sh, que llama a app/construir.sh.
-cp -R app/f1/. "$release/"                                   # Copia temporal: app/f1 no se modifica.
-# Solo en la 2.0: añade la página de estado y su enlace en la portada.
-cp app/f1-release/estado-cloud.html "$release/"
-docker build --build-arg "WEB_VERSION=$VERSION" --tag "$IMAGEN:$VERSION" "$contexto"
-```
-
-**Explicación técnica.** Las dos versiones comparten la misma web, y la portada muestra su número de versión.
-
-- **La 2.0** añade [`estado-cloud.html`](app/f1-release/estado-cloud.html), una página que consulta `identidad.txt` y muestra la
-  versión y la réplica que responde.
-- **Por qué esa diferencia.** Basta para comprobar visualmente la actualización y el rollback de E7.
-
-[`construir.sh`](app/construir.sh) usa un contexto de construcción temporal, con solo lo necesario. Además, rechaza enlaces simbólicos
-y archivos con apariencia de secreto, como `.env`, `.pem`, `.key`, `.aws` o el estado de Terraform, para que nunca acaben publicados en
-la imagen.
-
-### 4.4. Construcción en un nodo
-
-**Procedimiento.**
-
-```bash
-# Literal: 5 de noviembre.
 bash scripts/preparar-imagenes.sh config/ssh.local manager-g5 reto4-g5/f1-definitiva
 ```
 
-**Explicación técnica.** Docker no puede ejecutarse dentro del Codespace, así que [`preparar-imagenes.sh`](scripts/preparar-imagenes.sh)
-copia `app/` a manager-g5 y construye allí las dos versiones. Después las prueba en contenedores temporales sin puertos publicados, sin
-tocar el servicio de Swarm.
+[`preparar-imagenes.sh`](scripts/preparar-imagenes.sh) copia a manager-g5 los archivos necesarios de `app/` y llama allí a [`construir-f1.sh`](app/construir-f1.sh) para cada versión:
 
-El 5 de noviembre, a las 08:44 UTC, la comprobación previa dio 5 páginas, 30 archivos y 0 errores. Se obtuvieron dos imágenes de
-unos 30 MB, con estos identificadores:
+```bash
+cp -R app/f1/. "$release/"                        # Copia temporal: app/f1 no se modifica.
+cp app/f1-release/estado-cloud.html "$release/"   # Solo en la 2.0.
+docker build --build-arg "WEB_VERSION=$VERSION" --tag "$IMAGEN:$VERSION" "$contexto"
+```
 
-- 1.0: `sha256:622d8343…`
-- 2.0: `sha256:1736eda0…`
+**Explicación.**
 
-**Evidencias.** [Construcción](evidencias/D1-imagenes-definitivas.txt) y [prueba en navegador](evidencias/D1-navegador-registro.txt),
-con capturas de los contenedores temporales [1.0](evidencias/D1-navegador-1.0.png) y [2.0](evidencias/D1-navegador-2.0.png), y una
-[versión candidata en local](evidencias/F1-candidata-local.png). Estas capturas no son del servicio desplegado.
-[Imágenes](evidencias/capturas-terminal/D1-imagenes.png).
+- Las dos versiones comparten la misma web, y la portada muestra su número de versión. **La 2.0** añade [`estado-cloud.html`](app/f1-release/estado-cloud.html), una página que consulta `identidad.txt` y muestra la versión y la réplica que responde. Esa diferencia basta para comprobar a simple vista la actualización y el rollback de E7.
+- [`construir.sh`](app/construir.sh) usa un contexto de construcción temporal con solo lo necesario, y rechaza enlaces simbólicos y archivos con apariencia de secreto (`.env`, `.pem`, `.key`, `.aws` o estado de Terraform), para que nunca acaben dentro de la imagen.
+- Las imágenes se construyen en un nodo porque Docker no funciona dentro del Codespace (incidencia [I4.1](#48-incidencias-reales-y-soluciones)).
 
-### 4.5. Publicación en Docker Hub
+**Comprobación.** El 5 de noviembre, la comprobación previa de la web dio 5 páginas, 30 archivos y 0 errores, y se obtuvieron dos imágenes de unos 30 MB. Cada versión se probó en un contenedor temporal sin puertos publicados, con un navegador, sin tocar el servicio de Swarm: [construcción](evidencias/D1-imagenes-definitivas.txt), [prueba en navegador](evidencias/D1-navegador-registro.txt) y capturas de las versiones [1.0](evidencias/D1-navegador-1.0.png) y [2.0](evidencias/D1-navegador-2.0.png).
+
+### 4.4. Publicación en Docker Hub (D1)
 
 **Procedimiento.**
 
 ```bash
-# Literal: 5 de noviembre.
-ssh -t -F config/ssh.local manager-g5 docker login -u innnx       # Sesión abierta por Cristina, de forma interactiva.
-bash scripts/publicar-imagenes.sh config/ssh.local innnx/reto4-f1  # Etiqueta, publica y cierra la sesión.
+ssh -t -F config/ssh.local manager-g5 docker login -u innnx          # Cristina escribe el token de forma interactiva.
+bash scripts/publicar-imagenes.sh config/ssh.local innnx/reto4-f1     # Etiqueta, publica y cierra la sesión.
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
-- **`docker login`** se hace de forma interactiva, con `-t`, para que el token lo escriba la persona y no quede en ningún script ni
-  registro.
-- **[`publicar-imagenes.sh`](scripts/publicar-imagenes.sh)** etiqueta las imágenes como `innnx/reto4-f1:1.0` y `:2.0`, las sube con
-  `docker push` y ejecuta siempre `docker logout` al terminar.
-- **El *digest*** es el resumen SHA-256 del contenido publicado. Si coincide con el de la imagen construida, lo publicado es
-  exactamente lo que se probó.
+- **`docker login`** se hace de forma interactiva, con `-t`, para que el token lo escriba la persona y no quede en ningún script ni registro.
+- **[`publicar-imagenes.sh`](scripts/publicar-imagenes.sh)** etiqueta las imágenes como `innnx/reto4-f1:1.0` y `:2.0`, las sube con `docker push` y ejecuta siempre `docker logout` al terminar.
+- **El *digest*** es el resumen SHA-256 del contenido publicado. Si coincide con el de la imagen construida, lo publicado es exactamente lo que se probó.
 
-El primer intento, a las 09:02 UTC, falló con `access token has insufficient scopes`: el token no tenía permiso de escritura. A las
-09:12 UTC se abrió una sesión nueva y se publicaron las dos etiquetas.
+**Comprobación.**
 
 | Etiqueta | Digest |
 | --- | --- |
 | 1.0 | `sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca` |
 | 2.0 | `sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7` |
 
-**Evidencias.**
-
 ![Etiquetas 1.0 y 2.0 en Docker Hub](evidencias/capturas-conformes/D1-dockerhub.png)
 
-*Figura 38. Etiquetas 1.0 y 2.0 en Docker Hub. Resultado: Docker Hub publica las dos etiquetas con los digests construidos. Autor:
-Claude Code, por encargo de Cristina (Lq922466). 2026-11-05, 12:23 UTC. Máquina: codespaces-8d43b2.*
+*Figura 34. Docker Hub publica las etiquetas 1.0 y 2.0 con los digests construidos. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 5 de noviembre de 2026.*
 
-[Intento fallido](evidencias/D1-publicacion-intento-fallido.txt), [publicación](evidencias/D1-publicacion-dockerhub.txt) y
-[etiquetas en Docker Hub](evidencias/D1-dockerhub-etiquetas.png).
+[Publicación](evidencias/D1-publicacion-dockerhub.txt) y [vista web de las etiquetas](evidencias/D1-dockerhub-etiquetas.png).
 
-### 4.6. Comprobación de la descarga
+### 4.5. Descarga anónima desde los workers (D1)
 
 **Procedimiento.**
 
 ```bash
-# Literal: 5 de noviembre.
 bash scripts/comprobar-descarga.sh config/ssh.local innnx/reto4-f1
 ```
 
-**Explicación técnica.** [`comprobar-descarga.sh`](scripts/comprobar-descarga.sh) consulta Docker Hub de forma anónima, y descarga
-las dos etiquetas en los tres workers **sin sesión**. Así se demuestra que el repositorio es público y que cualquier nodo puede obtener
-la imagen sin credenciales, algo imprescindible para que Swarm cree réplicas en cualquier nodo.
+**Explicación.** [`comprobar-descarga.sh`](scripts/comprobar-descarga.sh) consulta Docker Hub de forma anónima y descarga las dos etiquetas en los tres workers **sin iniciar sesión**. Así se demuestra que el repositorio es público y que cualquier nodo puede obtener la imagen, algo imprescindible para que Swarm cree réplicas en cualquier nodo. También compara el digest y una huella del contenido servido con lo construido en el manager.
 
-También compara el digest y una huella del contenido servido con lo construido en manager-g5. A las 09:13 UTC, los tres workers
-descargaron ambas etiquetas con el mismo digest y el mismo contenido.
+**Comprobación.** El 5 de noviembre, los tres workers descargaron ambas etiquetas con el mismo digest y el mismo contenido ([registro](evidencias/D1-descarga-dockerhub.txt)).
 
-**Evidencias.** [Descarga](evidencias/D1-descarga-dockerhub.txt).
-
-### 4.7. Despliegue con `stack.yml`
+### 4.6. Despliegue con `stack.yml` (D2)
 
 **Procedimiento.**
 
 ```bash
-# Literal: 5 de noviembre.
 bash scripts/desplegar-f1.sh config/ssh.local innnx/reto4-f1 evidencias/F3-despliegue
-# Dentro de desplegar-f1.sh, en el manager, mediante app/desplegar.sh:
+# Dentro, en el manager, app/desplegar.sh ejecuta:
 export WEB_IMAGE=innnx/reto4-f1:1.0
 docker stack deploy --compose-file stack.yml reto4
 ```
 
-La pila está definida en [`app/stack.yml`](app/stack.yml):
+[`app/stack.yml`](app/stack.yml):
 
 ```yaml
-# Literal: app/stack.yml.
 services:
   web:
     image: "${WEB_IMAGE}"
@@ -1827,210 +1707,195 @@ networks:
     external: true
 ```
 
-**Explicación técnica.**
+**Explicación.**
 
 | Clave | Para qué sirve |
 | --- | --- |
 | `image: "${WEB_IMAGE}"` | La imagen se elige al desplegar, sin cambiar el archivo |
-| `published: 80`, `target: 80`, `mode: ingress` | Publica el puerto 80 de **todos** los nodos y lo envía, por el routing mesh, al puerto 80 de cualquier réplica |
+| `published: 80`, `target: 80`, `mode: ingress` | Publica el puerto 80 en **todos** los nodos y lo envía, por el routing mesh, al puerto 80 de cualquier réplica |
 | `networks: red-app-g5` y `external: true` | Conecta el servicio a la red del grupo, creada en la Fase 3, en lugar de crear una nueva |
 | `replicas: 4` | Swarm mantiene siempre cuatro contenedores |
 | `restart_policy: condition: any` | Si un contenedor termina, por error o no, Swarm lo sustituye. Es la base de E3 |
-| `update_config` | Actualiza de una réplica en una (`parallelism: 1`), arranca la nueva antes de retirar la antigua (`start-first`) y, si falla, vuelve atrás sola (`failure_action: rollback`) |
+| `update_config` | Actualiza de una réplica en una, arranca la nueva antes de retirar la antigua (`start-first`) y, si falla, vuelve atrás sola |
 | `rollback_config` | El rollback sigue las mismas reglas |
 
-Una pila se despliega con `docker stack deploy`, que crea el servicio `reto4_web`: el nombre de la pila más el del servicio.
+**Diferencia con la Guía.** La Guía llama «red del grupo» a una sola red, `red-gX`, que define como la red ingress personalizada. Aquí `red-g5` es esa red ingress, y el servicio se conecta además a una segunda red overlay propia, `red-app-g5`, que es la que pide C4 («red overlay propia para servicios»). El puerto 80 publicado entra siempre por `red-g5`.
 
-[`desplegar-f1.sh`](scripts/desplegar-f1.sh) mantiene sondas mientras dura el despliegue, espera a que el servicio converja y comprueba
-que cada tarea usa la imagen de Docker Hub. Esa comprobación es necesaria porque el portal provisional y la web definitiva responden
-igual, `version=1.0`. Después recorre las páginas con un navegador.
+`docker stack deploy` crea el servicio `reto4_web`: el nombre de la pila más el del servicio. [`desplegar-f1.sh`](scripts/desplegar-f1.sh) mantiene sondas durante el despliegue, espera a que el servicio converja, comprueba que **cada tarea** usa la imagen de Docker Hub y recorre las páginas con un navegador.
 
-El 5 de noviembre, a las 09:19 UTC, el servicio pasó del portal provisional, `reto4-g5/f1:1.0`, a la web definitiva,
-`innnx/reto4-f1:1.0`, en 4/4. Las cuatro IP dieron HTTP 200, y el navegador recorrió 5 páginas sin errores en cada una.
-
-Las sondas registraron 328 respuestas correctas y 0 fallos: 82 por IP, durante todo el cambio.
-
-**Evidencias.**
+**Comprobación.** El 5 de noviembre, el servicio pasó del portal provisional a la web definitiva, `innnx/reto4-f1:1.0`, en 4/4. Las cuatro IP dieron HTTP 200, el navegador recorrió 5 páginas sin errores en cada una, y las sondas registraron **328 muestras correctas y 0 fallos** durante todo el cambio ([registro](evidencias/F3-despliegue/registro.txt)).
 
 ![Servicio de cuatro réplicas](evidencias/capturas-conformes/D2-servicio.png)
 
-*Figura 39. Servicio de cuatro réplicas. Resultado: El servicio tiene cuatro réplicas, la red del grupo y política de reinicio. Autor:
-Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 11:01 UTC. Máquinas: codespaces-8d43b2 y manager-g5.*
+*Figura 35. El servicio tiene cuatro réplicas, la red del grupo y política de reinicio. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquinas: codespaces-8d43b2 y manager-g5.*
 
-[Registro del despliegue](evidencias/F3-despliegue/registro.txt), con sondas y capturas por IP en
-[F3-despliegue/](evidencias/F3-despliegue/), [estado final](evidencias/F3-estado-final.txt) y
-[pila y servicio](evidencias/capturas-terminal/D2-pila-servicio.png).
-
-### 4.8. Acceso por la IP pública de los cuatro nodos (D3)
+### 4.7. Acceso por la IP pública de los cuatro nodos (D3)
 
 **Procedimiento.**
 
 ```bash
-# Procedimiento. Solo lectura: IP públicas actuales y respuesta de cada una.
 aws ec2 describe-instances --region us-east-1 \
   --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' 'Name=instance-state-name,Values=running' \
   --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,PublicIpAddress]' --output text
 curl -s -o /dev/null -w '%{http_code}\n' http://IP_PUBLICA/     # 200 si responde.
 curl -s http://IP_PUBLICA/identidad.txt                           # Versión y contenedor.
+bash scripts/verificar-despliegue.sh config/ssh.local innnx/reto4-f1 1.0
 ```
 
-En el navegador se abre `http://IP_PUBLICA/`, escribiendo `http://`, porque el portal no usa HTTPS.
+En el navegador se abre `http://IP_PUBLICA/`, escribiendo `http://`, porque la web no usa HTTPS.
 
-**Explicación técnica.** Gracias al routing mesh, cualquier nodo acepta la conexión en el puerto 80, aunque no tenga ninguna réplica,
-y la reenvía por la red ingress a una réplica sana. Por eso la web carga desde las cuatro IP.
+**Explicación.** Gracias al routing mesh, cualquier nodo acepta la conexión en el puerto 80, aunque no aloje ninguna réplica, y la reenvía por la red ingress a una réplica sana. Por eso la web carga desde las cuatro IP. El puerto 8080 está abierto en el grupo de seguridad porque lo indica la Guía, pero la pila no lo publica, así que los nodos rechazan la conexión en ese puerto.
 
-El puerto 8080 está abierto en el grupo de seguridad porque lo indica la Guía, pero la pila no lo publica. El 9 de noviembre, los cuatro
-nodos rechazaron la conexión en ese puerto.
+[`verificar-despliegue.sh`](scripts/verificar-despliegue.sh) comprueba, solo con lectura, las réplicas, la imagen de cada tarea en estado `Running`, el HTTP de las cuatro IP y que las peticiones lleguen a más de un contenedor.
 
-| Comprobación | Fecha | Resultado |
-| --- | --- | --- |
-| Navegador gráfico real, Google Chrome for Testing, con la dirección visible | 5 de noviembre, 09:37 UTC | La web definitiva carga por las cuatro IP de ese día |
-| HTTP e `identidad.txt` | 9 de noviembre, 08:33 UTC | HTTP 200 y `version=1.0` en `107.23.128.135`, `3.87.79.9`, `98.89.45.93` y `54.243.27.22`. Cada IP repartió 12 peticiones entre los mismos cuatro contenedores |
+**Comprobación.**
 
-Las IP públicas cambian en cada sesión: hay que consultarlas el día de la corrección.
+- **5 de noviembre:** la web definitiva cargó en un navegador gráfico real por las cuatro IP de ese día.
+- **9 de noviembre, por la mañana:** HTTP 200 y `version=1.0` en las cuatro IP ([registro](evidencias/auditoria/registro-2026-11-09.txt)).
+- **9 de noviembre, tras corregir C3:** `verificar-despliegue.sh` dio 4/4 con `innnx/reto4-f1:1.0` y HTTP 200 en las cuatro IP (registro de sesión de Codex).
 
-**Evidencias.**
+![Web definitiva por la IP de manager-g5](evidencias/D3-navegador-manager-g5.png)
 
-![Web definitiva con la dirección visible](evidencias/D3-navegador-manager-g5.png)
+*Figura 36. Web definitiva cargada por la IP pública de manager-g5, con la dirección visible, en un navegador gráfico real. Captura anterior: Claude Code, 5 de noviembre de 2026. No tiene el comentario que exige la norma. Capturas de [worker1-g5](evidencias/D3-navegador-worker1-g5.png), [worker2-g5](evidencias/D3-navegador-worker2-g5.png) y [worker3-g5](evidencias/D3-navegador-worker3-g5.png).*
 
-*Figura 40. Web definitiva por la IP de manager-g5, en un navegador gráfico real sobre un escritorio virtual del Codespace. 5 de
-noviembre de 2026, 09:37 UTC. Captura: Claude Code. Máquina: codespaces-8d43b2. No tiene el comentario que exige la norma.*
+> **Evidencia pendiente:** capturas D3 conformes, con comentario, de la web en el navegador por las cuatro IP públicas del día de la corrección.
 
-Capturas de [worker1-g5](evidencias/D3-navegador-worker1-g5.png), [worker2-g5](evidencias/D3-navegador-worker2-g5.png) y
-[worker3-g5](evidencias/D3-navegador-worker3-g5.png), el [método](evidencias/D3-registro.txt), la
-[portada completa](evidencias/F3-web-final-1.0-completa.png) y el
-[registro del 9 de noviembre](evidencias/auditoria/registro-2026-11-09.txt).
+### 4.8. Incidencias reales y soluciones
 
-**Pendiente:** capturas D3 conformes, con comentario, hechas con las IP del día.
+**I4.1. Docker no funciona dentro del Codespace** · Estado: **resuelta** con una alternativa
 
-### Resultado y conclusión de la Fase 4
+- *Síntomas:* las órdenes `docker` fallaban en el Codespace.
+- *Causa:* el contenedor del Codespace no tiene los permisos necesarios para ejecutar el motor de Docker.
+- *Diagnóstico:* `docker info` desde el Codespace.
+- *Solución aplicada:* las imágenes se construyen y se prueban en manager-g5 con `preparar-imagenes.sh`, que copia allí los archivos necesarios de `app/`.
+- *Comprobación:* las dos imágenes se construyeron y probaron en el manager ([registro](evidencias/D1-imagenes-definitivas.txt)).
 
-La web del grupo se empaqueta en una imagen propia sobre Nginx, que identifica cada contenedor.
+**I4.2. Docker Hub rechazó la primera publicación** · Estado: **resuelta**
 
-- **Docker Hub:** las versiones 1.0 y 2.0 se publicaron en `innnx/reto4-f1`, con los digests comprobados y descarga anónima desde los
-  workers.
-- **Servicio:** la pila define cuatro réplicas en el puerto 80, en la red `red-app-g5`, con reinicio siempre y actualización y rollback
-  progresivos.
-- **Despliegue:** se hizo sin fallos en las sondas.
-- **Acceso:** la web respondió en las cuatro IP el 5 de noviembre, en un navegador, y de nuevo el 9 de noviembre, por HTTP.
+- *Síntomas:* `docker push` falló con `access token has insufficient scopes`.
+- *Causa:* el token de acceso de Docker Hub no tenía permiso de escritura.
+- *Diagnóstico:* mensaje de error del primer intento ([registro](evidencias/D1-publicacion-intento-fallido.txt)).
+- *Solución aplicada:* se abrió una sesión nueva con un token con permiso de escritura y se repitió la publicación.
+- *Comprobación:* las dos etiquetas se publicaron con los digests esperados ([registro](evidencias/D1-publicacion-dockerhub.txt)).
 
-D1 y D2 se consideran listos. D3 está demostrado, pero sus capturas de navegador no tienen el comentario que exige la norma.
+**I4.3. El portal provisional y la web definitiva respondían igual** · Estado: **resuelta**
 
-## Fase 5: Orquestación
+- *Síntomas:* tras el despliegue, `identidad.txt` decía `version=1.0` tanto con el portal provisional como con la web definitiva, así que no bastaba para saber cuál se servía.
+- *Causa:* ambas imágenes se construyeron como versión 1.0.
+- *Diagnóstico:* `docker service ps reto4_web` mostraba imágenes distintas con la misma versión.
+- *Solución aplicada:* la verificación comprueba la **imagen de cada tarea** (`innnx/reto4-f1:1.0`), no solo la versión.
+- *Comprobación:* el despliegue del 5 de noviembre terminó con las cuatro tareas en la imagen de Docker Hub ([registro](evidencias/F3-despliegue/registro.txt)).
 
-**Objetivo general.** Demostrar lo que aporta Swarm frente a un servidor único:
+**I4.4. Enlaces internos rotos y una credencial de demostración en la web** · Estado: **resuelta**
 
-- reparto de carga;
-- escalado;
-- autorreparación;
-- alta disponibilidad ante la caída de un worker y del líder;
-- mantenimiento de nodos;
-- actualización sin cortes con vuelta atrás.
+- *Síntomas:* cuatro páginas enlazaban a `#escuderias`, que no existía, y el JavaScript contenía una credencial de demostración.
+- *Causa:* contenido recibido en el ZIP del grupo.
+- *Diagnóstico:* [`comprobar-web.py`](scripts/comprobar-web.py) revisa los enlaces internos; la credencial se detectó al revisar el código antes de versionarlo.
+- *Solución aplicada:* se añadió el destino `#escuderias` y el validador de enlaces (commit `bcfceee`), y se retiró la credencial antes del primer commit de la web.
+- *Comprobación:* la comprobación previa dio 0 errores en 5 páginas y 30 archivos.
 
-La Guía pide documentarlo con capturas antes, durante y después, mientras un script consulta la web cada segundo. Criterios de la
-Rúbrica: E1–E8. La Guía asigna 2 puntos a esta fase, y la Rúbrica, 1,5 puntos al bloque E.
+### 4.9. Posibles incidencias y soluciones
 
-| Qué pide la Guía | Situación a 9 de noviembre |
-| --- | --- |
-| Comprobar el reparto de tráfico y escalar a 8, 12 y bajar a 2 réplicas | **Demostrado** con la web definitiva |
-| Borrar un contenedor manualmente y ver cómo Swarm lo recupera | **Demostrado** con la web definitiva |
-| Apagar un worker y verificar que la web sigue activa y las réplicas se reubican | **Parcial:** solo con el portal provisional y en texto |
-| Poner un nodo en modo drain y luego reactivarlo | **Demostrado** con la web definitiva |
-| Pasar de 1.0 a 2.0 sin cortes, y luego revertir | **Demostrado** con la web definitiva |
-| Promover 2 workers a manager, apagar el líder y comprobar que se elige uno nuevo | **Parcial:** solo con el portal provisional y sin el estado durante la parada |
+| Síntoma o error | Causa probable | Diagnóstico | Solución |
+| --- | --- | --- | --- |
+| `pull access denied` o `manifest unknown` en un worker | Repositorio privado o etiqueta mal escrita | `comprobar-descarga.sh` | Hacer público el repositorio de Docker Hub o corregir la etiqueta |
+| `denied: requested access to the resource is denied` al publicar | Sin sesión, o espacio de nombres equivocado | `docker info \| grep Username` | `docker login -u innnx` y etiquetar como `innnx/reto4-f1:VERSION` |
+| `network red-app-g5 not found` al desplegar | La red externa no existe | `docker network ls` | Ejecutar `configurar-red-swarm.sh` antes del despliegue |
+| La imagen aparece vacía en el servicio | No se exportó `WEB_IMAGE` | `docker service inspect reto4_web` | `export WEB_IMAGE=innnx/reto4-f1:1.0` antes de `docker stack deploy` |
+| Réplicas reiniciándose sin parar | Falla el `HEALTHCHECK` o Nginx no arranca | `docker service ps --no-trunc reto4_web` y `docker service logs reto4_web` | Corregir la imagen, publicarla de nuevo y actualizar el servicio |
+| El navegador no carga la web | Se abrió con `https://` o la IP es de otra sesión | `curl -I http://IP_PUBLICA/` | Usar `http://` y las IP actuales de EC2 |
+| El navegador muestra una versión antigua | Caché del navegador | `curl -s http://IP_PUBLICA/identidad.txt` | Recargar sin caché |
 
-### 5.0. Método común de las pruebas
+### 4.10. Resultado y conclusión de la Fase 4
 
-**Procedimiento.** Las pruebas que modifican el servicio se lanzaron con scripts, siempre con autorización expresa:
+La web del grupo se empaqueta en una imagen propia sobre Nginx que identifica cada contenedor. Las versiones 1.0 y 2.0 se publicaron en `innnx/reto4-f1`, con los digests comprobados y descarga anónima desde los workers. La pila define cuatro réplicas en el puerto 80, en la red `red-app-g5`, con reinicio siempre y actualización y rollback progresivos. El despliegue se hizo sin fallos en las sondas, y la web respondió por las cuatro IP públicas el 5 y el 9 de noviembre.
+
+- **Cumplidos:** D1 y D2.
+- **D3:** cumplido técnicamente; las capturas de navegador no tienen el comentario de la norma.
+
+<a id="fase-5-orquestación"></a>
+
+## Fase 5 — Pruebas de orquestación
+
+**Objetivo.** Demostrar lo que aporta Swarm frente a un servidor único: reparto de carga, escalado, autorreparación, alta disponibilidad ante la caída de un worker y del líder, mantenimiento de nodos y actualización sin cortes con vuelta atrás. La Guía pide documentarlo con capturas antes, durante y después, mientras un script consulta la web cada segundo.
+
+**Contenidos.**
+
+| Prueba de la Guía | Criterio | Apartado | Web | Estado |
+| --- | --- | --- | --- | --- |
+| Reparto de tráfico | E1 | 5.2 | Definitiva | Realizada |
+| Escalar a 8, 12 y bajar a 2 réplicas | E2 | 5.3 | Definitiva | Realizada, con dos tiempos de espera |
+| Borrar un contenedor y ver cómo Swarm lo recupera | E3 | 5.4 | Definitiva | Realizada |
+| Apagar un worker: la web sigue activa y las réplicas se reubican | E4 | 5.5 | Provisional | Prueba histórica |
+| Reincorporación, reequilibrio y reinicio del laboratorio | E5 | 5.6 | Provisional y definitiva | Realizada |
+| Poner un nodo en modo drain y reactivarlo | E6 | 5.7 | Definitiva | Realizada |
+| Pasar de 1.0 a 2.0 sin cortes, y revertir | E7 | 5.8 | Definitiva | Realizada |
+| Promover 2 workers, apagar el líder y comprobar el nuevo líder | E8 | 5.9 | Provisional | Realizada, con 34 s sin muestras |
+
+En todas las pruebas falta la serie de **capturas conformes** antes, durante y después con la sonda visible.
+
+### 5.1. Método común: scripts y sondas
+
+**Qué se hizo y para qué.** Las pruebas que modifican el servicio se lanzan con scripts, siempre con autorización expresa, para que sean repetibles y dejen un registro completo.
+
+**Procedimiento.**
 
 ```bash
-# Literal: scripts del repositorio, 5 de noviembre.
-bash scripts/probar-actualizacion.sh config/ssh.local innnx/reto4-f1 evidencias/F3-actualizacion      # E7.
-bash scripts/probar-orquestacion.sh config/ssh.local innnx/reto4-f1 evidencias/F4-E2 e2              # E2. También e3 y e6.
+bash scripts/probar-orquestacion.sh config/ssh.local innnx/reto4-f1 evidencias/F4-E2 e2   # También e3 y e6.
+bash scripts/probar-actualizacion.sh config/ssh.local innnx/reto4-f1 evidencias/F3-actualizacion   # E7.
+bash scripts/sondear-web.sh http://IP_PUBLICA/identidad.txt                               # Una sonda, en otra terminal.
 ```
 
 Cada script:
 
-1. Lee de EC2 las IP públicas vigentes.
-2. Arranca una sonda por IP con [`sondear-web.sh`](scripts/sondear-web.sh).
-3. Ejecuta la operación en el manager.
-4. Espera a que el servicio vuelva a su estado.
-5. Comprueba HTTP en las cuatro IP y recorre la web con un navegador.
-6. Detiene las sondas y resume sus resultados.
+1. lee de EC2 las IP públicas vigentes;
+2. arranca una sonda por IP con [`sondear-web.sh`](scripts/sondear-web.sh);
+3. ejecuta la operación en el manager;
+4. espera a que el servicio vuelva a su estado;
+5. comprueba HTTP en las cuatro IP y recorre la web con un navegador;
+6. detiene las sondas y resume sus resultados en `registro.txt`, junto con la salida de cada sonda y las capturas.
 
-Todo queda en un `registro.txt`, junto a la salida de cada sonda y las capturas.
+**Explicación.** La sonda pide `identidad.txt` **una vez por segundo y por IP**, con un límite de 0,9 s por petición, y anota la hora, el resultado, la versión y el contenedor. Es el «script que consulta la web cada segundo» de la Guía. [`lib-sondas.sh`](scripts/lib-sondas.sh) detiene la prueba si una IP acumula tres fallos seguidos. Desde el 9 de noviembre, además, la sonda exige que la respuesta identifique versión y contenedor, y el resumen comprueba que cada sonda siguió viva hasta el final (incidencia [I5.4](#510-incidencias-reales-y-soluciones)).
 
-**Explicación técnica.** La sonda pide `identidad.txt` **una vez por segundo y por IP**, y anota la hora, el resultado, la versión y
-el contenedor. Es el «script que consulta la web cada segundo» que pide la Guía.
+El 4 de noviembre, E1, E2, E3, E6 y E7 se hicieron también con el portal provisional ([registro](evidencias/prototipo/fase4-5.txt)). Se repitieron el 5 con la web definitiva, y este informe presenta esas repeticiones.
 
-Una muestra por segundo demuestra que hubo respuesta en ese instante, pero no lo que ocurre entre dos muestras. Por eso este informe
-habla de «muestras correctas», y no de «disponibilidad continua».
+> **Evidencia pendiente (toda la fase):** capturas conformes antes, durante y después de cada prueba, con la sonda visible. `capturas-norma.py` las toma con la variable `SONDA` apuntando al registro de la sonda, mientras la persona autorizada ejecuta la operación.
 
-En E3 y E6 se aplicó un criterio de supervisión. La prueba se detiene si una IP acumula tres fallos seguidos, si no se recuperan las
-réplicas o si alguna IP sigue fallando al terminar.
-
-| Prueba | Fecha y hora (UTC) | Web | Evidencia principal |
-| --- | --- | --- | --- |
-| E1 | 5 nov. 09:24 y 09:53 · 6 nov. 10:31 · 9 nov. 08:33 | Definitiva | Estado final, captura conforme y registro del 9 de noviembre |
-| E2 | 5 nov. 09:34 | Definitiva | [F4-E2](evidencias/F4-E2/) |
-| E3 | 5 nov. 09:44 | Definitiva | [F4-E3](evidencias/F4-E3/) |
-| E4 | 4 nov. 20:03–20:09 | **Provisional** | [E4-E5-E8](evidencias/E4-E5-E8-registro.txt) |
-| E5 | 4 nov. 20:30 → 5 nov. 08:43 · 6 nov. 11:01 · 9 nov. 08:33 | Provisional y definitiva | Verificaciones de E5 y captura conforme |
-| E6 | 5 nov. 09:46 | Definitiva | [F4-E6](evidencias/F4-E6/) |
-| E7 | 5 nov. 09:21 | Definitiva | [F3-actualizacion](evidencias/F3-actualizacion/) |
-| E8 | 4 nov. 20:14–20:18 | **Provisional** | [E8](evidencias/E8-eleccion-registro.txt) |
-
-El 4 de noviembre, E1, E2, E3, E6 y E7 también se ejecutaron con el portal provisional. Se repitieron el 5 con la web definitiva, y
-este informe presenta esas repeticiones. Las del 4 se conservan como registro: [fase 4 y 5](evidencias/prototipo/fase4-5.txt) y
-[sonda: 156 correctas](evidencias/prototipo/sondeo-orquestacion.txt).
-
-**Lo que falta en toda la fase.** Las capturas conformes de E2, E3, E6 y E7, tomadas antes, durante y después con la sonda visible,
-requieren repetir las pruebas con autorización. Las capturas actuales de esas pruebas son reales, pero no muestran el prompt ni el
-script.
-
-### 5.1. E1: balanceo de carga (web definitiva)
+### 5.2. E1: balanceo de carga
 
 **Procedimiento.**
 
 ```bash
-# Literal, con la lista de IP abreviada: captura del 5 de noviembre, 09:53 UTC, y captura conforme del 6.
 for ip in $IPS; do for i in 1 2 3 4; do curl -s --max-time 5 http://$ip/identidad.txt; done; done
 ```
 
-**Explicación técnica.** Cada petición nueva abre una conexión TCP. El routing mesh, mediante IPVS en la red ingress, reparte las
-conexiones entre las réplicas, sin importar a qué IP se dirijan. Si las respuestas llevan contenedores distintos, el reparto funciona.
-Es la evidencia que pide la Rúbrica: «respuestas distintas».
+**Explicación.** Cada petición nueva abre una conexión TCP. El routing mesh, mediante IPVS en la red ingress, reparte las conexiones entre las réplicas, sin importar a qué IP se dirijan. Si las respuestas llevan contenedores distintos, el reparto funciona: es la evidencia que pide la Rúbrica, «respuestas distintas».
+
+**Comprobación.**
 
 | Fecha | Peticiones | Resultado |
 | --- | --- | --- |
-| 5 nov. 09:24 UTC | 12, por las cuatro IP | Cuatro contenedores distintos: 4, 3, 2 y 3 respuestas |
-| 5 nov. 09:53 UTC | 16, cuatro por IP | Cada IP fue respondida por los mismos cuatro contenedores |
-| 6 nov. 10:31 UTC | 16, cuatro por IP | Cada IP fue respondida por los mismos cuatro contenedores |
-| 9 nov. 08:33 UTC | 48, doce por IP | Cada IP repartió exactamente 3 peticiones a cada uno de cuatro contenedores |
-
-**Evidencias.**
+| 5 de noviembre | 16, cuatro por IP | Cada IP fue respondida por los mismos cuatro contenedores |
+| 6 de noviembre | 16, cuatro por IP | Cada IP fue respondida por los mismos cuatro contenedores |
+| 9 de noviembre, mañana | 48, doce por IP | Cada IP repartió exactamente 3 peticiones a cada uno de los cuatro contenedores |
+| 9 de noviembre, tras corregir C3 | 12 | Cuatro contenedores distintos, con 3 respuestas cada uno |
 
 ![Balanceo de carga](evidencias/capturas-conformes/E1-balanceo.png)
 
-*Figura 41. Balanceo de carga. Resultado: Las peticiones por las cuatro IP reciben respuesta de contenedores distintos. Autor: Claude
-Code, por encargo de Cristina (Lq922466). 2026-11-06, 10:31 UTC. Máquina: codespaces-8d43b2.*
+*Figura 37. Las peticiones por las cuatro IP reciben respuesta de contenedores distintos. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026.*
 
-[Estado final del 5 de noviembre](evidencias/F3-estado-final.txt), [captura anterior](evidencias/capturas-terminal/E1-reparto-peticiones.png)
-y [registro del 9 de noviembre](evidencias/auditoria/registro-2026-11-09.txt).
+### 5.3. E2: escalado a 8, 12 y 2 réplicas
 
-### 5.2. E2: escalado a 8, 12 y 2 réplicas (web definitiva)
-
-**Procedimiento.**
+**Procedimiento.** Dentro de `probar-orquestacion.sh`, en el manager:
 
 ```bash
-# Literal: dentro de probar-orquestacion.sh, en el manager.
-docker service scale --detach=false reto4_web=8     # Después, 12, 2 y vuelta a 4.
+docker service scale --detach=false reto4_web=8      # Después, 12, 2 y vuelta a 4.
 docker service ps --filter desired-state=running reto4_web
 ```
 
-**Explicación técnica.** `docker service scale` cambia el número deseado de réplicas. Swarm crea o elimina tareas hasta alcanzarlo, y
-las reparte entre los nodos disponibles. `--detach=false` espera a que termine antes de devolver el control, para que la comprobación
-siguiente vea el estado final.
+**Explicación.** `docker service scale` cambia el número deseado de réplicas, y Swarm crea o elimina tareas hasta alcanzarlo, repartiéndolas entre los nodos disponibles. `--detach=false` espera a que termine, para que la comprobación siguiente vea el estado final.
+
+**Comprobación.** 5 de noviembre, con la web definitiva:
 
 | Réplicas | Reparto por nodo | HTTP en las 4 IP |
 | --- | --- | --- |
@@ -2039,391 +1904,311 @@ siguiente vea el estado final.
 | 2/2 | 1 en manager-g5 y 1 en worker2-g5 | 200 |
 | 4/4 | 1-1-1-1 | 200 |
 
-Con 2 réplicas, los nodos sin réplica siguieron respondiendo: es el routing mesh de E1.
-
-**Observación.** Las sondas registraron 562 respuestas correctas y 2 tiempos de espera. Los dos ocurrieron durante la reducción de 12
-a 2 réplicas, a las 09:35:38 UTC: una muestra de 34.230.4.20 y otra de 98.81.203.125 superaron el límite de 0,9 s. Las muestras
-anterior y siguiente fueron correctas. Son 2 de 564 peticiones, y **no se ha determinado la causa**. Por esta observación, el registro
-termina con código 1. Después se definió el criterio de supervisión de E3 y E6.
-
-**Evidencias.**
+Con 2 réplicas, los nodos sin réplica siguieron respondiendo gracias al routing mesh. Las sondas registraron **562 muestras correctas y 2 tiempos de espera**, los dos durante la reducción de 12 a 2 réplicas (incidencia [I5.1](#510-incidencias-reales-y-soluciones)).
 
 ![Servicio con 12 réplicas](evidencias/F4-E2/terminal-e2-escalado-12.png)
 
-*Figura 42. Doce réplicas. 5 de noviembre de 2026, 10:35 en Madrid. Captura: Claude Code. Máquina: manager-g5. No muestra el prompt
-que exige la norma.*
+*Figura 38. Doce réplicas repartidas tres por nodo. Captura anterior: Claude Code, 5 de noviembre de 2026. Máquina: manager-g5. No muestra el prompt ni el comentario de la norma. Capturas de los estados [inicial](evidencias/F4-E2/terminal-e2-inicial-4.png), [8](evidencias/F4-E2/terminal-e2-escalado-8.png), [2](evidencias/F4-E2/terminal-e2-escalado-2.png) y [vuelta a 4](evidencias/F4-E2/terminal-e2-escalado-4.png), y [registro](evidencias/F4-E2/registro.txt).*
 
-[Registro, sondas y capturas de cada estado](evidencias/F4-E2/). **Pendiente:** capturas conformes antes, durante y después.
+### 5.4. E3: autorreparación
 
-### 5.3. E3: autorreparación (web definitiva)
-
-**Procedimiento.**
+**Procedimiento.** En el nodo que aloja la tarea elegida, manager-g5:
 
 ```bash
-# Literal, en manager-g5, que alojaba la tarea.
-docker rm -f 223aad67af29
+docker rm -f ID_DEL_CONTENEDOR                       # Ese día, 223aad67af29.
 docker service ps --filter name=reto4_web.1 reto4_web
 ```
 
-**Explicación técnica.** `docker rm -f` elimina el contenedor a la fuerza, como si hubiera fallado. Swarm compara el estado real (3
-réplicas) con el deseado (4): marca la tarea como fallida y crea otra. Es la `restart_policy: condition: any` de la pila.
+**Explicación.** `docker rm -f` elimina el contenedor a la fuerza, como si hubiera fallado. Swarm compara el estado real (3 réplicas) con el deseado (4), marca la tarea como fallida y crea otra: es la `restart_policy: condition: any` de la pila.
 
-Swarm registró `non-zero exit (137)`, que corresponde a un proceso terminado con `SIGKILL`, y creó la tarea `lgmt4tdycl4a` en el mismo
-nodo. El contenedor se eliminó a las 09:45:01 UTC, y a las 09:45:16 UTC el servicio volvía a estar en 4/4. Las sondas registraron 308
-respuestas correctas y 0 fallos.
+![Servicio antes de eliminar el contenedor](evidencias/F4-E3/terminal-e3-antes.png)
 
-**Evidencias.**
+*Figura 39. Antes: servicio en 4/4, una réplica por nodo. Captura anterior: Claude Code, 5 de noviembre de 2026. Máquina: manager-g5. No muestra el prompt ni el comentario de la norma.*
+
+**Comprobación.** Swarm registró `non-zero exit (137)`, que corresponde a un proceso terminado con `SIGKILL`, y creó una tarea nueva en el mismo nodo. En unos 15 segundos el servicio volvía a estar en 4/4. Las sondas registraron **308 muestras correctas y 0 fallos** ([registro](evidencias/F4-E3/registro.txt)).
 
 ![Tarea fallida y reemplazo](evidencias/F4-E3/terminal-e3-despues.png)
 
-*Figura 43. Reemplazo de la tarea. 5 de noviembre de 2026, 10:45 en Madrid. Captura: Claude Code. Máquina: manager-g5. No muestra el
-prompt que exige la norma.*
+*Figura 40. Después: la tarea eliminada aparece como fallida y una nueva la sustituye; el servicio vuelve a 4/4. Captura anterior: Claude Code, 5 de noviembre de 2026. No muestra el prompt ni el comentario de la norma.*
 
-[Registro, sondas y capturas antes y después](evidencias/F4-E3/). **Pendiente:** capturas conformes.
+### 5.5. E4: caída de un worker
 
-### 5.4. E4: caída de un worker (portal provisional)
-
-**Procedimiento.**
+**Procedimiento.** Prueba histórica del 4 de noviembre, hecha con Codex y con el **portal provisional**, solo sobre worker3-g5:
 
 ```bash
-# Deducido de la salida: solo sobre worker3-g5, el 4 de noviembre.
-aws ec2 stop-instances --instance-ids i-0446409b26cf0a662
-aws ec2 start-instances --instance-ids i-0446409b26cf0a662
+aws ec2 stop-instances --region us-east-1 --instance-ids i-0446409b26cf0a662    # Detiene worker3-g5.
+docker node ls; docker service ps reto4_web                                      # En el manager, durante la parada.
+aws ec2 start-instances --region us-east-1 --instance-ids i-0446409b26cf0a662   # Lo vuelve a arrancar.
 ```
 
-**Explicación técnica.** Al detener la instancia, el nodo deja de enviar señales al manager, y Swarm lo marca como `Down`. Sus tareas
-se crean de nuevo en los nodos disponibles para mantener el número de réplicas.
+**Explicación.** Al detener la instancia, el nodo deja de enviar señales al manager y Swarm lo marca como `Down`. Sus tareas se crean de nuevo en los nodos disponibles para mantener el número de réplicas. Mientras tanto, el routing mesh deja de enviar tráfico al nodo caído.
 
-| Hora (UTC) | Qué muestra el registro |
-| --- | --- |
-| 20:03:57 | Antes: cuatro nodos Ready/Active, 4/4 y worker3-g5 seleccionado |
-| 20:05:38 | EC2 informa `stopped`. Swarm marca worker3-g5 como `Down` y muestra `5/4` |
-| 20:05:40 | `reto4_web.1` ya corre en manager-g5 |
-| 20:03:57–20:06:40 | Sonda: 164 respuestas correctas y 0 fallos |
-| 20:08:53 | worker3-g5 `active`, cuatro nodos Ready/Active y 4/4 |
+**Comprobación.**
 
-`5/4` es transitorio: la tarea del nodo caído se sigue contando hasta que Swarm puede confirmar que se ha detenido. Se normalizó al
-volver el nodo.
+- Antes: cuatro nodos `Ready/Active` y 4/4.
+- Durante la parada: EC2 informa `stopped`, Swarm marca worker3-g5 como `Down` y la réplica `reto4_web.1` ya corre en manager-g5. El servicio muestra `5/4` de forma transitoria: la tarea del nodo caído se sigue contando hasta que Swarm puede confirmar que se ha detenido.
+- La sonda registró **164 muestras correctas y 0 fallos** durante la parada.
+- Después: worker3-g5 vuelve `Ready/Active` y el servicio, a 4/4.
 
-**Límites.**
+[Registro](evidencias/E4-E5-E8-registro.txt), [estado durante la parada](evidencias/prototipo/E4-worker-down.txt), [sonda](evidencias/prototipo/E4-E5-http.txt) y [análisis](evidencias/auditoria/E4-E8.md).
 
-- Solo se hizo con el portal provisional.
-- La URL sondeada no consta.
-- No hay capturas de la consola.
-- La captura web no muestra IP ni hora.
+![Portal durante la caída del worker](evidencias/E4-web-worker-down.png)
 
-Es además la demostración en directo que pide la exposición. [Análisis completo](evidencias/auditoria/E4-E8.md) y
-[plan para repetirla](entrega/PLAN-C3-E4-E8.md), que requiere autorización.
+*Figura 41. Portal provisional respondiendo durante la parada de worker3-g5. Captura de Codex, 4 de noviembre de 2026. No muestra IP, hora ni estado del clúster, así que no prueba por sí sola el momento de la captura.*
 
-**Evidencias.** [Registro](evidencias/E4-E5-E8-registro.txt), [estado durante la parada](evidencias/prototipo/E4-worker-down.txt),
-[E4 y E5](evidencias/prototipo/E4-E5.txt), [sonda](evidencias/prototipo/E4-E5-http.txt) y
-[captura web](evidencias/E4-web-worker-down.png). **Pendiente:** repetirla con la web definitiva y capturas conformes.
+**Límites.** Se hizo con el portal provisional, no consta la URL sondeada, no hay capturas de la consola y la captura web no muestra IP ni hora.
 
-### 5.5. E5: reincorporación, reequilibrio y reinicio del laboratorio
+> **Evidencia pendiente:** repetir E4 con la web definitiva y capturas conformes antes, durante y después, según el [plan](entrega/PLAN-C3-E4-E8.md). Detiene una instancia, así que requiere autorización. Es además la demostración en directo de caída de nodo que pide la exposición.
+
+### 5.6. E5: reincorporación, reequilibrio y reinicio del laboratorio
 
 **Procedimiento.** La Rúbrica agrupa dos comprobaciones:
 
-1. **Reincorporación y reequilibrio.** Al volver worker3-g5 en E4, el nodo quedó `Ready/Active`. Swarm no mueve las tareas que ya
-   funcionan, así que se forzó una redistribución:
+1. **Reincorporación y reequilibrio.** Al volver worker3-g5 en E4, el nodo quedó `Ready/Active`, pero Swarm no mueve las tareas que ya funcionan. Para repartirlas de nuevo se fuerza una actualización:
 
    ```bash
-   # Literal.
    docker service update --quiet --detach --force reto4_web
    ```
 
-   Se aplicó en E4, el 4 de noviembre entre las 20:09:14 y las 20:09:43 UTC, con el portal provisional. Se repitió en E6, el 5 de
-   noviembre, con la web definitiva. Ver [reincorporación](evidencias/prototipo/E5-worker-recuperado.txt) y
-   [reparto](evidencias/prototipo/E5-reparto.txt).
-
-2. **Reinicio del laboratorio.** Con End Lab y Start Lab desde AWS Academy:
+2. **Reinicio del laboratorio.** Tras **End Lab** y **Start Lab** en AWS Academy, se compara el estado con una referencia guardada antes:
 
    ```bash
-   # Literal.
    bash scripts/verificar-e5.sh ~/DIRECTORIO_PRIVADO_DE_RESPALDO
    ```
 
-**Explicación técnica.** [`verificar-e5.sh`](scripts/verificar-e5.sh) compara el estado tras el reinicio con una referencia guardada
-antes: ID de instancia, volúmenes raíz, controles, IP, SSH, Swarm, redes, réplicas y HTTP.
+**Explicación.** `--force` vuelve a crear las tareas réplica a réplica, con `start-first`, sin cortar el servicio, y el planificador las reparte entre todos los nodos disponibles. [`verificar-e5.sh`](scripts/verificar-e5.sh) compara ID de instancia, volúmenes, controles de estado, IP, SSH, Swarm, redes, réplicas y HTTP.
 
-`--force` redistribuye las tareas réplica a réplica, con `start-first`, sin cortar el servicio.
+**Comprobación.**
 
-| Momento | Qué se comprobó |
-| --- | --- |
-| 4 nov. 20:30–20:31 UTC | Preparación y referencia previa |
-| 4 nov. 20:51 UTC | Primer intento detenido por la denegación `voc-cancel-cred`, porque faltaba renovar las credenciales |
-| 5 nov. 08:43 UTC | Mismos ID y volúmenes raíz, controles `ok`, IP públicas distintas. SSH, Swarm con tres managers, redes, 4/4 y HTTP correctos. Servía aún el portal provisional |
-| 6 nov. 11:01 UTC | Tras otro reinicio, y ya con la web definitiva: las mismas instancias en el clúster, con otras IP públicas y 4/4 |
-| 9 nov. 08:33 UTC | Tras otro reinicio: mismas instancias, IP públicas nuevas y web en las cuatro IP. **Swarm no comprobado**, por falta de SSH |
-
-**Evidencias.**
+- **Reequilibrio:** aplicado en E4 con el portal provisional y en E6 con la web definitiva ([reincorporación](evidencias/prototipo/E5-worker-recuperado.txt) y [reparto](evidencias/prototipo/E5-reparto.txt)).
+- **Reinicio del 4 al 5 de noviembre:** mismos ID y volúmenes, controles `ok`, IP públicas distintas, y SSH, Swarm, redes, 4/4 y HTTP correctos ([antes](evidencias/E5-verificacion-previa.txt) y [después](evidencias/E5-verificacion-final.txt)).
+- **Reinicios del 6 y del 9 de noviembre:** el clúster volvió solo, con las mismas instancias y 4/4.
+- **Reinicio del 10 de noviembre:** las salidas sincronizadas de Terraform muestran los mismos ID con IP públicas nuevas. **Swarm no se ha comprobado** después de ese reinicio.
 
 ![Nodos y servicio tras el reinicio del laboratorio](evidencias/capturas-conformes/E5-estado.png)
 
-*Figura 44. Nodos y servicio tras el reinicio del laboratorio. Resultado: Tras reiniciar el laboratorio, las mismas instancias siguen
-en el clúster con 4/4. Autor: Claude Code, por encargo de Cristina (Lq922466). 2026-11-06, 11:01 UTC. Máquinas: codespaces-8d43b2 y manager-g5.*
+*Figura 42. Tras reiniciar el laboratorio, las mismas instancias siguen en el clúster con el servicio en 4/4. Captura conforme. Claude Code, por encargo de Cristina (Lq922466). 6 de noviembre de 2026. Máquinas: codespaces-8d43b2 y manager-g5. Es anterior a la corrección de C3.*
 
-[Preparación](evidencias/E5-preparacion.txt), [antes](evidencias/E5-verificacion-previa.txt),
-[intento interrumpido](evidencias/E5-verificacion-posterior.txt), [después](evidencias/E5-verificacion-final.txt) y
-[registro del 9 de noviembre](evidencias/auditoria/registro-2026-11-09.txt). La captura
-[E5-web-recuperado](evidencias/E5-web-recuperado.png) es del portal tras reincorporar un worker en E4, no tras reiniciar el
-laboratorio.
+### 5.7. E6: mantenimiento con modo drain
 
-### 5.6. E6: mantenimiento con modo drain (web definitiva)
-
-**Procedimiento.**
+**Procedimiento.** Dentro de `probar-orquestacion.sh`, en el manager:
 
 ```bash
-# Literal: dentro de probar-orquestacion.sh, en el manager.
 docker node update --availability drain worker3-g5
 docker node update --availability active worker3-g5
 docker service update --quiet --detach --force reto4_web
 ```
 
-**Explicación técnica.** `drain` retira un nodo para mantenimiento: Swarm traslada sus tareas a otros nodos y deja de asignarle nuevas,
-pero el nodo sigue en el clúster. Al volver a `active` puede recibir tareas, aunque Swarm no mueve las que ya funcionan. Por eso se
-fuerza el reequilibrio.
+**Explicación.** `drain` retira un nodo para mantenimiento: Swarm traslada sus tareas a otros nodos y deja de asignarle nuevas, pero el nodo sigue en el clúster. Al volver a `active` puede recibir tareas, aunque Swarm no mueve las que ya funcionan; por eso se fuerza el reequilibrio.
 
-Con worker3-g5 en Drain, su tarea migró a worker2-g5, con un reparto 1-1-2-0, y el servicio siguió en 4/4. Tras volver a Active, la
-actualización forzada dejó una réplica por nodo. Las sondas registraron 488 respuestas correctas y 0 fallos.
+![worker3-g5 en Drain](evidencias/F4-E6/terminal-e6-durante-drain.png)
 
-**Evidencias.**
+*Figura 43. Durante el mantenimiento: worker3-g5 en `Drain`, su tarea trasladada a worker2-g5 y el servicio en 4/4. Captura anterior: Claude Code, 5 de noviembre de 2026. No muestra el prompt ni el comentario de la norma. Capturas [antes](evidencias/F4-E6/terminal-e6-antes.png), [tras volver a Active](evidencias/F4-E6/terminal-e6-active.png) y [tras el reequilibrio](evidencias/F4-E6/terminal-e6-despues-force.png).*
 
-![Nodo en Drain y tarea migrada](evidencias/F4-E6/terminal-e6-durante-drain.png)
+**Comprobación.** Con worker3-g5 en `Drain`, el reparto fue 1-1-2-0 y el servicio siguió en 4/4. Tras volver a `Active` y forzar la actualización, quedó una réplica por nodo. Las sondas registraron **488 muestras correctas y 0 fallos** ([registro](evidencias/F4-E6/registro.txt)).
 
-*Figura 45. worker3-g5 en Drain. 5 de noviembre de 2026, 10:46 en Madrid. Captura: Claude Code. Máquina: manager-g5. No muestra el
-prompt que exige la norma.*
+### 5.8. E7: actualización de 1.0 a 2.0 sin corte y rollback
 
-[Registro, sondas y capturas antes, durante y después](evidencias/F4-E6/). **Pendiente:** capturas conformes.
-
-### 5.7. E7: actualización de 1.0 a 2.0 sin corte y rollback (web definitiva)
-
-**Procedimiento.**
+**Procedimiento.** Dentro de `probar-actualizacion.sh`, en el manager:
 
 ```bash
-# Literal: dentro de probar-actualizacion.sh, en el manager.
 docker service update --quiet --detach=false --image innnx/reto4-f1:2.0 reto4_web
 docker service rollback --quiet --detach=false reto4_web
 ```
 
-**Explicación técnica.** Con `update_config` (`parallelism: 1`, `order: start-first`), Swarm arranca una réplica 2.0, espera a que esté
-en marcha y solo entonces retira una 1.0, y así hasta cambiar las cuatro. Siempre hay réplicas sirviendo, y por eso no hay corte.
+**Explicación.** Con `update_config` (`parallelism: 1`, `order: start-first`), Swarm arranca una réplica 2.0, espera a que esté en marcha y solo entonces retira una 1.0, y así hasta cambiar las cuatro. Siempre hay réplicas sirviendo, y por eso no hay corte. `docker service rollback` vuelve a la configuración anterior con el mismo método; si la actualización hubiera fallado, `failure_action: rollback` habría vuelto atrás sola.
 
-`docker service rollback` vuelve a la configuración anterior del servicio con el mismo método. Si la actualización hubiera fallado,
-`failure_action: rollback` habría vuelto atrás automáticamente.
+**Comprobación.** El 5 de noviembre, la actualización y el rollback terminaron en 4/4 con la versión esperada en las cuatro IP. El navegador recorrió 6 páginas en la 2.0 y 5 en la 1.0, sin errores, y la página de estado de la 2.0 mostró la versión y la réplica. Las sondas registraron **620 muestras correctas y 0 fallos**, con respuestas de las dos versiones mientras convivían ([registro](evidencias/F3-actualizacion/registro.txt)).
 
-La actualización y el rollback terminaron en 4/4, con la versión esperada en las cuatro IP. El navegador recorrió 6 páginas en la 2.0
-y 5 en la 1.0, sin errores. La página de estado de la 2.0 mostró la versión y la réplica.
+![Web actualizada a la versión 2.0](evidencias/F3-actualizacion/web-actualizada-2.0-100.27.223.129.png)
 
-Las sondas registraron 620 respuestas correctas y 0 fallos, con respuestas de las dos versiones durante el cambio: unas 77 de la 1.0 y
-78 de la 2.0 por IP.
+*Figura 44. Después de la actualización: el pie de la portada muestra «Versión 2.0» y el enlace a la página de estado de la réplica. Captura anterior: Claude Code, 5 de noviembre de 2026, por la IP de manager-g5 de ese día. No muestra la dirección ni el comentario de la norma.*
 
-**Evidencias.** [Registro](evidencias/F3-actualizacion/registro.txt), [sondas y capturas por IP](evidencias/F3-actualizacion/) e
-[historial de tareas](evidencias/capturas-terminal/E7-historial-versiones.png), este último tomado después de la prueba.
-**Pendiente:** captura conforme durante la actualización, con la sonda y el navegador.
+![Web tras el rollback a la versión 1.0](evidencias/F3-actualizacion/web-rollback-1.0-100.27.223.129.png)
 
-### 5.8. E8: elección de un nuevo líder (portal provisional)
+*Figura 45. Después del rollback: la portada vuelve a la versión 1.0. Captura anterior: Claude Code, 5 de noviembre de 2026. No muestra la dirección ni el comentario de la norma.*
 
-**Procedimiento.**
+![Historial de tareas con las dos versiones](evidencias/capturas-terminal/E7-historial-versiones.png)
+
+*Figura 46. Historial de tareas de `reto4_web`: tareas `innnx/reto4-f1:2.0` en `Shutdown` y tareas 1.0 en `Running` tras el rollback. Captura anterior: Claude Code, 5 de noviembre de 2026. Máquina: manager-g5. No muestra el prompt ni el comentario de la norma.*
+
+> **Evidencia pendiente:** captura conforme **durante** la actualización, con la sonda mostrando respuestas de ambas versiones y el navegador.
+
+### 5.9. E8: elección de un nuevo líder
+
+**Procedimiento.** Prueba histórica del 4 de noviembre, hecha con Codex y con el **portal provisional**:
 
 ```bash
-# Deducido de la salida, el 4 de noviembre.
-docker node promote worker1-g5 worker2-g5                      # En manager-g5: tres managers.
-aws ec2 stop-instances --instance-ids i-0e6ebf2af63facc60      # Solo el líder.
-docker node ls                                                 # Desde worker1-g5, otro manager.
-aws ec2 start-instances --instance-ids i-0e6ebf2af63facc60
+docker node promote worker1-g5 worker2-g5                                       # En manager-g5: tres managers.
+aws ec2 stop-instances --region us-east-1 --instance-ids i-0e6ebf2af63facc60     # Detiene solo el líder.
+docker node ls                                                                  # Desde worker1-g5, otro manager.
+aws ec2 start-instances --region us-east-1 --instance-ids i-0e6ebf2af63facc60
 ```
 
-**Explicación técnica.** Los managers mantienen el estado del clúster con el algoritmo **Raft**. Con tres managers, la mayoría es dos.
-Si cae el líder, los otros dos siguen teniendo mayoría y eligen un líder nuevo. Por eso la Guía pide promover dos workers antes de
-apagar el líder.
+**Explicación.** Con tres managers, la mayoría de Raft es dos. Si cae el líder, los otros dos siguen teniendo mayoría y eligen un líder nuevo. Por eso la Guía pide promover dos workers antes de apagar el líder. El listado se hace «desde otro» manager, como pide la Rúbrica, porque el líder caído no puede responder.
 
-El listado se hace «desde otro» manager, como pide la Rúbrica, porque el líder caído no puede responder.
+**Comprobación.** Extractos de `docker node ls` tomados desde worker1-g5 ([registro](evidencias/E8-eleccion-registro.txt)):
 
-| Hora | Qué muestra el registro |
-| --- | --- |
-| 21:07:37, hora de Madrid | Tres managers, con manager-g5 como líder |
-| 21:14:38, hora de Madrid | Antes de la parada, visto desde worker1-g5: manager-g5 líder y 4/4 |
-| 20:14:37–20:15:14 UTC | Primer tramo de sonda: 38 respuestas correctas |
-| 20:15:14–20:15:48 UTC | **34 segundos sin muestras** |
-| 20:15:48–20:17:57 UTC | Segundo tramo de sonda: 130 respuestas correctas |
-| 21:15:50, hora de Madrid | Desde worker1-g5: **worker2-g5 es el líder**, manager-g5 está Ready/Reachable y el servicio en 4/4 |
-| 21:17:55, hora de Madrid | manager-g5 con IP pública nueva, 98.93.8.44, y activo como manager |
+```text
+ANTES
+xf46ytyuxo4bvn8lbxixhfhtv     manager-g5   Ready     Active         Leader           29.1.3
+m69w5hsyyyegwivfhoi8fbihd *   worker1-g5   Ready     Active         Reachable        29.1.3
+7zff6zyro5ir31bz19ozwmt4q     worker2-g5   Ready     Active         Reachable        29.1.3
 
-**Límites.**
+DESPUÉS DE LA PARADA Y LA REINCORPORACIÓN
+xf46ytyuxo4bvn8lbxixhfhtv     manager-g5   Ready     Active         Reachable        29.1.3
+m69w5hsyyyegwivfhoi8fbihd *   worker1-g5   Ready     Active         Reachable        29.1.3
+7zff6zyro5ir31bz19ozwmt4q     worker2-g5   Ready     Active         Leader           29.1.3
+```
 
-- No hay ninguna salida de `docker node ls` tomada durante la parada. La elección se demuestra comparando antes y después.
-- La parada del nodo se deduce de que cambió su IP pública: el registro no contiene `stopped`.
-- Hay 34 segundos sin muestras de sonda, y la URL sondeada no consta.
-- Solo se hizo con el portal provisional, y sin capturas de la consola.
+El liderazgo pasó de manager-g5 a **worker2-g5**, el servicio siguió en 4/4 y manager-g5 volvió como manager `Reachable`, con una IP pública nueva. La sonda registró 38 muestras correctas antes de la parada y 130 después, con **34 segundos sin muestras** entre ambos tramos (incidencia [I5.2](#510-incidencias-reales-y-soluciones)).
 
-[Análisis completo](evidencias/auditoria/E4-E8.md).
+**Límites.** No hay ninguna salida de `docker node ls` tomada **durante** la parada: la elección se demuestra comparando antes y después. La parada se deduce de que cambió la IP pública del manager, porque el registro no contiene `stopped`. No consta la URL sondeada. Las capturas web de [durante](evidencias/E8-web-parada.png) y [después](evidencias/E8-web-recuperado.png) no muestran IP, hora ni estado del clúster. [Análisis completo](evidencias/auditoria/E4-E8.md).
 
-**Evidencias.** [Registro](evidencias/E8-eleccion-registro.txt), [cuórum previo](evidencias/prototipo/E8-quorum-previo.txt),
-[elección](evidencias/prototipo/E8-eleccion.txt), [sonda del primer tramo](evidencias/prototipo/E8-http.txt),
-[recuperación](evidencias/prototipo/E8-recuperacion.txt), [sonda del segundo tramo](evidencias/prototipo/E8-http-recuperacion.txt),
-capturas web [durante](evidencias/E8-web-parada.png) y [después](evidencias/E8-web-recuperado.png), que no muestran IP, hora ni estado,
-y [comprobación posterior](evidencias/verificacion-posterior.txt). **Pendiente:** repetirla con la web definitiva y con captura desde
-otro manager durante la parada.
+**Relación con C3.** Esta prueba dejó tres managers, que se corrigieron el 9 de noviembre (apartado [3.4](#34-validación-de-los-nodos-y-de-sus-roles-c3)). Repetirla obliga a promover de nuevo dos workers, detener el líder y volver después a un solo manager.
 
-### Resultado y conclusión de la Fase 5
+> **Evidencia pendiente:** repetir E8 con la web definitiva, con una sonda continua y una captura conforme de `docker node ls` desde otro manager **durante** la parada, y restaurar C3 al terminar. Requiere autorización.
 
-| Prueba | Web | Resultado | Sondas | Situación |
+### 5.10. Incidencias reales y soluciones
+
+**I5.1. Dos tiempos de espera durante el escalado (E2)** · Estado: **pendiente de explicar**; no se repitió en las pruebas siguientes
+
+- *Síntomas:* durante la reducción de 12 a 2 réplicas, una muestra de la sonda de worker1-g5 y otra de la de worker3-g5 superaron el límite de 0,9 s, en el mismo segundo. Las muestras anterior y siguiente fueron correctas.
+- *Causa:* **no determinada.** Coincide con la retirada simultánea de diez réplicas, pero no hay datos para demostrarlo.
+- *Diagnóstico:* resumen de las sondas en el [registro](evidencias/F4-E2/registro.txt): 140 correctas y 1 fallo en esas dos IP, y 141 correctas en las otras dos. El registro termina con `exit=1` por esos fallos.
+- *Solución aplicada:* no se ocultaron. Se definió un criterio de supervisión para las pruebas siguientes: detener la prueba si una IP acumula tres fallos seguidos, si no se recuperan las réplicas o si alguna IP sigue fallando al terminar.
+- *Comprobación:* E3, E6 y E7 terminaron con 0 fallos. Son 2 de 564 muestras, y E2 no debe presentarse como prueba sin fallos.
+
+**I5.2. Treinta y cuatro segundos sin muestras en E8** · Estado: **pendiente**
+
+- *Síntomas:* la sonda de E8 tiene dos tramos separados por 34 segundos sin ninguna muestra, justo durante la parada del líder.
+- *Causa:* **no registrada.** La sonda se ejecutó en dos tramos, guardados en archivos distintos ([primero](evidencias/prototipo/E8-http.txt) y [segundo](evidencias/prototipo/E8-http-recuperacion.txt)), y no consta por qué se interrumpió.
+- *Diagnóstico:* comparación de las horas de la última muestra del primer tramo y la primera del segundo.
+- *Solución:* no puede corregirse sobre la prueba histórica. Solo la repetición de E8 con una sonda continua cerraría este hueco.
+- *Comprobación:* la elección del nuevo líder sí está demostrada comparando antes y después; la disponibilidad durante esos 34 segundos, no.
+
+**I5.3. Reparto desigual de réplicas tras el despliegue y el rollback** · Estado: **resuelta**
+
+- *Síntomas:* tras el despliegue y el rollback del 5 de noviembre, una réplica en manager-g5, otra en worker1-g5, dos en worker2-g5 y ninguna en worker3-g5.
+- *Causa:* Swarm coloca las tareas cuando las crea, y no mueve las que ya funcionan aunque un nodo quede libre.
+- *Diagnóstico:* `docker service ps --filter desired-state=running --format '{{.Node}}' reto4_web | sort | uniq -c` ([estado](evidencias/F3-estado-final.txt)).
+- *Solución aplicada:* `docker service update --force reto4_web`, dentro de E6.
+- *Comprobación:* una réplica por nodo al terminar E6 ([registro](evidencias/F4-E6/registro.txt)).
+
+**I5.4. Las comprobaciones podían dar falsos positivos** · Estado: **resuelta**
+
+- *Síntomas:* en la revisión del 9 de noviembre se vio que la sonda aceptaba como correcta cualquier respuesta HTTP 200, aunque fuera una página de error; que una sonda que hubiera muerto con su última muestra correcta no se detectaba; y que `verificar-despliegue.sh` aceptaba tareas que no estaban `Running` o respuestas de un solo contenedor.
+- *Causa:* las comprobaciones miraban el código HTTP y la imagen, pero no la identidad completa de la respuesta ni el estado de los procesos.
+- *Diagnóstico:* revisión del código y pruebas con datos simulados.
+- *Solución aplicada:* commit `9dab86d`: la sonda exige `version=1.0|2.0` y `contenedor=…`, el resumen comprueba que cada sonda sigue viva, y la verificación exige tareas `Running` y más de un contenedor. Se añadieron pruebas automáticas.
+- *Comprobación:* las 29 pruebas de `tests/` pasaron el 10 y el 18 de noviembre. Además, se revisaron los registros de las pruebas anteriores: las **2306 muestras correctas** de despliegue, E2, E3, E6 y E7 contienen todas la versión y el contenedor, así que sus resultados siguen siendo válidos.
+
+La verificación de E5 que se detuvo por credenciales revocadas se explica en la incidencia [I1.1](#115-incidencias-reales-y-soluciones).
+
+### 5.11. Posibles incidencias y soluciones
+
+| Síntoma o error | Causa probable | Diagnóstico | Solución |
+| --- | --- | --- | --- |
+| Las réplicas quedan en `Pending` al escalar | Falta memoria en los t3.small | `docker service ps reto4_web` y `docker node inspect --pretty NODO` | Reducir réplicas o liberar recursos |
+| Tras reincorporar un nodo, no recibe tareas | Swarm no mueve las tareas que funcionan | `docker service ps` | `docker service update --force reto4_web` |
+| La actualización se queda en `paused` | Falla el `HEALTHCHECK` de la versión nueva | `docker service inspect --format '{{json .UpdateStatus}}' reto4_web` | `docker service rollback reto4_web` y revisar la imagen |
+| El rollback no vuelve a la versión esperada | La configuración anterior no era la que se creía | `docker service inspect --pretty reto4_web` | Usar `docker service update --image innnx/reto4-f1:1.0` |
+| Al apagar el líder, el clúster no se puede gestionar | Solo hay un manager, o dos | `docker node ls` desde otro manager | Promover dos workers antes de E8 y volver a un manager después |
+| La sonda no muestra fallos, pero ha dejado de escribir | El proceso de la sonda ha muerto | `ps` y la hora de la última línea de la sonda | Usar las sondas actuales, que lo detectan |
+| No hay SSH tras parar y arrancar un nodo | Las IP públicas han cambiado | `ssh -G manager-g5 \| grep hostname` | `bash scripts/actualizar-ips.sh` |
+| El tráfico sigue llegando a un nodo caído | El routing mesh aún no lo ha marcado `Down` | `docker node ls` | Esperar unos segundos; las sondas lo registran |
+
+### 5.12. Resultado y conclusión de la Fase 5
+
+| Prueba | Web | Resultado | Muestras de la sonda | Estado |
 | --- | --- | --- | --- | --- |
-| E1 Balanceo | Definitiva | Cuatro contenedores distintos por cualquier IP, el 5, el 6 y el 9 de noviembre | — | Demostrado |
-| E2 Escalado | Definitiva | 8/8, 12/12, 2/2 y 4/4 | 562 correctas, 2 tiempos de espera aislados | Demostrado, con observación |
-| E3 Autorreparación | Definitiva | Contenedor eliminado y reemplazado, 4/4 | 308 correctas, 0 fallos | Demostrado |
-| E4 Caída de un worker | **Provisional** | `Down`, tarea reubicada y reincorporación | 164 correctas, 0 fallos | **Parcial** |
-| E5 Reincorporación y reinicio | Provisional y definitiva | Mismas instancias y discos, Swarm y servicio correctos tras cada reinicio comprobado | — | Demostrado |
-| E6 Drain | Definitiva | Tarea migrada, vuelta a Active y una réplica por nodo | 488 correctas, 0 fallos | Demostrado |
-| E7 Actualización y rollback | Definitiva | 1.0 → 2.0 → 1.0, en 4/4 | 620 correctas, 0 fallos | Demostrado |
-| E8 Elección de líder | **Provisional** | Líder nuevo, comparando antes y después | 38 y 130 correctas, con 34 s sin muestras | **Parcial** |
+| E1 Balanceo | Definitiva | Cuatro contenedores distintos por cualquier IP | — | Realizada |
+| E2 Escalado | Definitiva | 8/8, 12/12, 2/2 y 4/4 | 562 correctas y 2 tiempos de espera | Realizada, con fallos aislados |
+| E3 Autorreparación | Definitiva | Contenedor eliminado y reemplazado, 4/4 | 308 correctas, 0 fallos | Realizada |
+| E4 Caída de un worker | **Provisional** | `Down`, tarea reubicada y reincorporación | 164 correctas, 0 fallos | Histórica, parcial |
+| E5 Reincorporación y reinicio | Provisional y definitiva | Mismas instancias y clúster correcto tras cada reinicio comprobado | — | Realizada |
+| E6 Drain | Definitiva | Tarea trasladada, vuelta a Active y una réplica por nodo | 488 correctas, 0 fallos | Realizada |
+| E7 Actualización y rollback | Definitiva | 1.0 → 2.0 → 1.0, en 4/4 | 620 correctas, 0 fallos | Realizada |
+| E8 Nuevo líder | **Provisional** | Nuevo líder, comparando antes y después | 38 y 130 correctas, con 34 s sin muestras | Histórica, parcial |
 
-Swarm demostró balanceo, escalado, autorreparación, mantenimiento y actualización sin fallos en las muestras, con la web definitiva.
-E4 y E8, que detienen instancias, solo se hicieron con el portal provisional y sin capturas conformes. Repetirlos requiere
-autorización, y E4 es además la demostración que pide la exposición.
+Swarm demostró con la web definitiva el balanceo, el escalado, la autorreparación, el mantenimiento y la actualización con rollback, y tras cada reinicio del laboratorio el clúster volvió con las mismas instancias. Las sondas son muestras por segundo: en E2 hubo dos tiempos de espera sin causa determinada, y en E8 hay 34 segundos sin muestras. E4 y E8 solo se hicieron con el portal provisional.
 
-En todas las pruebas falta la serie de capturas conformes antes, durante y después con la sonda visible. Es la principal carencia
-de documentación de esta fase.
+La principal carencia de la fase es documental: faltan las capturas conformes antes, durante y después con la sonda visible, y repetir E4 y E8 con la web definitiva, con autorización.
 
-## Seguridad
+## Conclusión general
 
-Resumen de las medidas explicadas en cada fase:
+**Último estado técnico registrado.** Son los resultados del 9 y del 10 de noviembre de 2026. Desde entonces no se ha accedido a AWS ni al clúster, así que el estado actual debe comprobarse con `comprobar-laboratorio.sh` en cuanto se inicie el laboratorio.
 
-- **Credenciales de AWS.** Están solo en `~/.aws/credentials`, con permisos 600, fuera del repositorio. Se renuevan en cada sesión
-  (sección Learner Lab), y las capturas y registros ocultan el identificador de la cuenta.
-- **Secretos en Git.** `.gitignore` excluye estado, planes, variables, claves privadas y credenciales. La revisión de todo el historial
-  no encontró ninguno ([registro](evidencias/auditoria/registro-repositorio.txt) y Figura 7).
-- **Red.** El SSH externo se limita a una IP `/32`. Los puertos de Swarm y el ICMP se limitan al propio grupo de seguridad. A Internet
-  solo se abren el 80 y el 8080.
-- **SSH.** Solo con clave, sin root ni contraseña, con permisos 700 y 600 y con la huella de los servidores comprobada.
-- **Docker Hub.** La sesión se abre solo para publicar y se cierra siempre. El repositorio de imágenes es público, para descargar sin
-  credenciales.
-- **Web.** Se retiró una credencial de demostración del JavaScript antes de versionarlo, los formularios no envían datos, y la
-  construcción rechaza archivos con apariencia de secreto.
+- **Infraestructura (10 de noviembre).** Las cuatro instancias conservan sus ID, discos e IP privadas desde su creación. El estado de Terraform está sincronizado con AWS. El plan normal propone sustituir las instancias por una imagen Ubuntu nueva (I1.4), así que **no debe aplicarse** hasta fijar la imagen.
+- **Seguridad de red (9 de noviembre).** El grupo de seguridad aplica la política de mínimos. Además de la IP del Codespace, mantiene la regla temporal `88.14.93.201/32` para las pruebas pendientes de B1.
+- **SSH (9 de noviembre).** Las claves de los cuatro integrantes están en los cuatro nodos, sin root ni contraseñas. Cristina entró con la suya en los cuatro nodos; Enrique, Alexandra e Ibai, solo en manager-g5.
+- **Swarm (9 de noviembre).** manager-g5 es el único manager y líder, con tres workers activos, como pide la Guía. No se ha vuelto a comprobar tras el reinicio del laboratorio del 10 de noviembre.
+- **Web (9 de noviembre).** `reto4_web` en 4/4 con `innnx/reto4-f1:1.0`, HTTP 200 por las cuatro IP públicas y reparto entre los cuatro contenedores, según la última comprobación del 9 de noviembre.
 
-## Incidencias y soluciones
+**Situación por criterios de la Rúbrica.**
 
-| Incidencia | Solución o estado | Evidencia |
-| --- | --- | --- |
-| Docker pedía confirmación al retirar la red `ingress`, y la creación de `red-g5` falló con `AlreadyExists` | Se corrigió el script para confirmar la retirada | [Registro](evidencias/prototipo/fase2-3.txt) |
-| Credenciales de AWS rechazadas tras reiniciar el laboratorio (`voc-cancel-cred`) | Se renovaron y se completó E5 | [Intento](evidencias/E5-verificacion-posterior.txt) y [resultado](evidencias/E5-verificacion-final.txt) |
-| Cuatro páginas enlazaban a `#escuderias`, que no existía | Se añadió el destino y un validador de enlaces | Commit `bcfceee` |
-| Docker no puede ejecutarse en el Codespace, por falta de permisos del contenedor | Las imágenes se construyeron en manager-g5 | [Registro](evidencias/D1-imagenes-definitivas.txt) |
-| Docker Hub rechazó el primer token (`insufficient scopes`) | Se abrió una sesión nueva y se publicó | [Intento](evidencias/D1-publicacion-intento-fallido.txt) y [resultado](evidencias/D1-publicacion-dockerhub.txt) |
-| La regla SSH activa no tenía descripción, y el código sí, así que el plan de A6 incluía un segundo cambio | Se alineó el código con la regla real, sin tocarla, y se usó la IP vigente | [Plan descartado](evidencias/A6-plan-actual.txt) y [final](evidencias/A6-plan-final.txt) |
-| El portal provisional y la web definitiva responden `version=1.0` | La verificación comprueba la imagen de cada tarea | [Registro](evidencias/F3-despliegue/registro.txt) |
-| Reparto desigual tras el despliegue y el rollback | E6 terminó con una réplica por nodo | [Estado](evidencias/F3-estado-final.txt) y [E6](evidencias/F4-E6/registro.txt) |
-| Dos tiempos de espera aislados en E2 | Causa no determinada. Se acordó un criterio de supervisión para E3 y E6 | [Registro](evidencias/F4-E2/registro.txt) |
-| AWS y la web dejaron de responder a las 11:07 UTC del 5 de noviembre, y la IP del Codespace cambió | Resuelto el 6 de noviembre: credenciales renovadas y regla SSH sustituida por la IP vigente, con autorización | [Auditoría](evidencias/auditoria/INFORME.md) y [registro](evidencias/auditoria/registro-2026-11-06.txt) |
-| La IP del Codespace volvió a cambiar el 6 de noviembre, entre las 09:19 y las 10:27 UTC, y se perdió el SSH | Resuelto a las 10:50 UTC con nueva autorización: se añadió la regla, se comprobó SSH en los cuatro nodos y se retiró la antigua | [Registro](evidencias/auditoria/registro-2026-11-06.txt) |
-| La generación de capturas se quedó colgada en C2, porque `import` no encuentra una ventana con acento en el título | El identificador pasó a `C2-cluster`, el catálogo solo admite identificadores ASCII e `import` tiene un tiempo límite | [`capturas-norma.py`](scripts/capturas-norma.py) |
-| El verificador de capturas dio por correcta la de A6 con la salida vacía, porque encontró el patrón esperado en el propio comando | Se retiró esa captura y el verificador dejó de evaluar el comando escrito. Las demás capturas se reevaluaron con esa regla, sin ningún cambio de resultado | [`capturas-norma.py`](scripts/capturas-norma.py) |
-| La clave pública de Cristina llegó con un salto de línea de Windows | Se retiró sin cambiar la huella. No consta esta incidencia en las claves de Enrique, Alexandra o Ibai | [Registro de la incidencia](evidencias/auditoria/registro-2026-11-09-b1.txt) y [procedimiento de claves](entrega/PROCEDIMIENTO-CLAVES.md) |
-| 9 de noviembre: credenciales caducadas (`RequestExpired`) | Se renovaron, y AWS volvió a responder | [Registro](evidencias/auditoria/registro-2026-11-09.txt) |
-| 9 de noviembre: la IP del Codespace pasó a `172.166.151.114` y la regla admitía `172.166.151.115/32` | Resuelto a las 09:22 UTC, con autorización: se añadió la regla nueva, se comprobó SSH en los cuatro nodos y se retiró la antigua | [Registro](evidencias/auditoria/registro-2026-11-09-b1.txt) |
+- **A · Terraform:** A1, A4 y A5 cumplidos; A2 y A3 cumplidos, con la captura de la consola de EC2 pendiente; **A6 parcial** (plan sin cambios, destrucción y secuencia de capturas).
+- **B · SSH:** B2, B3, B4 y B5 cumplidos; **B1 parcial** (accesos de tres integrantes a los workers, capturas con comentario y política de `vockey`).
+- **C · Swarm:** C1, C2 y C4 cumplidos; **C3 corregido**, con la captura conforme pendiente.
+- **D · Web:** D1 y D2 cumplidos; D3 cumplido, con las capturas conformes pendientes.
+- **E · Orquestación:** E1, E2, E3, E5, E6 y E7 realizados con sus resultados reales; **E4 y E8 parciales**, por ser históricas con el portal provisional y, en E8, por los 34 segundos sin muestras.
+- **F · Repositorio y entorno:** F3–F9 y F12 cumplidos, con todo el proyecto en `main` y el diagrama actualizado; F1 cumplido, con el profesor (jc-csl) como colaborador y la captura de Settings pendiente; **F2 parcial**; **F10 parcial**, por las capturas pendientes; **F11 parcial**, porque [GESTION.md](GESTION.md) sigue en borrador; **F13 pendiente**.
+- **G · Exposición y defensa:** se evalúa el día de la exposición; el material está en [DEFENSA.md](entrega/DEFENSA.md).
 
-## Contraste con los 42 criterios de la Rúbrica
+**Evidencias pendientes.** Reunidas aquí para preparar la entrega:
 
-Valoración de **cómo está documentado** cada criterio en este informe, a 9 de noviembre. El estado técnico oficial de cada criterio
-es el de [REVISION.md](REVISION.md), que coincide con el [índice de evidencias](evidencias/INDICE.md).
+| Fase | Evidencia que falta | Qué debe mostrar | Criterio |
+| --- | --- | --- | --- |
+| 0 | Settings → Collaborators en el navegador | Cuentas de los integrantes y del profesor (jc-csl) | F1 |
+| 0 | Historial de `main` y lista de PR actualizados | Commits y PR de cada integrante desde su cuenta | F2 |
+| 0 | Vista del Codespace en el navegador (complementaria) | Codespace activo | F5 |
+| 1 | Panel de Learner Lab y consola de EC2 | Laboratorio en verde e instancias con tipos y etiquetas, sin la cuenta | A2 |
+| 1 | Reglas en la consola de EC2 | Reglas de entrada del grupo de seguridad | A3 |
+| 1 | Secuencia de A6 | `validate`, plan, cambio, plan con `No changes` y destrucción | A6 |
+| 1 | Extracto del `apply -refresh-only` y `terraform output` coincidiendo con EC2 | Sincronización del estado del 10 de noviembre | A5, A6 |
+| 1 | `comprobar-laboratorio.sh` con código 0 | Estado completo el día de la corrección | Todos |
+| 1 | Práctica individual previa | Documentación de cada integrante | F13 |
+| 2 | `B1-repositorio` | Las cuatro `.pub` en GitHub y las privadas excluidas | B1 |
+| 2 | Accesos a los workers de Enrique, Alexandra e Ibai, y `B1-registro-*` | Entrada con su clave en los cuatro nodos, con comentario, y registro de cada nodo | B1 |
+| 3 | `C3-nodos` actualizada | manager-g5 único `Leader` y tres workers `Ready/Active` | C3 |
+| 4 | D3 conformes | La web en el navegador por las cuatro IP del día, con comentario | D3 |
+| 5 | Capturas antes, durante y después con la sonda | E2, E3, E6 y E7 | E2, E3, E6, E7 |
+| 5 | Repetición de E4 | Caída de un worker con la web definitiva | E4 |
+| 5 | Repetición de E8 | `docker node ls` desde otro manager durante la parada, con sonda continua | E8 |
+| Exposición | Presentación actualizada | Las diapositivas 3, 5 y 6 y sus notas aún describen tres managers y las claves sin instalar | G1 |
 
-- **Bien documentado:** explicado, con procedimiento y con evidencia conforme a la norma.
-- **Necesita más:** explicado y con evidencia real, pero falta una captura conforme o complementaria, o una explicación.
-- **Sin evidencia suficiente:** el requisito no está demostrado, o la evidencia no lo cubre.
+**Decisiones pendientes, todas con autorización expresa:** fijar la imagen de Terraform (I1.4); el momento de la destrucción de A6, tras consultarlo con el profesor; la política de `vockey`; la retirada de la regla temporal cuando terminen las pruebas de B1; y la repetición de E4 y E8.
 
-| Criterio | Qué pide la Rúbrica | Estado en REVISION | Apartado | Documentación |
-| --- | --- | --- | --- | --- |
-| A1 | Proyecto organizado, con variables | Listo | 1.1, 1.2 | **Bien documentado** |
-| A2 | Manager + 3 workers definidos una vez; etiquetas | Demostrado, falta captura conforme | 1.5 | **Necesita más:** la Rúbrica pide la consola de EC2. Hay captura conforme de terminal |
-| A3 | Security group con política de mínimos | Demostrado, falta captura conforme | 1.4, L.10 | **Bien documentado.** Captura conforme de las reglas |
-| A4 | Script de arranque (hostname, zona, Docker, claves) | Demostrado, falta captura conforme | 1.6 | **Bien documentado.** Capturas conformes del script y del arranque |
-| A5 | Salidas con IP pública, privada e ID | Demostrado, falta captura conforme | 1.7 | **Bien documentado.** Captura conforme |
-| A6 | Pruebas clave: validación, plan, cambio, destrucción | Parcial | 1.8–1.10 | **Sin evidencia suficiente:** falta la destrucción y la secuencia en capturas |
-| B1 | Clave propia en 4 nodos; vockey sustituida | Parcial | 2.1, 2.2, 2.9 | **Necesita más:** las claves de los cuatro integrantes, instaladas en los 4 nodos, con captura conforme. Cristina entró en los cuatro nodos, y Enrique, Alexandra e Ibai en manager-g5, confirmado por el registro de cada nodo. Faltan el acceso de Enrique, Alexandra e Ibai a los workers, capturas con comentario, las claves en GitHub y aclarar `vockey` |
-| B2 | Archivo config SSH con nombre corto | Parcial | 2.5 | **Bien documentado.** Capturas conformes de la plantilla y de la conexión |
-| B3 | Control total, órdenes simultáneas y copia ficheros | Demostrado, falta captura conforme | 2.7, 2.8 | **Bien documentado.** Capturas conformes |
-| B4 | Sin contraseña ni root; permisos locales | Demostrado, falta captura conforme | 2.3, 2.4 | **Bien documentado.** Captura conforme |
-| B5 | Acceso a workers por IP privada (salto) | Demostrado, falta captura conforme | 2.6 | **Bien documentado.** Captura conforme |
-| C1 | Docker en 4 nodos; conectividad por IP privada | Demostrado, falta captura conforme | 3.1, 3.2 | **Bien documentado.** Captura conforme |
-| C2 | Clúster por IP privada; MTU ajustado (1450) | Demostrado, falta captura conforme | 3.3, 3.4 | **Necesita más:** falta aclarar la MTU de 1400 medida dentro de los contenedores |
-| C3 | 4 nodos activos, manager líder, 3 workers unidos | Parcial | 3.5 | **Sin evidencia suficiente:** hay tres managers. Corregirlo requiere autorización |
-| C4 | Red overlay propia para servicios | Demostrado, falta captura conforme | 3.4 | **Bien documentado.** Captura conforme |
-| D1 | Imagen propia (identifica contenedor); ver 1.0 y 2.0 | Listo | 4.2–4.6 | **Bien documentado** |
-| D2 | Servicio 4 réplicas, red grupo, políticas reinicio | Listo | 4.7 | **Bien documentado** |
-| D3 | Accesible por IP pública de los 4 nodos | Demostrado, falta captura conforme | 4.8 | **Necesita más:** las capturas de navegador no llevan comentario. Comprobado de nuevo por HTTP el 9 de noviembre |
-| E1 | Balanceo de carga | Demostrado, falta captura conforme | 5.1 | **Bien documentado.** Captura conforme |
-| E2 | Escalado (8, 12, 2) | Demostrado, falta captura conforme | 5.2 | **Necesita más:** capturas conformes con la sonda, y la causa de los dos tiempos de espera |
-| E3 | Autorreparación (eliminar contenedor) | Demostrado, falta captura conforme | 5.3 | **Necesita más:** capturas conformes antes y después |
-| E4 | Alta disponibilidad (caída worker) | Parcial | 5.4 | **Sin evidencia suficiente:** solo con el portal provisional y en texto |
-| E5 | Reincorporación y reequilibrio; reinicio lab | Demostrado, falta captura conforme | 5.5, L.1 | **Bien documentado.** Captura conforme tras el reinicio. Falta la vista de EC2 |
-| E6 | Mantenimiento (modo drain) | Demostrado, falta captura conforme | 5.6 | **Necesita más:** capturas conformes antes, durante y después |
-| E7 | Actualización (1.0 a 2.0) sin corte y rollback | Demostrado, falta captura conforme | 5.7 | **Necesita más:** captura conforme durante la actualización, con la sonda y el navegador |
-| E8 | Alta disp. managers (nuevo líder) | Parcial | 5.8 | **Sin evidencia suficiente:** provisional y sin listado durante la parada |
-| F1 | Privado, todos colaboradores, profesor invitado | Parcial | 0.1, 0.4 | **Sin evidencia suficiente:** falta confirmar al profesor y a los integrantes |
-| F2 | Commits repartidos y uso de Pull Requests por colaboradores | Parcial | 0.5 | **Sin evidencia suficiente:** una PR de Enrique, con su commit hecho desde la web. Faltan commits desde WSL o Git Bash de Enrique, Alexandra e Ibai, y las PR de Alexandra e Ibai. Ver las [instrucciones de F2](entrega/INSTRUCCIONES-F2-INTEGRANTES.md) |
-| F3 | README.md (resumen, instrucciones rápidas, enlaces) | Listo | [README](README.md) | **Bien documentado** |
-| F4 | Estructura (/terraform, /app, /config, y .devcontainer) | Listo | 0.3 | **Bien documentado** |
-| F5 | Entorno colaborativo: .devcontainer y capturas Codespace | Listo | 0.2 | **Bien documentado** |
-| F6 | Código Terraform funcional | Listo | Fase 1 | **Bien documentado** |
-| F7 | Scripts comentados | Listo | Todas las fases | **Bien documentado.** [Captura conforme](evidencias/capturas-conformes/F7-scripts.png) |
-| F8 | Mapa arquitectura propio | Listo | Arquitectura | **Bien documentado** |
-| F9 | proyecto.md: Informe extenso Fases 0-5 paso a paso | Parcial | Este informe | **Necesita más:** el informe cubre las Fases 0–5 paso a paso, pero depende de las capturas que faltan |
-| F10 | Capturas de evidencias (Fases 0-5) con normativa y comentadas | Parcial | Todas las fases | **Sin evidencia suficiente:** faltan capturas conformes en A2, A6, B1, D3, E2–E4, E6–E8 y Learner Lab |
-| F11 | Reparto tareas y reflexión | Parcial | [GESTION.md](GESTION.md) | **Sin evidencia suficiente:** borrador sin completar por el grupo |
-| F12 | Sin credenciales, claves ni estado de tf | Listo | 0.6, Seguridad | **Bien documentado** |
-| F13 | Documentación práctica individual | Pendiente | 1.1 | **Sin evidencia suficiente:** carpeta sin contenido |
-| G1 | Exposición (10 min): demo, arquitectura, código | Pendiente | [DEFENSA.md](entrega/DEFENSA.md) | No se acredita en el informe: se evalúa el día de la exposición |
-| G2 | Preguntas individuales a cualquier miembro | Pendiente | [DEFENSA.md](entrega/DEFENSA.md) | No se acredita en el informe |
-| G3 | Demostración técnica individual | Pendiente | [DEFENSA.md](entrega/DEFENSA.md) | No se acredita en el informe. Requiere laboratorio activo y SSH |
+**Conclusión.** El grupo ha construido una infraestructura completa y funcional: definida como código, administrada con claves propias, organizada como un clúster Swarm por IP privada y capaz de repartir la carga, escalar, recuperarse de fallos, mantener nodos y actualizarse sin cortes. Las incidencias más instructivas, como las credenciales temporales, las IP cambiantes, el estado de Terraform, la imagen `most_recent` o los roles de Swarm tras E8, se han diagnosticado y documentado con sus causas, y la mayoría están resueltas. Lo que queda es sobre todo evidencia: capturas conformes del estado actual, la participación propia de cada integrante en GitHub y en SSH, y las pruebas E4 y E8 con la web definitiva.
 
-**Resumen:**
+## Referencias y páginas web utilizadas
 
-| Valoración | Criterios |
-| --- | --- |
-| Bien documentados (21) | A1, A3, A4, A5, B2, B3, B4, B5, C1, C4, D1, D2, E1, E5, F3, F4, F5, F6, F7, F8 y F12 |
-| Necesitan más (9) | A2, B1, C2, D3, E2, E3, E6, E7 y F9 |
-| Sin evidencia suficiente (9) | A6, C3, E4, E8, F1, F2, F10, F11 y F13 |
-| Se evalúan en la exposición (3) | G1, G2 y G3 |
+### Documentos del profesor
 
-**Pendiente de actualizar en `REVISION.md`.** Desde el 6 de noviembre existen capturas conformes de A2–A5, B2–B5, C1–C4, D2, E1 y E5.
-`REVISION.md` todavía indica «falta captura conforme» en varios de ellos, y «Parcial» en B2. Antes de cambiar esos estados hay que
-subir las capturas a GitHub y revisar cada una.
+- *CLOUD Reto 4: Web en clúster Docker Swarm creado con Terraform sobre AWS* (Guía del Reto 4, 2.º ASIR). Documento original, no versionado.
+- *Rúbrica 2 ASIR CLOUD Reto 4*: 42 criterios en los bloques A a G. Documento original, no versionado. Contraste con el proyecto en [CONTRASTE-GUIA-RUBRICA.md](entrega/CONTRASTE-GUIA-RUBRICA.md).
 
-## Lo que no se ha demostrado
+### Servicios y páginas usados en el proyecto
 
-| Aspecto | Situación a 9 de noviembre |
-| --- | --- |
-| Destrucción con Terraform (A6) | No ejecutada. Requiere autorización aparte |
-| Claves individuales (B1) | Las de los cuatro integrantes, instaladas en los cuatro nodos el 9 de noviembre. No están en GitHub. Cristina entró con su clave en los cuatro nodos. Enrique, Alexandra e Ibai entraron en manager-g5, pero no en los workers. Regla temporal `88.14.93.201/32` abierta, que hay que retirar después |
-| Topología de C3 | Tres managers desde E8. Corregirla requiere autorización |
-| E4 y E8 con la web definitiva | No repetidas. Requiere autorización, porque detienen instancias |
-| Estado del clúster durante la parada de E8 | Sin registro |
-| Disponibilidad continua | Las sondas son muestras por segundo y, en E2, hubo dos tiempos de espera |
-| Estado actual de Swarm | Comprobado el 9 de noviembre a las 09:26 UTC: 4/4, con el líder en worker2-g5 y tres managers |
-| Capturas de la consola de AWS y de Learner Lab | No hay ninguna |
-| Cumplimiento de la Guía y la Rúbrica | Faltan capturas conformes y trabajo del grupo. [Contraste](entrega/CONTRASTE-GUIA-RUBRICA.md) |
+- GitHub y GitHub Codespaces: [github.com](https://github.com). Repositorio privado `Lq922466/reto4-cloud-G5`.
+- AWS Academy Learner Lab: [awsacademy.instructure.com](https://awsacademy.instructure.com/).
+- Comprobación de la IP pública de salida: [checkip.amazonaws.com](https://checkip.amazonaws.com/).
+- Imágenes del proyecto en Docker Hub: [hub.docker.com/r/innnx/reto4-f1](https://hub.docker.com/r/innnx/reto4-f1/tags).
+- Imagen base de Nginx: [hub.docker.com/_/nginx](https://hub.docker.com/_/nginx).
 
-## Entregables y exposición
+### Documentación técnica de consulta
 
-| Qué pide la Guía | Situación a 9 de noviembre |
-| --- | --- |
-| Repositorio privado, con el profesor antes de la fecha límite y commits y PR de todos | **Parcial:** privado y con una PR de Enrique. Falta el profesor, y commits y PR de Alexandra e Ibai |
-| `/.devcontainer` con evidencias del Codespace funcionando | **Cumple** |
-| `/terraform`: código, script de arranque y claves públicas | **Parcial:** las tres claves públicas están en `terraform/claves/`, pero pendientes de subir a GitHub |
-| `/app`: Dockerfile, código en sus dos versiones y script de despliegue | **Cumple** |
-| `/config`: plantilla SSH y configuraciones aplicadas | **Cumple** |
-| `/scripts`: comentados, con actualización de IP, comprobaciones y consultas | **Cumple** |
-| `/diagramas`: mapa de la arquitectura | **Cumple**, con la topología actual |
-| `/practica-individual`: práctica de prueba previa | **Pendiente** |
-| `README.md`, `PROYECTO.md` y `GESTION.md` | `README.md` listo. `PROYECTO.md` ampliado, con capturas por completar. `GESTION.md` en borrador |
-| Exposición: arquitectura, código, caída de nodo en directo y reparto de tareas | **Pendiente.** [Material preparado](entrega/DEFENSA.md) y [presentación](entrega/presentacion-cloud-g5.pptx) |
-| Individual: 2 o 3 preguntas y demostración técnica en vivo | **Pendiente** |
+- GitHub. [Introducción a los contenedores de desarrollo](https://docs.github.com/es/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/introduction-to-dev-containers) y [Dev Container Features](https://containers.dev/features).
+- GitHub. [Acerca de las solicitudes de incorporación de cambios](https://docs.github.com/es/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
+- AWS. [Archivos de configuración y credenciales de la AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html), [`sts get-caller-identity`](https://docs.aws.amazon.com/cli/latest/reference/sts/get-caller-identity.html), [`ec2 describe-instances`](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html) y [`ec2 authorize-security-group-ingress`](https://docs.aws.amazon.com/cli/latest/reference/ec2/authorize-security-group-ingress.html).
+- AWS. [Grupos de seguridad de Amazon EC2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html).
+- HashiCorp Terraform. [`count`](https://developer.hashicorp.com/terraform/language/meta-arguments/count), [`templatefile`](https://developer.hashicorp.com/terraform/language/functions/templatefile), [`terraform plan`, incluido el modo refresh-only](https://developer.hashicorp.com/terraform/cli/commands/plan) y [`terraform destroy`](https://developer.hashicorp.com/terraform/cli/commands/destroy).
+- Proveedor AWS de Terraform. [`aws_instance`](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance), [`aws_security_group`](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) y [`aws_ami`](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami).
+- [Documentación de cloud-init](https://cloudinit.readthedocs.io/en/latest/).
+- OpenSSH. [`ssh_config`](https://man.openbsd.org/ssh_config) y [`sshd_config`](https://man.openbsd.org/sshd_config).
+- Docker. [Conceptos clave de Swarm](https://docs.docker.com/engine/swarm/key-concepts/), [Raft en Swarm](https://docs.docker.com/engine/swarm/raft/), [administración de managers](https://docs.docker.com/engine/swarm/admin_guide/), [routing mesh e ingress](https://docs.docker.com/engine/swarm/ingress/) y [redes overlay](https://docs.docker.com/engine/network/drivers/overlay/).
+- Docker. [Modo drain](https://docs.docker.com/engine/swarm/swarm-tutorial/drain-node/), [actualizaciones progresivas](https://docs.docker.com/engine/swarm/swarm-tutorial/rolling-update/), [`deploy` en Compose](https://docs.docker.com/reference/compose-file/deploy/), [`docker stack deploy`](https://docs.docker.com/reference/cli/docker/stack/deploy/) y [referencia del Dockerfile](https://docs.docker.com/reference/dockerfile/).
 
-## Referencias
+### Documentos del repositorio
 
-[Criterios](REVISION.md) · [evidencias](evidencias/INDICE.md) · [capturas conformes](evidencias/capturas-conformes/INDICE.md) ·
-[capturas de terminal](evidencias/capturas-terminal/INDICE.md) · [auditoría](evidencias/auditoria/INFORME.md) ·
-[E4 y E8](evidencias/auditoria/E4-E8.md) · [gestión](GESTION.md) · [defensa](entrega/DEFENSA.md) ·
-[checklist](entrega/CHECKLIST-FINAL.md) · [contraste con la Guía y la Rúbrica](entrega/CONTRASTE-GUIA-RUBRICA.md) ·
-[procedimiento de capturas](entrega/PROCEDIMIENTO-CAPTURAS.md) · [procedimiento de claves](entrega/PROCEDIMIENTO-CLAVES.md) ·
-[plan de C3, E4 y E8](entrega/PLAN-C3-E4-E8.md) · [revisión de la documentación de Enrique](entrega/REVISION-ENRIQUE.md)
+[README](README.md) · [estado por criterio](REVISION.md) · [índice de evidencias](evidencias/INDICE.md) · [capturas conformes](evidencias/capturas-conformes/INDICE.md) · [capturas de los integrantes](evidencias/capturas-integrantes/INDICE.md) · [auditoría](evidencias/auditoria/INFORME.md) · [análisis de E4 y E8](evidencias/auditoria/E4-E8.md) · [gestión del grupo](GESTION.md) · [defensa](entrega/DEFENSA.md) · [checklist final](entrega/CHECKLIST-FINAL.md) · [procedimiento de capturas](entrega/PROCEDIMIENTO-CAPTURAS.md) · [procedimiento de claves](entrega/PROCEDIMIENTO-CLAVES.md) · [plan de C3, E4 y E8](entrega/PLAN-C3-E4-E8.md) · [tareas pendientes](entrega/PENDIENTES.md) · [instrucciones de F2](entrega/INSTRUCCIONES-F2-INTEGRANTES.md) · [informe anterior](entrega/historico/PROYECTO-2026-11-09.md) · [registro histórico de la revisión](entrega/historico/REVISION-2026-11-05.md)

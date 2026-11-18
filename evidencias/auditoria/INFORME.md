@@ -2,6 +2,10 @@
 
 Realizada por Claude Code el 5 de noviembre de 2026 y repetida en vivo el 6 de noviembre. No se ha modificado Swarm ni Terraform. En AWS, los únicos cambios son las dos sustituciones autorizadas de la regla SSH del 6 de noviembre.
 
+> **Informe histórico del 5 y 6 de noviembre.** Algunas conclusiones han cambiado después: las claves personales se instalaron el 9 de
+> noviembre, la topología de C3 se corrigió ese mismo día, el estado de Terraform se sincronizó el 10 de noviembre y todo el proyecto
+> está en `main` desde el 18. El estado vigente está en [REVISION.md](../../REVISION.md) y en [PROYECTO.md](../../PROYECTO.md).
+
 ## Repetición en vivo: 6 de noviembre de 2026
 
 Con el laboratorio activo y las credenciales renovadas, entre las 09:14 y las 09:19 UTC. [Registro completo](registro-2026-11-06.txt).

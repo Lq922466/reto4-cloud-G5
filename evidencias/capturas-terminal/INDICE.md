@@ -4,6 +4,10 @@ Capturas tomadas el 5 de noviembre de 2026 por Claude Code con `scripts/capturas
 para el informe de F9 y F10. Cada una es una imagen real de un terminal xterm en un escritorio
 virtual del Codespace, sin retocar, con los comandos reales. Todas usan comandos de lectura.
 
+> **Estado del 5 de noviembre.** Muestran la topología de ese día, con tres managers y worker1-g5 como
+> líder, y no tienen el prompt ni el comentario que exige la Guía. Las capturas que cumplen la norma
+> están en [capturas-conformes/](../capturas-conformes/INDICE.md).
+
 - **Fecha y máquina:** cada captura muestra el comando, `hostname` y `date -Is`. El Codespace
   usa UTC y los nodos, hora de Madrid (+01:00).
 - **Texto:** junto a cada imagen hay un `.txt` con la misma salida.

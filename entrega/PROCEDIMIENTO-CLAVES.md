@@ -3,7 +3,9 @@
 **Estado a 9 de noviembre, 10:44 UTC: las claves de los cuatro integrantes están instaladas en los cuatro nodos. Cristina ha entrado con la suya en los cuatro nodos, y Enrique, Alexandra e Ibai en manager-g5. Falta el acceso de Enrique, Alexandra e Ibai a los tres workers.**
 
 - **Autorización:** Cristina autorizó los cambios en AWS y en los nodos, que se hicieron por fases y comprobando cada una. [Registro completo](../evidencias/auditoria/registro-2026-11-09-b1.txt).
-- **Pendiente:** las tres claves públicas todavía no están en GitHub, y cada paso que cambia AWS, los nodos o GitHub sigue requiriendo autorización expresa de Cristina.
+- **Claves en GitHub:** las cuatro claves públicas se versionaron en `terraform/claves/` el 9 de noviembre (commit `a81b3d5`) y están en `main` desde el 18 de noviembre.
+- **Después de esta tabla:** ese mismo 9 de noviembre, Codex bajó los dos managers temporales de E8 y manager-g5 quedó como único manager y líder. El laboratorio se reinició el 10 de noviembre, así que las IP públicas de esta página ya no son las vigentes.
+- **Pendiente:** cada paso que cambia AWS, los nodos o GitHub sigue requiriendo autorización expresa de Cristina.
 
 | Hecho comprobado | Cuándo (UTC) | Resultado |
 | --- | --- | --- |
@@ -135,7 +137,7 @@ aws ec2 describe-security-groups --region us-east-1 --group-ids sg-0c12ecd538a29
   --query 'SecurityGroups[0].IpPermissions[?FromPort==`22`].IpRanges[].[CidrIp,Description]' --output text
 ```
 
-Mientras exista una regla temporal, `comprobar-laboratorio.sh` avisará de que sobra, y un plan de Terraform propondrá retirarla, porque las reglas están en `main.tf`. No se aplica ese plan. Las capturas A3 y A6 se hacen sin reglas temporales.
+Mientras exista una regla temporal, `comprobar-laboratorio.sh` avisará de que sobra. Desde el commit `9dab86d`, la regla se declara en `ssh_additional_cidrs`, en las variables privadas, así que el plan de Terraform ya no propone retirarla: el del 10 de noviembre no tenía cambios en el grupo de seguridad. Las capturas A3 y A6 se hacen sin reglas temporales.
 
 ### 3.3. Preparar el ordenador de cada integrante
 
@@ -175,12 +177,12 @@ ssh-keygen -lf "$env:TEMP\comprobar.pub"; Remove-Item "$env:TEMP\comprobar.pub"
 abiertos.
 
 **2. Configurar los alias.** Se añade al archivo de configuración de SSH: `~/.ssh/config` en Linux, WSL o Git Bash, y
-`C:\Users\USUARIO\.ssh\config` en Windows. Solo cambia `IdentityFile`. La IP del manager es la del 9 de noviembre: si el laboratorio
-se reinicia, cambia, y Cristina facilita la nueva, que está en [`config/ssh_config.aplicado`](../config/ssh_config.aplicado).
+`C:\Users\USUARIO\.ssh\config` en Windows. Solo cambian `IdentityFile` y la IP pública del manager, que es distinta en cada sesión del laboratorio: Cristina facilita la
+vigente, que también queda en [`config/ssh_config.aplicado`](../config/ssh_config.aplicado) después de ejecutar `actualizar-ips.sh`.
 
 ```text
 Host manager-g5
-    HostName 107.23.128.135
+    HostName IP_PUBLICA_DEL_MANAGER
     HostKeyAlias manager-g5
 
 Host worker1-g5
@@ -273,7 +275,7 @@ Con esto se generan las capturas `B1-registro-enrique`, `-alexandra` e `-ibai` (
 
 | Captura | Cuándo | Quién la hace | Qué acredita |
 | --- | --- | --- | --- |
-| `B1-repositorio` | Con las tres claves ya en GitHub | Claude Code | Las tres públicas están en la rama remota, en `/terraform`, y Git excluye las privadas |
+| `B1-repositorio` | Con las claves ya en GitHub (desde el 9 de noviembre) | Claude Code | Las cuatro públicas están en `main`, en `/terraform`, y Git excluye las privadas |
 | `B1-clave-nodos` | Tras instalar | Claude Code | Las tres huellas están en los cuatro nodos, junto con `vockey` y la clave del Codespace, con permisos 600. **Hecha el 9 de noviembre, con las cuatro claves: CORRECTO** ([captura](../evidencias/capturas-conformes/B1-clave-nodos.png)) |
 | `B1-acceso-enrique`, `-alexandra`, `-ibai` | Tras instalar y abrir su regla | **Cada integrante, nadie en su nombre** | Cada integrante entra en los cuatro nodos con su clave. **9 de noviembre: solo manager-g5 y sin comentario** ([capturas](../evidencias/capturas-integrantes/INDICE.md)) |
 | `B1-registro-manager` | Tras las pruebas en el manager | Claude Code | manager-g5 registra el acceso de cada integrante con su huella. **Hecha el 9 de noviembre, con los cuatro: CORRECTO** |
@@ -287,7 +289,7 @@ python3 -I scripts/capturas-norma.py --autor "Claude Code, por encargo de Cristi
 python3 -I scripts/capturas-norma.py --autor "Claude Code, por encargo de Cristina (Lq922466)" --solo '^B1-registro-alexandra$'
 ```
 
-Están probadas con transcripciones de prueba, incluidos casos que deben fallar, no contra los nodos ni contra GitHub. `B1-repositorio` hace `git fetch` y lee la rama remota, así que requiere que antes se autorice el commit y el push de las tres claves. `ubuntu` puede leer `/var/log/auth.log` sin `sudo` en los cuatro nodos, comprobado el 6 de noviembre. Las capturas `B1-registro-*` deben hacerse antes de que rote el registro.
+Están probadas con transcripciones de prueba, incluidos casos que deben fallar, no contra los nodos ni contra GitHub. `B1-repositorio` hace `git fetch` y lee la rama remota que sigue la rama local, que desde el 18 de noviembre es `origin/main`, donde ya están las cuatro claves. `ubuntu` puede leer `/var/log/auth.log` sin `sudo` en los cuatro nodos, comprobado el 6 de noviembre. Las capturas `B1-registro-*` deben hacerse antes de que rote el registro.
 
 ## Deshacer
 
@@ -304,6 +306,6 @@ done
 
 - **`vockey`.** Sigue activa, como dice la Guía, y la Rúbrica la da por sustituida. Hay que aclararlo con el profesor.
 - **Terraform.** Si se recrean los nodos, las claves no se instalarán solas mientras no estén en `ssh_public_keys`.
-- **Las pruebas de cada integrante.** Solo cuentan las que haga cada uno con su propia clave, en su propio equipo. A 9 de noviembre no se ha hecho ninguna.
-- **Retirar la regla temporal** `88.14.93.201/32` cuando terminen. Mientras exista, un plan de Terraform propondrá quitarla.
-- **Subir las claves a GitHub** para la captura `B1-repositorio`. Requiere autorizar el commit y el push.
+- **Las pruebas de cada integrante.** Solo cuentan las que haga cada uno con su propia clave, en su propio equipo. El 9 de noviembre, Cristina entró en los cuatro nodos, y Enrique, Alexandra e Ibai solo en manager-g5: faltan sus accesos a los tres workers.
+- **Retirar la regla temporal** `88.14.93.201/32` cuando terminen, con autorización, y quitarla también de `ssh_additional_cidrs`.
+- **La captura `B1-repositorio`**, con las cuatro claves en `main`.

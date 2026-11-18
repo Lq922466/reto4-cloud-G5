@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gran Premio de Euskadi de F1 - Inicio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==========================================================================
+         1. BARRA SUPERIOR (CONTADOR REGRESIVO)
+         ========================================================================== -->
+    <div class="contador-bar">
+        <span>Cuenta atras para el GP de Euskadi: </span>
+        <strong id="reloj-contador">Cargando...</strong>
+    </div>
+
+    <!-- ==========================================================================
+         2. CABECERA Y NAVEGACIÓN PRINCIPAL
+         ========================================================================== -->
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="img/logo_f1_bilbao.PNG" alt="Logo Gran Premio de Euskadi F1" class="logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li class="dropdown"><a href="#">La carrera</a>
+                    <ul class="submenu">
+                        <li><a href="#circuito">Circuito</a></li>
+                        <li><a href="#horarios">Horarios</a></li>
+                        <li><a href="#escuderias">Escuderias</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#">Bilbao</a>
+                    <ul class="submenu">
+                        <li><a href="#">Visitanos</a></li>
+                        <li><a href="#">Gastronomia</a></li>
+                        <li><a href="#">Alojamiento</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="entradas.html">Entradas</a>
+                    <ul class="submenu">
+                        <li><a href="entradas.html">Solo Carrera</a></li>
+                        <li><a href="acceso.html">Acceso Prensa</a></li>
+                    </ul>
+                </li>
+                <li><a href="sorteo.html">Sorteo Podio</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ==========================================================================
+         3. CONTENEDOR ESTRUCTURAL PRINCIPAL (GRID 2 COLUMNAS)
+         ========================================================================== -->
+    <div class="main-wrapper">
+
+        <!-- 3.1 BLOQUE PRINCIPAL IZQUIERDO (CONTENIDO DE LA PÁGINA) -->
+        <main class="bloque-principal">
+
+            <!-- Banner Hero Principal -->
+            <section class="banner-carrera">
+                <img src="img/gran_foto_carrera.jpg" alt="Carrera F1 en Bilbao" class="img-responsive">
+            </section>
+
+            <!-- Presentación General e Imágenes Resumen -->
+            <section class="info-carrera">
+                <h1>Gran Premio de Euskadi - Bilbao 2026</h1>
+                <p>El circuito urbano de Bilbao acoge la maxima competicion automovilistica mundial con un trazado espectacular junto a la ria, cruzando los puentes mas emblematicos y rodeando el Museo Guggenheim.</p>
+
+                <div class="fotos-resumen">
+                    <img src="img/mapa_circuito.jpg" alt="Mapa del circuito de Bilbao" class="img-thumb">
+                    <img src="img/resumen_circuito.PNG" alt="Mapa resumen del circuito" class="img-thumb">
+                </div>
+            </section>
+
+            <!-- Compromiso de Sostenibilidad / MR-ROBOT -->
+            <section class="mensaje-mr-robot">
+                <h2>Colaboracion con MR-ROBOT</h2>
+                <p>Colaboramos activamente con el grupo <strong>MR-ROBOT</strong> para promover la eliminacion paulatina de los motores de combustion tradicional y la transicion tecnologica hacia motores hibridos ecologicos y eficientes en la Formula 1.</p>
+            </section>
+
+            <!-- Datos Técnicos y Estadísticas del Circuito -->
+            <section id="circuito" class="seccion-destacada">
+                <h2>Ficha Tecnica del Circuito Urbano</h2>
+                <div class="grid-stats">
+                    <div class="stat-card">
+                        <span class="stat-numero">5.2 km</span>
+                        <span class="stat-etiqueta">Longitud del Trazado</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-numero">59</span>
+                        <span class="stat-etiqueta">Vueltas a la Carrera</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-numero">330 km/h</span>
+                        <span class="stat-etiqueta">Velocidad Maxima</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-numero">2</span>
+                        <span class="stat-etiqueta">Zonas de DRS</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Programa y Horarios Oficiales -->
+            <section id="horarios" class="seccion-destacada">
+                <h2>Programa Oficial del Evento</h2>
+                <div class="tabla-horarios-container">
+                    <table class="tabla-horarios">
+                        <thead>
+                            <tr>
+                                <th>Dia</th>
+                                <th>Sesion</th>
+                                <th>Hora Local (CET)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Viernes</td>
+                                <td>Entrenamientos Libres 1 (FP1)</td>
+                                <td>13:30 - 14:30</td>
+                            </tr>
+                            <tr>
+                                <td>Viernes</td>
+                                <td>Entrenamientos Libres 2 (FP2)</td>
+                                <td>17:00 - 18:00</td>
+                            </tr>
+                            <tr>
+                                <td>Sabado</td>
+                                <td>Entrenamientos Libres 3 (FP3)</td>
+                                <td>12:30 - 13:30</td>
+                            </tr>
+                            <tr>
+                                <td>Sabado</td>
+                                <td>Clasificacion Oficial (Q1 - Q3)</td>
+                                <td>16:00 - 17:00</td>
+                            </tr>
+                            <tr class="highlight-row">
+                                <td>Domingo</td>
+                                <td>GRAN PREMIO DE EUSKADI (Carrera)</td>
+                                <td>15:00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Cuadrícula de Noticias Recientes -->
+            <section class="seccion-destacada">
+                <h2>Ultimas Noticias</h2>
+                <div class="grid-noticias">
+                    <article class="card-noticia">
+                        <h3>Preparativos en la Ria de Bilbao</h3>
+                        <p>Los ingenieros completan el asfalto especial antideslizante cerca del puente de La Salve para garantizar la máxima adherencia.</p>
+                    </article>
+                    <article class="card-noticia">
+                        <h3>Venta de Entradas Registra Récord</h3>
+                        <p>Las gradas de la Tribuna Principal han agotado el 90% de su capacidad en las primeras 48 horas de apertura.</p>
+                    </article>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- 3.2 BARRA LATERAL (ASIDE) DE UTILIDADES Y WIDGETS -->
+        <aside class="aside-lateral">
+
+            <!-- 1. Galería / Carrusel Dinámico -->
+            <div class="carrusel-container">
+                <h3>Galeria</h3>
+                <div class="carrusel-box">
+                    <img id="carrusel-img" src="img/f1_bilbao1.jpg" alt="Carrusel F1 Bilbao">
+                    <p id="carrusel-titulo">Monoplaza cruzando el puente Bizkaia</p>
+                </div>
+            </div>
+
+            <!-- 2. Enlace a documentación FIA -->
+            <div class="normativa-box">
+                <h3>Normativa Oficial</h3>
+                <p>Reglamento técnico F1 2026:</p>
+                <a href="https://www.fia.com/sites/default/files/fia_2026_formula_1_technical_regulations_issue_8_-_2024-06-24.pdf" target="_blank" rel="noopener noreferrer" class="btn-download">Ver Documento FIA</a>
+
+            </div>
+
+            <!-- 3. Acceso Directo a Venta de Entradas -->
+            <div class="aside-card-cta">
+                <h3>Venta Oficial</h3>
+                <a href="entradas.html" class="btn-submit btn-block">Comprar Entradas</a>
+            </div>
+
+            <!-- 4. Clima y Estado de la Pista -->
+            <div class="aside-info-box">
+                <h3>Estado de Pista</h3>
+                <div class="pista-estado-content">
+                    <p><strong>Temperatura Ambiente:</strong> 18°C</p>
+                    <p><strong>Temperatura Asfalto:</strong> 24°C</p>
+                    <p><strong>Condiciones:</strong> Seco / Nublado</p>
+                    <p><strong>Humedad:</strong> 62%</p>
+                </div>
+            </div>
+
+            <!-- 5. Canal Oficial y Hashtag -->
+            <div class="aside-info-box">
+                <h3>Sigue el Gran Premio</h3>
+                <p class="social-hashtag">#GPEuskadi2026 #F1Bilbao</p>
+                <p class="aside-text-muted">Comparte tus fotos y vive la experiencia en directo con la comunidad oficial.</p>
+            </div>
+
+            <!-- 6. Top 3 Escuderías Favoritas -->
+            <div id="escuderias" class="aside-info-box">
+                <h3>Escuderías Destacadas</h3>
+                <ul class="aside-list-simple">
+                    <li><span>1. Scuderia Ferrari</span> <strong class="text-highlight">SF-26</strong></li>
+                    <li><span>2. Red Bull Racing</span> <strong class="text-highlight">RB22</strong></li>
+                    <li><span>3. Mercedes-AMG F1</span> <strong class="text-highlight">W17</strong></li>
+                </ul>
+            </div>
+
+            <!-- 7. Zonas de Adelantamiento (DRS) -->
+            <div class="aside-info-box">
+                <h3>Zonas DRS del Circuito</h3>
+                <div class="pista-estado-content">
+                    <p><strong>Zona 1:</strong> Recta Principal (Ría de Bilbao)</p>
+                    <p><strong>Zona 2:</strong> Puente de Euskalduna</p>
+                    <p class="aside-text-small">Detección a 100m antes de las curvas clave.</p>
+                </div>
+            </div>
+
+            <!-- 8. Estado de Aforo VIP -->
+            <div class="aside-info-box">
+                <h3>Aforo Zonas VIP</h3>
+                <div class="pista-estado-content">
+                    <p><strong>Paddock Club:</strong> <span class="text-danger">AGOTADO</span></p>
+                    <p><strong>Tribuna Principal:</strong> <span class="text-success">Últimas Plazas</span></p>
+                    <p><strong>Pelouse Ría:</strong> <span class="text-success">Disponible</span></p>
+                </div>
+            </div>
+
+            <!-- 9. Récord Histórico del Trazado -->
+            <div class="aside-info-box">
+                <h3>Récord del Trazado</h3>
+                <div class="pista-estado-content">
+                    <p><strong>Tiempo Estimado:</strong> 1:14.235</p>
+                    <p><strong>Piloto:</strong> Simulador Oficial F1</p>
+                    <p><strong>Año:</strong> 2026 (Gran Premio Inaugural)</p>
+                </div>
+            </div>
+
+        </aside>
+
+    </div> <!-- FIN DE MAIN-WRAPPER -->
+
+    <!-- ==========================================================================
+         4. SECCIÓN DE PATROCINADORES Y PARTNERS OFICIALES
+         ========================================================================== -->
+    <section class="patrocinadores-section">
+        <h2>Partners y Patrocinadores Oficiales</h2>
+        <div class="patrocinadores-grid">
+            <div class="sponsor-card">
+                <img src="img/sponsor_1_tech.png" alt="MR-ROBOT Tech" class="sponsor-img">
+            </div>
+            <div class="sponsor-card">
+                <img src="img/sponsor_2_bilbao.png" alt="Bilbao Udala" class="sponsor-img">
+            </div>
+            <div class="sponsor-card">
+                <img src="img/sponsor_3_guggenheim.png" alt="Guggenheim Bilbao" class="sponsor-img">
+            </div>
+            <div class="sponsor-card">
+                <img src="img/sponsor_4_euskadi.png" alt="Eusko Jaurlaritza - Basque Government" class="sponsor-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         5. PIE DE PÁGINA (FOOTER Y ENLACES SOCIALES)
+         ========================================================================== -->
+    <aside class="bloque-principal" aria-label="Información de despliegue">
+        <a href="/identidad.txt">Versión y réplica del portal</a>
+        <!-- RETO4_CLOUD_RELEASE -->
+    </aside>
+
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2026 Gran Premio de Euskadi F1. Todos los derechos reservados.</p>
+            <p>
+                <a href="#">Politica de Cookies</a> |
+                <a href="#">Privacidad</a> |
+                <a href="#">Aviso Legal</a>
+            </p>
+        </div>
+        <div class="redes-sociales">
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_twitter.png" alt="Twitter/X"></a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_instagram.png" alt="Instagram"></a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_facebook.png" alt="Facebook"></a>
+            <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer"><img src="img/icon_f1.png" alt="F1 Official"></a>
+        </div>
+    </footer>
+
+<script src="app.js" defer></script>
+
+</body>
+</html>

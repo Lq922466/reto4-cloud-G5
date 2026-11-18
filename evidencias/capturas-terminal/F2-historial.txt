@@ -1,0 +1,16 @@
+$ hostname; date -Is; git log --format='%h %an %ad %s' --date=short -n 12 | cut -c1-140; gh pr list --state all
+codespaces-8d43b2
+2026-11-05T09:52:04+00:00
+5e451f5 Innnx 2026-11-05 Aplica el criterio de supervisión de E3 y E6 y guarda el texto de las capturas
+63ccce7 Innnx 2026-11-05 Registra E2 con la web definitiva y las capturas D3 con la dirección visible
+3145f02 Innnx 2026-11-05 Separa E2, E3 y E6, fija el drain en worker3-g5 y añade capturas gráficas reales
+145b019 Innnx 2026-11-05 Registra el despliegue de la web definitiva, la actualización y el rollback
+5b5fc9c Innnx 2026-11-05 Añade sondas y navegador al despliegue y verifica la imagen de cada tarea
+3133592 Innnx 2026-11-05 Registra la publicación y descarga de las imágenes en Docker Hub
+51f71cf Innnx 2026-11-05 Registra la aplicación del cambio A6 y su verificación
+b44fb7a Innnx 2026-11-05 Registra el intento fallido de publicación en Docker Hub
+106ef76 Innnx 2026-11-05 Limita el plan A6 a la etiqueta y separa las fases de publicación y prueba
+319f86b Innnx 2026-11-05 Prepara despliegue final, plan A6 y cierre verificable de E5
+e1f92f4 Innnx 2026-11-05 Mejora el contraste de los enlaces del bloque de despliegue y añade la prueba en navegador
+bcfceee Innnx 2026-11-05 Corrige anclas de la web F1 y añade preparación verificable de imágenes
+1	RETO 4 CLOUD G5 — implementación, evidencias y revisión de entrega	cloud-g5-implementacion	DRAFT	2026-11-04T20:27:33Z

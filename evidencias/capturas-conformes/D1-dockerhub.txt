@@ -1,0 +1,10 @@
+# Evidencia D1-dockerhub · Criterio D1 · RETO 4 CLOUD, Grupo 5
+# Prueba: Etiquetas 1.0 y 2.0 en Docker Hub
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:23:12 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ curl -s 'https://hub.docker.com/v2/repositories/innnx/reto4-f1/tags/?page_size=10' | jq -r '.results|sort_by(.name)[]|[.name,.digest,.tag_status]|@tsv'
+1.0	sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca	active
+2.0	sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7	active
+[2026-11-05 12:23:12 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Docker Hub publica las dos etiquetas con los digests construidos.

@@ -1,0 +1,13 @@
+# Evidencia B3-copia · Criterio B3 · RETO 4 CLOUD, Grupo 5
+# Prueba: Copia de archivos con SHA-256 coincidente
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 09:18:41 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ d=$(mktemp -d); scp -q worker1-g5:/etc/hostname "$d/copia"; sha256sum "$d/copia"
+82af9653b25b4fc934586f55c05675cd80c914e8a68d7c4803a90e315738a2ec  /tmp/tmp.HGqyHih4RL/copia
+[2026-11-06 09:18:43 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+[2026-11-06 10:18:45 CET] ubuntu@worker1-g5:~$ sha256sum /etc/hostname
+82af9653b25b4fc934586f55c05675cd80c914e8a68d7c4803a90e315738a2ec  /etc/hostname
+[2026-11-06 10:18:45 CET] ubuntu@worker1-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. La copia por SCP tiene el mismo SHA-256 que el original. Solo se descarga: no se escribe en el nodo.

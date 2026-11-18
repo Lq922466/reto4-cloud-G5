@@ -1,0 +1,15 @@
+# Evidencia F12-seguridad · Criterio F12 · RETO 4 CLOUD, Grupo 5
+# Prueba: Sin credenciales, claves ni estado de Terraform
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:23:11 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ git ls-files | grep -Ei 'tfstate|tfplan|[.]pem$|[.]key$|ssh[.]local|[.]tfvars$'
+terraform/grupo.example.tfvars
+[2026-11-05 12:23:11 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ git check-ignore terraform/terraform.tfvars config/ssh.local
+terraform/terraform.tfvars
+config/ssh.local
+[2026-11-05 12:23:11 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ python3 scripts/revisar-secretos.py origin/main HEAD | tail -n 2
+Coincidencias: 0 []
+Archivos sensibles: []
+[2026-11-05 12:23:11 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Solo se versiona la plantilla de variables, y la revisión no encuentra secretos.

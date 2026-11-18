@@ -1,0 +1,13 @@
+# Evidencia F4-estructura · Criterio F4 · RETO 4 CLOUD, Grupo 5
+# Prueba: Estructura del repositorio
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-05 12:22:37 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ git branch --show-current
+cloud-g5-implementacion
+[2026-11-05 12:22:37 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ ls -d .devcontainer terraform app config scripts diagramas practica-individual
+.devcontainer  app  config  diagramas  practica-individual  scripts  terraform
+[2026-11-05 12:22:37 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ ls -p | tr '\n' ' '; echo
+GESTION.md PROYECTO.md README.md REVISION.md app/ config/ diagramas/ entrega/ evidencias/ practica-individual/ scripts/ terraform/ 
+[2026-11-05 12:22:37 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Existen las carpetas pedidas en la rama de implementación.

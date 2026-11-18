@@ -1,0 +1,25 @@
+$ hostname; date -Is; cat config/ssh.local; ssh -F config/ssh.local manager-g5 'hostname; date -Is'
+codespaces-8d43b2
+2026-11-05T09:52:53+00:00
+Host manager-g5
+    HostName 100.27.223.129
+
+Host worker1-g5
+    HostName 172.31.17.168
+
+Host worker2-g5
+    HostName 172.31.29.192
+
+Host worker3-g5
+    HostName 172.31.31.183
+
+Host worker?-g5
+    ProxyJump manager-g5
+
+Host manager-g5 worker?-g5
+    User ubuntu
+    IdentityFile ~/.ssh/reto4_g5
+    IdentitiesOnly yes
+    BatchMode yes
+manager-g5
+2026-11-05T10:52:54+01:00

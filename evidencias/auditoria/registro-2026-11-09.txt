@@ -1,0 +1,51 @@
+Registro de comprobaciones de solo lectura del 9 de noviembre de 2026.
+Autor: Claude Code, por encargo de Lq922466. Máquina: codespaces-8d43b2. No se ha modificado AWS, Terraform ni Docker Swarm.
+Los identificadores de cuenta se ocultan. No contiene credenciales.
+
+$ Antecedente, 07:44 UTC, antes de renovar las credenciales: bash scripts/comprobar-laboratorio.sh
+aws: [ERROR]: An error occurred (RequestExpired) when calling the DescribeInstances operation: Request has expired.
+AWS deniega la consulta. Iniciar Learner Lab y renovar ~/.aws/credentials.
+exit=3. Después, Lq922466 inició el laboratorio y facilitó credenciales nuevas, que se guardaron en ~/.aws/credentials, fuera del repositorio.
+
+$ bash scripts/comprobar-laboratorio.sh   # 2026-11-09 08:33:04 UTC
+Máquina: codespaces-8d43b2. Hora: 2026-11-09T08:33:04+00:00
+IP pública actual del Codespace: 172.166.151.114
+
+1. Instancias EC2
+manager-g5	i-0e6ebf2af63facc60	running	ok/ok	172.31.28.10	107.23.128.135	correcto
+worker1-g5	i-066a1ad3b7a8e0db9	running	ok/ok	172.31.17.168	3.87.79.9	correcto
+worker2-g5	i-0ed6d9c9957251a18	running	ok/ok	172.31.29.192	98.89.45.93	correcto
+worker3-g5	i-0446409b26cf0a662	running	ok/ok	172.31.31.183	54.243.27.22	correcto
+
+2. Regla SSH del grupo de seguridad reto4-cloud-g5
+Grupo: sg-0c12ecd538a29f8d6. Origen SSH actual: 172.166.151.115/32
+La regla debe limitarse a 172.166.151.114/32. Comandos propuestos, que NO se han ejecutado y requieren autorización:
+
+  aws ec2 authorize-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --protocol tcp --port 22 --cidr 172.166.151.114/32
+  aws ec2 revoke-security-group-ingress --region us-east-1 --group-id sg-0c12ecd538a29f8d6 --protocol tcp --port 22 --cidr 172.166.151.115/32
+
+Después, los planes de Terraform deben usar: -var ssh_cidr=172.166.151.114/32
+
+3. Web por las IP públicas
+107.23.128.135 HTTP 200 version=1.0 contenedor=0ec98a04e2fe 
+3.87.79.9 HTTP 200 version=1.0 contenedor=ab9d99e974f3 
+98.89.45.93 HTTP 200 version=1.0 contenedor=8fe417e51cad 
+54.243.27.22 HTTP 200 version=1.0 contenedor=ab9d99e974f3 
+
+4. SSH y Swarm, sin cambiar nada
+Sin acceso SSH a manager-g5 (107.23.128.135): ssh: connect to host 107.23.128.135 port 22: Connection timed out
+
+Resultado: falta corregir algo: ver arriba
+exit=2
+
+$ Routing mesh: 12 peticiones nuevas a /identidad.txt por cada IP pública, contadas por contenedor. 2026-11-09 08:33:19 UTC
+3.87.79.9: contenedor=0ec98a04e2fe×3 contenedor=14f1c80e3d64×3 contenedor=8fe417e51cad×3 contenedor=ab9d99e974f3×3
+54.243.27.22: contenedor=0ec98a04e2fe×3 contenedor=14f1c80e3d64×3 contenedor=8fe417e51cad×3 contenedor=ab9d99e974f3×3
+107.23.128.135: contenedor=0ec98a04e2fe×3 contenedor=14f1c80e3d64×3 contenedor=8fe417e51cad×3 contenedor=ab9d99e974f3×3
+98.89.45.93: contenedor=0ec98a04e2fe×3 contenedor=14f1c80e3d64×3 contenedor=8fe417e51cad×3 contenedor=ab9d99e974f3×3
+
+$ Puerto 8080 en cada IP pública. 2026-11-09 08:33:29 UTC
+3.87.79.9:8080 HTTP 000 código curl=7 (7 = conexión rechazada)
+54.243.27.22:8080 HTTP 000 código curl=7 (7 = conexión rechazada)
+107.23.128.135:8080 HTTP 000 código curl=7 (7 = conexión rechazada)
+98.89.45.93:8080 HTTP 000 código curl=7 (7 = conexión rechazada)

@@ -1,0 +1,36 @@
+# Evidencia B3-simultaneo · Criterio B3 · RETO 4 CLOUD, Grupo 5
+# Prueba: Órdenes simultáneas y control total
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 09:18:30 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ bash scripts/comprobar-ssh.sh
+manager-g5
+2026-11-06T10:18:31+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker2-g5
+2026-11-06T10:18:32+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker3-g5
+2026-11-06T10:18:32+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker1-g5
+2026-11-06T10:18:32+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+[2026-11-06 09:18:32 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+[2026-11-06 10:18:33 CET] ubuntu@manager-g5:~$ sudo -n true && echo permisos de sudo: correcto
+permisos de sudo: correcto
+[2026-11-06 10:18:33 CET] ubuntu@manager-g5:~$ exit
+exit
+[2026-11-06 10:18:35 CET] ubuntu@worker1-g5:~$ sudo -n true && echo permisos de sudo: correcto
+permisos de sudo: correcto
+[2026-11-06 10:18:35 CET] ubuntu@worker1-g5:~$ exit
+exit
+[2026-11-06 10:18:37 CET] ubuntu@worker2-g5:~$ sudo -n true && echo permisos de sudo: correcto
+permisos de sudo: correcto
+[2026-11-06 10:18:37 CET] ubuntu@worker2-g5:~$ exit
+exit
+[2026-11-06 10:18:40 CET] ubuntu@worker3-g5:~$ sudo -n true && echo permisos de sudo: correcto
+permisos de sudo: correcto
+[2026-11-06 10:18:40 CET] ubuntu@worker3-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. La misma orden se ejecuta a la vez en los cuatro nodos, y sudo funciona en todos.

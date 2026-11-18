@@ -1,0 +1,24 @@
+# Evidencia E1-balanceo · Criterio E1 · RETO 4 CLOUD, Grupo 5
+# Prueba: Balanceo de carga
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 10:31:05 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ for ip in $(aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].PublicIpAddress' --output text); do for i in 1 2 3 4; do printf '%s ' $ip; curl -s --max-time 5 http://$ip/identidad.txt | tr '\n' ' '; echo; done; done
+44.223.70.153 version=1.0 contenedor=a82fd8f9acf6 
+44.223.70.153 version=1.0 contenedor=086d98ef71bf 
+44.223.70.153 version=1.0 contenedor=2ecad652369a 
+44.223.70.153 version=1.0 contenedor=001c62c32ed0 
+52.54.92.153 version=1.0 contenedor=2ecad652369a 
+52.54.92.153 version=1.0 contenedor=001c62c32ed0 
+52.54.92.153 version=1.0 contenedor=a82fd8f9acf6 
+52.54.92.153 version=1.0 contenedor=086d98ef71bf 
+54.197.30.8 version=1.0 contenedor=2ecad652369a 
+54.197.30.8 version=1.0 contenedor=001c62c32ed0 
+54.197.30.8 version=1.0 contenedor=086d98ef71bf 
+54.197.30.8 version=1.0 contenedor=a82fd8f9acf6 
+3.91.64.124 version=1.0 contenedor=a82fd8f9acf6 
+3.91.64.124 version=1.0 contenedor=086d98ef71bf 
+3.91.64.124 version=1.0 contenedor=2ecad652369a 
+3.91.64.124 version=1.0 contenedor=001c62c32ed0 
+[2026-11-06 10:31:09 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Las peticiones por las cuatro IP reciben respuesta de contenedores distintos.

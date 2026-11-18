@@ -1,18 +1,39 @@
-# Terraform
+# Terraform: estado, planes, variables locales y datos de trabajo
 **/.terraform/
 *.tfstate
 *.tfstate.*
 *.tfplan
+*.plan
 *.tfvars
-crash.log
-crash.*.log
+!*.example.tfvars
+*.auto.tfvars.json
+crash*.log
 .terraformrc
 terraform.rc
 
-# SSH y credenciales
+# Claves y credenciales
 *.pem
 *.ppk
 *.key
+id_rsa*
+id_ed25519*
+!*.pub
+# Claves de los integrantes: en su carpeta solo se versionan las públicas, y la privada se excluye en cualquier ruta.
+*_reto4
+terraform/claves/*
+!terraform/claves/*.pub
 .ssh/
 .aws/
 credentials
+.env
+.env.*
+
+# Configuración SSH generada con las IP actuales
+config/ssh.local
+
+# Python
+__pycache__/
+
+# Documentos de trabajo y del profesor: no se versionan
+evidencias-locales/
+*.docx

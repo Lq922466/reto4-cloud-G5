@@ -1,0 +1,29 @@
+$ hostname; date -Is; stat -c '%a %n' ~/.ssh ~/.ssh/reto4_g5; for h in manager-g5 worker1-g5 worker2-g5 worker3-g5; do ssh -F config/ssh.local $h 'hostname; sudo sshd -T | grep -E "^(permitrootlogin|passwordauthentication|pubkeyauthentication) "; stat -c "%a %n" ~/.ssh ~/.ssh/authorized_keys'; done
+codespaces-8d43b2
+2026-11-05T09:53:10+00:00
+700 /home/vscode/.ssh
+600 /home/vscode/.ssh/reto4_g5
+manager-g5
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+worker1-g5
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+worker2-g5
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys
+worker3-g5
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+700 /home/ubuntu/.ssh
+600 /home/ubuntu/.ssh/authorized_keys

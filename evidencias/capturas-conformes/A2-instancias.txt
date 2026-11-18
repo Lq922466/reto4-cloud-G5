@@ -1,0 +1,25 @@
+# Evidencia A2-instancias · Criterio A2 · RETO 4 CLOUD, Grupo 5
+# Prueba: Instancias, tipos, etiquetas y controles
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 09:17:44 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].[Tags[?Key==`Name`]|[0].Value,InstanceType,State.Name,PrivateIpAddress,PublicIpAddress]' --output table
+=--------------------------------------------------------------------------
+|                            DescribeInstances                           |
++------------+------------+----------+-----------------+-----------------+
+|  worker1-g5|  t3.small  |  running |  172.31.17.168  |  44.223.70.153  |
+|  worker3-g5|  t3.small  |  running |  172.31.31.183  |  52.54.92.153   |
+|  manager-g5|  t3.medium |  running |  172.31.28.10   |  54.197.30.8    |
+|  worker2-g5|  t3.small  |  running |  172.31.29.192  |  3.91.64.124    |
++------------+------------+----------+-----------------+-----------------+
+>[2026-11-06 09:17:46 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ aws ec2 describe-instance-status --region us-east-1 --include-all-instances --instance-ids $(aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=manager-g5,worker?-g5' --query 'Reservations[].Instances[].InstanceId' --output text) --query 'InstanceStatuses[].[InstanceId,InstanceState.Name,SystemStatus.Status,InstanceStatus.Status]' --output table
+=------------------------------------------------
+|            DescribeInstanceStatus            |
++----------------------+----------+-----+------+
+|  i-0e6ebf2af63facc60 |  running |  ok |  ok  |
+|  i-0446409b26cf0a662 |  running |  ok |  ok  |
+|  i-0ed6d9c9957251a18 |  running |  ok |  ok  |
+|  i-066a1ad3b7a8e0db9 |  running |  ok |  ok  |
++----------------------+----------+-----+------+
+>[2026-11-06 09:17:48 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+
+# Resultado: CORRECTO. Un manager t3.medium y tres workers t3.small en ejecución y con los controles correctos.

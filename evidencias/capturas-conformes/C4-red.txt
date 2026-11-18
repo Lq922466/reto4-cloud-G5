@@ -1,0 +1,13 @@
+# Evidencia C4-red · Criterio C4 · RETO 4 CLOUD, Grupo 5
+# Prueba: Red overlay propia para servicios
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 12:00:58 CET] ubuntu@manager-g5:~$ docker network ls --filter driver=overlay
+NETWORK ID     NAME         DRIVER    SCOPE
+o3i22kpr3e9y   red-app-g5   overlay   swarm
+edrlfgm4rlaf   red-g5       overlay   swarm
+[2026-11-06 12:00:59 CET] ubuntu@manager-g5:~$ docker network inspect --format "{{.Name}} driver={{.Driver}} ingress={{.Ingress}} MTU={{index .Options \"com.docker.network.driver.mtu\"}}" red-app-g5
+red-app-g5 driver=overlay ingress=false MTU=1450
+[2026-11-06 12:00:59 CET] ubuntu@manager-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. Existe la red overlay propia red-app-g5, con MTU 1450.

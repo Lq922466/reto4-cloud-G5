@@ -1,0 +1,21 @@
+$ for h in manager-g5 worker1-g5 worker2-g5 worker3-g5; do ssh -F config/ssh.local $h 'hostname; date -Is; cloud-init status; timedatectl show -p Timezone --value; docker --version'; done
+manager-g5
+2026-11-05T10:52:21+01:00
+status: done
+Europe/Madrid
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker1-g5
+2026-11-05T10:52:24+01:00
+status: done
+Europe/Madrid
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker2-g5
+2026-11-05T10:52:26+01:00
+status: done
+Europe/Madrid
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker3-g5
+2026-11-05T10:52:29+01:00
+status: done
+Europe/Madrid
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2

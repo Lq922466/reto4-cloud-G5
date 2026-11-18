@@ -1,0 +1,11 @@
+$ ssh -F config/ssh.local manager-g5 'hostname; date -Is; docker image ls --format "{{.Repository}}:{{.Tag}} {{.ID}}" | grep -E "innnx|reto4-g5" | sort'; curl -s 'https://hub.docker.com/v2/repositories/innnx/reto4-f1/tags/?page_size=10' | jq -r '.results|sort_by(.name)[]|[.name,.digest]|@tsv'
+manager-g5
+2026-11-05T10:53:36+01:00
+innnx/reto4-f1:1.0 622d83436cb9
+innnx/reto4-f1:2.0 1736eda0abd6
+reto4-g5/f1-definitiva:1.0 622d83436cb9
+reto4-g5/f1-definitiva:2.0 1736eda0abd6
+reto4-g5/f1:1.0 01b33533fd6b
+reto4-g5/f1:2.0 64950fde0ed3
+1.0	sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+2.0	sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7

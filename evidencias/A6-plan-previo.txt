@@ -1,0 +1,7 @@
+Success! The configuration is valid.
+
+codespaces-8d43b2
+2026-11-04T20:32:03+00:00
+Plan: 0 to add, 1 to change, 0 to destroy.
+aws_instance.manager update
+Cambio previsto: etiqueta PruebaA6=reto4-g5; sin altas ni sustituciones.

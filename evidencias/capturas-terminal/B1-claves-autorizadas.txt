@@ -1,0 +1,17 @@
+$ for h in manager-g5 worker1-g5 worker2-g5 worker3-g5; do ssh -F config/ssh.local $h 'hostname; date -Is; ssh-keygen -lf ~/.ssh/authorized_keys'; done
+manager-g5
+2026-11-05T10:52:46+01:00
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker1-g5
+2026-11-05T10:52:48+01:00
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker2-g5
+2026-11-05T10:52:50+01:00
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)
+worker3-g5
+2026-11-05T10:52:52+01:00
+2048 SHA256:dSdE2bRgx+xf29ZBOfEM7wBA9wD8+++htV5P8ROuZ9c vockey (RSA)
+256 SHA256:+Z2k+zLsyhswZxNWG/HxbdnlEyyCFbiTPPUXSvUXT1Y reto4-g5-codespace (ED25519)

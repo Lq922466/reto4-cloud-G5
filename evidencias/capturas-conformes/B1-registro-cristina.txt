@@ -1,0 +1,21 @@
+# Evidencia B1-registro-cristina · Criterio B1 · RETO 4 CLOUD, Grupo 5
+# Prueba: Registro de cada nodo: acceso aceptado con la clave de Cristina
+# Autor: Claude Code, por encargo de Cristina (Lq922466) · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-09 11:43:52 CET] ubuntu@manager-g5:~$ grep -F 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'
+Nov  9 11:39:09 manager-g5 sshd[55623]: Accepted publickey for ubuntu from [IP oculta] port 50282 ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+[2026-11-09 11:43:52 CET] ubuntu@manager-g5:~$ exit
+exit
+[2026-11-09 11:43:55 CET] ubuntu@worker1-g5:~$ grep -F 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'
+Nov  9 11:37:36 worker1-g5 sshd[42931]: Accepted publickey for ubuntu from [IP oculta] port 36158 ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+[2026-11-09 11:43:55 CET] ubuntu@worker1-g5:~$ exit
+exit
+[2026-11-09 11:43:58 CET] ubuntu@worker2-g5:~$ grep -F 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'
+Nov  9 11:38:23 worker2-g5 sshd[43367]: Accepted publickey for ubuntu from [IP oculta] port 43882 ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+[2026-11-09 11:43:58 CET] ubuntu@worker2-g5:~$ exit
+exit
+[2026-11-09 11:44:01 CET] ubuntu@worker3-g5:~$ grep -F 'SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA' /var/log/auth.log | tail -n 1 | sed -E 's/from [0-9.]+/from [IP oculta]/'
+Nov  9 11:39:16 worker3-g5 sshd[48837]: Accepted publickey for ubuntu from [IP oculta] port 55764 ssh2: ED25519 SHA256:CCR0qvMqSW8DopOop+RzmuWU7lu/USgKep7m+2fN5zA
+[2026-11-09 11:44:01 CET] ubuntu@worker3-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. Cada nodo registra un acceso aceptado con la clave de Cristina, que antes hace su propia prueba.

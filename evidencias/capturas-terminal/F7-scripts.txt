@@ -1,0 +1,22 @@
+$ hostname; date -Is; ls -l scripts
+codespaces-8d43b2
+2026-11-05T09:52:03+00:00
+total 84
+-rw-rw-rw- 1 vscode vscode 3029 Nov  5 09:44 capturar-pantalla.sh
+-rw-rw-rw- 1 vscode vscode 7477 Nov  5 09:52 capturas-terminal.sh
+-rw-rw-rw- 1 vscode vscode 2061 Nov  5 08:52 comprobar-descarga.sh
+-rw-rw-rw- 1 vscode vscode  421 Nov  5 08:32 comprobar-ssh.sh
+-rw-rw-rw- 1 vscode vscode 2881 Nov  5 08:38 comprobar-web.py
+-rw-rw-rw- 1 vscode vscode 1444 Nov  5 08:32 configurar-red-swarm.sh
+-rw-rw-rw- 1 vscode vscode 1997 Nov  5 09:19 desplegar-f1.sh
+-rw-rw-rw- 1 vscode vscode 1558 Nov  5 08:32 formar-swarm.sh
+-rw-rw-rw- 1 vscode vscode  857 Nov  5 08:32 generar-config-ssh.sh
+-rw-rw-rw- 1 vscode vscode 3185 Nov  5 09:44 lib-sondas.sh
+-rw-rw-rw- 1 vscode vscode 2967 Nov  5 08:39 preparar-imagenes.sh
+-rw-rw-rw- 1 vscode vscode 1269 Nov  5 09:19 probar-actualizacion.sh
+-rw-rw-rw- 1 vscode vscode 4068 Nov  5 08:42 probar-navegador.py
+-rw-rw-rw- 1 vscode vscode 7665 Nov  5 09:44 probar-orquestacion.sh
+-rw-rw-rw- 1 vscode vscode 1608 Nov  5 08:52 publicar-imagenes.sh
+-rw-rw-rw- 1 vscode vscode  453 Nov  5 08:32 sondear-web.sh
+-rw-rw-rw- 1 vscode vscode 2468 Nov  5 09:33 verificar-despliegue.sh
+-rw-rw-rw- 1 vscode vscode 4449 Nov  5 08:32 verificar-e5.sh

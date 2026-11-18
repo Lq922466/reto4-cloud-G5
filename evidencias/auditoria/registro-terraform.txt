@@ -1,0 +1,38 @@
+Terraform, solo lectura. codespaces-8d43b2. 2026-11-05T11:08:04+00:00.
+
+$ terraform validate
+Success! The configuration is valid.
+
+
+$ terraform fmt -check -recursive
+exit=0
+
+$ terraform plan -detailed-exitcode -var ssh_cidr=172.166.156.160/32 (la regla SSH vigente en AWS)
+- Deprecated flag: -state
+Error: reading EC2 AMIs: operation error EC2: DescribeImages, https response error StatusCode: 403, RequestID: …, api error UnauthorizedOperation: You are not authorized to perform this operation. User: [identificador enmascarado] is not authorized to perform: ec2:DescribeImages with an explicit deny in an identity-based policy: [identificador enmascarado]
+Error: reading EC2 VPC: operation error EC2: DescribeVpcs, https response error StatusCode: 403, RequestID: …, api error UnauthorizedOperation: You are not authorized to perform this operation. User: [identificador enmascarado] is not authorized to perform: ec2:DescribeVpcs with an explicit deny in an identity-based policy: [identificador enmascarado]
+exit=1 (0 = sin cambios)
+
+$ terraform output nodes
+{
+  "manager-g5" = {
+    "id" = "i-0e6ebf2af63facc60"
+    "private_ip" = "172.31.28.10"
+    "public_ip" = "100.27.223.129"
+  }
+  "worker1-g5" = {
+    "id" = "i-066a1ad3b7a8e0db9"
+    "private_ip" = "172.31.17.168"
+    "public_ip" = "34.230.4.20"
+  }
+  "worker2-g5" = {
+    "id" = "i-0ed6d9c9957251a18"
+    "private_ip" = "172.31.29.192"
+    "public_ip" = "23.22.135.121"
+  }
+  "worker3-g5" = {
+    "id" = "i-0446409b26cf0a662"
+    "private_ip" = "172.31.31.183"
+    "public_ip" = "98.81.203.125"
+  }
+}

@@ -1,0 +1,37 @@
+# Evidencia A4-arranque · Criterio A4 · RETO 4 CLOUD, Grupo 5
+# Prueba: Resultado del arranque en los cuatro nodos
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 10:18:05 CET] ubuntu@manager-g5:~$ cloud-init status
+status: done
+[2026-11-06 10:18:05 CET] ubuntu@manager-g5:~$ timedatectl show -p Timezone --value
+Europe/Madrid
+[2026-11-06 10:18:05 CET] ubuntu@manager-g5:~$ docker --version
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+[2026-11-06 10:18:05 CET] ubuntu@manager-g5:~$ exit
+exit
+[2026-11-06 10:18:08 CET] ubuntu@worker1-g5:~$ cloud-init status
+status: done
+[2026-11-06 10:18:08 CET] ubuntu@worker1-g5:~$ timedatectl show -p Timezone --value
+Europe/Madrid
+[2026-11-06 10:18:08 CET] ubuntu@worker1-g5:~$ docker --version
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+[2026-11-06 10:18:08 CET] ubuntu@worker1-g5:~$ exit
+exit
+[2026-11-06 10:18:11 CET] ubuntu@worker2-g5:~$ cloud-init status
+status: done
+[2026-11-06 10:18:11 CET] ubuntu@worker2-g5:~$ timedatectl show -p Timezone --value
+Europe/Madrid
+[2026-11-06 10:18:11 CET] ubuntu@worker2-g5:~$ docker --version
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+[2026-11-06 10:18:12 CET] ubuntu@worker2-g5:~$ exit
+exit
+[2026-11-06 10:18:14 CET] ubuntu@worker3-g5:~$ cloud-init status
+status: done
+[2026-11-06 10:18:14 CET] ubuntu@worker3-g5:~$ timedatectl show -p Timezone --value
+Europe/Madrid
+[2026-11-06 10:18:14 CET] ubuntu@worker3-g5:~$ docker --version
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+[2026-11-06 10:18:14 CET] ubuntu@worker3-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. En los cuatro nodos terminó cloud-init, con zona Europe/Madrid y Docker.

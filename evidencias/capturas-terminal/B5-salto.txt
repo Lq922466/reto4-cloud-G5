@@ -1,0 +1,12 @@
+$ hostname; date -Is; ssh -F config/ssh.local -G worker1-g5 | grep -E '^(hostname|proxyjump|user) '; for h in worker1-g5 worker2-g5 worker3-g5; do ssh -F config/ssh.local $h 'hostname; hostname -I'; done
+codespaces-8d43b2
+2026-11-05T09:53:17+00:00
+user ubuntu
+hostname 172.31.17.168
+proxyjump manager-g5
+worker1-g5
+172.31.17.168 172.18.0.1 172.17.0.1 
+worker2-g5
+172.31.29.192 172.17.0.1 172.18.0.1 
+worker3-g5
+172.31.31.183 172.18.0.1 172.17.0.1 

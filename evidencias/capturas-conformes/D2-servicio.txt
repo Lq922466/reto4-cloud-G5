@@ -1,0 +1,44 @@
+# Evidencia D2-servicio · Criterio D2 · RETO 4 CLOUD, Grupo 5
+# Prueba: Servicio de cuatro réplicas
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 11:01:00 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ cat app/stack.yml
+services:
+  web:
+    image: "${WEB_IMAGE}"
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: ingress
+    networks:
+      - red-app-g5
+    deploy:
+      replicas: 4
+      restart_policy:
+        condition: any
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      rollback_config:
+        parallelism: 1
+        order: start-first
+
+networks:
+  red-app-g5:
+    external: true
+[2026-11-06 11:01:00 UTC] vscode@codespaces-8d43b2:/workspaces/reto4-cloud-G5$ exit
+exit
+[2026-11-06 12:01:01 CET] ubuntu@manager-g5:~$ docker service ls
+ID             NAME        MODE         REPLICAS   IMAGE                PORTS
+yzxg8z52dukm   reto4_web   replicated   4/4        innnx/reto4-f1:1.0   *:80->80/tcp
+[2026-11-06 12:01:01 CET] ubuntu@manager-g5:~$ docker service ps --filter desired-state=running reto4_web
+ID             NAME          IMAGE                NODE         DESIRED STATE   CURRENT STATE         ERROR     PORTS
+g7n4ldkgzyra   reto4_web.1   innnx/reto4-f1:1.0   manager-g5   Running         Running 2 hours ago             
+spg6w1gqo36z   reto4_web.2   innnx/reto4-f1:1.0   worker1-g5   Running         Running 2 hours ago             
+5b8d62iqkzp4   reto4_web.3   innnx/reto4-f1:1.0   worker2-g5   Running         Running 2 hours ago             
+ptucr7yqvbrv   reto4_web.4   innnx/reto4-f1:1.0   worker3-g5   Running         Running 2 hours ago             
+[2026-11-06 12:01:01 CET] ubuntu@manager-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. El servicio tiene cuatro réplicas, la red del grupo y política de reinicio.

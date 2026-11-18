@@ -1,0 +1,78 @@
+===== Estado final de la fase 3 =====
+codespaces-8d43b2
+2026-11-05T09:24:50+00:00
+
+$ docker node ls; docker service ls; docker service ps
+manager-g5
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Leader
+worker2-g5 Ready Active Reachable
+worker3-g5 Ready Active 
+reto4_web réplicas=4/4 imagen=innnx/reto4-f1:1.0@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+reto4_web.1 innnx/reto4-f1:1.0 manager-g5 Running about a minute ago
+reto4_web.2 innnx/reto4-f1:1.0 worker2-g5 Running about a minute ago
+reto4_web.3 innnx/reto4-f1:1.0 worker2-g5 Running about a minute ago
+reto4_web.4 innnx/reto4-f1:1.0 worker1-g5 Running about a minute ago
+
+$ IP públicas actuales en EC2
+34.230.4.20 HTTP 200
+98.81.203.125 HTTP 200
+100.27.223.129 HTTP 200
+23.22.135.121 HTTP 200
+
+12 peticiones, todas en versión 1.0. Respuestas por contenedor:
+      4 contenedor=223aad67af29
+      3 contenedor=600224b00926
+      2 contenedor=6a47012a76e8
+      3 contenedor=fd3d084dfe42
+exit=0
+
+$ docker service inspect (estado de la última actualización y configuración)
+UpdateStatus=rollback_completed (rollback completed)
+Réplicas=4
+Update: paralelismo=1 orden=start-first fallo=rollback
+Rollback: paralelismo=1 orden=start-first
+
+$ Tareas en ejecución por nodo
+      1 manager-g5
+      1 worker1-g5
+      2 worker2-g5
+
+$ Imágenes conservadas en cada nodo
+manager-g5
+innnx/reto4-f1:1.0 622d83436cb9
+innnx/reto4-f1:2.0 1736eda0abd6
+reto4-g5/f1-definitiva:1.0 622d83436cb9
+reto4-g5/f1-definitiva:2.0 1736eda0abd6
+reto4-g5/f1:1.0 01b33533fd6b
+reto4-g5/f1:2.0 64950fde0ed3
+  entradas de Docker Hub: 0
+0
+worker1-g5
+innnx/reto4-f1:1.0 622d83436cb9
+innnx/reto4-f1:2.0 1736eda0abd6
+reto4-g5/f1:1.0 01b33533fd6b
+reto4-g5/f1:2.0 64950fde0ed3
+  entradas de Docker Hub: 0
+worker2-g5
+innnx/reto4-f1:1.0 622d83436cb9
+innnx/reto4-f1:2.0 1736eda0abd6
+reto4-g5/f1:1.0 01b33533fd6b
+reto4-g5/f1:2.0 64950fde0ed3
+  entradas de Docker Hub: 0
+worker3-g5
+innnx/reto4-f1:1.0 622d83436cb9
+innnx/reto4-f1:2.0 1736eda0abd6
+reto4-g5/f1:1.0 01b33533fd6b
+reto4-g5/f1:2.0 64950fde0ed3
+  entradas de Docker Hub: 0
+
+$ aws ec2 describe-instances
+manager-g5	i-0e6ebf2af63facc60	running	100.27.223.129
+worker1-g5	i-066a1ad3b7a8e0db9	running	34.230.4.20
+worker2-g5	i-0ed6d9c9957251a18	running	23.22.135.121
+worker3-g5	i-0446409b26cf0a662	running	98.81.203.125
+
+$ Captura completa de la portada (Chromium sin interfaz)
+Contador: 31 días, 4h : 33m : 20s
+Captura completa: http://100.27.223.129/index.html 2026-11-05T09:26:40+00:00

@@ -1,0 +1,6 @@
+$ hostname; date -Is; d=$(mktemp -d); scp -F config/ssh.local worker1-g5:/etc/hostname "$d/hostname-worker1"; sha256sum "$d/hostname-worker1"; ssh -F config/ssh.local worker1-g5 'hostname; sha256sum /etc/hostname'; rm -rf -- "$d"
+codespaces-8d43b2
+2026-11-05T09:53:05+00:00
+82af9653b25b4fc934586f55c05675cd80c914e8a68d7c4803a90e315738a2ec  /tmp/tmp.jSJ6fGW9by/hostname-worker1
+worker1-g5
+82af9653b25b4fc934586f55c05675cd80c914e8a68d7c4803a90e315738a2ec  /etc/hostname

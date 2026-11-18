@@ -1,0 +1,9 @@
+2026-11-04T20:51:53+00:00
+E5: comprobación posterior al reinicio confirmado
+codespaces-8d43b2
+2026-11-04T20:51:56+00:00
+
+$ aws ec2 describe-instance-status (us-east-1)
+
+AWS EC2 DescribeInstanceStatus: UnauthorizedOperation. Denegación explícita de la política voc-cancel-cred. Se omitieron identificadores de cuenta y sesión.
+shell closed: exit status 254

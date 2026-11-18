@@ -1,0 +1,224 @@
+Commit de partida: 3145f02 Separa E2, E3 y E6, fija el drain en worker3-g5 y añade capturas gráficas reales
+codespaces-8d43b2
+2026-11-05T09:34:29+00:00
+
+===== E2: escalado =====
+codespaces-8d43b2
+2026-11-05T09:34:34+00:00
+
+$ docker node ls; docker service ls; docker service ps
+manager-g5
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Leader
+worker2-g5 Ready Active Reachable
+worker3-g5 Ready Active 
+reto4_web réplicas=4/4 imagen=innnx/reto4-f1:1.0@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+reto4_web.1 innnx/reto4-f1:1.0 manager-g5 Running 11 minutes ago
+reto4_web.2 innnx/reto4-f1:1.0 worker2-g5 Running 11 minutes ago
+reto4_web.3 innnx/reto4-f1:1.0 worker2-g5 Running 11 minutes ago
+reto4_web.4 innnx/reto4-f1:1.0 worker1-g5 Running 11 minutes ago
+
+$ IP públicas actuales en EC2
+34.230.4.20 HTTP 200
+98.81.203.125 HTTP 200
+100.27.223.129 HTTP 200
+23.22.135.121 HTTP 200
+
+12 peticiones, todas en versión 1.0. Respuestas por contenedor:
+      3 contenedor=223aad67af29
+      3 contenedor=600224b00926
+      3 contenedor=6a47012a76e8
+      3 contenedor=fd3d084dfe42
+
+$ [manager-g5] docker service scale reto4_web=8
+réplicas=8/8
+2026-11-05T09:34:59+00:00
+      2 manager-g5
+      2 worker1-g5
+      2 worker2-g5
+      2 worker3-g5
+codespaces-8d43b2
+2026-11-05T09:35:00+00:00
+
+$ docker node ls; docker service ls; docker service ps
+manager-g5
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Leader
+worker2-g5 Ready Active Reachable
+worker3-g5 Ready Active 
+reto4_web réplicas=8/8 imagen=innnx/reto4-f1:1.0@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+reto4_web.1 innnx/reto4-f1:1.0 manager-g5 Running 11 minutes ago
+reto4_web.2 innnx/reto4-f1:1.0 worker2-g5 Running 11 minutes ago
+reto4_web.3 innnx/reto4-f1:1.0 worker2-g5 Running 11 minutes ago
+reto4_web.4 innnx/reto4-f1:1.0 worker1-g5 Running 11 minutes ago
+reto4_web.5 innnx/reto4-f1:1.0 worker1-g5 Running 13 seconds ago
+reto4_web.6 innnx/reto4-f1:1.0 manager-g5 Running 12 seconds ago
+reto4_web.7 innnx/reto4-f1:1.0 worker3-g5 Running 12 seconds ago
+reto4_web.8 innnx/reto4-f1:1.0 worker3-g5 Running 12 seconds ago
+
+$ IP públicas actuales en EC2
+34.230.4.20 HTTP 200
+98.81.203.125 HTTP 200
+100.27.223.129 HTTP 200
+23.22.135.121 HTTP 200
+
+12 peticiones, todas en versión 1.0. Respuestas por contenedor:
+      1 contenedor=4ca0c04cc360
+      3 contenedor=600224b00926
+      2 contenedor=6daaf8f83d33
+      2 contenedor=91252bdfc390
+      4 contenedor=d2a1dbe0b3a3
+
+$ [manager-g5] docker service scale reto4_web=12
+réplicas=12/12
+2026-11-05T09:35:24+00:00
+      3 manager-g5
+      3 worker1-g5
+      3 worker2-g5
+      3 worker3-g5
+codespaces-8d43b2
+2026-11-05T09:35:25+00:00
+
+$ docker node ls; docker service ls; docker service ps
+manager-g5
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Leader
+worker2-g5 Ready Active Reachable
+worker3-g5 Ready Active 
+reto4_web réplicas=12/12 imagen=innnx/reto4-f1:1.0@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+reto4_web.1 innnx/reto4-f1:1.0 manager-g5 Running 12 minutes ago
+reto4_web.2 innnx/reto4-f1:1.0 worker2-g5 Running 11 minutes ago
+reto4_web.3 innnx/reto4-f1:1.0 worker2-g5 Running 12 minutes ago
+reto4_web.4 innnx/reto4-f1:1.0 worker1-g5 Running 12 minutes ago
+reto4_web.5 innnx/reto4-f1:1.0 worker1-g5 Running 37 seconds ago
+reto4_web.6 innnx/reto4-f1:1.0 manager-g5 Running 37 seconds ago
+reto4_web.7 innnx/reto4-f1:1.0 worker3-g5 Running 37 seconds ago
+reto4_web.8 innnx/reto4-f1:1.0 worker3-g5 Running 37 seconds ago
+reto4_web.9 innnx/reto4-f1:1.0 worker1-g5 Running 11 seconds ago
+reto4_web.10 innnx/reto4-f1:1.0 manager-g5 Running 11 seconds ago
+reto4_web.11 innnx/reto4-f1:1.0 worker2-g5 Running 11 seconds ago
+reto4_web.12 innnx/reto4-f1:1.0 worker3-g5 Running 11 seconds ago
+
+$ IP públicas actuales en EC2
+34.230.4.20 HTTP 200
+98.81.203.125 HTTP 200
+100.27.223.129 HTTP 200
+23.22.135.121 HTTP 200
+
+12 peticiones, todas en versión 1.0. Respuestas por contenedor:
+      3 contenedor=43a28b0111f5
+      2 contenedor=86ed35bd6978
+      1 contenedor=91252bdfc390
+      3 contenedor=e11bcafa28ea
+      3 contenedor=fdb55b5847c8
+
+$ [manager-g5] docker service scale reto4_web=2
+curl: (28) Operation timed out after 902 milliseconds with 0 bytes received
+curl: (28) Operation timed out after 902 milliseconds with 0 bytes received
+réplicas=2/2
+2026-11-05T09:35:43+00:00
+      1 manager-g5
+      1 worker2-g5
+codespaces-8d43b2
+2026-11-05T09:35:45+00:00
+
+$ docker node ls; docker service ls; docker service ps
+manager-g5
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Leader
+worker2-g5 Ready Active Reachable
+worker3-g5 Ready Active 
+reto4_web réplicas=2/2 imagen=innnx/reto4-f1:1.0@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+reto4_web.1 innnx/reto4-f1:1.0 manager-g5 Running 12 minutes ago
+reto4_web.2 innnx/reto4-f1:1.0 worker2-g5 Running 12 minutes ago
+
+$ IP públicas actuales en EC2
+34.230.4.20 HTTP 200
+98.81.203.125 HTTP 200
+100.27.223.129 HTTP 200
+23.22.135.121 HTTP 200
+
+12 peticiones, todas en versión 1.0. Respuestas por contenedor:
+      6 contenedor=223aad67af29
+      6 contenedor=6a47012a76e8
+
+$ [manager-g5] docker service scale reto4_web=4
+réplicas=4/4
+2026-11-05T09:36:09+00:00
+      1 manager-g5
+      1 worker1-g5
+      1 worker2-g5
+      1 worker3-g5
+codespaces-8d43b2
+2026-11-05T09:36:10+00:00
+
+$ docker node ls; docker service ls; docker service ps
+manager-g5
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Leader
+worker2-g5 Ready Active Reachable
+worker3-g5 Ready Active 
+reto4_web réplicas=4/4 imagen=innnx/reto4-f1:1.0@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+reto4_web.1 innnx/reto4-f1:1.0 manager-g5 Running 12 minutes ago
+reto4_web.2 innnx/reto4-f1:1.0 worker2-g5 Running 12 minutes ago
+reto4_web.3 innnx/reto4-f1:1.0 worker1-g5 Running 12 seconds ago
+reto4_web.4 innnx/reto4-f1:1.0 worker3-g5 Running 12 seconds ago
+
+$ IP públicas actuales en EC2
+34.230.4.20 HTTP 200
+98.81.203.125 HTTP 200
+100.27.223.129 HTTP 200
+23.22.135.121 HTTP 200
+
+12 peticiones, todas en versión 1.0. Respuestas por contenedor:
+      4 contenedor=0066d3a37fa3
+      3 contenedor=223aad67af29
+      2 contenedor=6a47012a76e8
+      3 contenedor=b7b9fbd2230b
+
+$ probar-navegador.py http://34.230.4.20/ 1.0
+2026-11-05T09:36:21+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://34.230.4.20/ versión 1.0: 5 páginas, 0 errores
+
+$ probar-navegador.py http://98.81.203.125/ 1.0
+2026-11-05T09:36:28+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://98.81.203.125/ versión 1.0: 5 páginas, 0 errores
+
+$ probar-navegador.py http://100.27.223.129/ 1.0
+2026-11-05T09:36:36+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://100.27.223.129/ versión 1.0: 5 páginas, 0 errores
+
+$ probar-navegador.py http://23.22.135.121/ 1.0
+2026-11-05T09:36:43+00:00
+index.html: título «Gran Premio de Euskadi de F1 - Inicio», 13 imágenes
+entradas.html: título «Comprar Entradas - Gran Premio de Euskadi F1», 5 imágenes
+sorteo.html: título «Sorteo Podio - Gran Premio de Euskadi F1», 5 imágenes
+contacto.html: título «Contacto y Ubicación - Gran Premio de Euskadi F1», 6 imágenes
+acceso.html: título «Acceso Prensa - Gran Premio de Euskadi F1», 5 imágenes
+Precio calculado: 80 €
+Resultado http://23.22.135.121/ versión 1.0: 5 páginas, 0 errores
+
+Resumen de las sondas (una petición por segundo y por IP):
+34.230.4.20 OK=140 FALLO=1 versión 1.0=140 versión 2.0=0
+98.81.203.125 OK=140 FALLO=1 versión 1.0=140 versión 2.0=0
+100.27.223.129 OK=141 FALLO=0 versión 1.0=141 versión 2.0=0
+23.22.135.121 OK=141 FALLO=0 versión 1.0=141 versión 2.0=0
+exit=1

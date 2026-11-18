@@ -1,0 +1,19 @@
+$ hostname; date -Is; bash scripts/comprobar-ssh.sh; for h in manager-g5 worker1-g5 worker2-g5 worker3-g5; do ssh -F config/ssh.local $h 'printf "%s sudo: " $(hostname); sudo -n true && echo correcto'; done
+codespaces-8d43b2
+2026-11-05T09:52:55+00:00
+manager-g5
+2026-11-05T10:52:56+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker1-g5
+2026-11-05T10:52:57+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker2-g5
+2026-11-05T10:52:57+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+worker3-g5
+2026-11-05T10:52:57+01:00
+Docker version 29.1.3, build 29.1.3-0ubuntu3~22.04.2
+manager-g5 sudo: correcto
+worker1-g5 sudo: correcto
+worker2-g5 sudo: correcto
+worker3-g5 sudo: correcto

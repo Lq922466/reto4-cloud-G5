@@ -1,0 +1,50 @@
+$ Docker Hub: consulta anónima de etiquetas
+2026-11-05T09:13:02+00:00
+{"repositorio":"innnx/reto4-f1","privado":false}
+1.0	sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca	amd64	linux	active	2026-11-05T09:12:37.208653Z
+2.0	sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7	amd64	linux	active	2026-11-05T09:12:43.307774Z
+
+$ Registro: manifiesto con token anónimo de solo descarga
+1.0 HTTP 200 sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+2.0 HTTP 200 sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7
+
+$ Workers sin sesión de Docker Hub
+manager-g5 entradas de Docker Hub: 0
+0
+worker1-g5 entradas de Docker Hub: 0
+worker2-g5 entradas de Docker Hub: 0
+worker3-g5 entradas de Docker Hub: 0
+
+$ scripts/comprobar-descarga.sh
+codespaces-8d43b2
+2026-11-05T09:13:12+00:00
+
+Versión 1.0
+Construida en manager-g5: contenido=a83fb4d41950fac0a20c307ba124ad1908ed2d004c84d7839050a75fd276e56d
+Publicada: innnx/reto4-f1@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca
+$ [worker1-g5] docker pull innnx/reto4-f1:1.0
+docker.io/innnx/reto4-f1:1.0
+innnx/reto4-f1@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca version=1.0 contenido=a83fb4d41950fac0a20c307ba124ad1908ed2d004c84d7839050a75fd276e56d
+$ [worker2-g5] docker pull innnx/reto4-f1:1.0
+docker.io/innnx/reto4-f1:1.0
+innnx/reto4-f1@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca version=1.0 contenido=a83fb4d41950fac0a20c307ba124ad1908ed2d004c84d7839050a75fd276e56d
+$ [worker3-g5] docker pull innnx/reto4-f1:1.0
+docker.io/innnx/reto4-f1:1.0
+innnx/reto4-f1@sha256:622d83436cb97412b761ca8cd8d6b8e6c4940f4682a7f6fb6940921d599362ca version=1.0 contenido=a83fb4d41950fac0a20c307ba124ad1908ed2d004c84d7839050a75fd276e56d
+
+Versión 2.0
+Construida en manager-g5: contenido=4e8580f3094f380371685a365603d3bd43aa55d4a7117821a8f0d7b5dbb012a5
+Publicada: innnx/reto4-f1@sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7
+$ [worker1-g5] docker pull innnx/reto4-f1:2.0
+docker.io/innnx/reto4-f1:2.0
+innnx/reto4-f1@sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7 version=2.0 contenido=4e8580f3094f380371685a365603d3bd43aa55d4a7117821a8f0d7b5dbb012a5
+$ [worker2-g5] docker pull innnx/reto4-f1:2.0
+docker.io/innnx/reto4-f1:2.0
+innnx/reto4-f1@sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7 version=2.0 contenido=4e8580f3094f380371685a365603d3bd43aa55d4a7117821a8f0d7b5dbb012a5
+$ [worker3-g5] docker pull innnx/reto4-f1:2.0
+docker.io/innnx/reto4-f1:2.0
+innnx/reto4-f1@sha256:1736eda0abd63aa0ac538b1a9c11bfdb4f64dc1d36c7687cd7be9a52d2cc76f7 version=2.0 contenido=4e8580f3094f380371685a365603d3bd43aa55d4a7117821a8f0d7b5dbb012a5
+
+$ [manager-g5] docker service ls
+reto4_web 4/4 reto4-g5/f1:1.0
+exit=0

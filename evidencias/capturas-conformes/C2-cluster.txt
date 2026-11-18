@@ -1,0 +1,16 @@
+# Evidencia C2-cluster · Criterio C2 · RETO 4 CLOUD, Grupo 5
+# Prueba: Clúster por IP privada y MTU 1450
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 12:00:54 CET] ubuntu@manager-g5:~$ docker info --format "NodeAddr={{.Swarm.NodeAddr}}"
+NodeAddr=172.31.28.10
+[2026-11-06 12:00:54 CET] ubuntu@manager-g5:~$ docker node inspect --format "{{.Description.Hostname}} {{.Status.Addr}}" manager-g5 worker1-g5 worker2-g5 worker3-g5
+manager-g5 172.31.28.10
+worker1-g5 172.31.17.168
+worker2-g5 172.31.29.192
+worker3-g5 172.31.31.183
+[2026-11-06 12:00:54 CET] ubuntu@manager-g5:~$ docker network inspect --format "{{.Name}} driver={{.Driver}} ingress={{.Ingress}} MTU={{index .Options \"com.docker.network.driver.mtu\"}}" red-g5
+red-g5 driver=overlay ingress=true MTU=1450
+[2026-11-06 12:00:54 CET] ubuntu@manager-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. El clúster usa IP privadas, y la red ingress red-g5 tiene MTU 1450.

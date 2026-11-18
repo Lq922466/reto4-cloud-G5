@@ -1,0 +1,17 @@
+$ hostname; date -Is; aws ec2 describe-security-groups --region us-east-1 --filters Name=group-name,Values=reto4-cloud-g5 --query 'SecurityGroups[].IpPermissions[].{Desde:FromPort,Hasta:ToPort,Protocolo:IpProtocol,CIDR:join(`,`,IpRanges[].CidrIp),Grupo:join(`,`,UserIdGroupPairs[].GroupId)}' --output table
+codespaces-8d43b2
+2026-11-05T09:52:17+00:00
+-------------------------------------------------------------------------------
+|                           DescribeSecurityGroups                            |
++---------------------+--------+------------------------+--------+------------+
+|        CIDR         | Desde  |         Grupo          | Hasta  | Protocolo  |
++---------------------+--------+------------------------+--------+------------+
+|                     |  2377  |  sg-0c12ecd538a29f8d6  |  2377  |  tcp       |
+|  0.0.0.0/0          |  80    |                        |  80    |  tcp       |
+|  0.0.0.0/0          |  8080  |                        |  8080  |  tcp       |
+|  172.166.156.160/32 |  22    |  sg-0c12ecd538a29f8d6  |  22    |  tcp       |
+|                     |  7946  |  sg-0c12ecd538a29f8d6  |  7946  |  udp       |
+|                     |  7946  |  sg-0c12ecd538a29f8d6  |  7946  |  tcp       |
+|                     |  4789  |  sg-0c12ecd538a29f8d6  |  4789  |  udp       |
+|                     |  -1    |  sg-0c12ecd538a29f8d6  |  -1    |  icmp      |
++---------------------+--------+------------------------+--------+------------+

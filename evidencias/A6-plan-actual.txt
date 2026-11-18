@@ -1,0 +1,22 @@
+A6: plan real, NO aplicado. Codespace codespaces-8d43b2. Rama cloud-g5-implementacion.
+Generado 2026-11-05 hacia las 08:40 UTC contra el estado operativo. Estado sin cambios: SHA-256 igual antes y después.
+
+$ terraform validate
+Success! The configuration is valid.
+
+$ terraform plan -target=aws_instance.manager -var ssh_cidr=<IP actual del Codespace>/32
+  # aws_instance.manager will be updated in-place
+          + "PruebaA6" = "reto4-g5"
+          + "PruebaA6" = "reto4-g5"
+  # aws_security_group.cluster will be updated in-place
+Plan: 0 to add, 2 to change, 0 to destroy.
+
+La regla SSH activa no tiene descripción y Terraform sí la declara. Por eso el SG aparece como segundo cambio.
+
+$ terraform plan -destroy (solo informativo, no ejecutado)
+  # aws_instance.manager will be destroyed
+  # aws_instance.workers[0] will be destroyed
+  # aws_instance.workers[1] will be destroyed
+  # aws_instance.workers[2] will be destroyed
+  # aws_security_group.cluster will be destroyed
+Plan: 0 to add, 0 to change, 5 to destroy.

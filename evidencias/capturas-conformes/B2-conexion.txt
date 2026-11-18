@@ -1,0 +1,15 @@
+# Evidencia B2-conexion · Criterio B2 · RETO 4 CLOUD, Grupo 5
+# Prueba: Conexión con el nombre corto
+# Autor: Claude Code, por encargo de Lq922466 · Ejecutado desde: vscode@codespaces-8d43b2
+[2026-11-06 10:18:26 CET] ubuntu@manager-g5:~$ hostname
+manager-g5
+[2026-11-06 10:18:26 CET] ubuntu@manager-g5:~$ exit
+exit
+[2026-11-06 10:18:28 CET] ubuntu@worker3-g5:~$ hostname
+worker3-g5
+[2026-11-06 10:18:28 CET] ubuntu@worker3-g5:~$ hostname -I
+172.31.31.183 172.18.0.1 172.17.0.1 
+[2026-11-06 10:18:28 CET] ubuntu@worker3-g5:~$ exit
+exit
+
+# Resultado: CORRECTO. Se entra usando solo el nombre corto, también a un worker por salto.

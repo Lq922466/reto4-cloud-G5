@@ -1,0 +1,68 @@
+codespaces-8d43b2
+2026-11-04T20:31:44+00:00
+
+$ aws ec2 describe-instance-status (us-east-1)
+i-0e6ebf2af63facc60	running	ok	ok
+i-0446409b26cf0a662	running	ok	ok
+i-0ed6d9c9957251a18	running	ok	ok
+i-066a1ad3b7a8e0db9	running	ok	ok
+
+$ aws ec2 describe-instances (direcciones actuales)
+i-066a1ad3b7a8e0db9	172.31.17.168	54.227.41.215
+i-0446409b26cf0a662	172.31.31.183	3.91.68.78
+i-0e6ebf2af63facc60	172.31.28.10	98.93.8.44
+i-0ed6d9c9957251a18	172.31.29.192	34.228.8.66
+
+$ ssh manager-g5 (identidad y estado local de Swarm)
+manager-g5
+2026-11-04T21:31:48+01:00
+active true
+
+$ ssh worker1-g5 (identidad y estado local de Swarm)
+worker1-g5
+2026-11-04T21:31:51+01:00
+active true
+
+$ ssh worker2-g5 (identidad y estado local de Swarm)
+worker2-g5
+2026-11-04T21:31:53+01:00
+active true
+
+$ ssh worker3-g5 (identidad y estado local de Swarm)
+worker3-g5
+2026-11-04T21:31:55+01:00
+active false
+
+$ docker node ls; docker network inspect; docker service ls; docker service ps
+manager-g5 Ready Active Reachable
+worker1-g5 Ready Active Reachable
+worker2-g5 Ready Active Leader
+worker3-g5 Ready Active
+red-g5 overlay ingress=true MTU=1450
+red-app-g5 overlay ingress=false MTU=1450
+reto4_web 4/4
+ID             NAME          IMAGE             NODE         DESIRED STATE   CURRENT STATE            ERROR     PORTS
+suo161np61y5   reto4_web.1   reto4-g5/f1:1.0   worker1-g5   Running         Running 17 minutes ago
+npq5ivi0qy75   reto4_web.2   reto4-g5/f1:1.0   worker3-g5   Running         Running 16 minutes ago
+m7ky47bx598b   reto4_web.3   reto4-g5/f1:1.0   worker2-g5   Running         Running 16 minutes ago
+rl7k3st6ju3m   reto4_web.4   reto4-g5/f1:1.0   worker3-g5   Running         Running 16 minutes ago
+
+$ curl http://54.227.41.215/identidad.txt
+2026-11-04T20:32:00+00:00
+version=1.0
+contenedor=b98e40a2c881
+
+$ curl http://3.91.68.78/identidad.txt
+2026-11-04T20:32:00+00:00
+version=1.0
+contenedor=0a316a6963c9
+
+$ curl http://98.93.8.44/identidad.txt
+2026-11-04T20:32:00+00:00
+version=1.0
+contenedor=ea39ff9060f7
+
+$ curl http://34.228.8.66/identidad.txt
+2026-11-04T20:32:01+00:00
+version=1.0
+contenedor=0a316a6963c9

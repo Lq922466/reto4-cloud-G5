@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Estado del portal · Gran Premio de Euskadi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="bloque-principal">
+        <h1>Estado del portal en Docker Swarm</h1>
+        <p>La consulta muestra la versión y el contenedor que atiende la petición.</p>
+        <pre id="identidad" role="status">Consultando la réplica…</pre>
+        <p><button id="consultar" type="button">Consultar de nuevo</button></p>
+        <p><a href="index.html">Volver al Gran Premio de Euskadi</a></p>
+    </main>
+    <script>
+        const identidad = document.getElementById("identidad");
+
+        async function consultar() {
+            try {
+                const respuesta = await fetch("/identidad.txt", { cache: "no-store" });
+                if (!respuesta.ok) {
+                    throw new Error("La réplica no devolvió su identificación.");
+                }
+                identidad.textContent = await respuesta.text();
+            } catch {
+                identidad.textContent = "No se pudo consultar la réplica.";
+            }
+        }
+
+        document.getElementById("consultar").addEventListener("click", consultar);
+        consultar();
+    </script>
+</body>
+</html>

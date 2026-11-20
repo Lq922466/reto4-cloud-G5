@@ -112,7 +112,7 @@ El documento sigue el orden del trabajo: preparar el repositorio, crear los serv
 
 Todo se despliega en `us-east-1`, en la VPC por defecto. El clúster se construye con las **IP privadas**, que no cambian, porque las públicas cambian en cada sesión del laboratorio. El Codespace es la máquina de control: desde él se usan Git, la AWS CLI, Terraform y SSH.
 
-![Mapa de arquitectura del grupo 5](diagramas/arquitectura.png)
+![Mapa de arquitectura del grupo 5](diagramas/arquitectura-simple.svg)
 
 *Figura 1. Mapa de arquitectura (criterio F8), generado desde el código Mermaid de [`diagramas/arquitectura.md`](diagramas/arquitectura.md): Codespace, GitHub, AWS, Swarm, redes, servicio y Docker Hub, con un manager líder y tres workers.*
 

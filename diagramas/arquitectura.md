@@ -25,7 +25,7 @@ flowchart LR
     CS -->|"SSH por la regla /32"| M
     M -.->|"Salto SSH por IP privada"| W1
     M -.-> W2 & W3
-    CS -->|"git push y Pull Requests"| GH["GitHub<br/>Lq922466/reto4-cloud-G5 (privado)"]
+    CS -->|"git push y Pull Requests"| GH["GitHub<br/>Lq922466/reto4-cloud-G5 (público desde el 20/11)"]
 ```
 
 ## Cómo leerlo

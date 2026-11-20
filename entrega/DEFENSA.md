@@ -1,5 +1,7 @@
 # Defensa de RETO 4 CLOUD · Grupo 5
 
+**Estado actualizado (20/11/2026):** la presentación ya se realizó, según confirmación de la coordinadora. Este documento conserva el guion preparado antes de la exposición; las instrucciones de ensayo y las referencias al futuro de la presentación son históricas y no indican que siga pendiente.
+
 Material para ensayar la exposición de 10 minutos y las preguntas del profesor. Acompaña a la
 [presentación](presentacion-cloud-g5.pptx), que lleva este mismo guion en las notas del orador.
 

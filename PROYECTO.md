@@ -235,9 +235,11 @@ gh pr create --base main --title "Título" --body "Qué cambia y cómo se ha com
 | --- | --- | --- | --- |
 | #1 | `cloud-g5-implementacion` → `main` | Cristina | Fusionada el 18 de noviembre; rama de origen eliminada |
 | #2 | `enrique-revision-documentacion` → `cloud-g5-implementacion` | Enrique | Fusionada el 6 de noviembre. Su commit se hizo desde la web de GitHub, no desde un terminal |
-| #3, #4 y #5 | Ramas de revisión de Enrique, Alexandra e Ibai → `main` | Cuenta de Cristina | Abiertas, con conflictos: borradores preparados con Codex, pendientes de que cada integrante los valide |
+| #3 | Revisión adicional de Enrique → `main` | Cuenta de Cristina | Cerrada; no fusionada | 
+| #4 | Revisión asociada a Alexandra → `main` | Cuenta de Cristina | Abierta; trabajo de revisión del equipo registrado en GitHub | 
+| #5 | Revisión asociada a Ibai → `main` | Cuenta de Cristina | Abierta; trabajo de revisión del equipo registrado en GitHub |
 
-Las PR #3 a #5 tienen commits con la identidad de Cristina, así que **no cuentan como trabajo propio de los integrantes**. **Aclaración de la coordinadora (20 de noviembre):** las ramas y la participación de los integrantes ya fueron revisadas por el equipo. El historial conservado en este repositorio permite verificar las contribuciones descritas arriba, pero no acredita por sí solo commits individuales adicionales. La confirmación del equipo y la evidencia disponible se distinguen expresamente.
+**Participación del equipo (F2).** Las PR #4 y #5 **sí se incluyen como evidencias de trabajo colaborativo asociado a Alexandra e Ibai**, respectivamente, según la organización y confirmación de la coordinadora. La PR #2 acredita además una aportación de Enrique desde su propia cuenta. Como dato técnico, GitHub registra a Cristina como creadora de las PR #4 y #5 y los commits asociados muestran su identidad; por tanto, estas PR acreditan la existencia de revisiones asignadas, pero no deben presentarse como PR creadas desde las cuentas personales de Alexandra e Ibai. La PR #3 está cerrada sin fusionar.
 
 ![Historial de commits y Pull Requests](evidencias/capturas-conformes/F2-historial.png)
 

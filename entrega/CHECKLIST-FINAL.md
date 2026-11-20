@@ -73,7 +73,7 @@ Hay una comprobación real, pero falta la captura concreta que pide la Rúbrica.
 
 | Cód. | Qué pide la Rúbrica | Evidencia exigida | Material disponible | Qué falta |
 | --- | --- | --- | --- | --- |
-| F13 | Documentación práctica individual | /practica-individual | [Estructura sin contenido](../practica-individual/README.md) | Cada integrante debe aportar la documentación de su práctica individual previa de EC2. |
+| F13 | Documentación práctica individual | /practica-individual | [Explicación de la práctica presencial sin capturas](../practica-individual/README.md) | La coordinadora confirma la práctica presencial; faltan las evidencias individuales originales. |
 | G1 | Exposición (10 min): demo, arquitectura, código | Día exposición | [Guion](DEFENSA.md), [presentación](presentacion-cloud-g5.pptx) | Presentación realizada según confirmación de la coordinadora; no consta acta ni captura del directo. |
 | G2 | Preguntas individuales a cualquier miembro | Día exposición | [Preguntas de repaso](DEFENSA.md#preguntas-del-profesor) | Cada integrante debe prepararla: 2 o 3 preguntas sobre cualquier parte. |
 | G3 | Demostración técnica individual | Día exposición | [Demostraciones](DEFENSA.md#demostraciones) | Cada integrante debe hacerla en directo. Requiere laboratorio activo y acceso SSH. |

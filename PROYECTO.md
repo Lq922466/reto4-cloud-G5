@@ -151,6 +151,8 @@ Entre la prueba E8 y el 9 de noviembre, worker1-g5 y worker2-g5 fueron managers 
 
 ## Fase 0 — GitHub y Codespaces
 
+**Objetivo.** Preparar un repositorio colaborativo y un Codespace con AWS CLI y Terraform para administrar el proyecto.
+
 **Qué hicimos y por qué.** Primero organizamos el repositorio y sus carpetas; inicialmente era privado y se hizo público el 20 de noviembre, siguiendo una indicación posterior del profesor según confirma la coordinadora. Después preparamos GitHub Codespaces, un entorno desde el que trabajar sin instalar todas las herramientas en cada ordenador. Por último, utilizamos ramas y solicitudes de revisión para compartir los cambios.
 
 
@@ -332,6 +334,8 @@ El entorno es reproducible: el Codespace se crea desde el `devcontainer` con AWS
 
 
 ## Fase 1 — AWS y Terraform
+
+**Objetivo.** Definir en Terraform y desplegar en AWS un manager y tres workers, con discos, red, SSH y salidas de infraestructura.
 
 **Qué hicimos y por qué.** Utilizamos Terraform para describir los servidores, sus discos y las reglas de acceso. En lugar de configurar cuatro máquinas manualmente, preparamos un bloque para el servidor principal y otro que genera tres servidores de trabajo. Antes de aplicar cambios comprobamos la configuración y revisamos el plan para evitar modificaciones inesperadas.
 
@@ -669,6 +673,8 @@ Terraform creó la infraestructura del proyecto con un único módulo: variables
 
 ## Fase 2 — Acceso SSH
 
+**Objetivo.** Configurar el acceso seguro por claves SSH a los cuatro servidores y el salto a los workers por sus IP privadas.
+
 **Qué hicimos y por qué.** Configuramos claves SSH para no depender de contraseñas. Después preparamos nombres de conexión fáciles de recordar y un acceso a los servidores internos a través del principal. También limitamos el inicio de sesión de root. Los accesos se comprobaron con conexiones reales y registros del servidor.
 
 **Confirmación del equipo.** Cristina confirma que comprobó los accesos SSH de los integrantes. Las capturas disponibles se conservan con su fecha y autor; esta confirmación posterior no se presenta como una captura nueva.
@@ -877,6 +883,8 @@ Con la clave del Codespace, el acceso permite la administración remota: nombres
 
 ## Fase 3 — Docker Swarm
 
+**Objetivo.** Configurar un clúster Swarm de cuatro nodos por IP privada y comprobar sus redes, roles y conectividad.
+
 **Qué hicimos y por qué.** Instalamos Docker y creamos un clúster Docker Swarm. El servidor principal organiza el trabajo y los otros tres ejecutan tareas. Los conectamos mediante sus direcciones privadas para que la comunicación interna no dependa de Internet. Comprobamos que los cuatro aparecían activos y que la red funcionaba.
 
 
@@ -994,6 +1002,8 @@ El clúster se formó por IP privada con los cuatro nodos. La red ingress es `re
 
 
 ## Fase 4 — Despliegue web
+
+**Objetivo.** Publicar las imágenes 1.0 y 2.0 de la web y desplegar cuatro réplicas accesibles por el puerto 80.
 
 **Qué hicimos y por qué.** Preparamos la web de Fórmula 1 en dos versiones, 1.0 y 2.0. La empaquetamos como una imagen Docker, la publicamos en Docker Hub y desplegamos cuatro copias del servicio. Esto permite repartir las visitas y facilita actualizar la web sin reinstalarla manualmente en cada máquina.
 
@@ -1142,6 +1152,8 @@ La web se empaqueta en una imagen propia sobre Nginx que identifica cada contene
 
 
 ## Fase 5 — Pruebas de orquestación
+
+**Objetivo.** Documentar las pruebas reales de balanceo, escalado, recuperación, mantenimiento, actualización y elección de líder, incluyendo sus límites.
 
 **Qué hicimos y por qué.** Probamos el reparto de peticiones, aumentamos y redujimos el número de copias, detuvimos contenedores y servidores y observamos su recuperación. También actualizamos la web a la versión 2.0 y volvimos a la 1.0. Cada prueba se explica por separado, con el procedimiento, los resultados registrados y las incidencias que aparecieron.
 

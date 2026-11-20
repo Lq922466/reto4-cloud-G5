@@ -19,6 +19,8 @@ interno no detalla su contenido ni menciona un Producto 7.
 Los permisos son los que muestra GitHub el 18 de noviembre ([captura](evidencias/capturas-conformes/F1-repositorio.png)). El
 profesor tiene acceso al repositorio con la cuenta `jc-csl`, con permiso de escritura, según confirmó Cristina. El repositorio es **público desde el 20 de noviembre de 2026**. La captura enlazada refleja su estado anterior, privado, el 18 de noviembre.
 
+**Confirmación de la coordinadora (20 de noviembre).** Alexandra e Ibai iniciaron sesión en GitHub con sus propias cuentas y consultaron el repositorio y el trabajo asignado, según confirma Cristina. Se reconocen estas acciones como participación del equipo. Las PR #4 y #5 corresponden a sus revisiones, pero GitHub registra su creación desde `Lq922466`; por tanto, no se presentan como PR creadas por sus cuentas personales. No se han localizado reviews ni commits de esas dos cuentas en dichas PR.
+
 ## 2. Reparto y organización del trabajo
 
 Resumen del documento interno de organización. Es una **planificación**: lo realmente hecho está en el apartado 3.

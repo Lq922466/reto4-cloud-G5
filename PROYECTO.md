@@ -305,7 +305,7 @@ python3 scripts/revisar-secretos.py 6f3d838 HEAD      # Todo lo integrado desde 
 - En todo el historial, el único archivo cuyo nombre coincide con los patrones sensibles es la plantilla `grupo.example.tfvars`, y `git check-ignore` confirma que `terraform/terraform.tfvars` y `config/ssh.local` quedan fuera de Git.
 - El script no revisa el contenido de las imágenes: se revisaron a la vista las capturas nuevas. La revisión anterior de todo el historial está en el [registro del repositorio](evidencias/auditoria/registro-repositorio.txt).
 
-![Sin credenciales, claves ni estado de Terraform](evidencias/capturas-conformes/seguridad del repositorio-seguridad.png)
+![Sin credenciales, claves ni estado de Terraform](evidencias/capturas-conformes/F12-seguridad.png)
 
 *Figura 7. Solo se versiona la plantilla de variables, y la revisión de todo lo integrado desde `6f3d838` no encuentra secretos. Captura conforme, 18 de noviembre de 2026.*
 

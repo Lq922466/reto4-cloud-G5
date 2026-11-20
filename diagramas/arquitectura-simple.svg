@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+<title id="title">Arquitectura Cloud — Grupo 5</title><desc id="desc">Codespaces administra mediante Terraform cuatro instancias EC2 en AWS. Docker Swarm coordina un manager y tres workers. Los nodos descargan las imágenes de Docker Hub y sirven la web a los usuarios.</desc>
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#64748b"/></marker><style>text{font-family:Arial,Helvetica,sans-serif;fill:#16263d}.head{font-size:34px;font-weight:700}.sub{font-size:17px;fill:#526277}.label{font-size:23px;font-weight:700}.small{font-size:17px}.mini{font-size:15px;fill:#526277}.line{fill:none;stroke:#64748b;stroke-width:3;marker-end:url(#arr)}.card{fill:#fff;stroke:#b8c9dc;stroke-width:2}.node{fill:#f2f7ff;stroke:#82a8df;stroke-width:2}</style></defs>
+<rect width="1200" height="700" fill="#f8fafc"/>
+<text x="54" y="66" class="head">Arquitectura Cloud — Grupo 5</text><text x="54" y="99" class="sub">Despliegue automatizado · 4 instancias EC2 · Docker Swarm</text>
+<rect x="42" y="160" width="284" height="132" rx="17" class="card"/><text x="68" y="202" class="label">GitHub Codespaces</text><text x="68" y="235" class="small">Terraform + AWS CLI</text><text x="68" y="260" class="mini">Despliegue y acceso SSH</text>
+<rect x="42" y="352" width="284" height="111" rx="17" class="card"/><text x="68" y="394" class="label">Docker Hub</text><text x="68" y="427" class="small">Imágenes web 1.0 / 2.0</text>
+<rect x="42" y="522" width="284" height="111" rx="17" class="card"/><text x="68" y="565" class="label">Usuarios</text><text x="68" y="598" class="small">Navegador · HTTP 80</text>
+<rect x="412" y="146" width="741" height="507" rx="23" fill="#fff8e8" stroke="#e8ba65" stroke-width="2.5"/>
+<text x="448" y="192" class="label">AWS · us-east-1</text><text x="448" y="218" class="mini">Instancias EC2 y Security Group</text>
+<rect x="446" y="250" width="674" height="345" rx="20" fill="#edf5ff" stroke="#75a6e6" stroke-width="2"/>
+<text x="478" y="292" class="label">Docker Swarm · 4 nodos</text>
+<rect x="625" y="319" width="312" height="67" rx="12" class="node"/><text x="781" y="347" text-anchor="middle" class="label" style="font-size:20px">manager-g5</text><text x="781" y="369" text-anchor="middle" class="mini">t3.medium · líder</text>
+<path d="M781 386 V411 H565 V433 M781 411 V433 M781 411 H998 V433" fill="none" stroke="#64748b" stroke-width="2.5"/>
+<rect x="472" y="433" width="186" height="65" rx="12" class="node"/><rect x="688" y="433" width="186" height="65" rx="12" class="node"/><rect x="904" y="433" width="186" height="65" rx="12" class="node"/>
+<text x="565" y="458" text-anchor="middle" class="small" font-weight="bold">worker1-g5</text><text x="565" y="481" text-anchor="middle" class="mini">t3.small</text><text x="781" y="458" text-anchor="middle" class="small" font-weight="bold">worker2-g5</text><text x="781" y="481" text-anchor="middle" class="mini">t3.small</text><text x="997" y="458" text-anchor="middle" class="small" font-weight="bold">worker3-g5</text><text x="997" y="481" text-anchor="middle" class="mini">t3.small</text>
+<rect x="532" y="520" width="504" height="57" rx="12" fill="#e2f6ed" stroke="#76b99a" stroke-width="2"/><text x="784" y="543" text-anchor="middle" class="small" font-weight="bold">Servicio web · 4 réplicas iniciales</text><text x="784" y="563" text-anchor="middle" class="mini">Distribuidas y escalables entre nodos</text>
+<path d="M326 221 H405" class="line"/><text x="337" y="208" class="mini">Terraform / SSH</text>
+<path d="M326 408 H391 V615 H780 V584" class="line"/><text x="345" y="392" class="mini">Pull de imágenes</text>
+<path d="M326 577 H390 V555 H525" class="line"/><text x="342" y="542" class="mini">Acceso web</text>
+<text x="54" y="677" class="mini">Acceso público a la web; SSH y puertos internos de Swarm restringidos por reglas de seguridad.</text>
+</svg>

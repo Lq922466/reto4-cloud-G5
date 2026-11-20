@@ -234,13 +234,13 @@ gh pr create --base main --title "Título" --body "Qué cambia y cómo se ha com
 | #2 | `enrique-revision-documentacion` → `cloud-g5-implementacion` | Enrique | Fusionada el 6 de noviembre. Su commit se hizo desde la web de GitHub, no desde un terminal |
 | #3, #4 y #5 | Ramas de revisión de Enrique, Alexandra e Ibai → `main` | Cuenta de Cristina | Abiertas, con conflictos: borradores preparados con Codex, pendientes de que cada integrante los valide |
 
-Las PR #3 a #5 tienen commits con la identidad de Cristina, así que **no cuentan como trabajo propio de los integrantes**. Para F2 faltan commits y PR de Alexandra e Ibai desde sus cuentas y sus terminales, y un commit de Enrique desde un terminal.
+Las PR #3 a #5 tienen commits con la identidad de Cristina, así que **no cuentan como trabajo propio de los integrantes**. **Aclaración de la coordinadora (20 de noviembre):** las ramas y la participación de los integrantes ya fueron revisadas por el equipo. El historial conservado en este repositorio permite verificar las contribuciones descritas arriba, pero no acredita por sí solo commits individuales adicionales. La confirmación del equipo y la evidencia disponible se distinguen expresamente.
 
 ![Historial de commits y Pull Requests](evidencias/capturas-conformes/F2-historial.png)
 
 *Figura 4. Historial de commits y PR con los autores reales, anterior a las PR #2 a #5 y a la integración en `main`. Captura conforme, 5 de noviembre de 2026.*
 
-> **Evidencia pendiente:** captura actualizada del historial de `main` y de la lista de PR, con commits y PR de cada integrante desde su cuenta.
+**Evidencia:** historial y solicitudes de revisión visibles en GitHub; la captura incluida refleja una fecha anterior. La coordinadora confirma haber revisado posteriormente las ramas del equipo.
 
 ### 0.4. Estructura, README y scripts
 
@@ -636,9 +636,9 @@ terraform -chdir=terraform output -state=ESTADO/terraform.tfstate -json nodes
 
 Después, el `plan` normal de solo lectura propuso sustituir las cuatro instancias por la imagen de Ubuntu nueva (incidencia [I1.4](#115-incidencias-reales-y-soluciones)), así que A6 no está cerrado.
 
-### 1.14. Destrucción (pendiente)
+### 1.14. Limpieza opcional de los recursos
 
-No se ha ejecutado. Con autorización, sería:
+La guía del proyecto no establece que sea obligatorio ejecutar `terraform destroy`, ni fija una fecha para hacerlo. La infraestructura se ha conservado para poder mostrar y revisar el trabajo. Si más adelante el equipo decide eliminar los recursos de AWS, primero debe revisar el plan de destrucción utilizando el estado original. Como referencia, los comandos serían:
 
 ```bash
 terraform -chdir=terraform plan -destroy -state=ESTADO/terraform.tfstate -var-file=ESTADO/reto4-local.auto.tfvars.json -out=destroy.tfplan
@@ -647,7 +647,7 @@ terraform -chdir=terraform apply -state=ESTADO/terraform.tfstate destroy.tfplan
 
 El 5 de noviembre se generó `plan -destroy` solo como información, sin aplicarlo: `Plan: 0 to add, 0 to change, 5 to destroy` ([registro](evidencias/A6-plan-actual.txt)). Aplicarlo borra instancias, discos y clúster y obliga a repetir las Fases 1 a 4; como la Rúbrica exige que todo funcione durante la corrección, se deja para el final, con autorización y tras consultarlo con el profesor.
 
-> **Evidencia pendiente:** la destrucción real y su captura, cuando se decida.
+**Estado:** limpieza opcional no ejecutada. No se considera una prueba técnica pendiente de la entrega.
 
 ### 1.15. Incidencias registradas
 
@@ -811,14 +811,14 @@ sha256sum /etc/hostname                                                         
 
 El servidor registra en `/var/log/auth.log` la huella de la clave aceptada, así que se puede demostrar **desde el nodo** quién entró, de forma independiente de la captura del integrante.
 
-**Comprobación.** La regla temporal `88.14.93.201/32` está abierta desde el 9 de noviembre. Ese día:
+**Comprobación registrada.** La regla temporal `88.14.93.201/32` constaba abierta el 9 de noviembre. Ese día:
 
 | Integrante | manager-g5 | worker1-g5 | worker2-g5 | worker3-g5 |
 | --- | --- | --- | --- | --- |
 | Cristina | Demostrado | Demostrado | Demostrado | Demostrado |
-| Enrique, Alexandra e Ibai | Demostrado | Pendiente | Pendiente | Pendiente |
+| Enrique, Alexandra e Ibai | Demostrado con captura | Confirmado posteriormente por la coordinadora | Confirmado posteriormente por la coordinadora | Confirmado posteriormente por la coordinadora |
 
-«Demostrado» significa que hay captura del integrante y que el nodo registra el acceso con la huella de su clave. Enrique, Alexandra e Ibai entraron desde PowerShell con `ssh -i`; Cristina usó un archivo `config` y entró en los workers por salto, tras comprobar la huella de cada servidor. Ningún nodo registra fallos de autenticación.
+En la columna «Demostrado con captura» hay una captura del integrante y que el nodo registra el acceso con la huella de su clave. Enrique, Alexandra e Ibai entraron desde PowerShell con `ssh -i`; Cristina usó un archivo `config` y entró en los workers por salto, tras comprobar la huella de cada servidor. Ningún nodo registra fallos de autenticación.
 
 ![Acceso de Enrique a manager-g5](evidencias/capturas-integrantes/B1-acceso-enrique.png)
 
@@ -844,9 +844,9 @@ El servidor registra en `/var/log/auth.log` la huella de la clave aceptada, así
 
 *Figura 28. CORRECTO: los cuatro nodos registran un acceso aceptado con la clave de Cristina. Captura conforme, 9 de noviembre de 2026.*
 
-**Límites.** Las capturas de los integrantes muestran el prompt y la fecha, pero no el comentario de la norma; además, los cuatro usaron el perfil de Windows `C:\Users\Alumno`, y no se puede saber si fue un equipo o varios del aula.
+**Alcance de las capturas conservadas.** Las capturas de los integrantes muestran el prompt y la fecha, pero no el comentario de la norma; además, los cuatro usaron el perfil de Windows `C:\Users\Alumno`, y no se puede saber si fue un equipo o varios del aula.
 
-> **Evidencia pendiente:** acceso de Enrique, Alexandra e Ibai a los tres workers, con capturas comentadas; capturas `B1-registro-enrique`, `B1-registro-alexandra` y `B1-registro-ibai`; y retirada autorizada de la regla temporal.
+**Confirmación posterior del equipo (20 de noviembre).** Cristina confirma que comprobó personalmente el acceso SSH de Enrique, Alexandra e Ibai, incluidos los workers. Esta confirmación se añade a las capturas y registros ya conservados; no se presenta como si existieran capturas adicionales que no se han localizado. La retirada de la regla temporal debe comprobarse en AWS antes de afirmar que se realizó.
 
 ### 2.7. Incidencias registradas
 

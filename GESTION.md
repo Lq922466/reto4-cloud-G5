@@ -1,10 +1,8 @@
-# Gestión del grupo 5
+# Organización y participación del Grupo 5
 
-> **BORRADOR. No entregar todavía.** Datos revisados el 18 de noviembre de 2026. Proceden de tres fuentes: el documento interno de
-> organización del equipo del RETO 4, que no se versiona porque contiene correos personales y un enlace de invitación; GitHub; y el
-> historial de Git. Ese documento describe **cómo se ha organizado el trabajo**, y una tarea asignada no significa que esté hecha.
-> Por eso este documento distingue entre responsabilidad asignada, trabajo realizado, evidencia y trabajo pendiente. Cada
-> `[POR COMPLETAR]` debe rellenarlo la persona indicada. Ningún reparto, reunión ni aportación se ha deducido o inventado.
+Este documento explica cómo se organizó el equipo, qué tareas correspondían a cada integrante y qué participación quedó registrada en el producto Cloud. Se distingue entre las tareas asignadas, las realizadas y las que todavía necesitan una evidencia adicional. La información se basa en los documentos de organización, GitHub y los registros del proyecto, revisados el 18 de noviembre de 2026.
+
+**Uso de inteligencia artificial.** Cristina coordinó y autorizó las operaciones técnicas del producto Cloud. Codex y Claude Code se utilizaron como apoyo para preparar scripts, realizar operaciones autorizadas, comprobar resultados y ordenar la documentación. El uso de estas herramientas se explica de manera transparente y no sustituye las aportaciones humanas ni se atribuye a otros integrantes.
 
 ## 1. Equipo
 
@@ -22,7 +20,7 @@ Los permisos son los que muestra GitHub el 18 de noviembre ([captura](evidencias
 profesor tiene acceso al repositorio con la cuenta `jc-csl`, con permiso de escritura, según confirmó Cristina. El repositorio es
 privado.
 
-## 2. Organización acordada
+## 2. Reparto y organización del trabajo
 
 Resumen del documento interno de organización. Es una **planificación**: lo realmente hecho está en el apartado 3.
 

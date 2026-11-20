@@ -60,7 +60,7 @@ Durante el proyecto se utilizaron **Codex** y **Claude Code** como herramientas 
   - [1.11. Creación de la infraestructura: `init`, `validate`, `plan` y `apply`](#111-creacion-de-la-infraestructura-init-validate-plan-y-apply)
   - [1.12. Modificación de la infraestructura](#112-modificacion-de-la-infraestructura)
   - [1.13. Actualización de la información de Terraform](#113-actualizacion-de-la-informacion-de-terraform)
-  - [1.14. Destrucción (pendiente)](#114-destruccion-pendiente)
+  - [1.14. Limpieza opcional de los recursos](#114-limpieza-opcional-de-los-recursos)
   - [1.15. Incidencias registradas](#115-incidencias-registradas)
   - [1.16. Resultado y conclusión](#116-resultado-y-conclusion)
 - [Fase 2 — Acceso SSH](#fase-2-acceso-ssh)
@@ -150,8 +150,6 @@ Entre la prueba E8 y el 9 de noviembre, worker1-g5 y worker2-g5 fueron managers 
 | Codex y Claude Code | Asistentes de IA | Ejecución y documentación por encargo de Cristina |
 
 ## Fase 0 — GitHub y Codespaces
-
-**Objetivo.** Preparar un espacio de trabajo común antes de crear servidores. Así podemos guardar el código, recuperar versiones anteriores y saber qué cambios se hicieron.
 
 **Qué hicimos y por qué.** Primero organizamos el repositorio y sus carpetas; inicialmente era privado y se hizo público el 20 de noviembre, siguiendo una indicación posterior del profesor según confirma la coordinadora. Después preparamos GitHub Codespaces, un entorno desde el que trabajar sin instalar todas las herramientas en cada ordenador. Por último, utilizamos ramas y solicitudes de revisión para compartir los cambios.
 
@@ -334,8 +332,6 @@ El entorno es reproducible: el Codespace se crea desde el `devcontainer` con AWS
 
 
 ## Fase 1 — AWS y Terraform
-
-**Objetivo.** Crear en AWS los cuatro servidores necesarios para alojar nuestra página web, de forma que su configuración quede escrita y se pueda revisar.
 
 **Qué hicimos y por qué.** Utilizamos Terraform para describir los servidores, sus discos y las reglas de acceso. En lugar de configurar cuatro máquinas manualmente, preparamos un bloque para el servidor principal y otro que genera tres servidores de trabajo. Antes de aplicar cambios comprobamos la configuración y revisamos el plan para evitar modificaciones inesperadas.
 
@@ -673,8 +669,6 @@ Terraform creó la infraestructura del proyecto con un único módulo: variables
 
 ## Fase 2 — Acceso SSH
 
-**Objetivo.** Administrar los servidores a distancia de manera segura y permitir que cada integrante acceda con su propia clave.
-
 **Qué hicimos y por qué.** Configuramos claves SSH para no depender de contraseñas. Después preparamos nombres de conexión fáciles de recordar y un acceso a los servidores internos a través del principal. También limitamos el inicio de sesión de root. Los accesos se comprobaron con conexiones reales y registros del servidor.
 
 **Confirmación del equipo.** Cristina confirma que comprobó los accesos SSH de los integrantes. Las capturas disponibles se conservan con su fecha y autor; esta confirmación posterior no se presenta como una captura nueva.
@@ -883,8 +877,6 @@ Con la clave del Codespace, el acceso permite la administración remota: nombres
 
 ## Fase 3 — Docker Swarm
 
-**Objetivo.** Conseguir que los cuatro servidores trabajen juntos y puedan ejecutar la misma aplicación como un único servicio.
-
 **Qué hicimos y por qué.** Instalamos Docker y creamos un clúster Docker Swarm. El servidor principal organiza el trabajo y los otros tres ejecutan tareas. Los conectamos mediante sus direcciones privadas para que la comunicación interna no dependa de Internet. Comprobamos que los cuatro aparecían activos y que la red funcionaba.
 
 
@@ -1002,8 +994,6 @@ El clúster se formó por IP privada con los cuatro nodos. La red ingress es `re
 
 
 ## Fase 4 — Despliegue web
-
-**Objetivo.** Publicar nuestra página web y permitir que se abra desde cualquiera de los cuatro servidores.
 
 **Qué hicimos y por qué.** Preparamos la web de Fórmula 1 en dos versiones, 1.0 y 2.0. La empaquetamos como una imagen Docker, la publicamos en Docker Hub y desplegamos cuatro copias del servicio. Esto permite repartir las visitas y facilita actualizar la web sin reinstalarla manualmente en cada máquina.
 
@@ -1152,8 +1142,6 @@ La web se empaqueta en una imagen propia sobre Nginx que identifica cada contene
 
 
 ## Fase 5 — Pruebas de orquestación
-
-**Objetivo.** Comprobar que la web sigue funcionando cuando recibe más visitas, se actualiza o falla parte de la infraestructura.
 
 **Qué hicimos y por qué.** Probamos el reparto de peticiones, aumentamos y redujimos el número de copias, detuvimos contenedores y servidores y observamos su recuperación. También actualizamos la web a la versión 2.0 y volvimos a la 1.0. Cada prueba se explica por separado, con el procedimiento, los resultados registrados y las incidencias que aparecieron.
 

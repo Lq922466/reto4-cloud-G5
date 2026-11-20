@@ -342,8 +342,6 @@ El entorno es reproducible: el Codespace se crea desde el `devcontainer` con AWS
 **Importante.** Los servidores consumen presupuesto mientras están encendidos. La destrucción con Terraform es una opción de limpieza posterior, no una tarea obligatoria de la guía.
 
 
-**Objetivo.** Acceder a AWS desde el Codespace y definir como código, con Terraform, un manager y tres workers Ubuntu 22.04 en `us-east-1`, con un único grupo de seguridad de mínimos, un script de arranque y salidas con las direcciones y el ID de cada nodo; y registrar las operaciones de validación, planificación y cambios, señalando la destrucción todavía pendiente.
-
 ### 1.1. Learner Lab, consola de AWS y región
 
 **Procedimiento.** AWS Academy Learner Lab proporciona una cuenta de AWS temporal. En [AWS Academy](https://awsacademy.instructure.com/) se abre **Launch AWS Academy Learner Lab**, se pulsa **Start Lab** y, con el indicador en verde, **AWS** abre la consola; arriba a la derecha debe verse **N. Virginia (us-east-1)**. En el Codespace se fija la región de la CLI:
@@ -681,8 +679,6 @@ Terraform creó la infraestructura del proyecto con un único módulo: variables
 
 **Confirmación del equipo.** Cristina confirma que comprobó los accesos SSH de los integrantes. Las capturas disponibles se conservan con su fecha y autor; esta confirmación posterior no se presenta como una captura nueva.
 
-
-**Objetivo.** Administrar los cuatro servidores por SSH con claves públicas propias, sin contraseñas ni acceso de root: entrar con un nombre corto, llegar a los workers por su IP privada a través del manager, ejecutar órdenes en todos a la vez con `sudo` y copiar archivos de forma verificable.
 
 ### 2.1. Claves propias de los integrantes
 
@@ -1161,8 +1157,6 @@ La web se empaqueta en una imagen propia sobre Nginx que identifica cada contene
 
 **Qué hicimos y por qué.** Probamos el reparto de peticiones, aumentamos y redujimos el número de copias, detuvimos contenedores y servidores y observamos su recuperación. También actualizamos la web a la versión 2.0 y volvimos a la 1.0. Cada prueba se explica por separado, con el procedimiento, los resultados registrados y las incidencias que aparecieron.
 
-
-**Objetivo.** Demostrar lo que aporta Swarm frente a un servidor único: reparto de carga, escalado, autorreparación, comportamiento ante la caída de un worker y del líder, mantenimiento de nodos y actualización sin cortes con vuelta atrás. Las pruebas se documentan con capturas y registros antes, durante y después de las operaciones, junto con sondas HTTP periódicas.
 
 ### 5.1. Cómo se realizaron las pruebas
 

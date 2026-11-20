@@ -8,7 +8,7 @@ Informe técnico del proyecto · Fases 0 a 5
 | --- | --- |
 | **Proyecto** | RETO 4 · Cloud · Grupo 5 |
 | **Integrantes** | Cristina (Lq922466), Enrique (EnriZx2), Alexandra (alexguerth) e Ibai (ibaiaretxabalaasir-collab). Responsable del producto Cloud: Cristina |
-| **Repositorio** | `Lq922466/reto4-cloud-G5` (privado) |
+| **Repositorio** | `Lq922466/reto4-cloud-G5` (**público desde el 20 de noviembre de 2026**) |
 | **Imágenes de la web** | [`innnx/reto4-f1`](https://hub.docker.com/r/innnx/reto4-f1/tags), etiquetas `1.0` y `2.0` |
 | **Nube** | AWS Academy Learner Lab, región `us-east-1`, VPC por defecto. Todos los recursos llevan el sufijo `g5` |
 | **Revisión del informe** | 18 de noviembre de 2026 |
@@ -38,7 +38,7 @@ Durante el proyecto se utilizaron **Codex** y **Claude Code** como herramientas 
   - [Flujo de trabajo](#flujo-de-trabajo)
   - [Herramientas utilizadas](#herramientas-utilizadas)
 - [Fase 0 — GitHub y Codespaces](#fase-0-github-y-codespaces)
-  - [0.1. Repositorio privado y colaboradores](#01-repositorio-privado-y-colaboradores)
+  - [0.1. Repositorio público y colaboradores](#01-repositorio-publico-y-colaboradores)
   - [0.2. Codespace y `devcontainer`](#02-codespace-y-devcontainer)
   - [0.3. Organización de los cambios en GitHub](#03-organizacion-de-los-cambios-en-github)
   - [0.4. Estructura, README y scripts](#04-estructura-readme-y-scripts)
@@ -138,7 +138,7 @@ Entre la prueba E8 y el 9 de noviembre, worker1-g5 y worker2-g5 fueron managers 
 
 | Herramienta | Versión o detalle | Uso |
 | --- | --- | --- |
-| GitHub, GitHub CLI (`gh` 2.103.3) y Git | Repositorio privado | Repositorio, colaboradores, ramas y Pull Requests |
+| GitHub, GitHub CLI (`gh` 2.103.3) y Git | Repositorio público (antes privado) | Repositorio, colaboradores, ramas y Pull Requests |
 | GitHub Codespaces y `devcontainer` | Ubuntu 22.04 | Máquina de control reproducible |
 | AWS Academy Learner Lab, consola de AWS y AWS CLI | AWS CLI 2.39.3 | Acceso a AWS y consultas o cambios autorizados en EC2 |
 | Terraform y proveedor `hashicorp/aws` | Terraform 1.17.1, proveedor 5.100.0 | Infraestructura como código |
@@ -153,14 +153,14 @@ Entre la prueba E8 y el 9 de noviembre, worker1-g5 y worker2-g5 fueron managers 
 
 **Objetivo.** Preparar un espacio de trabajo común antes de crear servidores. Así podemos guardar el código, recuperar versiones anteriores y saber qué cambios se hicieron.
 
-**Qué hicimos y por qué.** Primero organizamos el repositorio privado y sus carpetas. Después preparamos GitHub Codespaces, un entorno desde el que trabajar sin instalar todas las herramientas en cada ordenador. Por último, utilizamos ramas y solicitudes de revisión para compartir los cambios.
+**Qué hicimos y por qué.** Primero organizamos el repositorio y sus carpetas; inicialmente era privado y se hizo público el 20 de noviembre para facilitar la entrega. Después preparamos GitHub Codespaces, un entorno desde el que trabajar sin instalar todas las herramientas en cada ordenador. Por último, utilizamos ramas y solicitudes de revisión para compartir los cambios.
 
 
-**Objetivo.** Disponer de un repositorio privado y colaborativo en GitHub y de una máquina de control reproducible en GitHub Codespaces, con AWS CLI y Terraform, desde la que se gestiona todo el proyecto.
+**Objetivo.** Disponer de un repositorio colaborativo (actualmente público) en GitHub y de una máquina de control reproducible en GitHub Codespaces, con AWS CLI y Terraform, desde la que se gestiona todo el proyecto.
 
-### 0.1. Repositorio privado y colaboradores
+### 0.1. Repositorio público y colaboradores
 
-**Procedimiento.** Cristina creó el repositorio `reto4-cloud-G5` con su cuenta Lq922466 (**New repository → Private**). Se configuró como privado para limitar el acceso al código y a la documentación de la infraestructura. Después invitó a los demás integrantes y al profesor desde **Settings → Collaborators → Add people**, y cada uno aceptó la invitación. El permiso de escritura permite crear ramas y Pull Requests, pero no cambiar la configuración del repositorio.
+**Procedimiento.** Cristina creó el repositorio `reto4-cloud-G5` con su cuenta Lq922466 (**New repository → Private**). Inicialmente se configuró como privado para limitar el acceso. El 20 de noviembre de 2026 se cambió a **Public** para facilitar la consulta de la entrega. Este cambio no modifica el historial ni las invitaciones existentes. Después invitó a los demás integrantes y al profesor desde **Settings → Collaborators → Add people**, y cada uno aceptó la invitación. El permiso de escritura permite crear ramas y Pull Requests, pero no cambiar la configuración del repositorio.
 
 **Comprobación.**
 
@@ -169,11 +169,11 @@ gh repo view --json visibility --jq .visibility
 gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_name] | @tsv'
 ```
 
-El repositorio es privado. Cristina (Lq922466) es la administradora, y tienen escritura Enrique (EnriZx2), Alexandra (alexguerth), Ibai (ibaiaretxabalaasir-collab) y el profesor, con la cuenta **jc-csl**, registrada en la configuración de colaboradores.
+**Estado actual: repositorio público.** La captura siguiente corresponde al estado anterior (privado), el 18 de noviembre. Cristina (Lq922466) es la administradora, y tienen escritura Enrique (EnriZx2), Alexandra (alexguerth), Ibai (ibaiaretxabalaasir-collab) y el profesor, con la cuenta **jc-csl**, registrada en la configuración de colaboradores.
 
-![Repositorio privado y cuentas con acceso](evidencias/capturas-conformes/F1-repositorio.png)
+![Captura histórica de colaboradores cuando el repositorio era privado](evidencias/capturas-conformes/F1-repositorio.png)
 
-*Figura 2. Repositorio privado, con acceso de los cuatro integrantes y del profesor (jc-csl). Captura conforme, 18 de noviembre de 2026.*
+*Figura 2. Captura histórica del 18 de noviembre de 2026, cuando el repositorio era privado. Desde el 20 de noviembre es público; la imagen documenta los colaboradores de aquella fecha, no la visibilidad actual.*
 
 > **Evidencia pendiente:** la Rúbrica indica como evidencia de F1 la página **Settings → Collaborators**; falta su captura desde el navegador.
 
@@ -328,7 +328,7 @@ El script abre una sesión real en `xterm`, en el Codespace o por SSH en un nodo
 
 ### 0.8. Resultado y conclusión
 
-El entorno es reproducible: el Codespace se crea desde el `devcontainer` con AWS CLI y Terraform, el repositorio es privado y tiene la estructura de la Guía, y sus exclusiones y la revisión automática impiden publicar estado, variables, claves y credenciales. Todo el proyecto está en `main` y el profesor tiene acceso. La colaboración sigue incompleta: solo hay una solicitud de revisión fusionada de otro integrante, la de Enrique, hecha desde la web, y no constan commits de Alexandra ni de Ibai desde sus cuentas.
+El entorno es reproducible: el Codespace se crea desde el `devcontainer` con AWS CLI y Terraform, el repositorio es público desde el 20 de noviembre y mantiene la estructura de la Guía, y sus exclusiones y la revisión automática impiden publicar estado, variables, claves y credenciales. Todo el proyecto está en `main` y el profesor tiene acceso. La colaboración sigue incompleta: solo hay una solicitud de revisión fusionada de otro integrante, la de Enrique, hecha desde la web, y no constan commits de Alexandra ni de Ibai desde sus cuentas.
 
 
 ## Fase 1 — AWS y Terraform

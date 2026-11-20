@@ -32,7 +32,7 @@ de D3 sí. **Solo las de [capturas-conformes/](capturas-conformes/INDICE.md) mue
 | F10 | Parcial | [Capturas conformes](capturas-conformes/INDICE.md), integradas en el informe | Hay 32 capturas conformes de los días 5, 6, 9 y 18 de noviembre. Faltan las de las pruebas con sonda, D3, C3 actual y las de la consola de AWS. |
 | F11 | Parcial | [GESTION (borrador)](../GESTION.md) | Recoge la organización acordada y separa lo asignado de lo realizado. Falta el trabajo real de cada integrante, sus seguimientos y la reflexión. |
 | F12 | Listo | [Captura conforme](capturas-conformes/F12-seguridad.png) del 18 de noviembre, [revisión de todo el historial](auditoria/registro-repositorio.txt), [CT/F12-archivos-sensibles](capturas-terminal/F12-archivos-sensibles.png) | Repetir `revisar-secretos.py 6f3d838 HEAD` antes de cada integración. |
-| F13 | Pendiente | [Estructura sin contenido](../practica-individual/README.md) | Cada integrante debe aportar la documentación de su práctica individual previa de EC2. |
+| F13 | Documentado por confirmación; sin capturas originales | [Explicación de la práctica presencial sin capturas](../practica-individual/README.md) | La coordinadora confirma la práctica presencial; faltan las evidencias individuales originales. |
 
 ## Fase 1 · Infraestructura
 

@@ -123,7 +123,7 @@ Ese trabajo no se atribuye a ninguna otra persona.
 | Informe y evidencias | F9, F10 | Cristina, para el Producto 6 | `PROYECTO.md` y capturas conformes, con Claude Code. Revisión de enlaces del README, de Enrique | [PROYECTO.md](PROYECTO.md), [capturas conformes](evidencias/capturas-conformes/INDICE.md) | Capturas que faltan |
 | Gestión | F11 | Todos: documentación de equipo | Este borrador, redactado con Claude Code por encargo de Cristina | Este documento | Reflexión y seguimiento de cada integrante |
 | Prácticas individuales | F13 | Cada integrante | Nada en el repositorio | [Instrucciones](practica-individual/README.md) | La práctica de cada persona |
-| Exposición y defensa | G1–G3 | Todos: presentación final | [Material preparado](entrega/DEFENSA.md), sin realizar | — | Repartir partes, ensayar y hacer la exposición |
+| Exposición y defensa | G1–G3 | Todos: presentación final | Presentación realizada, confirmada por la coordinadora el 20 de noviembre de 2026 | [Material de presentación](entrega/DEFENSA.md) | No se ha incorporado un acta ni capturas de la exposición |
 
 ## 4. Seguimiento semanal
 
@@ -171,7 +171,7 @@ las que no lo hubo.
 | 9 de noviembre | Borradores de las revisiones de Enrique, Alexandra e Ibai en `cloud-g5-implementacion` (`cf5da4a` a `f664590`) y en las ramas de las PR #3, #4 y #5 | Commits con la identidad Innnx de Cristina. Los de las PR declaran que los preparó Codex; en los demás no consta la herramienta |
 | 10 de noviembre | Sincronización del estado de Terraform con `apply -refresh-only` y detección del riesgo de la imagen de Ubuntu | Claude Code, por encargo de Cristina y con su autorización |
 | 10 de noviembre | Reescritura de `PROYECTO.md` | Claude Code, por encargo de Cristina |
-| Pendiente | Acceso de Enrique, Alexandra e Ibai a los tres workers, con capturas comentadas | Enrique, Alexandra e Ibai |
+| Confirmado por la coordinadora | Acceso de Enrique, Alexandra e Ibai a los tres workers; la confirmación no equivale a capturas nuevas | Enrique, Alexandra e Ibai |
 
 - Seguimiento formal del viernes 13 de noviembre: `[POR COMPLETAR]`.
 - Tareas de la semana: consultar [PENDIENTES](entrega/PENDIENTES.md).

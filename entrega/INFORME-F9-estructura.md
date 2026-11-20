@@ -46,7 +46,7 @@ Procede de [GESTION.md](../GESTION.md), que ya recoge la organización acordada 
 
 ## 3. Arquitectura (F8)
 
-Diagrama: [`diagramas/arquitectura.png`](../diagramas/arquitectura.png), generado a partir de [arquitectura.md](../diagramas/arquitectura.md).
+Diagrama: [`diagramas/arquitectura-simple.svg`](../diagramas/arquitectura-simple.svg), generado a partir de [arquitectura.md](../diagramas/arquitectura.md).
 
 **Debe explicarse:** las instancias conservan sus nombres iniciales, pero desde las pruebas E8 manager-g5, worker1-g5 y
 worker2-g5 son managers de Swarm. worker1-g5 es el líder actual y solo worker3-g5 es un worker puro.

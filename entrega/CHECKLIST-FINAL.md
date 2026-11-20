@@ -55,7 +55,7 @@ Hay una comprobación real, pero falta la captura concreta que pide la Rúbrica.
 | E3 | Autorreparación (eliminar contenedor) | Servicio antes/después | [F4-E3](../evidencias/F4-E3/): registro, sondas y capturas antes y después | Capturas conformes, con la sonda visible. Requiere autorización. |
 | E6 | Mantenimiento (modo drain) | Nodos y servicio | [F4-E6](../evidencias/F4-E6/): registro, sondas y capturas antes, durante y después | Capturas conformes, con la sonda visible. Requiere autorización. |
 | E7 | Actualización (1.0 a 2.0) sin corte y rollback | Script y navegador | [F3-actualizacion](../evidencias/F3-actualizacion/): registro, sondas y capturas, [CT/E7-historial-versiones](../evidencias/capturas-terminal/E7-historial-versiones.png) | Capturas conformes durante la actualización y el rollback, con la sonda y el navegador. Requiere autorización. |
-| F1 | Privado, todos colaboradores, profesor invitado | Settings | [Captura conforme](../evidencias/capturas-conformes/F1-repositorio.png) del 18 de noviembre, con el profesor (jc-csl) como colaborador, [CT/F1-colaboradores](../evidencias/capturas-terminal/F1-colaboradores.png) | Captura de Settings → Collaborators en el navegador. |
+| F1 | La Rúbrica indica privado y colaboradores; actualmente público desde el 20/11 | Settings | [Captura histórica del estado privado](../evidencias/capturas-conformes/F1-repositorio.png) del 18 de noviembre; el repositorio ahora es público, con el profesor (jc-csl) como colaborador, [CT/F1-colaboradores](../evidencias/capturas-terminal/F1-colaboradores.png) | Captura de Settings → Collaborators en el navegador. |
 
 ## Parciales
 

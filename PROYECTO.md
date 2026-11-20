@@ -153,14 +153,12 @@ Entre la prueba E8 y el 9 de noviembre, worker1-g5 y worker2-g5 fueron managers 
 
 **Objetivo.** Preparar un espacio de trabajo común antes de crear servidores. Así podemos guardar el código, recuperar versiones anteriores y saber qué cambios se hicieron.
 
-**Qué hicimos y por qué.** Primero organizamos el repositorio y sus carpetas; inicialmente era privado y se hizo público el 20 de noviembre para facilitar la entrega. Después preparamos GitHub Codespaces, un entorno desde el que trabajar sin instalar todas las herramientas en cada ordenador. Por último, utilizamos ramas y solicitudes de revisión para compartir los cambios.
+**Qué hicimos y por qué.** Primero organizamos el repositorio y sus carpetas; inicialmente era privado y se hizo público el 20 de noviembre, siguiendo una indicación posterior del profesor según confirma la coordinadora. Después preparamos GitHub Codespaces, un entorno desde el que trabajar sin instalar todas las herramientas en cada ordenador. Por último, utilizamos ramas y solicitudes de revisión para compartir los cambios.
 
-
-**Objetivo.** Disponer de un repositorio colaborativo (actualmente público) en GitHub y de una máquina de control reproducible en GitHub Codespaces, con AWS CLI y Terraform, desde la que se gestiona todo el proyecto.
 
 ### 0.1. Repositorio público y colaboradores
 
-**Procedimiento.** Cristina creó el repositorio `reto4-cloud-G5` con su cuenta Lq922466 (**New repository → Private**). Inicialmente se configuró como privado para limitar el acceso. El 20 de noviembre de 2026 se cambió a **Public** para facilitar la consulta de la entrega. Este cambio no modifica el historial ni las invitaciones existentes. Después invitó a los demás integrantes y al profesor desde **Settings → Collaborators → Add people**, y cada uno aceptó la invitación. El permiso de escritura permite crear ramas y Pull Requests, pero no cambiar la configuración del repositorio.
+**Procedimiento.** Cristina creó el repositorio `reto4-cloud-G5` con su cuenta Lq922466 (**New repository → Private**). Inicialmente se configuró como privado para limitar el acceso. El 20 de noviembre de 2026 se cambió a **Public**, siguiendo una indicación posterior del profesor según confirma la coordinadora. Este cambio no modifica el historial ni las invitaciones existentes. Después invitó a los demás integrantes y al profesor desde **Settings → Collaborators → Add people**, y cada uno aceptó la invitación. El permiso de escritura permite crear ramas y Pull Requests, pero no cambiar la configuración del repositorio.
 
 **Comprobación.**
 
@@ -659,7 +657,7 @@ terraform -chdir=terraform apply -state=ESTADO/terraform.tfstate destroy.tfplan
 
 El 5 de noviembre se generó `plan -destroy` solo como información, sin aplicarlo: `Plan: 0 to add, 0 to change, 5 to destroy` ([registro](evidencias/A6-plan-actual.txt)). Aplicarlo borra instancias, discos y clúster y obliga a repetir las Fases 1 a 4; como la Rúbrica exige que todo funcione durante la corrección, se deja para el final, con autorización y tras consultarlo con el profesor.
 
-**Estado:** limpieza opcional no ejecutada. No se considera una prueba técnica pendiente de la entrega.
+**Estado:** la limpieza destructiva no se ejecutó. La Rúbrica A6 incluye una prueba de destrucción y exige una secuencia de capturas: el `plan -destroy` conservado no prueba que se haya ejecutado la destrucción. Por ello A6 permanece parcial.
 
 ### 1.15. Incidencias registradas
 
@@ -884,7 +882,7 @@ En la columna «Demostrado con captura» hay una captura del integrante y que el
 
 ### 2.8. Resultado y conclusión
 
-Con la clave del Codespace, el acceso permite la administración remota: nombres cortos (B2), workers por IP privada con salto (B5), órdenes simultáneas con `sudo` y copia SCP verificada (B3), y root y contraseña desactivados con permisos 700 y 600 (B4). Las claves de los cuatro integrantes están en los cuatro nodos y Cristina entró con la suya en todos. **B1 sigue parcial:** Enrique, Alexandra e Ibai solo han entrado en manager-g5, sus capturas no tienen el comentario de la norma, falta `B1-repositorio` y hay que aclarar `vockey` con el profesor.
+Con la clave del Codespace, el acceso permite la administración remota: nombres cortos (B2), workers por IP privada con salto (B5), órdenes simultáneas con `sudo` y copia SCP verificada (B3), y root y contraseña desactivados con permisos 700 y 600 (B4). Las claves de los cuatro integrantes están en los cuatro nodos y Cristina entró con la suya en todos. **B1 sigue parcial:** los registros versionados acreditan el acceso de Enrique, Alexandra e Ibai al manager-g5, y la coordinadora confirma que también comprobó sus accesos a los workers, aunque no hay capturas conformes adicionales de esas conexiones. Además, sus capturas carecen del comentario de la norma, falta `B1-repositorio` y hay que aclarar `vockey` con el profesor.
 
 
 ## Fase 3 — Docker Swarm
@@ -893,8 +891,6 @@ Con la clave del Codespace, el acceso permite la administración remota: nombres
 
 **Qué hicimos y por qué.** Instalamos Docker y creamos un clúster Docker Swarm. El servidor principal organiza el trabajo y los otros tres ejecutan tareas. Los conectamos mediante sus direcciones privadas para que la comunicación interna no dependa de Internet. Comprobamos que los cuatro aparecían activos y que la red funcionaba.
 
-
-**Objetivo.** Formar un clúster Docker Swarm con los cuatro nodos comunicados por IP privada, crear una red ingress overlay propia con MTU 1450 y una overlay para el servicio, y comprobar que los cuatro nodos están activos con el manager como líder.
 
 ### 3.1. Docker y conectividad por IP privada
 
@@ -1015,8 +1011,6 @@ El clúster se formó por IP privada con los cuatro nodos. La red ingress es `re
 
 **Qué hicimos y por qué.** Preparamos la web de Fórmula 1 en dos versiones, 1.0 y 2.0. La empaquetamos como una imagen Docker, la publicamos en Docker Hub y desplegamos cuatro copias del servicio. Esto permite repartir las visitas y facilita actualizar la web sin reinstalarla manualmente en cada máquina.
 
-
-**Objetivo.** Empaquetar la web del Gran Premio de Euskadi en una imagen propia, publicarla en Docker Hub en las versiones 1.0 y 2.0 y desplegarla en Swarm como un servicio de cuatro réplicas en el puerto 80, conectado a la red del grupo y accesible desde la IP pública de cualquiera de los cuatro nodos.
 
 ### 4.1. La web y su imagen con Nginx
 
@@ -1370,10 +1364,10 @@ Con la web definitiva, Swarm demostró el balanceo, el escalado, la autorreparac
 
 ## Conclusión general
 
-**Último estado técnico registrado.** Desde el 10 de noviembre no se ha accedido a AWS ni al clúster, así que el estado actual debe comprobarse con `comprobar-laboratorio.sh` en cuanto se inicie el laboratorio.
+**Último estado técnico registrado.** Los resultados técnicos documentados corresponden a las comprobaciones de los días 9 y 10 de noviembre. No se ha realizado una nueva comprobación del estado actual; esto no invalida los resultados históricos, pero tampoco los convierte en una verificación actual.
 
 - **Infraestructura (10 de noviembre).** Las cuatro instancias conservan sus ID, discos e IP privadas, y el estado de Terraform está sincronizado con AWS. El plan normal propone sustituir las instancias por la imagen de Ubuntu nueva (I1.4): **no debe aplicarse** hasta fijar la imagen.
-- **Red y SSH (9 de noviembre).** Grupo de seguridad de mínimos, con la regla temporal `88.14.93.201/32` abierta para B1. Las claves de los cuatro integrantes están en los cuatro nodos, sin root ni contraseñas; Cristina entró en todos, y Enrique, Alexandra e Ibai, solo en manager-g5.
+- **Red y SSH (9 de noviembre).** Grupo de seguridad de mínimos, con la regla temporal `88.14.93.201/32` abierta para B1. Las claves de los cuatro integrantes están en los cuatro nodos, sin root ni contraseñas. Los registros conservados acreditan la entrada de Cristina en todos y de Enrique, Alexandra e Ibai en manager-g5; la coordinadora confirma además que comprobó sus accesos a los workers, aunque faltan capturas conformes de estas últimas conexiones.
 - **Swarm y web (9 de noviembre).** manager-g5 único manager y líder con tres workers activos; `reto4_web` en 4/4 con `innnx/reto4-f1:1.0`, HTTP 200 por las cuatro IP y reparto entre los cuatro contenedores.
 
 

@@ -239,15 +239,12 @@ A estos se suman el commit de la revisión del 18 de noviembre, con Claude Code,
   - [PR #2](https://github.com/Lq922466/reto4-cloud-G5/pull/2), de Enrique, hacia `cloud-g5-implementacion`, fusionada por Cristina el
     6 de noviembre. Su contenido está en `main`.
   - [PR #3](https://github.com/Lq922466/reto4-cloud-G5/pull/3), [PR #4](https://github.com/Lq922466/reto4-cloud-G5/pull/4) y
-    [PR #5](https://github.com/Lq922466/reto4-cloud-G5/pull/5), abiertas el 9 de noviembre desde la cuenta de Cristina con borradores
-    preparados con Codex para Enrique, Alexandra e Ibai. Desde el 18 de noviembre apuntan a `main`. Siguen abiertas, con conflictos,
-    hasta que cada integrante las valide.
+    [PR #5](https://github.com/Lq922466/reto4-cloud-G5/pull/5), creadas desde la cuenta de Cristina con borradores preparados con Codex para Enrique, Alexandra e Ibai. La #3 está cerrada sin fusionar; las #4 y #5 siguen abiertas. **Las #4 y #5 se registran como participación colaborativa asociada a Alexandra e Ibai**, según confirma la coordinadora, sin atribuirles la autoría técnica de creación de la PR.
 - **Ramas de los integrantes:** `enrique-revision-documentacion`, con el commit de Enrique de la PR #2; y
   `enrique-correccion-revision`, `alexandra-revision-evidencias` e `ibai-revision-individual`, de las PR #3, #4 y #5, con dos commits
   cada una con la identidad Innnx. Ninguna se ha eliminado.
-- **Sin aportaciones propias en el repositorio:** no constan commits ni PR de Alexandra ni de Ibai desde sus cuentas. Esto no descarta
-  trabajo hecho fuera del repositorio, como la web del ZIP, Trello o Drive.
-- **Pendiente:** cada integrante debe aportar su trabajo real desde su propia cuenta.
+- **Participación registrada de Alexandra e Ibai:** se reconocen sus ramas y las PR #4 y #5 como trabajo colaborativo asociado a cada integrante. La coordinadora confirma su participación. El historial de GitHub no muestra que estas PR fueran creadas desde sus cuentas personales, distinción que se conserva para que el informe sea verificable.
+- **Para acreditar autoría individual de GitHub, si se exige específicamente:** harían falta commits o revisiones firmados desde sus propias cuentas.
 
 Flujo para aportar trabajo. Los pasos detallados para Enrique, Alexandra e Ibai, con sus ramas y lo que revisa cada integrante,
 están en las [instrucciones de F2](entrega/INSTRUCCIONES-F2-INTEGRANTES.md).

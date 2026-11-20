@@ -1,4 +1,4 @@
-# Tareas pendientes para la entrega
+# Revisión de tareas y evidencias para la entrega
 
 Situación revisada el 18 de noviembre de 2026. El último estado técnico registrado es del 9 de noviembre (Swarm, SSH y web) y del 10
 de noviembre (Terraform). [Contraste con la Guía y la Rúbrica](CONTRASTE-GUIA-RUBRICA.md). La Guía y la Rúbrica no
@@ -24,7 +24,7 @@ Classroom: `[POR COMPLETAR]`.
 | # | Tarea | Criterio | Listo cuando |
 | --- | --- | --- | --- |
 | 5 | Hacer las seis capturas de [REVISION.md](../REVISION.md#capturas-que-faltan), sin mostrar el ID de la cuenta de AWS | A2, A3, A6, E5, F1, F2, F5, F10 | Imágenes en `evidencias/capturas-web/` |
-| 6 | Integrantes y nombres | F1, F11, G1 | **Hecho:** Cristina, Enrique, Alexandra e Ibai, en [GESTION.md](../GESTION.md). Falta repartir las partes de la presentación |
+| 6 | Integrantes y nombres | F1, F11, G1 | **Hecho:** Cristina, Enrique, Alexandra e Ibai, en [GESTION.md](../GESTION.md). La presentación ya se realizó; la distribución de intervenciones no se ha documentado aquí |
 | 7 | Invitar al profesor al repositorio antes de la fecha límite | F1 | **Hecho:** `jc-csl` con escritura, comprobado el 18 de noviembre. Falta la captura de Settings → Collaborators en el navegador |
 | 8 | Aportar su práctica individual previa y su clave propia | F13, B1 | `practica-individual/Lq922466/` con trabajo real. **Clave propia, `cristina-reto4`, instalada el 9 de noviembre, y acceso con ella a los cuatro nodos demostrado ese día.** Falta repetir las capturas con el comentario de la norma |
 | 9 | Decidir cuándo ejecutar la destrucción de A6, tras consultarlo | A6 | Decisión tomada. Recomendación: después de la corrección |
@@ -52,7 +52,7 @@ Son los integrantes que recoge la organización del equipo. Nadie debe hacer est
 | 6 | Revisar la PR de otro integrante y las evidencias | F2 | Revisión registrada en GitHub |
 | 7 | Preparar las preguntas sobre cualquier parte y su demostración en vivo | G2, G3 | Realizadas ante el profesor |
 
-**Para todo el grupo:** asignar los papeles A–D, ensayar con la [presentación](presentacion-cloud-g5.pptx) y el [guion](DEFENSA.md),
+**Presentación realizada el 20 de noviembre de 2026, según confirmación de la coordinadora.** El guion y las diapositivas se conservan como materiales de preparación.
 incluida la caída de un nodo en directo, y hacer la exposición (G1). Seguimiento formal cada viernes, y aviso inmediato si surge un
 problema urgente.
 
@@ -95,7 +95,7 @@ problema urgente.
 | 4 | Repetir E4 y E8 según el [plan](PLAN-C3-E4-E8.md). C3 ya se corrigió el 9 de noviembre | Cambia roles de Swarm y detiene instancias |
 | 4b | Fijar la imagen de Ubuntu en Terraform y repetir el plan | Cambia el código que gestiona AWS |
 | 5 | Repetir E2, E3, E6 y E7 con capturas conformes | Cambia el servicio |
-| 6 | Ejecutar `terraform destroy` | Elimina el clúster, de forma irreversible |
+| Opcional | Ejecutar `terraform destroy` | Limpieza de recursos de AWS, no exigida como entrega |
 | 7 | Subir cambios a `main` o fusionar PR | Afecta a GitHub y a la rama de entrega. **La PR #1 se fusionó el 18 de noviembre** |
 
 **Claude Code no puede hacer:** las capturas con sesión de AWS o GitHub, el trabajo individual de nadie, las decisiones del grupo, la

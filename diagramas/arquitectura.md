@@ -2,7 +2,7 @@
 
 Mapa de la arquitectura desplegada (criterio F8). Representa la topología que pide la Guía y que se comprobó por última vez el
 **9 de noviembre de 2026**, después de devolver el clúster a un solo manager tras la prueba E8. No se ha vuelto a comprobar desde el
-reinicio del laboratorio del 10 de noviembre. [Imagen del diagrama renderizado](arquitectura.png).
+reinicio del laboratorio del 10 de noviembre. [Imagen del diagrama renderizado](arquitectura-simple.svg).
 
 ```mermaid
 flowchart LR
@@ -25,7 +25,7 @@ flowchart LR
     CS -->|"SSH por la regla /32"| M
     M -.->|"Salto SSH por IP privada"| W1
     M -.-> W2 & W3
-    CS -->|"git push y Pull Requests"| GH["GitHub<br/>Lq922466/reto4-cloud-G5 (privado)"]
+    CS -->|"git push y Pull Requests"| GH["GitHub<br/>Lq922466/reto4-cloud-G5 (público desde el 20/11)"]
 ```
 
 ## Cómo leerlo
@@ -47,5 +47,8 @@ y [reglas](../evidencias/capturas-conformes/A3-reglas.png).
 
 ## Cómo se genera la imagen
 
-`arquitectura.png` se obtiene renderizando el bloque Mermaid anterior con Mermaid 10.9.1 en Chromium sin interfaz (Playwright), con
+`arquitectura.png` es la versión histórica detallada renderizada a partir del bloque Mermaid con Mermaid 10.9.1 en Chromium sin interfaz (Playwright), con
 el tema por defecto y escala 2. GitHub también dibuja el bloque Mermaid directamente al abrir este archivo.
+
+
+> **Versión simplificada para el informe:** [arquitectura-simple.svg](arquitectura-simple.svg). Resume el despliegue sin IP privadas y muestra el servicio web distribuido entre los nodos. El PNG anterior se conserva como documentación técnica histórica.

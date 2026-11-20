@@ -1,10 +1,8 @@
-# Gestión del grupo 5
+# Organización y participación del Grupo 5
 
-> **BORRADOR. No entregar todavía.** Datos revisados el 18 de noviembre de 2026. Proceden de tres fuentes: el documento interno de
-> organización del equipo del RETO 4, que no se versiona porque contiene correos personales y un enlace de invitación; GitHub; y el
-> historial de Git. Ese documento describe **cómo se ha organizado el trabajo**, y una tarea asignada no significa que esté hecha.
-> Por eso este documento distingue entre responsabilidad asignada, trabajo realizado, evidencia y trabajo pendiente. Cada
-> `[POR COMPLETAR]` debe rellenarlo la persona indicada. Ningún reparto, reunión ni aportación se ha deducido o inventado.
+Este documento explica cómo se organizó el equipo, qué tareas correspondían a cada integrante y qué participación quedó registrada en el producto Cloud. Se distingue entre las tareas asignadas, las realizadas y las que todavía necesitan una evidencia adicional. La información se basa en los documentos de organización, GitHub y los registros del proyecto, revisados el 18 de noviembre de 2026.
+
+**Uso de inteligencia artificial.** Cristina coordinó y autorizó las operaciones técnicas del producto Cloud. Codex y Claude Code se utilizaron como apoyo para preparar scripts, realizar operaciones autorizadas, comprobar resultados y ordenar la documentación. El uso de estas herramientas se explica de manera transparente y no sustituye las aportaciones humanas ni se atribuye a otros integrantes.
 
 ## 1. Equipo
 
@@ -19,10 +17,11 @@ Este repositorio es el **Producto 6, Cloud**, asignado a Cristina. Los Productos
 interno no detalla su contenido ni menciona un Producto 7.
 
 Los permisos son los que muestra GitHub el 18 de noviembre ([captura](evidencias/capturas-conformes/F1-repositorio.png)). El
-profesor tiene acceso al repositorio con la cuenta `jc-csl`, con permiso de escritura, según confirmó Cristina. El repositorio es
-privado.
+profesor tiene acceso al repositorio con la cuenta `jc-csl`, con permiso de escritura, según confirmó Cristina. El repositorio es **público desde el 20 de noviembre de 2026**. La captura enlazada refleja su estado anterior, privado, el 18 de noviembre.
 
-## 2. Organización acordada
+**Confirmación de la coordinadora (20 de noviembre).** Alexandra e Ibai iniciaron sesión en GitHub con sus propias cuentas y consultaron el repositorio y el trabajo asignado, según confirma Cristina. Se reconocen estas acciones como participación del equipo. Las PR #4 y #5 corresponden a sus revisiones, pero GitHub registra su creación desde `Lq922466`; por tanto, no se presentan como PR creadas por sus cuentas personales. No se han localizado reviews ni commits de esas dos cuentas en dichas PR.
+
+## 2. Reparto y organización del trabajo
 
 Resumen del documento interno de organización. Es una **planificación**: lo realmente hecho está en el apartado 3.
 
@@ -125,7 +124,7 @@ Ese trabajo no se atribuye a ninguna otra persona.
 | Informe y evidencias | F9, F10 | Cristina, para el Producto 6 | `PROYECTO.md` y capturas conformes, con Claude Code. Revisión de enlaces del README, de Enrique | [PROYECTO.md](PROYECTO.md), [capturas conformes](evidencias/capturas-conformes/INDICE.md) | Capturas que faltan |
 | Gestión | F11 | Todos: documentación de equipo | Este borrador, redactado con Claude Code por encargo de Cristina | Este documento | Reflexión y seguimiento de cada integrante |
 | Prácticas individuales | F13 | Cada integrante | Nada en el repositorio | [Instrucciones](practica-individual/README.md) | La práctica de cada persona |
-| Exposición y defensa | G1–G3 | Todos: presentación final | [Material preparado](entrega/DEFENSA.md), sin realizar | — | Repartir partes, ensayar y hacer la exposición |
+| Exposición y defensa | G1–G3 | Todos: presentación final | Presentación realizada, confirmada por la coordinadora el 20 de noviembre de 2026 | [Material de presentación](entrega/DEFENSA.md) | No se ha incorporado un acta ni capturas de la exposición |
 
 ## 4. Seguimiento semanal
 
@@ -173,7 +172,7 @@ las que no lo hubo.
 | 9 de noviembre | Borradores de las revisiones de Enrique, Alexandra e Ibai en `cloud-g5-implementacion` (`cf5da4a` a `f664590`) y en las ramas de las PR #3, #4 y #5 | Commits con la identidad Innnx de Cristina. Los de las PR declaran que los preparó Codex; en los demás no consta la herramienta |
 | 10 de noviembre | Sincronización del estado de Terraform con `apply -refresh-only` y detección del riesgo de la imagen de Ubuntu | Claude Code, por encargo de Cristina y con su autorización |
 | 10 de noviembre | Reescritura de `PROYECTO.md` | Claude Code, por encargo de Cristina |
-| Pendiente | Acceso de Enrique, Alexandra e Ibai a los tres workers, con capturas comentadas | Enrique, Alexandra e Ibai |
+| Confirmado por la coordinadora | Acceso de Enrique, Alexandra e Ibai a los tres workers; la confirmación no equivale a capturas nuevas | Enrique, Alexandra e Ibai |
 
 - Seguimiento formal del viernes 13 de noviembre: `[POR COMPLETAR]`.
 - Tareas de la semana: consultar [PENDIENTES](entrega/PENDIENTES.md).
@@ -242,15 +241,12 @@ A estos se suman el commit de la revisión del 18 de noviembre, con Claude Code,
   - [PR #2](https://github.com/Lq922466/reto4-cloud-G5/pull/2), de Enrique, hacia `cloud-g5-implementacion`, fusionada por Cristina el
     6 de noviembre. Su contenido está en `main`.
   - [PR #3](https://github.com/Lq922466/reto4-cloud-G5/pull/3), [PR #4](https://github.com/Lq922466/reto4-cloud-G5/pull/4) y
-    [PR #5](https://github.com/Lq922466/reto4-cloud-G5/pull/5), abiertas el 9 de noviembre desde la cuenta de Cristina con borradores
-    preparados con Codex para Enrique, Alexandra e Ibai. Desde el 18 de noviembre apuntan a `main`. Siguen abiertas, con conflictos,
-    hasta que cada integrante las valide.
+    [PR #5](https://github.com/Lq922466/reto4-cloud-G5/pull/5), creadas desde la cuenta de Cristina con borradores preparados con Codex para Enrique, Alexandra e Ibai. La #3 está cerrada sin fusionar; las #4 y #5 siguen abiertas. **Las #4 y #5 se registran como participación colaborativa asociada a Alexandra e Ibai**, según confirma la coordinadora, sin atribuirles la autoría técnica de creación de la PR.
 - **Ramas de los integrantes:** `enrique-revision-documentacion`, con el commit de Enrique de la PR #2; y
   `enrique-correccion-revision`, `alexandra-revision-evidencias` e `ibai-revision-individual`, de las PR #3, #4 y #5, con dos commits
   cada una con la identidad Innnx. Ninguna se ha eliminado.
-- **Sin aportaciones propias en el repositorio:** no constan commits ni PR de Alexandra ni de Ibai desde sus cuentas. Esto no descarta
-  trabajo hecho fuera del repositorio, como la web del ZIP, Trello o Drive.
-- **Pendiente:** cada integrante debe aportar su trabajo real desde su propia cuenta.
+- **Participación registrada de Alexandra e Ibai:** se reconocen sus ramas y las PR #4 y #5 como trabajo colaborativo asociado a cada integrante. La coordinadora confirma su participación. El historial de GitHub no muestra que estas PR fueran creadas desde sus cuentas personales, distinción que se conserva para que el informe sea verificable.
+- **Para acreditar autoría individual de GitHub, si se exige específicamente:** harían falta commits o revisiones firmados desde sus propias cuentas.
 
 Flujo para aportar trabajo. Los pasos detallados para Enrique, Alexandra e Ibai, con sus ramas y lo que revisa cada integrante,
 están en las [instrucciones de F2](entrega/INSTRUCCIONES-F2-INTEGRANTES.md).

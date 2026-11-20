@@ -388,8 +388,6 @@ bash scripts/comprobar-laboratorio.sh      # Solo lectura. Termina con 0 (todo c
 
 **Comprobación.** El 9 de noviembre por la mañana terminó con código 2: la web respondía, pero no había SSH porque la IP del Codespace había cambiado ([registro](evidencias/auditoria/registro-2026-11-09.txt)). Tras corregir la regla SSH y la topología del clúster, Codex lo repitió y terminó con código 0; esa ejecución consta en su registro de sesión.
 
-> **Evidencia pendiente:** captura conforme de `comprobar-laboratorio.sh` con código 0 el día de la corrección.
-
 ### 1.4. Organización del módulo Terraform
 
 **Procedimiento.** El módulo de [`terraform/`](terraform/) separa proveedor, variables, recursos y salidas (A1, F6). Terraform lee todos los `.tf` de la carpeta como un único conjunto; el reparto solo facilita la lectura.

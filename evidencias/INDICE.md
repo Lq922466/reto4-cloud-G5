@@ -93,9 +93,9 @@ En E8 hubo 34 segundos sin muestras entre los dos tramos de sondeo.
 
 | Criterio | Estado | Evidencia | Falta |
 | --- | --- | --- | --- |
-| G1 | Pendiente | [Guion](../entrega/DEFENSA.md), [presentación](../entrega/presentacion-cloud-g5.pptx) | Asignar partes, ensayar y hacer la exposición, con caída de un nodo en directo. |
-| G2 | Pendiente | [Preguntas de repaso](../entrega/DEFENSA.md#preguntas-del-profesor) | Cada integrante debe prepararla: 2 o 3 preguntas sobre cualquier parte. |
-| G3 | Pendiente | [Demostraciones](../entrega/DEFENSA.md#demostraciones) | Cada integrante debe hacerla en directo. Requiere laboratorio activo y acceso SSH. |
+| G1 | Realizado según confirmación de la coordinadora | [Guion](../entrega/DEFENSA.md), [presentación](../entrega/presentacion-cloud-g5.pptx) | Asignar partes, ensayar y hacer la exposición, con caída de un nodo en directo. |
+| G2 | Presentación realizada; sin registro individual en el repositorio | [Preguntas de repaso](../entrega/DEFENSA.md#preguntas-del-profesor) | Cada integrante debe prepararla: 2 o 3 preguntas sobre cualquier parte. |
+| G3 | Presentación realizada; sin registro individual en el repositorio | [Demostraciones](../entrega/DEFENSA.md#demostraciones) | Cada integrante debe hacerla en directo. Requiere laboratorio activo y acceso SSH. |
 
 ## Auditoría
 

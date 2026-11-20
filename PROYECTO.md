@@ -218,6 +218,8 @@ git add RUTA                    # Solo los archivos revisados.
 git commit -m "Mensaje" && git push
 ```
 
+**Participación confirmada por la coordinadora (20 de noviembre).** Cristina confirma que Alexandra e Ibai accedieron a GitHub con sus propias cuentas y consultaron el trabajo del proyecto. Esta información procede de su confirmación como coordinadora; el registro de las PR #4 y #5 muestra que se abrieron desde `Lq922466`, y no constituye por sí solo una prueba de acceso individual. Sus ramas y PR se conservan como evidencia de las tareas de revisión asignadas, sin atribuirles commits o PR que GitHub registra a otra cuenta.
+
 El flujo colaborativo utiliza ramas de trabajo y **Pull Requests** (PR) para revisar los cambios antes de integrarlos. Las [instrucciones de F2](entrega/INSTRUCCIONES-F2-INTEGRANTES.md) detallan el flujo:
 
 ```bash

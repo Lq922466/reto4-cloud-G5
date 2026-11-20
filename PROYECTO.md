@@ -229,7 +229,7 @@ git add RUTA && git commit -m "Mensaje" && git push -u origin NOMBRE-DE-LA-TAREA
 gh pr create --base main --title "Título" --body "Qué cambia y cómo se ha comprobado"
 ```
 
-**Integración en `main`.** Hasta el 18 de noviembre, el trabajo estaba en la rama `cloud-g5-implementacion`. Ese día se integró en `main` con la PR #1, fusionada con un *merge commit* que conserva los commits y sus autores, y se eliminó la rama antigua. Desde entonces, **`main` es la única rama de trabajo y de entrega**.
+**Integración en `main`.** Hasta el 18 de noviembre, el trabajo estaba en la rama `cloud-g5-implementacion`. Ese día se integró en `main` con la PR #1, fusionada con un *merge commit* que conserva los commits y sus autores, y se eliminó la rama antigua. Desde esa integración, **`main` es la rama principal de entrega**. Existen además ramas de revisión, incluida `revision-informe-cloud-20261120`, cuyos cambios todavía no se han integrado en `main`.
 
 **Comprobación.** Antes de la integración, la rama de trabajo tenía 44 commits: 32 con la identidad de Cristina (Innnx), 11 de Codex y 1 de Enrique (EnriZx2). Los commits de Innnx incluyen trabajo preparado con Claude Code o con Codex, como indica su mensaje cuando lo declara. Estado de las PR:
 

@@ -1,27 +1,23 @@
-# Prácticas individuales
+# Práctica individual previa — AWS EC2
 
-> **SIN CONTENIDO.** Esta carpeta solo ofrece una estructura. Ningún integrante ha aportado todavía su práctica,
-> así que F13 sigue pendiente.
+## Objetivo
 
-## Qué se pide
+Familiarizarnos con Amazon EC2 y Ubuntu antes de comenzar el despliegue del proyecto Cloud en grupo.
 
-La Guía pide en esta carpeta la documentación de la práctica de prueba individual **realizada previamente**. La Fase 1 parte de una práctica
-individual de EC2 con Ubuntu 22.04. No indica formato ni nombre de carpeta, así que esta estructura es una propuesta. Hay que confirmar con el
-profesor si debe aportarla cada integrante.
+## Desarrollo de la actividad
 
-## Cómo aportar la práctica
+Según la confirmación de la coordinadora del Grupo 5, los integrantes realizaron previamente una práctica individual de EC2 durante las clases presenciales.
 
-Cada integrante:
+Esta actividad fue anterior al trabajo del grupo con Terraform y Docker Swarm. No se dispone en este repositorio de una relación verificable de los comandos, configuraciones y resultados individuales, por lo que no se atribuyen operaciones concretas a ninguna persona.
 
-1. Crea `practica-individual/CUENTA_DE_GITHUB/`.
-2. Copia ahí la [plantilla](PLANTILLA.md) como `README.md` y la completa con su propio trabajo.
-3. Añade sus capturas reales en esa misma carpeta.
-4. Lo sube desde su cuenta, con una rama y una pull request propias, como explica [GESTION.md](../GESTION.md#github).
+## Evidencias disponibles
 
-## Reglas
+No se conservaron capturas individuales de aquella sesión. Por ello, no se añaden capturas recreadas ni se presentan las evidencias posteriores del clúster del grupo como si fueran de la práctica previa.
 
-- Solo se documenta trabajo que la persona haya hecho de verdad.
-- Las evidencias del grupo en [evidencias/](../evidencias/INDICE.md) no sustituyen a una práctica individual. Se
-  pueden citar, indicando que son del grupo.
-- Nadie completa la práctica de otra persona, tampoco con asistentes de IA.
-- No se suben claves privadas, tokens, contraseñas, archivos de estado de Terraform ni identificadores de cuenta.
+Las pruebas documentadas del proyecto colectivo pueden consultarse en [PROYECTO.md](../PROYECTO.md) y en el [índice de evidencias](../evidencias/INDICE.md).
+
+## Resultado y observaciones
+
+La coordinadora confirma que la actividad individual se realizó en clase, pero su ejecución y resultados específicos no pueden verificarse a partir de los archivos actuales.
+
+**Pendiente documental, no repetición obligatoria:** si algún integrante conserva notas o archivos originales de esa práctica, se podrán incorporar posteriormente con su autoría y fecha reales. La ausencia de capturas puede limitar la valoración de este apartado según el criterio del profesor.

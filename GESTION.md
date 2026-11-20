@@ -17,8 +17,7 @@ Este repositorio es el **Producto 6, Cloud**, asignado a Cristina. Los Productos
 interno no detalla su contenido ni menciona un Producto 7.
 
 Los permisos son los que muestra GitHub el 18 de noviembre ([captura](evidencias/capturas-conformes/F1-repositorio.png)). El
-profesor tiene acceso al repositorio con la cuenta `jc-csl`, con permiso de escritura, según confirmó Cristina. El repositorio es
-privado.
+profesor tiene acceso al repositorio con la cuenta `jc-csl`, con permiso de escritura, según confirmó Cristina. El repositorio es **público desde el 20 de noviembre de 2026**. La captura enlazada refleja su estado anterior, privado, el 18 de noviembre.
 
 ## 2. Reparto y organización del trabajo
 

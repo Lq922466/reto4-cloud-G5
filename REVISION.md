@@ -1,5 +1,7 @@
 # Revisión de entrega RETO 4 CLOUD
 
+**Actualización de contexto (20/11/2026):** la coordinadora confirma que la presentación ya se realizó y que comprobó los accesos SSH del equipo. Las tablas siguientes corresponden a la auditoría documental del 18 de noviembre; sus estados no se han recalculado como si se hubieran obtenido nuevas capturas.
+
 Estado de los 42 criterios de la Rúbrica, revisado el **18 de noviembre de 2026** con las evidencias del repositorio. El último estado
 técnico registrado es del 9 de noviembre (Swarm, SSH y web) y del 10 de noviembre (Terraform). Desde entonces no se ha accedido a AWS ni
 al clúster. El procedimiento y la explicación de cada criterio están en [PROYECTO.md](PROYECTO.md); los originales de la Guía y la

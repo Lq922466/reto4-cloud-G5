@@ -173,6 +173,11 @@ gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_na
 
 *Figura 2. Captura histórica del 18 de noviembre de 2026, cuando el repositorio era privado. Desde el 20 de noviembre es público; la imagen documenta los colaboradores de aquella fecha, no la visibilidad actual.*
 
+![Colaboradores del repositorio](evidencias/evidencias/capturas-2026-11-27/P1-colaboradores.png)
+
+*Captura P1 aportada por la coordinadora: página GitHub Settings → Collaborators. Se conserva además la figura histórica anterior.*
+
+
 
 ### 0.2. Codespace y `devcontainer`
 
@@ -348,6 +353,11 @@ El entorno es reproducible: el Codespace se crea desde el `devcontainer` con AWS
 aws configure set region us-east-1 && aws configure set output json
 ```
 
+
+![Learner Lab activo](evidencias/evidencias/capturas-2026-11-27/P3-learner-lab.png)
+
+*Captura P3 aportada por la coordinadora: panel de AWS Academy Learner Lab con el indicador verde.*
+
 **Explicación.** Al terminar la sesión, Learner Lab detiene las instancias. Al volver, cada una **conserva su ID, su disco y su IP privada, pero recibe una IP pública nueva**: por eso el clúster usa IP privadas. Terraform no depende de esta configuración, porque usa la variable `aws_region`.
 
 
@@ -484,6 +494,11 @@ El 9 de noviembre, Codex leyó once reglas, todas de mínimos: el SSH externo ad
 
 *Figura 9. Entrada limitada a SSH `/32`, 80 y 8080 públicos y puertos internos solo entre nodos, antes de la regla temporal. Captura conforme, 6 de noviembre de 2026.*
 
+![Reglas de entrada EC2](evidencias/evidencias/capturas-2026-11-27/P4-reglas-entrada-ec2.png)
+
+*Captura P4 aportada por la coordinadora: reglas de entrada del grupo de seguridad consultadas en la consola EC2.*
+
+
 
 ### 1.8. Creación de los cuatro servidores
 
@@ -557,6 +572,11 @@ usermod -aG docker ubuntu                                      # ubuntu usa Dock
 ![Script de arranque](evidencias/capturas-conformes/A4-script.png)
 
 *Figura 12. El script configura hostname, zona horaria, claves públicas, SSH y Docker. Captura conforme, 5 de noviembre de 2026.*
+
+
+![Cuatro instancias EC2](evidencias/evidencias/capturas-2026-11-27/P5-cuatro-instancias.png)
+
+*Captura P5 aportada por la coordinadora: vista EC2 → Instances con cuatro instancias en ejecución.*
 
 **Comprobación.** En cada nodo, `cloud-init status`, `timedatectl show -p Timezone --value` y `docker --version`. El registro completo del primer arranque del manager está en [`evidencias/prototipo/manager-g5.txt`](evidencias/prototipo/manager-g5.txt).
 
@@ -712,6 +732,11 @@ El script solo acepta una clave pública Ed25519 de una línea; revisa antes los
 
 *Figura 16. CORRECTO: las claves de Cristina, Enrique, Alexandra e Ibai están en los cuatro nodos, y se conservan `vockey` y la clave del Codespace. Captura conforme, 9 de noviembre de 2026.*
 
+
+
+![Claves públicas en GitHub](evidencias/evidencias/capturas-2026-11-27/P8-claves-publicas.png)
+
+*Captura P8 aportada por la coordinadora: carpeta `terraform/claves` en GitHub, con cuatro archivos `.pub`.*
 
 ### 2.2. Conexión SSH mediante nombres sencillos
 
@@ -1342,12 +1367,6 @@ La verificación de E5 que se detuvo por credenciales revocadas se explica en la
 Con la web definitiva, Swarm demostró el balanceo, el escalado, la autorreparación, el mantenimiento y la actualización con rollback, y el clúster volvió con las mismas instancias tras cada reinicio comprobado. E4 y E8 solo se hicieron con el portal provisional, y E8 tiene 34 segundos sin muestras. Falta, sobre todo, la serie de capturas conformes con la sonda visible.
 
 
-
-### Capturas de consola aportadas el 27 de noviembre
-
-Se revisaron cinco capturas de consola facilitadas por la coordinadora: **Settings → Collaborators** (P1), **Learner Lab con indicador verde** (P3), **reglas de entrada del grupo de seguridad EC2** (P4), **cuatro instancias EC2 en ejecución** (P5) y **`terraform/claves` con cuatro archivos `.pub`** (P8). Son evidencias visuales de las pantallas mostradas en esa fecha. **Estas imágenes se recibieron en un ZIP externo y aún no están incorporadas como archivos al repositorio**, por lo que este apartado no presenta enlaces inexistentes. La captura P2 de la página Codespaces no figura en ese ZIP.
-
-Los registros y las figuras históricas de las fases 1–5 se conservan como pruebas de las operaciones realizadas. No se repitieron Terraform, Swarm ni las pruebas E4/E7/E8 el 27 de noviembre. En particular, el `destroy` no se considera ejecutado, E4 y E8 corresponden al portal provisional y el intervalo de 34 segundos sin muestras de E8 sigue sin estar verificado.
 
 ## Conclusión general
 

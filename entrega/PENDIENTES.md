@@ -1,6 +1,6 @@
 # Revisión de tareas y evidencias para la entrega
 
-Situación revisada el 18 de noviembre de 2026. El último estado técnico registrado es del 9 de noviembre (Swarm, SSH y web) y del 10
+Situación técnica revisada el 18 de noviembre de 2026. **Actualización documental del 27 de noviembre:** capturas P1, P3, P4, P5 y P8 incorporadas a `PROYECTO.md`; Codespaces no está disponible por límite de uso. No se realizaron nuevas operaciones en AWS. El último estado técnico registrado es del 9 de noviembre (Swarm, SSH y web) y del 10
 de noviembre (Terraform). [Contraste con la Guía y la Rúbrica](CONTRASTE-GUIA-RUBRICA.md). La Guía y la Rúbrica no
 indican la fecha de entrega. El grupo se ha fijado como objetivo interno el 20 de noviembre, pero la fecha oficial debe comprobarse en
 Classroom: `[POR COMPLETAR]`.
@@ -16,17 +16,17 @@ Classroom: `[POR COMPLETAR]`.
 | 1 | Iniciar Learner Lab y renovar `~/.aws/credentials` al empezar cada sesión | Las credenciales caducan con la sesión. La Rúbrica solo puntúa lo que funcione durante la corrección | `aws sts get-caller-identity` responde. **Hecho el 9 de noviembre**, y hay que repetirlo en cada sesión |
 | 2 | Sustituir la regla SSH del Codespace cuando cambie su IP | La IP de salida del Codespace no es fija. Es un cambio en AWS, que requiere autorización | Hecho el 9 de noviembre: regla `172.166.151.114/32`. Hay que comprobarla de nuevo en cada sesión con `comprobar-laboratorio.sh` |
 | 3 | Consultar al profesor | `vockey`, destrucción de A6, autoría de las capturas, si la práctica es de cada integrante, y la fecha de entrega | Respuestas anotadas en [REVISION.md](../REVISION.md) |
-| 3b | Autorizar que se fije la imagen de Ubuntu en Terraform | El `plan` normal del 10 de noviembre propone sustituir las cuatro instancias. **No ejecutar `terraform apply`** hasta corregirlo | Imagen fijada y `terraform plan` con `No changes` |
-| 4 | No borrar este Codespace | El estado de Terraform solo está aquí, en `/workspaces/reto4-revision.Geeumo/terraform`, y no debe subirse a Git. Conviene guardar una copia privada | Copia privada hecha |
+| 3b | Autorizar que se fije la imagen de Ubuntu en Terraform | El `plan` normal del 10 de noviembre propone sustituir las cuatro instancias. **No ejecutar `terraform apply`** hasta corregirlo; tampoco ejecutar `destroy` sin autorización | Imagen fijada y `terraform plan` con `No changes` |
+| 4 | Conservar una copia privada del estado de Terraform del Codespace cuando vuelva a estar accesible | El estado de Terraform estaba en el Codespace y no debe subirse a Git. Actualmente el Codespace no puede abrirse por el límite de uso; no consta una copia privada recuperable | Copia privada no confirmada |
 
 ### Antes de entregar
 
 | # | Tarea | Criterio | Listo cuando |
 | --- | --- | --- | --- |
-| 5 | Hacer las seis capturas de [REVISION.md](../REVISION.md#capturas-que-faltan), sin mostrar el ID de la cuenta de AWS | A2, A3, A6, E5, F1, F2, F5, F10 | Imágenes en `evidencias/capturas-web/` |
+| 5 | Completar solo las capturas técnicas que aún falten según [REVISION.md](../REVISION.md#capturas-que-faltan), sin mostrar el ID de la cuenta de AWS | A2, A3, A6, E5, F1, F2, F5, F10 | P1/P3/P4/P5/P8 ya están en `evidencias/evidencias/capturas-2026-11-27/`; P2 y capturas técnicas restantes no se han aportado |
 | 6 | Integrantes y nombres | F1, F11, G1 | **Hecho:** Cristina, Enrique, Alexandra e Ibai, en [GESTION.md](../GESTION.md). La presentación ya se realizó; la distribución de intervenciones no se ha documentado aquí |
-| 7 | Invitar al profesor al repositorio antes de la fecha límite | F1 | **Hecho:** `jc-csl` con escritura, comprobado el 18 de noviembre. Falta la captura de Settings → Collaborators en el navegador |
-| 8 | Aportar su práctica individual previa y su clave propia | F13, B1 | `practica-individual/Lq922466/` con trabajo real. **Clave propia, `cristina-reto4`, instalada el 9 de noviembre, y acceso con ella a los cuatro nodos demostrado ese día.** Falta repetir las capturas con el comentario de la norma |
+| 7 | Invitar al profesor al repositorio antes de la fecha límite | F1 | **Hecho:** `jc-csl` con escritura, comprobado el 18 de noviembre. Captura P1 incorporada el 27 de noviembre |
+| 8 | Aportar su práctica individual previa y su clave propia | F13, B1 | `practica-individual/Lq922466/` con trabajo real. **Clave propia, `cristina-reto4`, instalada el 9 de noviembre, y acceso con ella a los cuatro nodos demostrado ese día.** Las capturas de acceso individuales no tienen todos los comentarios de la norma |
 | 9 | Decidir cuándo ejecutar la destrucción de A6, tras consultarlo | A6 | Decisión tomada. Recomendación: después de la corrección |
 | 10 | Autorizar la repetición de pruebas | E2–E4, E6–E8 | Autorización dada. La topología de C3 ya se corrigió el 9 de noviembre |
 | 11 | Revisar e integrar la PR #1 en `main` | F2, F4 | **Hecho el 18 de noviembre.** `main` es la única rama; las PR #3–#5 apuntan a `main` |
@@ -52,7 +52,7 @@ Son los integrantes que recoge la organización del equipo. Nadie debe hacer est
 | 6 | Revisar la PR de otro integrante y las evidencias | F2 | Revisión registrada en GitHub |
 | 7 | Preparar las preguntas sobre cualquier parte y su demostración en vivo | G2, G3 | Realizadas ante el profesor |
 
-**Presentación realizada el 20 de noviembre de 2026, según confirmación de la coordinadora.** El guion y las diapositivas se conservan como materiales de preparación.
+**Presentación realizada, según confirmación de la coordinadora.** El guion y las diapositivas se conservan como materiales de preparación.
 incluida la caída de un nodo en directo, y hacer la exposición (G1). Seguimiento formal cada viernes, y aviso inmediato si surge un
 problema urgente.
 

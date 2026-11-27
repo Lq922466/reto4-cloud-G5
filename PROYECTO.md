@@ -173,7 +173,6 @@ gh api repos/Lq922466/reto4-cloud-G5/collaborators --jq '.[] | [.login, .role_na
 
 *Figura 2. Captura histórica del 18 de noviembre de 2026, cuando el repositorio era privado. Desde el 20 de noviembre es público; la imagen documenta los colaboradores de aquella fecha, no la visibilidad actual.*
 
-> **Evidencia pendiente:** la Rúbrica indica como evidencia de F1 la página **Settings → Collaborators**; falta su captura desde el navegador.
 
 ### 0.2. Codespace y `devcontainer`
 
@@ -204,7 +203,6 @@ Respondieron `aws-cli/2.39.3`, `Terraform v1.17.1` y `gh version 2.103.3`.
 
 *Figura 3. El `devcontainer` incluye AWS CLI y Terraform, y ambos funcionan en el Codespace. Captura conforme, 5 de noviembre de 2026.*
 
-> **Evidencia pendiente:** vista del Codespace activo en **GitHub → Codespaces**.
 
 ### 0.3. Organización de los cambios en GitHub
 
@@ -352,7 +350,6 @@ aws configure set region us-east-1 && aws configure set output json
 
 **Explicación.** Al terminar la sesión, Learner Lab detiene las instancias. Al volver, cada una **conserva su ID, su disco y su IP privada, pero recibe una IP pública nueva**: por eso el clúster usa IP privadas. Terraform no depende de esta configuración, porque usa la variable `aws_region`.
 
-> **Evidencia pendiente:** captura del panel de Learner Lab en verde y de **EC2 → Instances**, sin el identificador de la cuenta.
 
 ### 1.2. Credenciales temporales en el Codespace
 
@@ -410,7 +407,7 @@ terraform -chdir=terraform validate        # Sintaxis y tipos, sin contactar con
 
 *Figura 8. El módulo está organizado, usa variables y `terraform validate` es correcto. Captura conforme, 5 de noviembre de 2026.*
 
-**Práctica individual (práctica inicial).** Para este proyecto se decidió partir de la práctica individual de EC2 con Ubuntu 22.04. Este módulo la amplía a cuatro nodos, pero la documentación de la práctica previa de cada integrante todavía no está en [`practica-individual/`](practica-individual/README.md): **evidencia pendiente**.
+**Práctica individual (práctica inicial).** Para este proyecto se decidió partir de la práctica individual de EC2 con Ubuntu 22.04. Este módulo la amplía a cuatro nodos. La documentación individual previa no está incluida en [`practica-individual/`](practica-individual/README.md).
 
 ### 1.5. Variables
 
@@ -487,7 +484,6 @@ El 9 de noviembre, Codex leyó once reglas, todas de mínimos: el SSH externo ad
 
 *Figura 9. Entrada limitada a SSH `/32`, 80 y 8080 públicos y puertos internos solo entre nodos, antes de la regla temporal. Captura conforme, 6 de noviembre de 2026.*
 
-> **Evidencia pendiente:** reglas de entrada en la consola de EC2 («reglas EC2» en la Rúbrica), y captura conforme tras retirar la regla temporal.
 
 ### 1.8. Creación de los cuatro servidores
 
@@ -535,7 +531,6 @@ aws ec2 describe-instances --region us-east-1 --filters 'Name=tag:Name,Values=ma
 
 *Figura 11. Un manager t3.medium y tres workers t3.small en ejecución, con los controles de estado correctos. Captura conforme, 6 de noviembre de 2026.*
 
-> **Evidencia pendiente:** **EC2 → Instances** en la consola con las cuatro instancias, sus tipos y sus etiquetas («consola EC2» en la Rúbrica).
 
 ### 1.9. Script de arranque
 
@@ -607,7 +602,6 @@ terraform apply reto4-review-cidr.tfplan           # Apply complete! Resources: 
 
 **Comprobación.** Se crearon cinco recursos: el grupo de seguridad y las cuatro instancias. [Plan inicial](evidencias/prototipo/reto4-plan.log), [plan con la IP SSH](evidencias/prototipo/reto4-plan-cidr.log) y [apply](evidencias/prototipo/reto4-apply.log).
 
-> **Evidencia pendiente:** la secuencia de validación, plan, cambio y destrucción en capturas conformes; hoy solo consta en registros de texto.
 
 ### 1.12. Modificación de la infraestructura
 
@@ -640,7 +634,6 @@ terraform -chdir=terraform output -state=ESTADO/terraform.tfstate -json nodes
 
 **Comprobación.** El 9 de noviembre, un plan de solo lectura de Codex no tenía acciones sobre recursos; solo estaban desactualizadas las IP y DNS públicos y las reglas SSH guardadas. El 10 de noviembre, con autorización de Cristina, Claude Code lo aplicó: `Resources: 0 added, 0 changed, 0 destroyed`, y las salidas pasaron a coincidir con AWS. El registro y la copia del estado están en una carpeta privada, fuera de Git.
 
-> **Evidencia pendiente:** extracto del registro del `apply -refresh-only` sin datos de la cuenta, y captura de `terraform output nodes` coincidiendo con EC2.
 
 Después, el `plan` normal de solo lectura propuso sustituir las cuatro instancias por la imagen de Ubuntu nueva (incidencia [I1.4](#115-incidencias-reales-y-soluciones)), así que A6 no está cerrado.
 
@@ -719,7 +712,6 @@ El script solo acepta una clave pública Ed25519 de una línea; revisa antes los
 
 *Figura 16. CORRECTO: las claves de Cristina, Enrique, Alexandra e Ibai están en los cuatro nodos, y se conservan `vockey` y la clave del Codespace. Captura conforme, 9 de noviembre de 2026.*
 
-> **Evidencia pendiente:** captura `B1-repositorio` con las cuatro `.pub` en `main` y las privadas excluidas por `.gitignore`.
 
 ### 2.2. Conexión SSH mediante nombres sencillos
 
@@ -988,7 +980,6 @@ El servicio siguió en 4/4, con una réplica por nodo, y una sonda en las cuatro
 
 *Figura 32. Listado de nodos **anterior a la corrección**. NO CORRECTO: los cuatro nodos están activos y manager-g5 es el líder, pero worker1-g5 y worker2-g5 siguen siendo managers tras E8. Captura conforme, 6 de noviembre de 2026.*
 
-> **Evidencia pendiente:** nueva captura `C3-nodos` (`capturas-norma.py --solo '^C3-nodos$'`) con manager-g5 como único `Leader` y tres workers `Ready/Active`. La corrección no está en un registro versionado y el laboratorio se ha reiniciado después.
 
 ### 3.5. Incidencias registradas
 
@@ -1137,7 +1128,6 @@ En el navegador se abre `http://IP_PUBLICA/`, con `http://`, porque la web no us
 
 *Figura 35. Web definitiva por la IP pública de manager-g5, con la dirección visible, en un navegador gráfico real. Captura anterior de Claude Code, 5 de noviembre de 2026, sin el comentario de la norma. Capturas de [worker1-g5](evidencias/D3-navegador-worker1-g5.png), [worker2-g5](evidencias/D3-navegador-worker2-g5.png) y [worker3-g5](evidencias/D3-navegador-worker3-g5.png).*
 
-> **Evidencia pendiente:** capturas D3 conformes, con comentario, por las cuatro IP del día de la corrección.
 
 ### 4.6. Incidencias registradas
 
@@ -1172,7 +1162,6 @@ Cada script lee de EC2 las IP vigentes, arranca una sonda por IP con [`sondear-w
 
 **Explicación.** La sonda pide `identidad.txt` **una vez por segundo y por IP**, con un límite de 0,9 s, y anota hora, resultado, versión y contenedor: es el «script que consulta la web cada segundo» de la Guía. [`lib-sondas.sh`](scripts/lib-sondas.sh) detiene la prueba si una IP acumula tres fallos seguidos, la sonda exige que la respuesta identifique versión y contenedor, y el resumen comprueba que cada sonda siguió viva hasta el final (incidencia [I5.4](#510-incidencias-reales-y-soluciones)). E1, E2, E3, E6 y E7 se hicieron primero con el portal provisional ([registro](evidencias/prototipo/fase4-5.txt)) y se repitieron con la web definitiva; este informe presenta esas repeticiones.
 
-> **Evidencia pendiente (toda la fase):** capturas conformes antes, durante y después, con la sonda visible. `capturas-norma.py` las toma con la variable `SONDA` apuntando al registro de la sonda, mientras la persona autorizada ejecuta la prueba.
 
 ### 5.2. Distribución de las visitas entre servidores
 
@@ -1238,7 +1227,6 @@ Al detenerse, el nodo deja de enviar señales al manager y Swarm lo marca `Down`
 
 **Límites.** Se hizo con el portal provisional, no consta la URL sondeada y no hay capturas de la consola.
 
-> **Evidencia pendiente:** repetir E4 con la web definitiva y capturas conformes antes, durante y después, según el [plan](entrega/PLAN-C3-E4-E8.md). Detiene una instancia, así que requiere autorización; es también la demostración de caída de nodo de la exposición.
 
 ### 5.6. Recuperación de servidores y reinicio del laboratorio
 
@@ -1296,7 +1284,6 @@ Con `parallelism: 1` y `order: start-first`, Swarm arranca una réplica 2.0, esp
 
 *Figura 44. Historial de `reto4_web`: tareas 2.0 en `Shutdown` y tareas 1.0 en `Running` tras el rollback. Captura anterior de Claude Code, 5 de noviembre de 2026, sin el prompt ni el comentario de la norma.*
 
-> **Evidencia pendiente:** captura conforme **durante** la actualización, con la sonda mostrando las dos versiones y el navegador.
 
 ### 5.9. Sustitución del servidor principal
 
@@ -1329,7 +1316,6 @@ El liderazgo pasó a **worker2-g5**, el servicio siguió en 4/4 y manager-g5 vol
 
 **Límites.** No hay ningún `docker node ls` tomado **durante** la parada: la elección se demuestra comparando antes y después. La parada se deduce del cambio de IP pública del manager, porque el registro no contiene `stopped`, y no consta la URL sondeada. Las capturas web de [durante](evidencias/E8-web-parada.png) y [después](evidencias/E8-web-recuperado.png) no muestran IP, hora ni estado del clúster. [Análisis completo](evidencias/auditoria/E4-E8.md). Esta prueba dejó tres managers, que se corrigieron el 9 de noviembre (apartado [3.4](#34-validación-de-los-nodos-y-de-sus-roles-c3)).
 
-> **Evidencia pendiente:** repetir E8 con la web definitiva, una sonda continua y una captura conforme de `docker node ls` desde otro manager **durante** la parada, y volver después a un solo manager. Requiere autorización.
 
 ### 5.10. Incidencias registradas
 
@@ -1355,6 +1341,13 @@ La verificación de E5 que se detuvo por credenciales revocadas se explica en la
 
 Con la web definitiva, Swarm demostró el balanceo, el escalado, la autorreparación, el mantenimiento y la actualización con rollback, y el clúster volvió con las mismas instancias tras cada reinicio comprobado. E4 y E8 solo se hicieron con el portal provisional, y E8 tiene 34 segundos sin muestras. Falta, sobre todo, la serie de capturas conformes con la sonda visible.
 
+
+
+### Capturas de consola aportadas el 27 de noviembre
+
+Se revisaron cinco capturas de consola facilitadas por la coordinadora: **Settings → Collaborators** (P1), **Learner Lab con indicador verde** (P3), **reglas de entrada del grupo de seguridad EC2** (P4), **cuatro instancias EC2 en ejecución** (P5) y **`terraform/claves` con cuatro archivos `.pub`** (P8). Son evidencias visuales de las pantallas mostradas en esa fecha. **Estas imágenes se recibieron en un ZIP externo y aún no están incorporadas como archivos al repositorio**, por lo que este apartado no presenta enlaces inexistentes. La captura P2 de la página Codespaces no figura en ese ZIP.
+
+Los registros y las figuras históricas de las fases 1–5 se conservan como pruebas de las operaciones realizadas. No se repitieron Terraform, Swarm ni las pruebas E4/E7/E8 el 27 de noviembre. En particular, el `destroy` no se considera ejecutado, E4 y E8 corresponden al portal provisional y el intervalo de 34 segundos sin muestras de E8 sigue sin estar verificado.
 
 ## Conclusión general
 

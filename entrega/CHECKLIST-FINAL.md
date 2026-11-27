@@ -11,7 +11,7 @@ El último estado técnico registrado es del 9 de noviembre (Swarm, SSH y web) y
 
 | Situación | Nº | Criterios |
 | --- | --- | --- |
-| Listos | 25 | A1, A4, A5, B2, B3, B4, B5, C1, C2, C4, D1, D2, E1, E5, F3, F4, F5, F6, F7, F8, F9, F12 |
+| Listos | 25 | A1, A2, A3, A4, A5, B2, B3, B4, B5, C1, C2, C4, D1, D2, E1, E5, F1, F3, F4, F5, F6, F7, F8, F9, F12 |
 | Demostrados, falta captura conforme | 6 | C3, D3, E2, E3, E6, E7 |
 | Parciales | 7 | A6, B1, E4, E8, F2, F10, F11 |
 | Pendientes | 4 | F13, G1, G2, G3 |
